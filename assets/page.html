@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="{{= site.language =}}" class="h-feed">
+<head>
+	<meta charset="UTF-8">
+	<title>{{= page.title =}}</title>
+	<meta name="color-scheme" content="dark light">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="icon" href="/favicon.png">
+	<link rel="self" href="{{= post.url =}}">
+	<link rel="cannonical" href="{{= post.url =}}">
+	<link rel="alternate" type="application/rss+xml" href="/feed.xml">
+	<link rel="alternate" type="application/feed+json" href="/feed.json">
+
+	<!-- Font imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap">
+	<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Source+Code+Pro:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"> -->
+
+	<link rel="stylesheet" href="/colors.css">
+	<link rel="stylesheet" href="/prism.css">
+	<link rel="stylesheet" href="/styles.css">
+
+	{{= page.head =}}
+</head>
+<body>
+	<div id="root">
+		{{= page.content =}}
+	</div>
+</body>
+</html>

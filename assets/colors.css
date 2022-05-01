@@ -1,0 +1,158 @@
+
+:root {
+	color-scheme: light dark;
+}
+
+body {
+	--theme-sun: {{= colors.light.sun =}};
+	--theme-moon: {{= colors.light.moon =}};
+	--theme-bg-main: {{= colors.light.bg_main =}};
+	--theme-bg-light: {{= colors.light.bg_light =}};
+	--theme-bg-heavy: {{= colors.light.bg_heavy =}};
+	--theme-bg-accent: {{= colors.light.bg_accent =}};
+	--theme-line: {{= colors.light.line =}};
+	--theme-text-heading: {{= colors.light.text_heading =}};
+	--theme-text-body: {{= colors.light.text_body =}};
+	--theme-text-light: {{= colors.light.text_light =}};
+	--theme-text-link: {{= colors.light.text_link =}};
+	--theme-text-link-active: {{= colors.light.text_link_active =}};
+	--theme-text-link-visited: {{= colors.light.text_link_visited =}};
+	--theme-code-normal: {{= colors.light.code_normal =}};
+	--theme-code-shadow: {{= colors.light.code_shadow =}};
+	--theme-code-background: {{= colors.light.code_background =}};
+	--theme-code-selection: {{= colors.light.code_selection =}};
+	--theme-code-comment: {{= colors.light.code_comment =}};
+	--theme-code-punc: {{= colors.light.code_punc =}};
+	--theme-code-operator: {{= colors.light.code_operator =}};
+	--theme-code-const-literal: {{= colors.light.code_const_literal =}};
+	--theme-code-number-literal: {{= colors.light.code_number_literal =}};
+	--theme-code-boolean-literal: {{= colors.light.code_boolean_literal =}};
+	--theme-code-tag: {{= colors.light.code_tag =}};
+	--theme-code-string: {{= colors.light.code_string =}};
+	--theme-code-keyword: {{= colors.light.code_keyword =}};
+	--theme-code-func-name: {{= colors.light.code_func_name =}};
+	--theme-code-class-name: {{= colors.light.code_class_name =}};
+	--theme-code-regex-important: {{= colors.light.code_regex_important =}};
+	--theme-code-variable: {{= colors.light.code_variable =}};
+	--theme-code-builtin: {{= colors.light.code_builtin =}};
+	--theme-code-attr-name: {{= colors.light.code_attr_name =}};
+	--theme-code-gutter-divider: {{= colors.light.code_gutter_divider =}};
+	--theme-code-line-number: {{= colors.light.code_line_number =}};
+	--theme-code-line-highlight: {{= colors.light.code_line_highlight =}};
+}
+
+body[data-color-scheme='dark'] {
+	--theme-sun: {{= colors.dark.sun =}};
+	--theme-moon: {{= colors.dark.moon =}};
+	--theme-bg-main: {{= colors.dark.bg_main =}};
+	--theme-bg-light: {{= colors.dark.bg_light =}};
+	--theme-bg-heavy: {{= colors.dark.bg_heavy =}};
+	--theme-bg-accent: {{= colors.dark.bg_accent =}};
+	--theme-line: {{= colors.dark.line =}};
+	--theme-text-heading: {{= colors.dark.text_heading =}};
+	--theme-text-body: {{= colors.dark.text_body =}};
+	--theme-text-light: {{= colors.dark.text_light =}};
+	--theme-text-link: {{= colors.dark.text_link =}};
+	--theme-text-link-active: {{= colors.dark.text_link_active =}};
+	--theme-text-link-visited: {{= colors.dark.text_link_visited =}};
+	--theme-code-normal: {{= colors.dark.code_normal =}};
+	--theme-code-shadow: {{= colors.dark.code_shadow =}};
+	--theme-code-background: {{= colors.dark.code_background =}};
+	--theme-code-selection: {{= colors.dark.code_selection =}};
+	--theme-code-comment: {{= colors.dark.code_comment =}};
+	--theme-code-punc: {{= colors.dark.code_punc =}};
+	--theme-code-operator: {{= colors.dark.code_operator =}};
+	--theme-code-const-literal: {{= colors.dark.code_const_literal =}};
+	--theme-code-number-literal: {{= colors.dark.code_number_literal =}};
+	--theme-code-boolean-literal: {{= colors.dark.code_boolean_literal =}};
+	--theme-code-tag: {{= colors.dark.code_tag =}};
+	--theme-code-string: {{= colors.dark.code_string =}};
+	--theme-code-keyword: {{= colors.dark.code_keyword =}};
+	--theme-code-func-name: {{= colors.dark.code_func_name =}};
+	--theme-code-class-name: {{= colors.dark.code_class_name =}};
+	--theme-code-regex-important: {{= colors.dark.code_regex_important =}};
+	--theme-code-variable: {{= colors.dark.code_variable =}};
+	--theme-code-builtin: {{= colors.dark.code_builtin =}};
+	--theme-code-attr-name: {{= colors.dark.code_attr_name =}};
+	--theme-code-gutter-divider: {{= colors.dark.code_gutter_divider =}};
+	--theme-code-line-number: {{= colors.dark.code_line_number =}};
+	--theme-code-line-highlight: {{= colors.dark.code_line_highlight =}};
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		--theme-sun: {{= colors.dark.sun =}};
+		--theme-moon: {{= colors.dark.moon =}};
+		--theme-bg-main: {{= colors.dark.bg_main =}};
+		--theme-bg-light: {{= colors.dark.bg_light =}};
+		--theme-bg-heavy: {{= colors.dark.bg_heavy =}};
+		--theme-bg-accent: {{= colors.dark.bg_accent =}};
+		--theme-line: {{= colors.dark.line =}};
+		--theme-text-heading: {{= colors.dark.text_heading =}};
+		--theme-text-body: {{= colors.dark.text_body =}};
+		--theme-text-light: {{= colors.dark.text_light =}};
+		--theme-text-link: {{= colors.dark.text_link =}};
+		--theme-text-link-active: {{= colors.dark.text_link_active =}};
+		--theme-text-link-visited: {{= colors.dark.text_link_visited =}};
+		--theme-code-normal: {{= colors.dark.code_normal =}};
+		--theme-code-shadow: {{= colors.dark.code_shadow =}};
+		--theme-code-background: {{= colors.dark.code_background =}};
+		--theme-code-selection: {{= colors.dark.code_selection =}};
+		--theme-code-comment: {{= colors.dark.code_comment =}};
+		--theme-code-punc: {{= colors.dark.code_punc =}};
+		--theme-code-operator: {{= colors.dark.code_operator =}};
+		--theme-code-const-literal: {{= colors.dark.code_const_literal =}};
+		--theme-code-number-literal: {{= colors.dark.code_number_literal =}};
+		--theme-code-boolean-literal: {{= colors.dark.code_boolean_literal =}};
+		--theme-code-tag: {{= colors.dark.code_tag =}};
+		--theme-code-string: {{= colors.dark.code_string =}};
+		--theme-code-keyword: {{= colors.dark.code_keyword =}};
+		--theme-code-func-name: {{= colors.dark.code_func_name =}};
+		--theme-code-class-name: {{= colors.dark.code_class_name =}};
+		--theme-code-regex-important: {{= colors.dark.code_regex_important =}};
+		--theme-code-variable: {{= colors.dark.code_variable =}};
+		--theme-code-builtin: {{= colors.dark.code_builtin =}};
+		--theme-code-attr-name: {{= colors.dark.code_attr_name =}};
+		--theme-code-gutter-divider: {{= colors.dark.code_gutter_divider =}};
+		--theme-code-line-number: {{= colors.dark.code_line_number =}};
+		--theme-code-line-highlight: {{= colors.dark.code_line_highlight =}};
+	}
+
+	body[data-color-scheme='light'] {
+		--theme-sun: {{= colors.light.sun =}};
+		--theme-moon: {{= colors.light.moon =}};
+		--theme-bg-main: {{= colors.light.bg_main =}};
+		--theme-bg-light: {{= colors.light.bg_light =}};
+		--theme-bg-heavy: {{= colors.light.bg_heavy =}};
+		--theme-bg-accent: {{= colors.light.bg_accent =}};
+		--theme-line: {{= colors.light.line =}};
+		--theme-text-heading: {{= colors.light.text_heading =}};
+		--theme-text-body: {{= colors.light.text_body =}};
+		--theme-text-light: {{= colors.light.text_light =}};
+		--theme-text-link: {{= colors.light.text_link =}};
+		--theme-text-link-active: {{= colors.light.text_link_active =}};
+		--theme-text-link-visited: {{= colors.light.text_link_visited =}};
+		--theme-code-normal: {{= colors.light.code_normal =}};
+		--theme-code-shadow: {{= colors.light.code_shadow =}};
+		--theme-code-background: {{= colors.light.code_background =}};
+		--theme-code-selection: {{= colors.light.code_selection =}};
+		--theme-code-comment: {{= colors.light.code_comment =}};
+		--theme-code-punc: {{= colors.light.code_punc =}};
+		--theme-code-operator: {{= colors.light.code_operator =}};
+		--theme-code-const-literal: {{= colors.light.code_const_literal =}};
+		--theme-code-number-literal: {{= colors.light.code_number_literal =}};
+		--theme-code-boolean-literal: {{= colors.light.code_boolean_literal =}};
+		--theme-code-tag: {{= colors.light.code_tag =}};
+		--theme-code-string: {{= colors.light.code_string =}};
+		--theme-code-keyword: {{= colors.light.code_keyword =}};
+		--theme-code-func-name: {{= colors.light.code_func_name =}};
+		--theme-code-class-name: {{= colors.light.code_class_name =}};
+		--theme-code-regex-important: {{= colors.light.code_regex_important =}};
+		--theme-code-variable: {{= colors.light.code_variable =}};
+		--theme-code-builtin: {{= colors.light.code_builtin =}};
+		--theme-code-attr-name: {{= colors.light.code_attr_name =}};
+		--theme-code-gutter-divider: {{= colors.light.code_gutter_divider =}};
+		--theme-code-line-number: {{= colors.light.code_line_number =}};
+		--theme-code-line-highlight: {{= colors.light.code_line_highlight =}};
+	}
+}

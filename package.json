@@ -1,0 +1,26 @@
+{
+  "name": "@k/blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/start.js",
+  "scripts": {
+    "start": "./start.sh",
+    "build": "tsc -b tsconfig.json",
+    "docker:build:arm64": "docker build . -t blog:arm64 --platform linux/arm64",
+    "docker:build:amd64": "docker build . -t blog:amd64 --platform linux/amd64"
+  },
+  "keywords": [],
+  "author": "James Brumond <james@jbrumond.me>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^17.0.29",
+    "@types/sqlite3": "^3.1.8",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "@fastify/compress": "^5.0.0",
+    "@fastify/etag": "^3.0.0",
+    "fastify": "^3.28.0",
+    "sqlite3": "^5.0.6"
+  }
+}
