@@ -1,18 +1,23 @@
 
 import { web } from '../../http';
-import { store, TemplateName } from '../../storage';
+import { TemplateName } from '../../storage';
+import { simple_template_cache } from '../../cache';
+
+const colors_cache = simple_template_cache(TemplateName.colors_css);
+const prism_cache = simple_template_cache(TemplateName.prism_css);
+const styles_cache = simple_template_cache(TemplateName.styles_css);
 
 web.get('/colors.css', async (req, res) => {
 	res.type('text/css');
-	return store.templates.render(TemplateName.colors_css, { });
+	return colors_cache.get_value();
 });
 
 web.get('/prism.css', async (req, res) => {
 	res.type('text/css');
-	return store.templates.render(TemplateName.prism_css, { });
+	return prism_cache.get_value();
 });
 
 web.get('/styles.css', async (req, res) => {
 	res.type('text/css');
-	return store.templates.render(TemplateName.styles_css, { });
+	return styles_cache.get_value();
 });

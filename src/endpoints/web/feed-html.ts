@@ -3,6 +3,7 @@ import { web } from '../../http';
 import { conf } from '../../conf';
 import { store, TemplateName } from '../../storage';
 import { FastifyRequest } from 'fastify';
+import { TemplateContext } from '../../storage/templates';
 
 let cached_page: string;
 const default_count = 10;
@@ -57,22 +58,37 @@ function build_feed_html(count: number, tagged_with?: string, before?: string) {
 }
 
 function build_html_for_posts(posts: any[], count: number, tagged_with?: string, before?: string) {
-	let page_title = store.settings.feed_title;
 	let feed_html = '<!-- Param {{= page.content =}} not yet rendered -->';
+	let url = `${conf.http.web_url}/${tagged_with ? `tagged/${tagged_with}/` : ''}`;
 
-	const context = {
-		page: {
-			url: '',
-			head: '',
-			title: page_title,
-			get content() {
-				return feed_html;
-			}
+	if (before) {
+		url += `?before=${before}`;
+
+		if (count !== default_count) {
+			url += `&count=${count}`;
 		}
-	};
+	}
 
-	// page_title = store.templates.render(TemplateName.feed_page_title, context);
-	feed_html = store.templates.render(TemplateName.feed_html, context);
+	else if (count !== default_count) {
+		url += `?count=${count}`;
+	}
 
-	return store.templates.render(TemplateName.page_html, context);
+	const context = new TemplateContext({
+		get title() {
+			// TODO: More flexibility here
+			return store.settings.feed_title;
+		},
+		get url() {
+			return url;
+		}
+	});
+
+	return store.templates.render(TemplateName.page_html, context, {
+		get head() {
+			return '';
+		},
+		get content() {
+			return store.templates.templates[TemplateName.feed_html];
+		}
+	});
 }
