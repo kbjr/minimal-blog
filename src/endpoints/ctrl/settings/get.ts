@@ -17,6 +17,9 @@ const opts: RouteShorthandOptions = {
 					},
 					theme_dark: {
 						type: 'string'
+					},
+					feed_title: {
+						type: 'string'
 					}
 				}
 			}

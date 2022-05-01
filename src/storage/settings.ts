@@ -6,6 +6,7 @@ export interface SettingsData {
 	language: string;
 	theme_light: string;
 	theme_dark: string;
+	feed_title: string;
 	// ...
 }
 
@@ -30,6 +31,10 @@ export class Settings extends EventEmitter {
 
 		if (! this.data.theme_dark) {
 			await this.set_theme_dark('default_dark');
+		}
+
+		if (! this.data.feed_title) {
+			await this.set_feed_title('Untitled Feed');
 		}
 
 		// ...
@@ -67,6 +72,16 @@ export class Settings extends EventEmitter {
 		this.data.theme_dark = value;
 		await store.set_setting('theme_dark', value);
 		this.emit('update', 'theme_dark');
+	}
+
+	public get feed_title() {
+		return this.data.feed_title;
+	}
+
+	public async set_feed_title(value: string) {
+		this.data.feed_title = value;
+		await store.set_setting('feed_title', value);
+		this.emit('update', 'feed_title');
 	}
 
 	// ...

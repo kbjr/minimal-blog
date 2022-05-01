@@ -21,6 +21,8 @@
     "@fastify/compress": "^5.0.0",
     "@fastify/etag": "^3.0.0",
     "fastify": "^3.28.0",
-    "sqlite3": "^5.0.6"
+    "mustache": "^4.2.0",
+    "sqlite3": "^5.0.6",
+    "xmlbuilder2": "^3.0.2"
   }
 }

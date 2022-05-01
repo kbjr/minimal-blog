@@ -5,14 +5,18 @@ import { load_default_template } from './defaults/templates';
 import { conf } from '../conf';
 
 export const enum TemplateName {
-	page_html       = 'page.html',
-	feed_html       = 'feed.html',
-	post_html       = 'post.html',
-	not_found_html  = 'not_found.html',
-	colors_css      = 'colors.css',
-	prism_css       = 'prism.css',
-	styles_css      = 'styles.css',
-	robots_txt      = 'robots.txt',
+	page_html             = 'page.html',
+	feed_html             = 'feed.html',
+	post_html             = 'post.html',
+	not_found_html        = 'not_found.html',
+	colors_css            = 'colors.css',
+	prism_css             = 'prism.css',
+	styles_css            = 'styles.css',
+	robots_txt            = 'robots.txt',
+	time_js               = 'time.js',
+	prism_js              = 'prism.js',
+	svg_icon_js           = 'svg_icon.js',
+	color_theme_toggle_js = 'color_theme_toggle.js',
 }
 
 const template_names = [
@@ -24,6 +28,10 @@ const template_names = [
 	TemplateName.prism_css,
 	TemplateName.styles_css,
 	TemplateName.robots_txt,
+	TemplateName.time_js,
+	TemplateName.prism_js,
+	TemplateName.svg_icon_js,
+	TemplateName.color_theme_toggle_js,
 ];
 
 export type Templates = Record<TemplateName, string>;
@@ -69,12 +77,11 @@ export class TemplateManager extends EventEmitter {
 const param_pattern = /\{\{=\s*[a-zA-Z_\.]+\s*=}}/g;
 
 const param_funcs = {
-	// ===== Site settings =====
+	// ===== Site settings (available everywhere) =====
 	'site.url': () => conf.http.web_url,
-	// 'site.title': () => store.settings.
 	'site.language': () => store.settings.language,
 
-	// ===== Light-theme colors =====
+	// ===== Light-theme colors (available everywhere) =====
 	'colors.light.sun':                  () => store.color_themes.light.sun,
 	'colors.light.moon':                 () => store.color_themes.light.moon,
 	'colors.light.bg_main':              () => store.color_themes.light.bg_main,
@@ -111,7 +118,7 @@ const param_funcs = {
 	'colors.light.code_line_number':     () => store.color_themes.light.code_line_number,
 	'colors.light.code_line_highlight':  () => store.color_themes.light.code_line_highlight,
 	
-	// ===== Dark-theme colors =====
+	// ===== Dark-theme colors (available everywhere) =====
 	'colors.dark.sun':                  () => store.color_themes.dark.sun,
 	'colors.dark.moon':                 () => store.color_themes.dark.moon,
 	'colors.dark.bg_main':              () => store.color_themes.dark.bg_main,
@@ -147,16 +154,25 @@ const param_funcs = {
 	'colors.dark.code_gutter_divider':  () => store.color_themes.dark.code_gutter_divider,
 	'colors.dark.code_line_number':     () => store.color_themes.dark.code_line_number,
 	'colors.dark.code_line_highlight':  () => store.color_themes.dark.code_line_highlight,
-
-	// ===== Page data / fragments =====
-	'page.url':     (context: TemplateContext) => context.page.url,
-	'page.head':    (context: TemplateContext) => context.page.head,
-	'page.content': (context: TemplateContext) => context.page.content,
 	
-	// ===== Feed content =====
-	'feed.title': (context: TemplateContext) => context.feed.title,
+	// ===== Parameters related to the entire feed (available everywhere) =====
+	'feed.title':         () => store.settings.feed_title,
+	'feed.url_html':      () => store.feed.url_html,
+	'feed.url_json_feed': () => store.feed.url_json_feed,
+	'feed.url_rss':       () => store.feed.url_rss,
+	'feed.url_atom':      () => store.feed.url_atom,
 
-	// ===== Post content =====
+	// ===== Contextual parameters related to the current page (available in any HTML template) =====
+	'page.url':        (context: TemplateContext) => context.page.url,
+	'page.head':       (context: TemplateContext) => context.page.head,
+	'page.title':      (context: TemplateContext) => context.page.title,
+	'page.content':    (context: TemplateContext) => context.page.content,
+
+	// ===== Parameters related to the specific subset of posts currently shown (only available in feed.html) =====
+	'posts.count':   (context: TemplateContext) => context.posts.length,
+	'posts.content': (context: TemplateContext) => context.posts,
+
+	// ===== Parameters related to the specific post (only available in post.html) =====
 	'post.title': (context: TemplateContext) => context.post.title
 };
 
@@ -220,14 +236,30 @@ export interface TemplateContext {
 	page?: {
 		url: string;
 		head: string;
+		title: string;
 		content: string;
 	};
-	feed?: {
+	posts?: {
 		title: string;
-		// 
-	};
+		get listing(): string;
+	}[];
 	post?: {
 		// ...
 		title: string;
 	};
 }
+
+// const site_context = Object.freeze({
+// 	get url() { return conf.http.web_url; },
+// 	get language() { return store.settings.language; },
+// });
+
+// const colors_context = Object.freeze({
+// 	get light() { return store.color_themes.light; },
+// 	get dark() { return store.color_themes.dark; },
+// });
+
+// export class TemplateContext {
+// 	public readonly site = site_context;
+// 	public readonly colors = colors_context;
+// }

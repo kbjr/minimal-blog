@@ -1,4 +1,14 @@
 
+## Features
+
+- Produces multiple standard feed formats:
+	- [RSS](https://www.rssboard.org/rss-specification)
+	- [Atom](https://datatracker.ietf.org/doc/html/rfc4287)
+	- [JSON Feed](https://www.jsonfeed.org/)
+	- [`h-feed` Microformat](https://microformats.org/wiki/h-feed)
+
+
+
 ## Building from source
 
 ### To run locally (i.e. for development)
