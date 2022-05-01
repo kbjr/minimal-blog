@@ -20,6 +20,10 @@ export class ColorThemeManager extends EventEmitter {
 		return this.themes[store.settings.theme_dark];
 	}
 
+	public exists(theme_name: string) {
+		return this.themes[theme_name] != null;
+	}
+
 	public get_all() {
 		const copy: Record<string, Partial<ColorThemeData>> = { };
 
@@ -28,6 +32,21 @@ export class ColorThemeManager extends EventEmitter {
 		}
 
 		return copy;
+	}
+
+	public create_theme(theme_name: string, base_name?: string) {
+		const theme = base_name
+			? Object.assign({ }, this.themes[base_name])
+			: { };
+
+		for (const name of color_names) {
+			if (! theme[name]) {
+				theme[name] = 'transparent';
+			}
+		}
+
+		this.themes[theme_name] = theme;
+		return this.store_theme(theme_name);
 	}
 
 	private async populate_missing_colors_and_themes() {
@@ -42,7 +61,18 @@ export class ColorThemeManager extends EventEmitter {
 		}
 
 		for (const [theme_name, colors] of Object.entries(this.themes)) {
-			// TODO: Populate any missing colors in each theme
+			let updated = false;
+
+			for (const name of color_names) {
+				if (! colors[name]) {
+					updated = true;
+					colors[name] = 'transparent';
+				}
+			}
+
+			if (updated) {
+				await this.store_theme(theme_name);
+			}
 		}
 	}
 
@@ -93,75 +123,42 @@ export const enum ColorName {
 	code_line_highlight  = 'code_line_highlight',
 }
 
-export interface ColorThemeData {
-	/**  */
-	sun: string;
-	/**  */
-	moon: string;
-	/**  */
-	bg_main: string;
-	/**  */
-	bg_light: string;
-	/**  */
-	bg_heavy: string;
-	/**  */
-	bg_accent: string;
-	/**  */
-	line: string;
-	/**  */
-	text_heading: string;
-	/**  */
-	text_body: string;
-	/**  */
-	text_light: string;
-	/**  */
-	text_link: string;
-	/**  */
-	text_link_active: string;
-	/**  */
-	text_link_visited: string;
-	/**  */
-	code_normal: string;
-	/**  */
-	code_shadow: string;
-	/**  */
-	code_background: string;
-	/**  */
-	code_selection: string;
-	/**  */
-	code_comment: string;
-	/**  */
-	code_punc: string;
-	/**  */
-	code_operator: string;
-	/**  */
-	code_const_literal: string;
-	/**  */
-	code_number_literal: string;
-	/**  */
-	code_boolean_literal: string;
-	/**  */
-	code_tag: string;
-	/**  */
-	code_string: string;
-	/**  */
-	code_keyword: string;
-	/**  */
-	code_func_name: string;
-	/**  */
-	code_class_name: string;
-	/**  */
-	code_regex_important: string;
-	/**  */
-	code_variable: string;
-	/**  */
-	code_builtin: string;
-	/**  */
-	code_attr_name: string;
-	/**  */
-	code_gutter_divider: string;
-	/**  */
-	code_line_number: string;
-	/**  */
-	code_line_highlight: string;
-}
+export type ColorThemeData = Record<ColorName, string>;
+
+export const color_names = [
+	ColorName.sun,
+	ColorName.moon,
+	ColorName.bg_main,
+	ColorName.bg_light,
+	ColorName.bg_heavy,
+	ColorName.bg_accent,
+	ColorName.line,
+	ColorName.text_heading,
+	ColorName.text_body,
+	ColorName.text_light,
+	ColorName.text_link,
+	ColorName.text_link_active,
+	ColorName.text_link_visited,
+	ColorName.code_normal,
+	ColorName.code_shadow,
+	ColorName.code_background,
+	ColorName.code_selection,
+	ColorName.code_comment,
+	ColorName.code_punc,
+	ColorName.code_operator,
+	ColorName.code_const_literal,
+	ColorName.code_number_literal,
+	ColorName.code_boolean_literal,
+	ColorName.code_tag,
+	ColorName.code_string,
+	ColorName.code_keyword,
+	ColorName.code_func_name,
+	ColorName.code_class_name,
+	ColorName.code_regex_important,
+	ColorName.code_variable,
+	ColorName.code_builtin,
+	ColorName.code_attr_name,
+	ColorName.code_gutter_divider,
+	ColorName.code_line_number,
+	ColorName.code_line_highlight,
+];

@@ -6,6 +6,11 @@ ENV HTTP_CTRL_PORT=3001
 ENV HTTP_WEB_URL=http://localhost:3000
 ENV HTTP_CTRL_URL=http://localhost:3001
 
+ENV CACHE_ENABLE_ETAGS="1"
+ENV CACHE_ENABLE_CACHE_CONTROL="1"
+ENV COMPRESSION_ENABLE="1"
+ENV COMPRESSION_ENCODINGS="br,deflate,gzip"
+
 ENV DATA_PATH=/data
 ENV BLOG_PATH=/var/blog
 
@@ -14,7 +19,7 @@ VOLUME ${DATA_PATH}
 WORKDIR ${BLOG_PATH}
 
 COPY src/  ${BLOG_PATH}/src/
-COPY templates/  ${BLOG_PATH}/templates/
+COPY assets/  ${BLOG_PATH}/assets/
 COPY package.json tsconfig.json ${BLOG_PATH}/
 
 # Install build dependencies for sqlite3
