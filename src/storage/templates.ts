@@ -3,12 +3,15 @@ import { store } from './store';
 import { EventEmitter } from 'events';
 import { conf } from '../conf';
 import { render, parse } from 'mustache';
-import { load_default_template } from './defaults/templates';
+import { load_default_template } from './default-templates';
+import { PostData } from './feed';
 
 export const enum TemplateName {
 	page_html             = 'page.html',
-	feed_html             = 'feed.html',
-	post_html             = 'post.html',
+	feed_head_html        = 'feed_head.html',
+	feed_content_html     = 'feed_content.html',
+	post_head_html        = 'post_head.html',
+	post_content_html     = 'post_content.html',
 	not_found_html        = 'not_found.html',
 	colors_css            = 'colors.css',
 	prism_css             = 'prism.css',
@@ -22,8 +25,10 @@ export const enum TemplateName {
 
 const template_names = [
 	TemplateName.page_html,
-	TemplateName.feed_html,
-	TemplateName.post_html,
+	TemplateName.feed_head_html,
+	TemplateName.feed_content_html,
+	TemplateName.post_head_html,
+	TemplateName.post_content_html,
 	TemplateName.not_found_html,
 	TemplateName.colors_css,
 	TemplateName.prism_css,
@@ -89,16 +94,12 @@ export class TemplateContext {
 
 	constructor(
 		public readonly page: Readonly<PageContext>,
-		public readonly posts?: Post[],
-		public readonly post?: Post
+		public readonly posts?: PostData[],
+		public readonly post?: PostData
 	) { }
 }
 
 export interface PageContext {
 	url: string;
-	title: string;
-}
-
-export interface Post {
 	title: string;
 }

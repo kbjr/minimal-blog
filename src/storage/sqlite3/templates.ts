@@ -1,7 +1,7 @@
 
 import { conf } from '../../conf';
 import * as sqlite3 from 'sqlite3';
-import { run, get_one, get_all, open } from './db';
+import { run, get_one, get_all, open, sql } from './db';
 import { Templates } from '../templates';
 
 let db: sqlite3.Database;
@@ -35,10 +35,10 @@ export async function get_all_templates() {
 	return templates;
 }
 
-const sql_get_templates = `
+const sql_get_templates = sql(`
 select name, content
 from templates
-`;
+`);
 
 export async function set_template(name: string, content: string) {
 	return run(db, sql_set_template, {
@@ -47,22 +47,22 @@ export async function set_template(name: string, content: string) {
 	});
 }
 
-const sql_set_template = `
+const sql_set_template = sql(`
 insert into templates
 	(name, content)
 values
 	($name, $content)
 on conflict (name) do update
 	set content = $content
-`;
+`);
 
 export function create_templates() {
 	return run(db, sql_create_templates);
 }
 
-const sql_create_templates = `
+const sql_create_templates = sql(`
 create table if not exists templates (
 	name varchar(50) primary key,
 	content text
 )
-`;
+`);

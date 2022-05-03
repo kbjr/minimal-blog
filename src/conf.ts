@@ -1,4 +1,5 @@
 
+import { Loggers } from './debug';
 import { resolve as resolve_path } from 'path';
 
 export namespace conf {
@@ -70,6 +71,47 @@ export namespace conf {
 		/** The directory where static files and default templates are loaded from */
 		export const assets_path = resolve_path(__dirname, '../assets');
 	}
+
+	/** Configuration for the control API authentication mechanism */
+	export namespace auth {
+		/** Time to live (TTL) to set on issued tokens */
+		export const token_ttl = '1h';
+
+		/**
+		 * Path to key file to use for signing JWTs. If not supplied, the server will use HMAC token signing
+		 * using a randomly generated secret (regenerated uniquely at each server start).
+		 */
+		export const signing_key_file = cast_str<string>(process.env.AUTH_SIGNING_KEY, null);
+
+		/** Secret size (in bytes) to generate for HMAC token signing */
+		export const hmac_secret_size = 128;
+	}
+
+	/** Configuration to control logging output */
+	export namespace logging {
+		/** The various supported log levels, ordered from least to most verbose */
+		export enum Level {
+			none  = 'none',
+			fatal = 'fatal',
+			error = 'error',
+			warn  = 'warn',
+			info  = 'info',
+			debug = 'debug',
+			trace = 'trace',
+		}
+
+		/** The logging output level */
+		export const level: Level = cast_str<Level>(process.env.LOG_LEVEL, Level.info);
+
+		/** Enables `pino-pretty` logging output for easier reading (not included in production build) */
+		export const pretty = try_require('pino-pretty') && cast_bool(process.env.LOG_PRETTY, true);
+
+		/** Controls which additional debug loggers are enabled */
+		export const debug_loggers = Object.freeze<Partial<Loggers>>({
+			sqlite: true,
+			sqlite_sql: true
+		});
+	}
 }
 
 
@@ -116,4 +158,15 @@ function cast_bool(value: string, fallback: boolean = null) : boolean {
 	}
 
 	return fallback;
+}
+
+function try_require(module: string) {
+	try {
+		require(module);
+		return true;
+	}
+
+	catch (error) {
+		return false;
+	}
 }

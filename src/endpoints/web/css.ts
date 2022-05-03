@@ -3,8 +3,8 @@ import { web } from '../../http';
 import { TemplateName } from '../../storage';
 import { simple_template_cache } from '../../cache';
 
-const colors_cache = simple_template_cache(TemplateName.colors_css);
-const prism_cache = simple_template_cache(TemplateName.prism_css);
+const colors_cache = simple_template_cache(TemplateName.colors_css, true);
+const prism_cache = simple_template_cache(TemplateName.prism_css, true);
 const styles_cache = simple_template_cache(TemplateName.styles_css);
 
 web.get('/colors.css', async (req, res) => {

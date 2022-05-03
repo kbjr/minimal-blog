@@ -1,7 +1,7 @@
 
 import { store } from './store';
 import { EventEmitter } from 'events';
-import { default_themes } from './defaults/color-themes';
+import { default_themes } from './default-color-themes';
 
 export class ColorThemeManager extends EventEmitter {
 	protected themes: Record<string, Partial<ColorThemeData>> = { };

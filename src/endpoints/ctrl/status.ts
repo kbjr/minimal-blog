@@ -15,6 +15,9 @@ const opts: RouteShorthandOptions = {
 					},
 					hostname: {
 						type: 'string'
+					},
+					time: {
+						type: 'string'
 					}
 				}
 			}
@@ -25,6 +28,7 @@ const opts: RouteShorthandOptions = {
 ctrl.get('/.status', opts, async (req, res) => {
 	return {
 		status: 'ok',
-		hostname: hostname()
+		hostname: hostname(),
+		time: (new Date).toISOString(),
 	};
 });

@@ -24,10 +24,19 @@ import './web/feed-html';
 // ===== Control Panel API =====
 
 import './ctrl/status';
+import './ctrl/get-token';
+import './ctrl/ui';
+
+// Users / authentication
+import './ctrl/get-token';
+import './ctrl/users/list';
+import './ctrl/users/create';
+import './ctrl/users/update-password';
+import './ctrl/users/delete';
 
 // Settings
 import './ctrl/settings/get';
-import './ctrl/settings/patch';
+import './ctrl/settings/update';
 
 // Themes
 import './ctrl/themes/get';

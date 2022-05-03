@@ -22,11 +22,28 @@ export class Cache<T> {
 	}
 }
 
-export function simple_template_cache(template_name: TemplateName) {
+export function template_cache(template_name: TemplateName, partials: Record<string, string>, context: TemplateContext) {
 	const cache = new Cache(() => {
-		const context = new TemplateContext(null);
-		return store.templates.render(template_name, context);
+		return store.templates.render(template_name, context, partials);
 	});
+
+	store.settings.on('load', () => cache.invalidate());
+	store.settings.on('update', () => cache.invalidate());
+	store.color_themes.on('load', () => cache.invalidate());
+	store.color_themes.on('update', () => cache.invalidate());
+	store.templates.on('load', () => cache.invalidate());
+	store.templates.on('update', () => cache.invalidate());
+
+	return cache;
+}
+
+export function simple_template_cache(template_name: TemplateName, no_render = false) {
+	const cache = no_render
+		? new Cache(() => store.templates.templates[template_name])
+		: new Cache(() => {
+			const context = new TemplateContext(null);
+			return store.templates.render(template_name, context);
+		});
 
 	store.settings.on('load', () => cache.invalidate());
 	store.settings.on('update', () => cache.invalidate());

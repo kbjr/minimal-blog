@@ -29,7 +29,24 @@ export class Feed extends EventEmitter {
 
 export interface PostData {
 	uri_name: string;
+	is_draft: 1 | 0;
 	title: string;
+	external_url: string;
 	subtitle: string;
-	// ...
+	content_html: string;
+	content_text: string;
+	image: string;
+	banner_image: string;
+	date_published: string;
+	date_modified: string;
+	tags: string[];
+	authors: AuthorData[];
+	// attachments: any[];
+}
+
+export interface AuthorData {
+	id: number;
+	name?: string;
+	url?: string;
+	avatar?: string;
 }

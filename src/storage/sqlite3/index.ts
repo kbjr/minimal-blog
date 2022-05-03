@@ -1,7 +1,9 @@
 
+import * as users from './users';
 import * as settings from './settings';
 import * as color_themes from './color-themes';
 import * as templates from './templates';
+import * as posts from './posts';
 import { Storage } from '../storage';
 
 export class Storage_sqlite3 extends Storage {
@@ -10,9 +12,31 @@ export class Storage_sqlite3 extends Storage {
 	}
 
 	protected async init() {
+		await users.init();
 		await settings.init();
 		await color_themes.init();
 		await templates.init();
+		await posts.init();
+	}
+
+	public get_all_users() : Promise<users.UserRow[]> {
+		return users.get_all_users();
+	}
+
+	public get_user(name: string) : Promise<users.UserRow> {
+		return users.get_user(name);
+	}
+
+	public async create_user(name: string, password_hash: string) : Promise<void> {
+		await users.create_user(name, password_hash);
+	}
+
+	public async delete_user(name: string) : Promise<void> {
+		await users.delete_user(name);
+	}
+
+	public async update_password(name: string, password_hash: string) : Promise<void> {
+		await users.update_password(name, password_hash);
 	}
 
 	public get_all_settings() {

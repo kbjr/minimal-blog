@@ -1,7 +1,10 @@
 
 import { ctrl } from '../../../http';
 import { store } from '../../../storage';
-import { RouteShorthandOptions } from 'fastify';
+import { FastifyRequest, RouteShorthandOptions } from 'fastify';
+import { require_auth, ReqUser } from '../../../auth';
+
+type Req = ReqUser & FastifyRequest<{ }>;
 
 const opts: RouteShorthandOptions = {
 	schema: {
@@ -9,6 +12,9 @@ const opts: RouteShorthandOptions = {
 			200: {
 				type: 'object',
 				properties: {
+					version: {
+						type: 'number'
+					},
 					language: {
 						type: 'string'
 					},
@@ -20,6 +26,10 @@ const opts: RouteShorthandOptions = {
 					},
 					feed_title: {
 						type: 'string'
+					},
+					show_setup: {
+						type: 'number',
+						enum: [ 0, 1 ]
 					}
 				}
 			}
@@ -27,6 +37,7 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
-ctrl.get('/settings', opts, async (req, res) => {
+ctrl.get('/api/settings', opts, async (req: Req, res) => {
+	require_auth(req);
 	return store.settings.get_all();
 });

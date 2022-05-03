@@ -1,7 +1,7 @@
 
 import { conf } from '../../conf';
 import * as sqlite3 from 'sqlite3';
-import { run, get_one, get_all, open } from './db';
+import { run, get_one, get_all, open, sql } from './db';
 import { SettingsData } from '../settings';
 
 let db: sqlite3.Database;
@@ -40,10 +40,10 @@ export async function get_setting(name: string) {
 	return row.value;
 }
 
-const sql_get_setting = `
+const sql_get_setting = sql(`
 select name, value
 from site_settings
-`;
+`);
 
 export async function set_setting(name: string, value: any) {
 	return run(db, sql_set_setting, {
@@ -52,22 +52,22 @@ export async function set_setting(name: string, value: any) {
 	});
 }
 
-const sql_set_setting = `
+const sql_set_setting = sql(`
 insert into site_settings
 	(name, value)
 values
 	($name, $value)
 on conflict (name) do update
 	set value = $value
-`;
+`);
 
 export function create_settings() {
 	return run(db, sql_create_settings);
 }
 
-const sql_create_settings = `
+const sql_create_settings = sql(`
 create table if not exists site_settings (
 	name varchar(50) primary key,
 	value any
 )
-`;
+`);

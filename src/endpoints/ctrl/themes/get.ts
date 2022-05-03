@@ -1,7 +1,10 @@
 
 import { ctrl } from '../../../http';
 import { store } from '../../../storage';
-import { RouteShorthandOptions } from 'fastify';
+import { require_auth, ReqUser } from '../../../auth';
+import { FastifyRequest, RouteShorthandOptions } from 'fastify';
+
+type Req = ReqUser & FastifyRequest<{ }>;
 
 const opts: RouteShorthandOptions = {
 	schema: {
@@ -53,6 +56,7 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
-ctrl.get('/themes', opts, async (req, res) => {
+ctrl.get('/api/themes', opts, async (req: Req, res) => {
+	require_auth(req);
 	return store.color_themes.get_all();
 });

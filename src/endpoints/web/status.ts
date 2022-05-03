@@ -17,6 +17,9 @@ if (conf.http.web_enable_status) {
 						},
 						hostname: {
 							type: 'string'
+						},
+						time: {
+							type: 'string'
 						}
 					}
 				}
@@ -27,7 +30,8 @@ if (conf.http.web_enable_status) {
 	web.get('/.status', opts, async (req, res) => {
 		return {
 			status: 'ok',
-			hostname: hostname()
+			hostname: hostname(),
+			time: (new Date).toISOString(),
 		};
 	});
 }

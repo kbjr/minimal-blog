@@ -3,10 +3,10 @@ import { web } from '../../http';
 import { TemplateName } from '../../storage';
 import { simple_template_cache } from '../../cache';
 
-const time_cache = simple_template_cache(TemplateName.time_js);
-const prism_cache = simple_template_cache(TemplateName.prism_js);
-const svg_icon_cache = simple_template_cache(TemplateName.svg_icon_js);
-const color_theme_toggle_cache = simple_template_cache(TemplateName.color_theme_toggle_js);
+const time_cache = simple_template_cache(TemplateName.time_js, true);
+const prism_cache = simple_template_cache(TemplateName.prism_js, true);
+const svg_icon_cache = simple_template_cache(TemplateName.svg_icon_js, true);
+const color_theme_toggle_cache = simple_template_cache(TemplateName.color_theme_toggle_js, true);
 
 web.get('/time.js', async (req, res) => {
 	res.type('application/javascript');

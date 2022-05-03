@@ -1,7 +1,7 @@
 
 import { conf } from '../../conf';
 import * as sqlite3 from 'sqlite3';
-import { run, get_one, get_all, open } from './db';
+import { run, get_one, get_all, open, sql } from './db';
 import { ColorThemeData } from '../color-themes';
 
 let db: sqlite3.Database;
@@ -40,10 +40,10 @@ export async function get_all_color_themes() {
 	return themes;
 }
 
-const sql_get_themes = `
+const sql_get_themes = sql(`
 select theme_name, color_name, value
 from color_themes
-`;
+`);
 
 export async function set_color(theme_name: string, color_name: string, value: string) {
 	return run(db, sql_set_color, {
@@ -53,20 +53,20 @@ export async function set_color(theme_name: string, color_name: string, value: s
 	});
 }
 
-const sql_set_color = `
+const sql_set_color = sql(`
 insert into color_themes
 	(theme_name, color_name, value)
 values
 	($theme_name, $color_name, $value)
 on conflict (theme_name, color_name) do update
 	set value = $value
-`;
+`);
 
 export function create_color_themes() {
 	return run(db, sql_create_color_themes);
 }
 
-const sql_create_color_themes = `
+const sql_create_color_themes = sql(`
 create table if not exists color_themes (
 	theme_name varchar(50),
 	color_name varchar(50),
@@ -74,4 +74,4 @@ create table if not exists color_themes (
 
 	primary key (theme_name, color_name)
 )
-`;
+`);

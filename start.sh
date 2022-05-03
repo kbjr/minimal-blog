@@ -10,5 +10,7 @@ export DATA_STORAGE_TYPE="sqlite3"
 export DATA_DIR="$(dirname "$0")/data"
 export COMPRESSION_ENABLE="1"
 export COMPRESSION_ENCODINGS="br,deflate,gzip"
+export LOG_LEVEL="debug"
+export LOG_PRETTY="1"
 
 node ./build/start.js

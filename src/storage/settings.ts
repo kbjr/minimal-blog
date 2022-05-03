@@ -3,10 +3,12 @@ import { store } from './store';
 import { EventEmitter } from 'events';
 
 export interface SettingsData {
+	version: 1;
 	language: string;
 	theme_light: string;
 	theme_dark: string;
 	feed_title: string;
+	show_setup: 1 | 0;
 	// ...
 }
 
@@ -21,20 +23,28 @@ export class Settings extends EventEmitter {
 
 	/** Populates any missing settings with default values */
 	private async populate_missing_settings() {
-		if (! this.data.language) {
+		if (this.data.version == null) {
+			await this.set_version(1);
+		}
+
+		if (this.data.language == null) {
 			await this.set_language('en');
 		}
 
-		if (! this.data.theme_light) {
+		if (this.data.theme_light == null) {
 			await this.set_theme_light('default_light');
 		}
 
-		if (! this.data.theme_dark) {
+		if (this.data.theme_dark == null) {
 			await this.set_theme_dark('default_dark');
 		}
 
-		if (! this.data.feed_title) {
+		if (this.data.feed_title == null) {
 			await this.set_feed_title('Untitled Feed');
+		}
+
+		if (this.data.show_setup == null) {
+			await this.set_show_setup(1);
 		}
 
 		// ...
@@ -42,6 +52,16 @@ export class Settings extends EventEmitter {
 
 	public get_all() {
 		return Object.assign({ }, this.data);
+	}
+
+	public get version() {
+		return this.data.version;
+	}
+
+	public async set_version(value: 1) {
+		this.data.version = value;
+		await store.set_setting('version', value);
+		this.emit('update', 'version');
 	}
 
 	public get language() {
@@ -82,6 +102,16 @@ export class Settings extends EventEmitter {
 		this.data.feed_title = value;
 		await store.set_setting('feed_title', value);
 		this.emit('update', 'feed_title');
+	}
+
+	public get show_setup() {
+		return this.data.show_setup;
+	}
+
+	public async set_show_setup(value: 1 | 0) {
+		this.data.show_setup = value;
+		await store.set_setting('show_setup', value);
+		this.emit('update', 'show_setup');
 	}
 
 	// ...

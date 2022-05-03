@@ -1,5 +1,5 @@
 
-import { ColorThemeData } from '../color-themes';
+import { ColorThemeData } from './color-themes';
 
 export const default_themes: Record<string, ColorThemeData> = {
 	default_light: {
