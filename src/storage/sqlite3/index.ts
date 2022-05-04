@@ -19,16 +19,16 @@ export class Storage_sqlite3 extends Storage {
 		await posts.init();
 	}
 
-	public get_all_users() : Promise<users.UserRow[]> {
+	public get_all_users() {
 		return users.get_all_users();
 	}
 
-	public get_user(name: string) : Promise<users.UserRow> {
+	public get_user(name: string) {
 		return users.get_user(name);
 	}
 
-	public async create_user(name: string, password_hash: string) : Promise<void> {
-		await users.create_user(name, password_hash);
+	public async create_user(name: string, password_hash: string, is_admin = false) : Promise<void> {
+		await users.create_user(name, password_hash, is_admin ? 1 : 0);
 	}
 
 	public async delete_user(name: string) : Promise<void> {

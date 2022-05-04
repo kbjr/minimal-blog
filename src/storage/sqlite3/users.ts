@@ -2,6 +2,7 @@
 import { conf } from '../../conf';
 import * as sqlite3 from 'sqlite3';
 import { run, get_one, get_all, open, sql } from './db';
+import { UserData } from '../users';
 
 let db: sqlite3.Database;
 
@@ -24,12 +25,20 @@ export interface UserRow {
 	is_admin: 1 | 0;
 }
 
-export function get_all_users() {
-	return get_all<UserRow>(db, sql_get_user);
+export async function get_all_users() {
+	const rows = await get_all<UserRow>(db, sql_get_user);
+	return rows.map((row) => {
+		const mapped: UserData = row as any as UserData;
+		mapped.is_admin = Boolean(row.is_admin);
+		return mapped;
+	});
 }
 
-export function get_user(name: string) {
-	return get_one<UserRow>(db, sql_get_user + 'where name = ?', [ name ]);
+export async function get_user(name: string) {
+	const row = await get_one<UserRow>(db, sql_get_user + 'where name = ?', [ name ]);
+	const mapped: UserData = row as any as UserData;
+	mapped.is_admin = Boolean(row.is_admin);
+	return mapped;
 }
 
 const sql_get_user = sql(`

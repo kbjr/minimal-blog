@@ -10,7 +10,7 @@ export abstract class Storage {
 
 	public abstract get_all_users() : Promise<UserData[]>;
 	public abstract get_user(name: string) : Promise<UserData>;
-	public abstract create_user(name: string, password_hash: string) : Promise<void>;
+	public abstract create_user(name: string, password_hash: string, is_admin?: boolean) : Promise<void>;
 	public abstract delete_user(name: string) : Promise<void>;
 	public abstract update_password(name: string, password_hash: string) : Promise<void>;
 	// TODO: Add toggle_admin() method

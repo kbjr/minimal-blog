@@ -55,16 +55,16 @@ export class UserManager {
 		}
 
 		const new_user: UserData = {
-			name: name,
+			name,
 			password_hash: null,
-			is_admin: is_admin ? 1 : 0
+			is_admin,
 		};
 
 		this.users.push(new_user);
 		this.users_by_name[name] = new_user;
 
 		new_user.password_hash = await hash_password(password);
-		await store.create_user(name, new_user.password_hash);
+		await store.create_user(name, new_user.password_hash, is_admin);
 	}
 
 	public async update_password(name: string, new_password: string) {
@@ -98,5 +98,5 @@ export class UserManager {
 export interface UserData {
 	name: string;
 	password_hash: string;
-	is_admin: 1 | 0;
+	is_admin: boolean;
 }
