@@ -1,0 +1,35 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "pwa-node",
+			"request": "launch",
+			"name": "Launch Program",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"env": {
+				"HTTP_WEB_PORT": "3000",
+				"HTTP_CTRL_PORT": "3001",
+				"HTTP_WEB_URL": "http://localhost:3000",
+				"HTTP_CTRL_URL": "http://localhost:3001",
+				"CACHE_ENABLE_ETAGS": "1",
+				"CACHE_ENABLE_CACHE_CONTROL": "1",
+				"DATA_STORAGE_TYPE": "sqlite3",
+				"DATA_DIR": "${workspaceFolder}/data",
+				"COMPRESSION_ENABLE": "1",
+				"COMPRESSION_ENCODINGS": "br,deflate,gzip",
+				"LOG_LEVEL": "debug",
+				"LOG_PRETTY": "1",
+			},
+			"program": "${workspaceFolder}/build/start.js",
+			"preLaunchTask": "tsc: build - tsconfig.json",
+			"outFiles": [
+				"${workspaceFolder}/build/**/*.js"
+			]
+		}
+	]
+}

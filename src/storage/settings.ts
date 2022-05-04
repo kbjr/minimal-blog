@@ -50,6 +50,12 @@ export class Settings extends EventEmitter {
 		// ...
 	}
 
+	public async set(name: string, value: any) {
+		this.data[name] = value;
+		await store.set_setting(name, value);
+		this.emit('update', name);
+	}
+
 	public get_all() {
 		return Object.assign({ }, this.data);
 	}

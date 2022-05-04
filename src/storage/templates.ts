@@ -66,6 +66,10 @@ export class TemplateManager extends EventEmitter {
 		return render(this.templates[name], context, partials);
 	}
 
+	public get_template(name: TemplateName) {
+		return this.templates[name];
+	}
+
 	public update_template(name: TemplateName, content: string) {
 		this.templates[name] = content;
 		parse(content);

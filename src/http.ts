@@ -1,4 +1,5 @@
 
+import * as Ajv from 'ajv';
 import { conf } from './conf';
 import { HttpError } from './http-error';
 import fastify, { FastifyError, FastifyLoggerOptions, FastifyReply, FastifyRequest } from 'fastify';

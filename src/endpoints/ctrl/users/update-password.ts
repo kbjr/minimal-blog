@@ -6,8 +6,10 @@ import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import * as http_error from '../../../http-error';
 
 type Req = ReqUser & FastifyRequest<{
-	Body: {
+	Params: {
 		username: string;
+	};
+	Body: {
 		password: string;
 	};
 }>;
@@ -20,13 +22,13 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
-ctrl.put('/api/users/:name/password', opts, async (req: Req, res) => {
+ctrl.put('/api/users/:username/password', opts, async (req: Req, res) => {
 	require_auth(req);
 
-	if (req.body.username !== req.user.sub && ! req.user.roles.admin) {
-		http_error.throw_403_forbidden('Not authorized', `User "${req.user.sub}" attempted to modify the password of "${req.body.username}"`);
+	if (req.params.username !== req.user.sub && ! req.user.roles.admin) {
+		http_error.throw_403_forbidden('Not authorized', `User "${req.user.sub}" attempted to modify the password of "${req.params.username}"`);
 	}
 
-	await store.users.update_password(req.body.username, req.body.password);
+	await store.users.update_password(req.params.username, req.body.password);
 	res.status(204);
 });

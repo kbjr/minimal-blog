@@ -72,6 +72,8 @@ export class UserManager {
 			http_error.throw_403_forbidden('Password update failed', 'Attempted to update password for user that does not exist');
 		}
 
+		// TODO: Validate password strength
+
 		const new_hash = await hash_password(new_password);
 		const user = this.get_user(name);
 

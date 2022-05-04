@@ -38,6 +38,20 @@ import './ctrl/users/delete';
 import './ctrl/settings/get';
 import './ctrl/settings/update';
 
+// Templates
+import './ctrl/templates/get';
+import './ctrl/templates/put';
+// import './ctrl/templates/put-favicon';
+
 // Themes
 import './ctrl/themes/get';
+// ...
+
+// Posts
+// ...
+
+// Authors
+// ...
+
+// Tags
 // ...

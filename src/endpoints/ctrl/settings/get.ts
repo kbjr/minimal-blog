@@ -12,21 +12,11 @@ const opts: RouteShorthandOptions = {
 			200: {
 				type: 'object',
 				properties: {
-					version: {
-						type: 'number'
-					},
-					language: {
-						type: 'string'
-					},
-					theme_light: {
-						type: 'string'
-					},
-					theme_dark: {
-						type: 'string'
-					},
-					feed_title: {
-						type: 'string'
-					},
+					version: { type: 'number' },
+					language: { type: 'string' },
+					theme_light: { type: 'string' },
+					theme_dark: { type: 'string' },
+					feed_title: { type: 'string' },
 					show_setup: {
 						type: 'number',
 						enum: [ 0, 1 ]

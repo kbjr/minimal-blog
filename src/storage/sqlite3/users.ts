@@ -68,7 +68,7 @@ export async function delete_user(name: string) {
 }
 
 const sql_delete_user = sql(`
-delete users
+delete from users
 where name = $name
 `);
 
@@ -81,8 +81,8 @@ export async function update_password(name: string, password_hash: string) {
 
 const sql_update_password = sql(`
 update users
-where name = $name
 set password_hash = $password_hash
+where name = $name
 `);
 
 // TODO: Add a toggle_admin() function
