@@ -1,0 +1,215 @@
+
+:root {
+	font-size: 16px;
+	--font-open-sans: 'Open Sans', sans-serif;
+	--font-monospace: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	box-sizing: border-box;
+}
+
+html, body, #root {
+	height: 100%;
+	min-height: 100%;
+}
+
+body {
+	background: var(--theme-bg-main);
+
+	/* NOTE: This style is added dynamically by JS */
+	/* transition: background linear .1s; */
+}
+
+#root {
+	display: flex;
+	flex-direction: column;
+	padding: 2rem;
+	max-width: 100rem;
+	margin: auto;
+}
+
+
+
+
+
+/* ===== Main Heading ===== */
+
+#root > header {
+	padding: 0 1rem;
+	/* display: flex; */
+	/* flex-direction: row; */
+}
+
+	#root > header h1 {
+		/* flex-grow: 1; */
+	}
+
+
+
+	
+/* ===== Typography ===== */
+
+h1, h2, h3, h4, h5, h6,
+p, a, li, dt, dd {
+	font-family: var(--font-open-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: var(--theme-text-heading);
+}
+
+code, pre {
+	color: var(--theme-code-normal);
+	font-family: var(--font-monospace);
+	font-size: 1.35rem;
+}
+
+pre {
+	margin: 4rem 2rem;
+	padding: 1rem 1.5rem;
+	border: 0.1rem solid var(--theme-line);
+	border-radius: 1rem;
+	overflow: auto;
+}
+
+h1 {
+	color: var(--theme-text-heading);
+	font-size: 2rem;
+	font-weight: 300;
+}
+
+p, small, li, dt, dd {
+	color: var(--theme-text-body);
+}
+
+p {
+	margin: 3rem 0;
+	font-size: 1.2rem;
+	line-height: 1.75;
+}
+
+small {
+	font-size: 0.8rem;
+	font-family: var(--font-open-sans);
+	/* font-family: var(--font-nunito); */
+}
+
+a {
+	color: var(--theme-text-link);
+	text-decoration: none;
+}
+
+a:active,
+a:hover,
+a:focus {
+	color: var(--theme-text-link-active);
+}
+
+a:visited {
+	color: var(--theme-text-link-visited);
+}
+
+h1 > a, h2 > a,
+h1 > a:active, h2 > a:active,
+h1 > a:hover, h2 > a:hover,
+h1 > a:focus, h2 > a:focus,
+h1 > a:visited, h2 > a:visited {
+	color: inherit;
+}
+
+header p {
+	display: block;
+	margin: 1rem;
+	line-height: 1;
+	font-style: italic;
+	font-size: 1rem;
+}
+
+
+
+/* ===== Forms and Inputs ===== */
+
+label {
+	display: block;
+	font-family: var(--font-open-sans);
+	font-size: 1rem;
+	margin-top: 1rem;
+}
+
+input {
+	display: block;
+	margin-top: 0.25rem;
+	margin-bottom: 1rem;
+	border: 0.125rem var(--theme-border-input) solid;
+	border-radius: 0.25rem;
+	padding: 0.5rem;
+	font-family: var(--font-open-sans);
+	font-size: 1rem;
+	width: 20rem;
+}
+
+input[type='text']:invalid,
+input[type='password']:invalid {
+	border-color: var(--theme-border-input-invalid);
+}
+
+button {
+	padding: 0.75rem 1.5rem;
+	border-radius: 0.5rem;
+	font-size: 1rem;
+	margin-top: 1rem;
+	cursor: pointer;
+	user-select: none;
+}
+
+
+
+
+
+/* ===== Login Page ===== */
+
+#form-login {
+	padding: 2rem;
+	margin: 5rem auto;
+}
+
+
+
+
+
+
+
+
+
+/* ===== Tighter layout for smaller screens ===== */
+
+@media (max-width: 60rem) {
+	#root {
+		padding: 2rem 0;
+	}
+
+	article > header:not(:last-child) {
+		margin-bottom: 4rem;
+	}
+
+	p {
+		margin: 2rem 0;
+		font-size: 1rem;
+	}
+
+	code, pre {
+		font-size: 1rem;
+	}
+
+	pre {
+		margin: 2rem 0.5rem;
+		padding: 0.5rem 1rem;
+		border: 0.1rem solid var(--theme-code-gutter-divider);
+		border-radius: 1rem;
+		overflow: auto;
+	}
+}

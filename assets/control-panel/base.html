@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ page.title }}</title>
+	<meta name="color-scheme" content="dark light">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Font imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap">
+
+	<link rel="stylesheet" href="{{{ ctrl_panel.url }}}/colors.css">
+	<link rel="stylesheet" href="{{{ ctrl_panel.url }}}/styles.css">
+
+	<!-- Expose some configuration values to client-side JS -->
+	<script>
+		window.conf = {
+			site_url: '{{{ site.url }}}',
+			ctrl_panel_url: '{{{ ctrl_panel.url }}}',
+			token_payload: null,
+			// 
+		};
+	</script>
+
+	<script src="{{{ ctrl_panel.url }}}/app.js"></script>
+
+	{{# page.require_auth }}
+	<script src="{{{ ctrl_panel.url }}}/login_check.js"></script>
+	{{/ page.require_auth}}
+
+	<script src="{{{ ctrl_panel.url }}}/time.js" async></script>
+	<script src="{{{ ctrl_panel.url }}}/svg_icon.js" async></script>
+	<script src="{{{ ctrl_panel.url }}}/color_theme_toggle.js" async></script>
+
+	{{> page_head }}
+</head>
+<body>
+	<div id="root">
+		<header>
+			<h2>Control Panel / {{ page.title }}</h2>
+			<p>Website: <a href="{{{ site.url }}}">{{ site.url }}</a></p>
+			<p>Control Panel: <a href="{{{ ctrl_panel.url }}}">{{ ctrl_panel.url }}</a></p>
+			<noscript>
+				<p>
+					<strong>JavaScript is required to use this control panel</strong>
+				</p>
+			</noscript>
+
+			{{# page.require_auth }}
+			<button id="btn-logout">Logout</button>
+			<script>
+			(() => {
+				const btn_logout = document.querySelector('#btn-logout');
+				btn_logout.addEventListener('click', () => app.logout());
+			})();
+			</script>
+			{{/ page.require_auth }}
+
+			<color-theme-toggle></color-theme-toggle>
+		</header>
+		
+		{{> page_content }}
+	</div>
+</body>
+</html>

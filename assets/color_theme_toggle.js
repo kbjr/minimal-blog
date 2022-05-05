@@ -26,7 +26,7 @@
 			width: ${size}rem;
 			height: ${size}rem;
 			padding: 0.5rem;
-			background: var(--color-bg-light);
+			background: var(--theme-bg-light);
 			border-radius: 100%;
 			cursor: pointer;
 			overflow: hidden;
@@ -35,7 +35,7 @@
 		}
 
 			:host .wrapper:hover {
-				background: var(--color-bg-accent);
+				background: var(--theme-bg-accent);
 			}
 
 			:host .wrapper .icons {
@@ -61,7 +61,7 @@
 		}
 
 			:host svg-icon[icon='sun'] {
-				color: var(--color-sun);
+				color: var(--theme-sun);
 				filter: drop-shadow(1px 1px 1px #555);
 			}
 
@@ -70,7 +70,7 @@
 			}
 
 			:host svg-icon[icon='moon'] {
-				color: var(--color-moon);
+				color: var(--theme-moon);
 				filter: drop-shadow(1px 1px 0.5px #bbb);
 			}
 

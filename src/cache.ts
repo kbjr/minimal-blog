@@ -1,16 +1,20 @@
 
 import { store, TemplateName } from './storage';
 import { TemplateContext } from './storage/templates';
+import { debug_logger } from './debug';
 
 export class Cache<T> {
 	private value: T;
+	private log = debug_logger('cache', `[cache:${this.name}]: `);
 
 	constructor(
+		private name: string,
 		private render: () => T
 	) { }
 
 	public get_value() {
 		if (this.value == null) {
+			this.log('render');
 			this.value = this.render();
 		}
 
@@ -18,12 +22,13 @@ export class Cache<T> {
 	}
 
 	public invalidate() {
+		this.log('invalidate');
 		this.value = null;
 	}
 }
 
 export function template_cache(template_name: TemplateName, partials: Record<string, string>, context: TemplateContext) {
-	const cache = new Cache(() => {
+	const cache = new Cache(`template:${template_name}`, () => {
 		return store.templates.render(template_name, context, partials);
 	});
 
@@ -39,8 +44,8 @@ export function template_cache(template_name: TemplateName, partials: Record<str
 
 export function simple_template_cache(template_name: TemplateName, no_render = false) {
 	const cache = no_render
-		? new Cache(() => store.templates.templates[template_name])
-		: new Cache(() => {
+		? new Cache(`simple_template:${template_name}`, () => store.templates.templates[template_name])
+		: new Cache(`simple_template:${template_name}`, () => {
 			const context = new TemplateContext(null);
 			return store.templates.render(template_name, context);
 		});

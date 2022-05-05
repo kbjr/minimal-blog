@@ -20,6 +20,14 @@ export class ColorThemeManager extends EventEmitter {
 		return this.themes[store.settings.theme_dark];
 	}
 
+	public get default_light() {
+		return this.themes.default_light;
+	}
+
+	public get default_dark() {
+		return this.themes.default_dark;
+	}
+
 	public exists(theme_name: string) {
 		return this.themes[theme_name] != null;
 	}
@@ -86,41 +94,47 @@ export class ColorThemeManager extends EventEmitter {
 }
 
 export const enum ColorName {
-	sun                  = 'sun',
-	moon                 = 'moon',
-	bg_main              = 'bg_main',
-	bg_light             = 'bg_light',
-	bg_heavy             = 'bg_heavy',
-	bg_accent            = 'bg_accent',
-	line                 = 'line',
-	text_heading         = 'text_heading',
-	text_body            = 'text_body',
-	text_light           = 'text_light',
-	text_link            = 'text_link',
-	text_link_active     = 'text_link_active',
-	text_link_visited    = 'text_link_visited',
-	code_normal          = 'code_normal',
-	code_shadow          = 'code_shadow',
-	code_background      = 'code_background',
-	code_selection       = 'code_selection',
-	code_comment         = 'code_comment',
-	code_punc            = 'code_punc',
-	code_operator        = 'code_operator',
-	code_const_literal   = 'code_const_literal',
-	code_number_literal  = 'code_number_literal',
-	code_boolean_literal = 'code_boolean_literal',
-	code_tag             = 'code_tag',
-	code_string          = 'code_string',
-	code_keyword         = 'code_keyword',
-	code_func_name       = 'code_func_name',
-	code_class_name      = 'code_class_name',
-	code_regex_important = 'code_regex_important',
-	code_variable        = 'code_variable',
-	code_builtin         = 'code_builtin',
-	code_attr_name       = 'code_attr_name',
-	code_gutter_divider  = 'code_gutter_divider',
-	code_line_number     = 'code_line_number',
-	code_line_highlight  = 'code_line_highlight',
+	sun                   = 'sun',
+	moon                  = 'moon',
+	bg_main               = 'bg_main',
+	bg_light              = 'bg_light',
+	bg_heavy              = 'bg_heavy',
+	bg_accent             = 'bg_accent',
+	line                  = 'line',
+	text_heading          = 'text_heading',
+	text_body             = 'text_body',
+	text_light            = 'text_light',
+	text_link             = 'text_link',
+	text_link_active      = 'text_link_active',
+	text_link_visited     = 'text_link_visited',
+	bg_button_primary     = 'bg_button_primary',
+	text_button_primary   = 'text_button_primary',
+	bg_button_secondary   = 'bg_button_secondary',
+	text_button_secondary = 'text_button_secondary',
+	border_input          = 'border_input',
+	border_input_invalid  = 'border_input_invalid',
+	code_normal           = 'code_normal',
+	code_shadow           = 'code_shadow',
+	code_background       = 'code_background',
+	code_selection        = 'code_selection',
+	code_comment          = 'code_comment',
+	code_punc             = 'code_punc',
+	code_operator         = 'code_operator',
+	code_const_literal    = 'code_const_literal',
+	code_number_literal   = 'code_number_literal',
+	code_boolean_literal  = 'code_boolean_literal',
+	code_tag              = 'code_tag',
+	code_string           = 'code_string',
+	code_keyword          = 'code_keyword',
+	code_func_name        = 'code_func_name',
+	code_class_name       = 'code_class_name',
+	code_regex_important  = 'code_regex_important',
+	code_variable         = 'code_variable',
+	code_builtin          = 'code_builtin',
+	code_attr_name        = 'code_attr_name',
+	code_gutter_divider   = 'code_gutter_divider',
+	code_line_number      = 'code_line_number',
+	code_line_highlight   = 'code_line_highlight',
 }
 
 export type ColorThemeData = Record<ColorName, string>;
@@ -139,6 +153,12 @@ export const color_names = [
 	ColorName.text_link,
 	ColorName.text_link_active,
 	ColorName.text_link_visited,
+	ColorName.bg_button_primary,
+	ColorName.text_button_primary,
+	ColorName.bg_button_secondary,
+	ColorName.text_button_secondary,
+	ColorName.border_input,
+	ColorName.border_input_invalid,
 	ColorName.code_normal,
 	ColorName.code_shadow,
 	ColorName.code_background,

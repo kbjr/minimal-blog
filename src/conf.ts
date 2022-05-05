@@ -85,6 +85,13 @@ export namespace conf {
 
 		/** Secret size (in bytes) to generate for HMAC token signing */
 		export const hmac_secret_size = 128;
+
+		/** Configuration for the argon2 hasher used for hashing user passwords for storage */
+		export namespace argon2 {
+			export const hash_length = 100;
+			export const time_cost = 3;
+			export const memory_cost = 4096;
+		}
 	}
 
 	/** Configuration to control logging output */
@@ -108,8 +115,12 @@ export namespace conf {
 
 		/** Controls which additional debug loggers are enabled */
 		export const debug_loggers = Object.freeze<Partial<Loggers>>({
-			sqlite: true,
-			sqlite_sql: true
+			sqlite: false,
+			sqlite_sql: false,
+			web_templates: false,
+			ctrl_templates: false,
+			cache: false,
+			auth: false,
 		});
 	}
 }

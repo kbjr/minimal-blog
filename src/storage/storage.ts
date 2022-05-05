@@ -24,6 +24,8 @@ export abstract class Storage {
 	public abstract get_all_templates() : Promise<Partial<Templates>>;
 	public abstract set_template(name: string, content: string) : Promise<void>;
 
+	public abstract backup() : Promise<void>;
+
 	public readonly users = new UserManager();
 	public readonly settings = new Settings();
 	public readonly color_themes = new ColorThemeManager();

@@ -1,0 +1,96 @@
+
+<form id="form-login">
+	<p>Welcome to your new control panel!</p>
+	<p>To get started, you'll need to create a new user:</p>
+
+	<label for="in-username">New Admin Username</label>
+	<input type="text" id="in-username" required autofocus>
+
+	<label for="in-password">New Admin Password</label>
+	<input type="password" id="in-password" required autocomplete="new-password" minlength="8">
+
+	<label for="in-password-confirm">Confirm New Admin Password</label>
+	<input type="password" id="in-password-confirm" required>
+
+	<button type="submit" id="btn-create-user">Create User</button>
+</form>
+
+<script>
+(() => {
+
+const form                   = document.querySelector('#form-login');
+const input_username         = form.querySelector('#in-username');
+const input_password         = form.querySelector('#in-password');
+const input_password_confirm = form.querySelector('#in-password-confirm');
+const button_submit          = form.querySelector('#btn-create-user');
+
+form.addEventListener('submit', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	const username = input_username.value;
+	const password = input_password.value;
+	const password_confirm = input_password_confirm.value;
+
+	if (password !== password_confirm) {
+		input_password_confirm.setCustomValidity('Password and confirmation do not match');
+		input_password_confirm.reportValidity();
+		return;
+	}
+
+	disable_form();
+	create_user(username, password);
+
+	return false;
+});
+
+function disable_form() {
+	input_username.disabled = true;
+	input_password.disabled = true;
+	input_password_confirm.disabled = true;
+	button_submit.disabled = true;
+}
+
+function enable_form() {
+	input_username.disabled = false;
+	input_password.disabled = false;
+	input_password_confirm.disabled = false;
+	button_submit.disabled = false;
+}
+	
+async function create_user(username, password) {
+	const headers = app.http_headers(true, {
+		'content-type': 'application/json'
+	});
+
+	const body = JSON.stringify({
+		username, password,
+		first_time_setup: true
+	});
+
+	const res = await app.http('POST', '/api/users', headers, body);
+
+	switch (res.status) {
+		case 201: {
+			// TODO: Transition more smoothly than this
+			location.reload();
+			break;
+		};
+
+		case 422: {
+			// TODO: Tell the user what's wrong
+			console.error(await res.json());
+			enable_form();
+			break;
+		};
+
+		default: {
+			console.error(await res.json());
+			enable_form();
+			break;
+		};
+	}
+}
+
+})();
+</script>

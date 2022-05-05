@@ -24,11 +24,16 @@ import './web/feed-html';
 // ===== Control Panel API =====
 
 import './ctrl/status';
-import './ctrl/get-token';
-import './ctrl/ui';
+import './ctrl/token/get';
+import './ctrl/token/validate';
+
+// UI
+import './ctrl/ui/main';
+import './ctrl/ui/assets';
+import './ctrl/ui/login';
 
 // Users / authentication
-import './ctrl/get-token';
+import './ctrl/token/get';
 import './ctrl/users/list';
 import './ctrl/users/create';
 import './ctrl/users/update-password';
@@ -45,13 +50,23 @@ import './ctrl/templates/put';
 
 // Themes
 import './ctrl/themes/get';
-// ...
+// import './ctrl/themes/put';
+// import './ctrl/themes/delete';
 
 // Posts
-// ...
+// import './ctrl/posts/list';
+// import './ctrl/posts/get';
+// import './ctrl/posts/put';
+// import './ctrl/posts/delete';
+// import './ctrl/posts/preview';
 
 // Authors
-// ...
+// import './ctrl/authors/list';
+// import './ctrl/authors/get';
+// import './ctrl/authors/post';
+// import './ctrl/authors/put';
+// import './ctrl/authors/delete';
 
 // Tags
-// ...
+// import './ctrl/tags/list';
+// import './ctrl/tags/delete';

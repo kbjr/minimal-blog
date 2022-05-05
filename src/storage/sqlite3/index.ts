@@ -5,6 +5,9 @@ import * as color_themes from './color-themes';
 import * as templates from './templates';
 import * as posts from './posts';
 import { Storage } from '../storage';
+import { promises as fs, constants } from 'fs';
+import { conf } from '../../conf';
+import { log_debug } from '../../debug';
 
 export class Storage_sqlite3 extends Storage {
 	constructor() {
@@ -12,11 +15,31 @@ export class Storage_sqlite3 extends Storage {
 	}
 
 	protected async init() {
+		// TODO: Check version number in settings database
+		// TODO: If version is out of date:
+		// TODO:   - Create a backup of the database files
+		// TODO:   - Do any database upgrade(s) needed
+
 		await users.init();
 		await settings.init();
 		await color_themes.init();
 		await templates.init();
 		await posts.init();
+	}
+
+	public async backup() {
+		const timestamp_suffix = (new Date).toISOString().replace(/[-:T]/g, '.').slice(0, -1);
+
+		await Promise.all([
+			backup_file(conf.data.sqlite3.settings_path),
+			backup_file(conf.data.sqlite3.posts_path),
+		]);
+
+		async function backup_file(file: string) {
+			log_debug('sqlite', `[sqlite://${file}]: Generating backup ${file}.bak.${timestamp_suffix}`);
+			const new_file = `${file}.bak.${timestamp_suffix}`;
+			await fs.copyFile(file, new_file, constants.COPYFILE_EXCL);
+		}
 	}
 
 	public get_all_users() {

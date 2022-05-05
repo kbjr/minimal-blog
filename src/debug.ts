@@ -7,6 +7,10 @@ export type Logger = keyof Loggers;
 export interface Loggers {
 	sqlite: boolean;
 	sqlite_sql: boolean;
+	web_templates: boolean;
+	ctrl_templates: boolean;
+	cache: boolean;
+	auth: boolean;
 }
 
 export function log_debug(logger: Logger, message: string, ...args: any[]) {

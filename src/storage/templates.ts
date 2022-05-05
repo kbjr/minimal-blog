@@ -5,6 +5,9 @@ import { conf } from '../conf';
 import { render, parse } from 'mustache';
 import { load_default_template } from './default-templates';
 import { PostData } from './feed';
+import { debug_logger } from '../debug';
+
+const log = debug_logger('web_templates', `[web_templates]: `);
 
 export const enum TemplateName {
 	page_html             = 'page.html',
@@ -46,14 +49,18 @@ export class TemplateManager extends EventEmitter {
 	public templates: Partial<Templates>;
 
 	public async load() {
+		log('Loading all templates from storage');
+
 		this.templates = await store.get_all_templates();
 
-		for (const template of Object.values(this.templates)) {
+		for (const [name, template] of Object.entries(this.templates)) {
+			log(`Pre-parsing template ${name} with moustache`);
 			parse(template);
 		}
 
 		for (const name of template_names) {
-			if (! this.templates[name]) {
+			if (this.templates[name] == null) {
+				log(`Template ${name} not found in storage; Loading default from disk`);
 				const content = await load_default_template(name);
 				await this.update_template(name, content);
 			}
@@ -63,6 +70,7 @@ export class TemplateManager extends EventEmitter {
 	}
 
 	public render(name: TemplateName, context: TemplateContext, partials: Record<string, string> = { }) : string {
+		log(`Rendering template ${name}`);
 		return render(this.templates[name], context, partials);
 	}
 
@@ -71,6 +79,7 @@ export class TemplateManager extends EventEmitter {
 	}
 
 	public update_template(name: TemplateName, content: string) {
+		log(`Updating template ${name}`);
 		this.templates[name] = content;
 		parse(content);
 		this.emit('update', name);

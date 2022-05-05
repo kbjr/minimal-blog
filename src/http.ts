@@ -1,5 +1,4 @@
 
-import * as Ajv from 'ajv';
 import { conf } from './conf';
 import { HttpError } from './http-error';
 import fastify, { FastifyError, FastifyLoggerOptions, FastifyReply, FastifyRequest } from 'fastify';
@@ -83,5 +82,6 @@ function error_handler(error: Error | FastifyError, req: FastifyRequest, res: Fa
 	ctrl.log.error(error);
 
 	res.status(500);
+	res.type('application/json');
 	res.send({ error: 'unknown error' });
 }

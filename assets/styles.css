@@ -21,7 +21,7 @@ html, body, #root {
 }
 
 body {
-	background: var(--color-bg-main);
+	background: var(--theme-bg-main);
 
 	/* NOTE: This style is added dynamically by JS */
 	/* transition: background linear .1s; */
@@ -70,7 +70,7 @@ body {
 	}
 
 		h2.view-heading {
-			color: var(	--color-text-heading);
+			color: var(	--theme-text-heading);
 			margin-bottom: 1.5rem;
 			font-weight: 400;
 		}
@@ -98,7 +98,7 @@ body {
 			section.tags a {
 				display: inline-block;
 				padding: 0.5rem;
-				border: 0.1rem solid var(--color-line);
+				border: 0.1rem solid var(--theme-line);
 				line-height: 1;
 				border-radius: 0.5rem;
 				margin-left: 1rem;
@@ -165,7 +165,7 @@ article > footer {
 		article > footer .tags a {
 			display: inline-block;
 			padding: 0.5rem;
-			border: 0.1rem solid var(--color-line);
+			border: 0.1rem solid var(--theme-line);
 			line-height: 1;
 			border-radius: 0.5rem;
 			margin-left: 1rem;
@@ -203,11 +203,11 @@ p, a, li, dt, dd {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	color: var(--color-text-heading);
+	color: var(--theme-text-heading);
 }
 
 code, pre {
-	color: var(--color-code-normal);
+	color: var(--theme-code-normal);
 	font-family: var(--font-monospace);
 	font-size: 1.35rem;
 }
@@ -215,19 +215,19 @@ code, pre {
 pre {
 	margin: 4rem 2rem;
 	padding: 1rem 1.5rem;
-	border: 0.1rem solid var(--color-line);
+	border: 0.1rem solid var(--theme-line);
 	border-radius: 1rem;
 	overflow: auto;
 }
 
 h1 {
-	color: var(--color-text-heading);
+	color: var(--theme-text-heading);
 	font-size: 2rem;
 	font-weight: 300;
 }
 
 p, small, li, dt, dd {
-	color: var(--color-text-body);
+	color: var(--theme-text-body);
 }
 
 p {
@@ -243,18 +243,18 @@ small {
 }
 
 a {
-	color: var(--color-text-link);
+	color: var(--theme-text-link);
 	text-decoration: none;
 }
 
 a:active,
 a:hover,
 a:focus {
-	color: var(--color-text-link-active);
+	color: var(--theme-text-link-active);
 }
 
 a:visited {
-	color: var(--color-text-link-visited);
+	color: var(--theme-text-link-visited);
 }
 
 h1 > a, h2 > a,
@@ -270,7 +270,7 @@ header p.p-summary {
 	line-height: 1;
 	font-weight: 700;
 	font-style: italic;
-	color: var(--color-text-light);
+	color: var(--theme-text-light);
 	font-size: 1rem;
 }
 
@@ -301,7 +301,7 @@ header p.p-summary {
 	pre {
 		margin: 2rem 0.5rem;
 		padding: 0.5rem 1rem;
-		border: 0.1rem solid var(--color-code-gutter-divider);
+		border: 0.1rem solid var(--theme-code-gutter-divider);
 		border-radius: 1rem;
 		overflow: auto;
 	}

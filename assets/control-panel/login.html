@@ -1,0 +1,83 @@
+
+<form id="form-login">
+	<p>Login to continue</p>
+	
+	<label for="in-username">Username</label>
+	<input type="text" id="in-username" required autofocus autocomplete="username">
+
+	<label for="in-password">Password</label>
+	<input type="password" id="in-password" required autocomplete="current-password">
+
+	<button type="submit" id="btn-login">Login</button>
+</form>
+
+<script>
+(() => {
+
+const form           = document.querySelector('#form-login');
+const input_username = form.querySelector('#in-username');
+const input_password = form.querySelector('#in-password');
+const button_submit  = form.querySelector('#btn-login');
+
+form.addEventListener('submit', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	const username = document.querySelector('#in-username').value;
+	const password = document.querySelector('#in-password').value;
+
+	form.disabled = true;
+
+	disable_form();
+	login(username, password);
+
+	return false;
+});
+	
+async function login(username, password) {
+	const headers = app.http_headers(true, {
+		'content-type': 'application/json'
+	});
+
+	const body = JSON.stringify({
+		username, password
+	});
+
+	const res = await app.http('POST', '/api/token', headers, body);
+
+	switch (res.status) {
+		case 200: {
+			const json = await res.json();
+			app.login(json.token, json.payload, true);
+			break;
+		};
+
+		case 422: {
+			// TODO: Tell the user what's wrong
+			console.error(await res.json());
+			enable_form();
+			break;
+		};
+
+		default: {
+			console.error(await res.json());
+			enable_form();
+			break;
+		};
+	}
+}
+
+function disable_form() {
+	input_username.disabled = true;
+	input_password.disabled = true;
+	button_submit.disabled = true;
+}
+
+function enable_form() {
+	input_username.disabled = false;
+	input_password.disabled = false;
+	button_submit.disabled = false;
+}
+	
+})();
+</script>

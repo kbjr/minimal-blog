@@ -1,8 +1,8 @@
 
-import { ctrl } from '../../http';
-import { store } from '../../storage';
-import { create_jwt } from '../../auth';
-import * as http_error from '../../http-error';
+import { ctrl } from '../../../http';
+import { store } from '../../../storage';
+import { create_jwt } from '../../../auth';
+import * as http_error from '../../../http-error';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 
 const opts: RouteShorthandOptions = {
