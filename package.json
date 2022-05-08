@@ -25,9 +25,13 @@
     "@fastify/compress": "^5.0.0",
     "@fastify/etag": "^3.0.0",
     "argon2": "^0.28.5",
+    "dompurify": "^2.3.6",
     "fastify": "^3.28.0",
+    "jsdom": "^19.0.0",
     "jsonwebtoken": "^8.5.1",
+    "marked": "^4.0.15",
     "mustache": "^4.2.0",
+    "prismjs": "^1.28.0",
     "sqlite3": "^5.0.6",
     "xmlbuilder2": "^3.0.2"
   }

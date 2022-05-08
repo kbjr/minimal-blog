@@ -1,6 +1,8 @@
 
 ## Features
 
+- Entire application runs in a single container
+	- No database needed, just needs a volume for file storage
 - Control panel API / UI (served on a separate port from the main web UI)
 - Produces multiple standard feed formats:
 	- [RSS](https://www.rssboard.org/rss-specification)

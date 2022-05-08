@@ -20,7 +20,7 @@ export const default_themes: Record<string, ColorThemeData> = {
 		text_link_active: '#4f6390',
 		text_link_visited: '#4f6390',
 		bg_button_primary: '#f0f0f0',
-		bg_button_primary_hover: '#86a7f04c',
+		bg_button_primary_hover: '#dbe5fb',
 		text_button_primary: '#444444',
 		bg_button_secondary: '#efefef',
 		bg_button_secondary_hover: '#efefef',
