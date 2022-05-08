@@ -1,6 +1,7 @@
 
 import { store } from './store';
 import { EventEmitter } from 'events';
+import { default_light, default_dark } from './default-color-themes';
 
 export interface SettingsData {
 	version: 1;
@@ -32,11 +33,11 @@ export class Settings extends EventEmitter {
 		}
 
 		if (this.data.theme_light == null) {
-			await this.set_theme_light('default_light');
+			await this.set_theme_light(default_light);
 		}
 
 		if (this.data.theme_dark == null) {
-			await this.set_theme_dark('default_dark');
+			await this.set_theme_dark(default_dark);
 		}
 
 		if (this.data.feed_title == null) {

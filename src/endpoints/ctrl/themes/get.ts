@@ -14,6 +14,7 @@ const opts: RouteShorthandOptions = {
 				additionalProperties: {
 					type: 'object',
 					properties: {
+						$builtin: { type: 'boolean' },
 						sun: { type: 'string' },
 						moon: { type: 'string' },
 						bg_main: { type: 'string' },
@@ -28,9 +29,12 @@ const opts: RouteShorthandOptions = {
 						text_link_active: { type: 'string' },
 						text_link_visited: { type: 'string' },
 						bg_button_primary: { type: 'string' },
+						bg_button_primary_hover: { type: 'string' },
 						text_button_primary: { type: 'string' },
 						bg_button_secondary: { type: 'string' },
+						bg_button_secondary_hover: { type: 'string' },
 						text_button_secondary: { type: 'string' },
+						bg_input: { type: 'string' },
 						border_input: { type: 'string' },
 						border_input_invalid: { type: 'string' },
 						code_normal: { type: 'string' },

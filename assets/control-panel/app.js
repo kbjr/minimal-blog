@@ -49,15 +49,71 @@ app.logout = function logout() {
 };
 
 app.http = async function http(method, path, headers = { }, body = null) {
-	const url = conf.ctrl_panel_url + path;
-	const res = await fetch(url, {
+	return fetch(conf.ctrl_panel_url + path, {
 		method,
 		mode: 'same-origin',
 		headers,
 		body
 	});
+};
 
-	return res;
+app.http_get = async function http_get(path, include_auth = false) {
+	const res = await app.http('GET', path, app.http_headers(include_auth));
+	
+	switch (res.status) {
+		case 200: {
+			return res.json();
+		};
+
+		case 401: {
+			app.redirect_to_login(true);
+			break;
+		};
+
+		case 403:
+		case 500:
+		default:
+			return app.throw_http_error(res);
+	}
+};
+
+app.http_post = async function http_post(path, include_auth = false, body = null) {
+	const headers = app.http_headers(include_auth, body == null ? null : {
+		'content-type': 'application/json'
+	});
+
+	const res = await app.http('POST', path, headers, body == null ? null : JSON.stringify(body));
+	
+	switch (res.status) {
+		case 201: return res.json();
+		case 401: return app.redirect_to_login(true);
+
+		case 403:
+		case 422:
+		case 500:
+		default:
+			return app.throw_http_error(res);
+	}
+};
+
+app.http_patch = async function http_patch(path, include_auth = false, body = null) {
+	const headers = app.http_headers(include_auth, body == null ? null : {
+		'content-type': 'application/json'
+	});
+
+	const res = await app.http('PATCH', path, headers, body == null ? null : JSON.stringify(body));
+	
+	switch (res.status) {
+		case 204: return;
+		case 200: return res.json();
+		case 401: return app.redirect_to_login(true);
+
+		case 403:
+		case 422:
+		case 500:
+		default:
+			return app.throw_http_error(res);
+	}
 };
 
 app.http_headers = function http_headers(include_auth, others) {
@@ -65,7 +121,34 @@ app.http_headers = function http_headers(include_auth, others) {
 		include_auth ? { authorization: `Bearer ${get_auth_token()}` } : { },
 		others
 	);
-}
+};
+
+app.throw_http_error = async function http_error(res) {
+	let body;
+
+	if (res.headers.get('content-type') === 'application/json') {
+		try {
+			body = await res.json();
+		}
+
+		catch (error) {
+			console.error(error);
+			body = await res.text();
+		}
+
+		throw new app.HttpError(res, body);
+	}
+
+	throw new app.HttpError(res, await res.text());
+};
+
+app.HttpError = class HttpError {
+	constructor(res, body) {
+		this.res = res;
+		this.body = body;
+		console.error('HTTP Error', res.status, body);
+	}
+};
 
 
 

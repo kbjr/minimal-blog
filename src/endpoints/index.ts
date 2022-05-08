@@ -28,9 +28,14 @@ import './ctrl/token/get';
 import './ctrl/token/validate';
 
 // UI
-import './ctrl/ui/main';
 import './ctrl/ui/assets';
 import './ctrl/ui/login';
+import './ctrl/ui/main';
+import './ctrl/ui/color-themes';
+import './ctrl/ui/posts';
+import './ctrl/ui/settings';
+import './ctrl/ui/templates';
+import './ctrl/ui/users';
 
 // Users / authentication
 import './ctrl/token/get';
@@ -50,6 +55,7 @@ import './ctrl/templates/put';
 
 // Themes
 import './ctrl/themes/get';
+import './ctrl/themes/create';
 // import './ctrl/themes/put';
 // import './ctrl/themes/delete';
 

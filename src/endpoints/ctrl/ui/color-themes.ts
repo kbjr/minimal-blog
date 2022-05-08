@@ -5,7 +5,7 @@ import { store } from '../../../storage';
 import { get_unrendered, render } from './render';
 import { current_lang } from './i18n';
 
-ctrl.get('/login.html', async (req, res) => {
+ctrl.get('/color_themes.html', async (req, res) => {
 	if (store.settings.show_setup) {
 		// If in setup mode, redirect to the main URL for first-time setup
 		res.status(303);
@@ -17,16 +17,17 @@ ctrl.get('/login.html', async (req, res) => {
 
 	const context = {
 		page: {
-			url: `${conf.http.ctrl_url}/login.html`,
-			name: 'login',
-			title: current_lang.pages.login.title,
-			require_auth: false
+			url: `${conf.http.ctrl_url}/color_themes.html`,
+			name: 'color-themes',
+			nav_section: 'color-themes',
+			title: current_lang.pages.color_themes.title,
+			require_auth: true
 		}
 	};
 	
 	const html = await render('base.html', context, {
-		page_head: '<meta name="description" content="Control panel login page">',
-		page_content: await get_unrendered('login.html')
+		page_head: '<meta name="description" content="Control panel page for color theme management">',
+		page_content: await get_unrendered('color_themes.html')
 	});
 
 	return html;

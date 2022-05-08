@@ -1,6 +1,6 @@
 (() => {
 	
-	const animation = 'linear .2s';
+	const animation = 'linear .5s';
 	const color_scheme = 'color_scheme';
 	const color_scheme_attr = 'data-color-scheme';
 	const prefers_dark_scheme = window.matchMedia('(prefers-color-scheme: dark)');
@@ -13,7 +13,9 @@
 		document.body.setAttribute(color_scheme_attr, override);
 	}
 
-	document.body.style.transition = `background ${animation}`;
+	setTimeout(() => {
+		document.body.style.transition = `background ${animation}`;
+	}, 50);
 
 	const size = 2;
 
@@ -26,17 +28,11 @@
 			width: ${size}rem;
 			height: ${size}rem;
 			padding: 0.5rem;
-			background: var(--theme-bg-light);
 			border-radius: 100%;
 			cursor: pointer;
 			overflow: hidden;
 			position: relative;
-			transition: background ${animation};
 		}
-
-			:host .wrapper:hover {
-				background: var(--theme-bg-accent);
-			}
 
 			:host .wrapper .icons {
 				width: ${size * 2}rem;
@@ -62,7 +58,6 @@
 
 			:host svg-icon[icon='sun'] {
 				color: var(--theme-sun);
-				filter: drop-shadow(1px 1px 1px #555);
 			}
 
 			:host [data-mode='dark'] svg-icon[icon='sun'] {
@@ -71,7 +66,6 @@
 
 			:host svg-icon[icon='moon'] {
 				color: var(--theme-moon);
-				filter: drop-shadow(1px 1px 0.5px #bbb);
 			}
 
 			:host [data-mode='light'] svg-icon[icon='moon'] {

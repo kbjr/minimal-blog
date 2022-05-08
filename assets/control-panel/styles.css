@@ -40,12 +40,25 @@ body {
 
 #root > header {
 	padding: 0 1rem;
-	/* display: flex; */
-	/* flex-direction: row; */
+	position: relative;
 }
 
-	#root > header h1 {
-		/* flex-grow: 1; */
+	#root > header color-theme-toggle {
+		display: block;
+		position: absolute;
+		top: 2rem;
+		right: 2rem
+	}
+
+	#root > header nav {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-evenly;
+		align-items: baseline;
+		margin-bottom: 1.5rem;
+		padding-bottom: 1.5rem;
+		border-bottom: 1px var(--theme-line) solid;
 	}
 
 
@@ -54,7 +67,7 @@ body {
 /* ===== Typography ===== */
 
 h1, h2, h3, h4, h5, h6,
-p, a, li, dt, dd {
+p, a, li, dt, dd, label {
 	font-family: var(--font-open-sans);
 }
 
@@ -82,7 +95,7 @@ h1 {
 	font-weight: 300;
 }
 
-p, small, li, dt, dd {
+p, small, li, dt, dd, label {
 	color: var(--theme-text-body);
 }
 
@@ -129,6 +142,13 @@ header p {
 	font-size: 1rem;
 }
 
+#todo {
+	text-align: center;
+	margin: 4rem;
+	color: var(--theme-text-light);
+	font-style: italic;
+}
+
 
 
 /* ===== Forms and Inputs ===== */
@@ -142,42 +162,157 @@ label {
 
 input {
 	display: block;
-	margin-top: 0.25rem;
+	margin-top: 0.35rem;
 	margin-bottom: 1rem;
 	border: 0.125rem var(--theme-border-input) solid;
 	border-radius: 0.25rem;
+	color: var(--theme-text-body);
+	background-color: var(--theme-bg-input);
 	padding: 0.5rem;
 	font-family: var(--font-open-sans);
 	font-size: 1rem;
 	width: 20rem;
 }
 
-input[type='text']:invalid,
-input[type='password']:invalid {
-	border-color: var(--theme-border-input-invalid);
-}
+	input[disabled] {
+		opacity: 0.4;
+		cursor: default;
+		pointer-events: none;
+	}
+
+	input[type='text']:invalid,
+	input[type='password']:invalid {
+		border-color: var(--theme-border-input-invalid);
+	}
 
 button {
-	padding: 0.75rem 1.5rem;
+	padding: 0.5rem 1.5rem;
 	border-radius: 0.5rem;
 	font-size: 1rem;
 	margin-top: 1rem;
 	cursor: pointer;
 	user-select: none;
+	appearance: none;
+	color: var(--theme-text-button-primary);
+	background: var(--theme-bg-button-primary);
+	text-decoration: none;
+	transition: background linear .125s;
+	font-size: 1rem;
+	font-family: var(--font-open-sans);
+	font-weight: 700;
+	line-height: 2rem;
 }
 
+	button[data-style='secondary'] {
+		color: var(--theme-text-button-secondary);
+		background: var(--theme-bg-button-secondary);
+	}
 
+	button:not([disabled]):hover {
+		background: var(--theme-bg-button-primary-hover);
+	}
+
+	button[data-style='secondary']:not([disabled]):hover {
+		background: var(--theme-bg-button-secondary-hover);
+	}
+
+	button[disabled] {
+		opacity: 0.4;
+		cursor: default;
+		pointer-events: none;
+	}
+
+select {
+	display: block;
+	margin-top: 0.25rem;
+	margin-bottom: 1rem;
+	border: 0.125rem var(--theme-border-input) solid;
+	border-radius: 0.25rem;
+	color: var(--theme-text-body);
+	background-color: var(--theme-bg-input);
+	padding: 0.5rem;
+	font-family: var(--font-open-sans);
+	font-size: 1rem;
+	width: 20rem;
+	cursor: pointer;
+}
+
+	select[disabled] {
+		opacity: 0.4;
+		cursor: default;
+		pointer-events: none;
+	}
+
+	select option {
+		color: var(--theme-text-body);
+		background-color: var(--theme-bg-input);
+		padding: 0.5rem;
+		font-family: var(--font-open-sans);
+		font-size: 1rem;
+	}
 
 
 
 /* ===== Login Page ===== */
 
-#form-login {
+#page-login main {
 	padding: 2rem;
 	margin: 5rem auto;
 }
 
 
+
+/* ===== First-Time Setup Page ===== */
+
+#page-first-time-setup main {
+	padding: 2rem;
+	margin: 5rem auto;
+}
+
+
+
+/* ===== Color Themes Page ===== */
+
+#page-color-themes main {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+
+	#page-color-themes #main-panel {
+		flex: 0 0 auto;
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+	}
+
+		#page-color-themes #main-panel section {
+			flex: 0 0 auto;
+		}
+
+	#page-color-themes #edit-colors-panel {
+		flex: 0 0 calc(100% - 27rem);
+	}
+
+		#page-color-themes #edit-colors-panel ul {
+			list-style: none;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+
+			#page-color-themes #edit-colors-panel ul li {
+				margin: 1rem;
+			}
+
+	#page-color-themes section {
+		margin: 2rem 3rem 4rem;
+	}
+
+	#page-color-themes section[disabled] {
+		opacity: 0.4;
+		pointer-events: none;
+	}
 
 
 
@@ -191,6 +326,14 @@ button {
 	#root {
 		padding: 2rem 0;
 	}
+	
+	#root > header nav {
+		margin-top: 1.5rem;
+	}
+	
+		#root > header nav a {
+			margin: 0.25rem 0.65rem;
+		}
 
 	article > header:not(:last-child) {
 		margin-bottom: 4rem;
@@ -211,5 +354,9 @@ button {
 		border: 0.1rem solid var(--theme-code-gutter-divider);
 		border-radius: 1rem;
 		overflow: auto;
+	}
+
+	#page-color-themes main {
+		flex-wrap: wrap;
 	}
 }

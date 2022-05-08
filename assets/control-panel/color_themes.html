@@ -1,0 +1,764 @@
+
+<main>
+	<div id="main-panel">
+		<section id="sec-themes-select">
+			<h3>{{ labels.pages.color_themes.select_subtitle }}</h3>
+		
+			<form id="form-themes-select" aria-busy="true" aria-live="polite">
+				<label for="in-themes-select-light">{{ labels.pages.color_themes.select_label_light_mode }}</label>
+				<select id="in-themes-select-light" disabled>
+					<option value="">{{ labels.loading }}</option>
+				</select>
+		
+				<label for="in-themes-select-dark">{{ labels.pages.color_themes.select_label_dark_mode }}</label>
+				<select id="in-themes-select-dark" disabled>
+					<option value="">{{ labels.loading }}</option>
+				</select>
+		
+				<button type="submit" id="btn-themes-select" disabled>{{ labels.pages.color_themes.select_update }}</button>
+			</form>
+		</section>
+	
+		<section id="sec-themes-create">
+			<h3>{{ labels.pages.color_themes.create_subtitle }}</h3>
+		
+			<form id="form-themes-create" aria-busy="true" aria-live="polite">
+				<label for="in-themes-create-start-from">{{ labels.pages.color_themes.create_label_start_from }}</label>
+				<select id="in-themes-create-start-from" disabled>
+					<option value="">{{ labels.loading }}</option>
+				</select>
+		
+				<label for="in-themes-create-name">{{ labels.pages.color_themes.create_label_new_name }}</label>
+				<input type="text" id="in-themes-create-name" required>
+		
+				<button type="submit" id="btn-themes-create" disabled>{{ labels.pages.color_themes.create_theme }}</button>
+			</form>
+		</section>
+		
+		<section id="sec-themes-edit">
+			<h3>{{ labels.pages.color_themes.edit_subtitle }}</h3>
+		
+			<form id="form-themes-edit" aria-busy="true" aria-live="polite">
+				<label for="in-themes-edit">{{ labels.pages.color_themes.edit_label_theme }}</label>
+				<select id="in-themes-edit" disabled>
+					<option value="">{{ labels.loading }}</option>
+				</select>
+		
+				<button type="submit" id="btn-themes-edit" disabled>{{ labels.pages.color_themes.edit_colors }}</button>
+				<button type="button" id="btn-themes-delete" disabled data-style="secondary">{{ labels.pages.color_themes.delete_theme }}</button>
+			</form>
+		</section>
+	</div>
+
+	<div id="edit-colors-panel">
+		<section id="sec-edit-colors" disabled aria-disabled="true">
+			<h3>Edit Colors</h3>
+
+			<form id="form-themes-edit-colors" aria-busy="true" aria-live="polite">
+				<section>
+					<h4>Basics</h4>
+					<ul>
+						<li><color-input disabled data-color="sun"></color-input></li>
+						<li><color-input disabled data-color="moon"></color-input></li>
+						<li><color-input disabled data-color="bg_main"></color-input></li>
+						<li><color-input disabled data-color="bg_light"></color-input></li>
+						<li><color-input disabled data-color="bg_heavy"></color-input></li>
+						<li><color-input disabled data-color="line"></color-input></li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>Text</h4>
+					<ul>
+						<li><color-input disabled data-color="text_heading"></color-input></li>
+						<li><color-input disabled data-color="text_body"></color-input></li>
+						<li><color-input disabled data-color="text_light"></color-input></li>
+						<li><color-input disabled data-color="text_link"></color-input></li>
+						<li><color-input disabled data-color="text_link_active"></color-input></li>
+						<li><color-input disabled data-color="text_link_visited"></color-input></li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>Buttons</h4>
+					<ul>
+						<li><color-input disabled data-color="bg_button_primary"></color-input></li>
+						<li><color-input disabled data-color="bg_button_primary_hover"></color-input></li>
+						<li><color-input disabled data-color="text_button_primary"></color-input></li>
+						<li><color-input disabled data-color="bg_button_secondary"></color-input></li>
+						<li><color-input disabled data-color="bg_button_secondary_hover"></color-input></li>
+						<li><color-input disabled data-color="text_button_secondary"></color-input></li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>Inputs</h4>
+					<ul>
+						<li><color-input disabled data-color="bg_input"></color-input></li>
+						<li><color-input disabled data-color="border_input"></color-input></li>
+						<li><color-input disabled data-color="border_input_invalid"></color-input></li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>Code Snippets</h4>
+					<ul>
+						<li><color-input disabled data-color="code_normal"></color-input></li>
+						<li><color-input disabled data-color="code_shadow"></color-input></li>
+						<li><color-input disabled data-color="code_background"></color-input></li>
+						<li><color-input disabled data-color="code_selection"></color-input></li>
+						<li><color-input disabled data-color="code_comment"></color-input></li>
+						<li><color-input disabled data-color="code_punc"></color-input></li>
+						<li><color-input disabled data-color="code_operator"></color-input></li>
+						<li><color-input disabled data-color="code_const_literal"></color-input></li>
+						<li><color-input disabled data-color="code_number_literal"></color-input></li>
+						<li><color-input disabled data-color="code_boolean_literal"></color-input></li>
+						<li><color-input disabled data-color="code_tag"></color-input></li>
+						<li><color-input disabled data-color="code_string"></color-input></li>
+						<li><color-input disabled data-color="code_keyword"></color-input></li>
+						<li><color-input disabled data-color="code_func_name"></color-input></li>
+						<li><color-input disabled data-color="code_class_name"></color-input></li>
+						<li><color-input disabled data-color="code_regex_important"></color-input></li>
+						<li><color-input disabled data-color="code_variable"></color-input></li>
+						<li><color-input disabled data-color="code_builtin"></color-input></li>
+						<li><color-input disabled data-color="code_attr_name"></color-input></li>
+						<li><color-input disabled data-color="code_gutter_divider"></color-input></li>
+						<li><color-input disabled data-color="code_line_number"></color-input></li>
+						<li><color-input disabled data-color="code_line_highlight"></color-input></li>
+					</ul>
+				</section>
+
+				<button type="submit" id="btn-theme-edit-save">Save Changes</button>
+				<button type="reset" id="btn-theme-edit-cancel" data-style="secondary">Cancel</button>
+			</form>
+		</section>
+	</div>
+</main>
+
+<script>
+(async () => {
+
+let themes;
+let settings;
+let theme_being_edited;
+let theme_edits;
+
+
+
+// ===== Elements =====
+
+const form_select = document.querySelector('#form-themes-select');
+const select_light_theme = document.querySelector('#in-themes-select-light');
+const select_dark_theme = document.querySelector('#in-themes-select-dark');
+const button_select = document.querySelector('#btn-themes-select');
+
+const form_create = document.querySelector('#form-themes-create');
+const select_create_from = document.querySelector('#in-themes-create-start-from');
+const input_create_name = document.querySelector('#in-themes-create-name');
+const button_create = document.querySelector('#btn-themes-create');
+
+const form_edit = document.querySelector('#form-themes-edit');
+const select_edit = document.querySelector('#in-themes-edit');
+const button_edit = document.querySelector('#btn-themes-edit');
+const button_delete = document.querySelector('#btn-themes-delete');
+
+const form_edit_colors = document.querySelector('#form-themes-edit-colors');
+const color_editor = document.querySelector('#sec-edit-colors');
+const color_inputs = document.querySelectorAll('color-input');
+
+
+
+// ===== Bind Events =====
+
+form_select.addEventListener('submit', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	const light_theme = select_light_theme.value;
+	const dark_theme = select_dark_theme.value;
+
+	disable_form(form_select);
+	submit_select(light_theme, dark_theme);
+
+	return false;
+});
+
+form_create.addEventListener('submit', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	const start_from = select_create_from.value;
+	const new_name = input_create_name.value;
+
+	disable_form(form_create);
+	submit_create(start_from, new_name);
+
+	return false;
+});
+
+form_edit.addEventListener('submit', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	const theme = select_edit.value;
+
+	if (! theme) {
+		// TODO: Error
+		return false;
+	}
+
+	disable_form(form_edit);
+	theme_edits = { };
+	theme_being_edited = theme;
+	reload_color_inputs();
+	enable_color_editor();
+
+	return false;
+});
+
+button_delete.addEventListener('click', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	const theme = select_edit.value;
+
+	if (! theme) {
+		// TODO: Error
+		return false;
+	}
+
+	disable_form(form_edit);
+	submit_delete(theme);
+
+	return false;
+});
+
+form_edit_colors.addEventListener('submit', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	disable_color_editor();
+	submit_edit_save();
+
+	return false;
+});
+
+form_edit_colors.addEventListener('reset', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	theme_edits = null;
+	theme_being_edited = null;
+	reload_color_inputs();
+	disable_color_editor();
+	enable_form(form_edit);
+
+	return false;
+});
+
+
+
+// ===== <color-input> component =====
+
+const styles = `
+:host {
+	display: contents;
+}
+
+.wrapper {
+	width: 16rem;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	overflow: hidden;
+	background: var(--theme-bg-light);
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+
+.color-swatch {
+	flex: 0 0 3rem;
+	width: 3rem;
+	height: 3rem;
+	margin: 0;
+	padding: 0;
+	display: block;
+	content: " ";
+	overflow: hidden;
+	border: 0.125rem var(--theme-border-input) solid;
+	border-radius: 0.5rem;
+	background-size: 1rem 1rem;
+	background-image: linear-gradient(45deg,
+		#fff 33.33%,
+		#000 33.33%,
+		#000 50%,
+		#fff 50%,
+		#fff 83.33%,
+		#000 83.33%,
+		#000 100%
+	);
+}
+
+.color-swatch div {
+	width: 3rem;
+	height: 3rem;
+	margin: 0;
+	padding: 0;
+	display: block;
+	content: " ";
+}
+
+.color-swatch input[type='color'] {
+	position: relative;
+	top: 3rem;
+	height: 0;
+	visibility: hidden;
+}
+
+.color-info {
+	margin-left: 1rem;
+	flex: 1 1 auto;
+}
+
+.color-name {
+	font-size: 0.8rem;
+	font-weight: 700;
+	user-select: none;
+}
+
+.color-value {
+	font-size: 0.8rem;
+	/* font-weight: 700; */
+	user-select: none;
+}
+
+.color-info input {
+	display: block;
+	margin-top: 0.1rem;
+	border: 0.125rem var(--theme-border-input) solid;
+	border-radius: 0.25rem;
+	color: var(--theme-text-body);
+	background-color: var(--theme-bg-input);
+	padding: 0.1rem 0.5rem;
+	font-family: var(--font-open-sans);
+	font-size: 1rem;
+	width: 10rem;
+}
+
+:host([show-editor]) .color-value,
+:host(:not([show-editor])) .color-info input {
+	display: none;
+}
+`;
+
+const template = `
+<style>${styles}</style>
+<div class="wrapper" title="Edit Color" tabindex="0" role="button" aria-pressed="false">
+	<div class="color-swatch">
+		<div></div>
+	</div>
+	<div class="color-info">
+		<label for="value" class="color-name"></label>
+		<div class="color-value" aria-hidden="false"></div>
+		<input type="text" id="value" aria-hidden="true">
+	</div>
+</div>
+`;
+
+customElements.define('color-input',
+	class ColorInput extends HTMLElement {
+		static get observedAttributes() {
+			return [ 'disabled', 'show-editor', 'data-color' ];
+		}
+
+		constructor() {
+			super();
+			this.attachShadow({ mode: 'open' });
+			this.shadowRoot.innerHTML = template;
+
+			this.wrapper = this.shadowRoot.querySelector('.wrapper');
+			this.color_swatch = this.wrapper.querySelector('.color-swatch div');
+			this.color_info = this.wrapper.querySelector('.color-info');
+			this.color_name = this.wrapper.querySelector('.color-name');
+			this.color_value = this.wrapper.querySelector('.color-value');
+			this.color_input = this.wrapper.querySelector('.color-info input');
+		}
+
+		connectedCallback() {
+			this.unbind_this = make_button_like(this, this.on_select);
+			// this.unbind_editor_icon = make_button_like(this.editor_icon, this.on_select_editor_icon);
+
+			this.reload();
+			this.update_state();
+		}
+		
+		disconnectedCallback() {
+			this.unbind_this();
+			// this.unbind_editor_input();
+		}
+
+		get color() {
+			return this.getAttribute('data-color');
+		}
+
+		get disabled() {
+			return this.getAttribute('disabled') != null;
+		}
+
+		set disabled(value) {
+			if (value) {
+				this.setAttribute('disabled', '');
+			}
+
+			else {
+				this.removeAttribute('disabled');
+			}
+		}
+
+		get show_editor() {
+			return this.hasAttribute('show-editor');
+		}
+
+		set show_editor(value) {
+			if (value === this.show_editor) {
+				// Don't perform no-ops
+				return;
+			}
+
+			if (value) {
+				this.setAttribute('show-editor', '');
+				this.color_input.value = this.value;
+				this.color_input.focus();
+				this.color_input.addEventListener('blur', this.on_input_blur);
+			}
+
+			else {
+				this.removeAttribute('show-editor');
+				this.color_input.value = '';
+
+				if (document.activeElement === this) {
+					this.color_input.blur();
+				}
+
+				this.color_input.removeEventListener('blur', this.on_input_blur);
+			}
+		}
+
+		get value() {
+			return this.wrapper.getAttribute('data-value');
+		}
+
+		get edited_value() {
+			return theme_edits && theme_edits[this.color];
+		}
+
+		set edited_value(value) {
+			if (value === this.original_value) {
+				delete theme_edits[this.color];
+			}
+
+			else {
+				theme_edits[this.color] = value;
+			}
+		}
+
+		get original_value() {
+			return themes && themes[theme_being_edited] && themes[theme_being_edited][this.color];
+		}
+
+		set value(value) {
+			if (value == null) {
+				value = 'transparent';
+				this.color_value.innerHTML = '<em>no value</em>';
+			}
+
+			else {
+				this.color_value.innerHTML = value;
+			}
+
+			this.wrapper.setAttribute('data-value', value);
+			this.color_swatch.style.background = value;
+		}
+
+		attributeChangedCallback(attr_name, old_value, new_value) {
+			switch (attr_name) {
+				case 'data-color':
+					return this.reload();
+
+				case 'disabled':
+				case 'show-editor':
+					return this.update_state();
+			}
+		}
+
+		update_state() {
+			const { disabled, show_editor } = this;
+
+			if (disabled || show_editor) {
+				this.wrapper.removeAttribute('tabindex');
+			}
+
+			else {
+				this.wrapper.setAttribute('tabindex', '0');
+			}
+
+			if (show_editor) {
+				this.wrapper.setAttribute('aria-pressed', 'true');
+				this.color_value.setAttribute('aria-hidden', 'true');
+				this.color_input.setAttribute('aria-hidden', 'false');
+			}
+
+			else {
+				this.wrapper.setAttribute('aria-pressed', 'false');
+				this.color_value.setAttribute('aria-hidden', 'false');
+				this.color_input.setAttribute('aria-hidden', 'true');
+			}
+		}
+
+		reload() {
+			this.color_name.innerHTML = this.color;
+
+			if (this.edited_value) {
+				this.value = this.edited_value;
+				return;
+			}
+
+			if (themes && theme_being_edited) {
+				const theme = themes[theme_being_edited];
+
+				if (theme) {
+					this.value = theme[this.color];
+					return;
+				}
+			}
+
+			this.value = null;
+		}
+
+		on_select = () => {
+			if (this.disabled) {
+				return;
+			}
+
+			if (! this.show_editor) {
+				this.show_editor = true;
+			}
+		};
+
+		on_input_change = () => {
+			// TODO: Show live color updates while the user is typing?
+		};
+
+		on_input_blur = () => {
+			const new_value = this.color_input.value;
+			this.value = new_value;
+			this.edited_value = new_value;
+			this.show_editor = false;
+		};
+	}
+);
+
+
+
+// ===== Start Loading Data =====
+
+load();
+
+
+
+// ===== Utility Functions =====
+
+async function load() {
+	[ themes, settings ] = await Promise.all([
+		app.http_get('/api/themes', true),
+		app.http_get('/api/settings', true),
+	]);
+
+	select_create_from.innerHTML = '';
+	select_light_theme.innerHTML = '';
+	select_dark_theme.innerHTML = '';
+	select_edit.innerHTML = '';
+
+	for (const [name, colors] of Object.entries(themes)) {
+		append_option(select_light_theme, name, settings.theme_light === name);
+		append_option(select_dark_theme, name, settings.theme_dark === name);
+		append_option(select_create_from, name, settings.theme_light === name);
+
+		if (colors.$builtin) {
+			// pass: cannot edit or delete builtin themes
+		}
+		
+		else {
+			append_option(select_edit, name, settings.theme_light === name);
+		}
+	}
+
+	form_select.setAttribute('aria-busy', 'false');
+	form_create.setAttribute('aria-busy', 'false');
+	form_edit.setAttribute('aria-busy', 'false');
+	form_edit_colors.setAttribute('aria-busy', 'false');
+
+	select_create_from.disabled = false;
+	select_light_theme.disabled = false;
+	select_dark_theme.disabled = false;
+	select_edit.disabled = false;
+
+	button_create.disabled = false;
+	button_select.disabled = false;
+	button_edit.disabled = false;
+	button_delete.disabled = false;
+
+	reload_color_inputs();
+}
+
+function make_button_like(button, on_select) {
+	button.addEventListener('click', on_select);
+	button.addEventListener('keydown', on_keydown);
+	button.addEventListener('keyup', on_keyup);
+
+	return function unbind() {
+		button.removeEventListener('click', on_selectt);
+		button.removeEventListener('keydown', on_keydown);
+		button.removeEventListener('keyup', on_keyup);
+	}
+
+	function on_keydown(/** @type KeyboardEvent */ event) {
+		if (event.keyCode === 32) {
+			event.preventDefault();
+		}
+
+
+		if (event.keyCode === 13) {
+			event.preventDefault();
+			on_select();
+		}
+	}
+
+	function on_keyup(/** @type KeyboardEvent */ event) {
+		if (event.keyCode === 32) {
+			event.preventDefault();
+			on_select();
+		}
+	}
+}
+
+function append_option(to, name, select) {
+	const opt = document.createElement('option');
+	opt.value = name;
+	opt.innerHTML = name; // TODO: Sanitize
+	opt.selected = select;
+	to.appendChild(opt);
+	return opt;
+}
+
+function disable_form(form, busy = true) {
+	const inputs = form.querySelectorAll('input, select, button, color-input');
+
+	if (busy) {
+		form.setAttribute('aria-busy', 'true');
+	}
+
+	for (const input of inputs) {
+		input.disabled = true;
+	}
+}
+
+function enable_form(form, unbusy = true) {
+	const inputs = form.querySelectorAll('input, select, button, color-input');
+
+	if (unbusy) {
+		form.setAttribute('aria-busy', 'false');
+	}
+
+	for (const input of inputs) {
+		input.disabled = false;
+	}
+}
+
+function disable_color_editor() {
+	color_editor.setAttribute('disabled', '');
+	color_editor.setAttribute('aria-disabled', 'true');
+	disable_form(form_edit_colors);
+}
+
+function enable_color_editor() {
+	color_editor.removeAttribute('disabled');
+	color_editor.removeAttribute('aria-disabled');
+	enable_form(form_edit_colors);
+}
+
+function reload_color_inputs() {
+	for (const input of color_inputs) {
+		input.reload();
+	}
+}
+
+async function submit_select(theme_light, theme_dark) {
+	try {
+		await app.http_patch('/api/settings', true, { theme_light, theme_dark });
+	}
+
+	catch (error) {
+		// TODO: Tell the user what went wrong
+		enable_form(form_select);
+		return;
+	}
+	
+	enable_form(form_select);
+	settings.theme_light = theme_light;
+	settings.theme_dark = theme_dark;
+}
+
+async function submit_create(base_name, theme_name) {
+	let new_theme;
+
+	try {
+		new_theme = await app.http_post('/api/themes', true, { base_name, theme_name });
+	}
+
+	catch (error) {
+		// TODO: Tell the user what went wrong
+		enable_form(form_create);
+		return;
+	}
+
+	enable_form(form_create);
+	input_create_name.value = '';
+
+	themes[theme_name] = new_theme;
+
+	append_option(select_light_theme, theme_name, false);
+	append_option(select_dark_theme, theme_name, false);
+	append_option(select_create_from, theme_name, false);
+	append_option(select_edit, theme_name, false);
+}
+
+async function submit_delete(theme_name) {
+	// TODO: Delete theme
+}
+
+async function submit_edit_save() {
+	disable_color_editor();
+
+	const new_theme_version = { };
+	Object.assign(new_theme_version, themes[theme_being_edited]);
+	Object.assign(new_theme_version, theme_edits);
+
+	try {
+		// TODO: Save updates...
+	}
+
+	catch (error) {
+		// TODO: Tell the user what went wrong
+		enable_color_editor();
+		return;
+	}
+
+	Object.assign(themes[theme_being_edited], theme_edits);
+	theme_edits = { };
+	enable_color_editor();
+}
+
+})();
+</script>

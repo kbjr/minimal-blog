@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ labels.lang_code }}">
 <head>
 	<meta charset="UTF-8">
 	<title>{{ page.title }}</title>
@@ -20,7 +20,8 @@
 			site_url: '{{{ site.url }}}',
 			ctrl_panel_url: '{{{ ctrl_panel.url }}}',
 			token_payload: null,
-			// 
+			current_page: '{{{ page.name }}}',
+			current_nav: '{{{ page.nav_section }}}',
 		};
 	</script>
 
@@ -32,30 +33,36 @@
 
 	<script src="{{{ ctrl_panel.url }}}/time.js" async></script>
 	<script src="{{{ ctrl_panel.url }}}/svg_icon.js" async></script>
-	<script src="{{{ ctrl_panel.url }}}/color_theme_toggle.js" async></script>
-
+	
 	{{> page_head }}
 </head>
-<body>
+<body id="page-{{{ page.name }}}">
+	<script src="{{{ ctrl_panel.url }}}/color_theme_toggle.js"></script>
+	
 	<div id="root">
 		<header>
-			<h2>Control Panel / {{ page.title }}</h2>
-			<p>Website: <a href="{{{ site.url }}}">{{ site.url }}</a></p>
-			<p>Control Panel: <a href="{{{ ctrl_panel.url }}}">{{ ctrl_panel.url }}</a></p>
+			<h2>{{ labels.control_panel }} / {{ page.title }}</h2>
+			<p>{{ labels.website }}: <a href="{{{ site.url }}}">{{ site.url }}</a></p>
+			<p>{{ labels.control_panel }}: <a href="{{{ ctrl_panel.url }}}">{{ ctrl_panel.url }}</a></p>
+
 			<noscript>
-				<p>
-					<strong>JavaScript is required to use this control panel</strong>
-				</p>
+				<p><strong>{{ labels.noscript }}</strong></p>
 			</noscript>
 
 			{{# page.require_auth }}
-			<button id="btn-logout">Logout</button>
-			<script>
-			(() => {
-				const btn_logout = document.querySelector('#btn-logout');
-				btn_logout.addEventListener('click', () => app.logout());
-			})();
-			</script>
+			<nav>
+				<a href="{{{ ctrl_panel.url }}}/posts.html">{{ labels.pages.posts.title }}</a>
+				<a href="{{{ ctrl_panel.url }}}/settings.html">{{ labels.pages.settings.title }}</a>
+				<a href="{{{ ctrl_panel.url }}}/color_themes.html">{{ labels.pages.color_themes.title }}</a>
+				<a href="{{{ ctrl_panel.url }}}/templates.html">{{ labels.pages.templates.title }}</a>
+				<a href="{{{ ctrl_panel.url }}}/users.html">{{ labels.pages.users.title }}</a>
+				<button id="btn-logout">{{ labels.logout }}</button>
+				<script>
+					document
+						.querySelector('#btn-logout')
+						.addEventListener('click', () => app.logout());
+				</script>
+			</nav>
 			{{/ page.require_auth }}
 
 			<color-theme-toggle></color-theme-toggle>

@@ -1,24 +1,26 @@
 
-<form id="form-login">
-	<p>Welcome to your new control panel!</p>
-	<p>To get started, you'll need to create a new user:</p>
-
-	<label for="in-username">New Admin Username</label>
-	<input type="text" id="in-username" required autofocus>
-
-	<label for="in-password">New Admin Password</label>
-	<input type="password" id="in-password" required autocomplete="new-password" minlength="8">
-
-	<label for="in-password-confirm">Confirm New Admin Password</label>
-	<input type="password" id="in-password-confirm" required>
-
-	<button type="submit" id="btn-create-user">Create User</button>
-</form>
+<main>
+	<form id="form-create-user">
+		<p>Welcome to your new control panel!</p>
+		<p>To get started, you'll need to create a new user:</p>
+	
+		<label for="in-username">New Admin Username</label>
+		<input type="text" id="in-username" required autofocus>
+	
+		<label for="in-password">New Admin Password</label>
+		<input type="password" id="in-password" required autocomplete="new-password" minlength="8">
+	
+		<label for="in-password-confirm">Confirm New Admin Password</label>
+		<input type="password" id="in-password-confirm" required>
+	
+		<button type="submit" id="btn-create-user">Create User</button>
+	</form>
+</main>
 
 <script>
 (() => {
 
-const form                   = document.querySelector('#form-login');
+const form                   = document.querySelector('#form-create-user');
 const input_username         = form.querySelector('#in-username');
 const input_password         = form.querySelector('#in-password');
 const input_password_confirm = form.querySelector('#in-password-confirm');

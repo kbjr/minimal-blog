@@ -1,10 +1,7 @@
 
 :root {
 	font-size: 16px;
-	/* --font-nunito: 'Nunito', sans-serif; */
 	--font-open-sans: 'Open Sans', sans-serif;
-	/* --font-ubuntu: 'Ubuntu', sans-serif; */
-	/* --font-source-code-pro: 'Source Code Pro', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; */
 	--font-monospace: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 }
 

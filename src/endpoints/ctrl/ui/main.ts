@@ -1,15 +1,19 @@
 
 import { ctrl } from '../../../http';
-import { get_unrendered, render } from './render';
-import * as http_error from '../../../http-error';
 import { conf } from '../../../conf';
 import { store } from '../../../storage';
+import { get_unrendered, render } from './render';
+import { current_lang } from './i18n';
 
 ctrl.get('/', async (req, res) => {
 	res.type('text/html');
 
-	if (store.settings.show_setup && store.users.no_users) {
-		return render_first_time_setup_page();
+	if (store.settings.show_setup) {
+		if (store.users.no_users) {
+			return render_first_time_setup_page();
+		}
+
+		await store.settings.set_show_setup(0);
 	}
 
 	return render_main_page();
@@ -19,20 +23,14 @@ async function render_main_page() {
 	const context = {
 		page: {
 			url: conf.http.ctrl_url,
-			title: 'Main',
+			name: 'main',
+			title: current_lang.pages.main.title,
 			require_auth: true,
-		},
-		site: {
-			url: conf.http.web_url
-			// 
-		},
-		ctrl_panel: {
-			url: conf.http.ctrl_url
 		}
 	};
 	
 	const html = await render('base.html', context, {
-		page_head: '',
+		page_head: '<meta name="description" content="Control panel main landing page">',
 		page_content: await get_unrendered('main.html')
 	});
 
@@ -43,20 +41,14 @@ async function render_first_time_setup_page() {
 	const context = {
 		page: {
 			url: conf.http.ctrl_url,
-			title: 'First Time Setup',
+			name: 'first-time-setup',
+			title: current_lang.pages.first_time_setup.title,
 			require_auth: false,
-		},
-		site: {
-			url: conf.http.web_url
-			// 
-		},
-		ctrl_panel: {
-			url: conf.http.ctrl_url
 		}
 	};
 	
 	const html = await render('base.html', context, {
-		page_head: '',
+		page_head: '<meta name="description" content="Control panel first-time setup page">',
 		page_content: await get_unrendered('first_time_setup.html')
 	});
 

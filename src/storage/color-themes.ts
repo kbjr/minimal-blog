@@ -1,14 +1,15 @@
 
 import { store } from './store';
 import { EventEmitter } from 'events';
-import { default_themes } from './default-color-themes';
+import { default_themes, default_light, default_dark } from './default-color-themes';
 
 export class ColorThemeManager extends EventEmitter {
 	protected themes: Record<string, Partial<ColorThemeData>> = { };
 
 	public async load() {
 		this.themes = await store.get_all_color_themes();
-		await this.populate_missing_colors_and_themes();
+		this.themes[default_light] = default_themes[default_light];
+		this.themes[default_dark] = default_themes[default_dark];
 		this.emit('load');
 	}
 
@@ -21,15 +22,21 @@ export class ColorThemeManager extends EventEmitter {
 	}
 
 	public get default_light() {
-		return this.themes.default_light;
+		return this.themes[default_light];
 	}
 
 	public get default_dark() {
-		return this.themes.default_dark;
+		return this.themes[default_dark];
 	}
 
 	public exists(theme_name: string) {
 		return this.themes[theme_name] != null;
+	}
+
+	public get(theme_name: string) {
+		if (this.exists(theme_name)) {
+			return Object.assign({ }, this.themes[theme_name]);
+		}
 	}
 
 	public get_all() {
@@ -43,13 +50,19 @@ export class ColorThemeManager extends EventEmitter {
 	}
 
 	public create_theme(theme_name: string, base_name?: string) {
+		if (this.exists(theme_name)) {
+			throw new Error('Theme with the given name already exists');
+		}
+
 		const theme = base_name
 			? Object.assign({ }, this.themes[base_name])
 			: { };
 
+		delete theme.$builtin;
+
 		for (const name of color_names) {
 			if (! theme[name]) {
-				theme[name] = 'transparent';
+				theme[name] = '#000000';
 			}
 		}
 
@@ -57,36 +70,15 @@ export class ColorThemeManager extends EventEmitter {
 		return this.store_theme(theme_name);
 	}
 
-	private async populate_missing_colors_and_themes() {
-		if (! this.themes.default_light) {
-			this.themes.default_light = default_themes.default_light;
-			await this.store_theme('default_light');
-		}
-		
-		if (! this.themes.default_dark) {
-			this.themes.default_dark = default_themes.default_dark;
-			await this.store_theme('default_dark');
-		}
-
-		for (const [theme_name, colors] of Object.entries(this.themes)) {
-			let updated = false;
-
-			for (const name of color_names) {
-				if (! colors[name]) {
-					updated = true;
-					colors[name] = 'transparent';
-				}
-			}
-
-			if (updated) {
-				await this.store_theme(theme_name);
-			}
-		}
-	}
-
 	private async store_theme(theme_name: string) {
+		if (this.themes[theme_name].$builtin) {
+			throw new Error('Should not be attempting to store a built-in theme');
+		}
+
 		for (const [color_name, value] of Object.entries(this.themes[theme_name])) {
-			await store.set_color(theme_name, color_name, value);
+			if (color_name !== '$builtin') {
+				await store.set_color(theme_name, color_name, value as string);
+			}
 		}
 
 		this.emit('update', theme_name);
@@ -94,50 +86,54 @@ export class ColorThemeManager extends EventEmitter {
 }
 
 export const enum ColorName {
-	sun                   = 'sun',
-	moon                  = 'moon',
-	bg_main               = 'bg_main',
-	bg_light              = 'bg_light',
-	bg_heavy              = 'bg_heavy',
-	bg_accent             = 'bg_accent',
-	line                  = 'line',
-	text_heading          = 'text_heading',
-	text_body             = 'text_body',
-	text_light            = 'text_light',
-	text_link             = 'text_link',
-	text_link_active      = 'text_link_active',
-	text_link_visited     = 'text_link_visited',
-	bg_button_primary     = 'bg_button_primary',
-	text_button_primary   = 'text_button_primary',
-	bg_button_secondary   = 'bg_button_secondary',
-	text_button_secondary = 'text_button_secondary',
-	border_input          = 'border_input',
-	border_input_invalid  = 'border_input_invalid',
-	code_normal           = 'code_normal',
-	code_shadow           = 'code_shadow',
-	code_background       = 'code_background',
-	code_selection        = 'code_selection',
-	code_comment          = 'code_comment',
-	code_punc             = 'code_punc',
-	code_operator         = 'code_operator',
-	code_const_literal    = 'code_const_literal',
-	code_number_literal   = 'code_number_literal',
-	code_boolean_literal  = 'code_boolean_literal',
-	code_tag              = 'code_tag',
-	code_string           = 'code_string',
-	code_keyword          = 'code_keyword',
-	code_func_name        = 'code_func_name',
-	code_class_name       = 'code_class_name',
-	code_regex_important  = 'code_regex_important',
-	code_variable         = 'code_variable',
-	code_builtin          = 'code_builtin',
-	code_attr_name        = 'code_attr_name',
-	code_gutter_divider   = 'code_gutter_divider',
-	code_line_number      = 'code_line_number',
-	code_line_highlight   = 'code_line_highlight',
+	sun                       = 'sun',
+	moon                      = 'moon',
+	bg_main                   = 'bg_main',
+	bg_light                  = 'bg_light',
+	bg_heavy                  = 'bg_heavy',
+	line                      = 'line',
+	text_heading              = 'text_heading',
+	text_body                 = 'text_body',
+	text_light                = 'text_light',
+	text_link                 = 'text_link',
+	text_link_active          = 'text_link_active',
+	text_link_visited         = 'text_link_visited',
+	bg_button_primary         = 'bg_button_primary',
+	bg_button_primary_hover   = 'bg_button_primary_hover',
+	text_button_primary       = 'text_button_primary',
+	bg_button_secondary       = 'bg_button_secondary',
+	bg_button_secondary_hover = 'bg_button_secondary_hover',
+	text_button_secondary     = 'text_button_secondary',
+	bg_input                  = 'bg_input',
+	border_input              = 'border_input',
+	border_input_invalid      = 'border_input_invalid',
+	code_normal               = 'code_normal',
+	code_shadow               = 'code_shadow',
+	code_background           = 'code_background',
+	code_selection            = 'code_selection',
+	code_comment              = 'code_comment',
+	code_punc                 = 'code_punc',
+	code_operator             = 'code_operator',
+	code_const_literal        = 'code_const_literal',
+	code_number_literal       = 'code_number_literal',
+	code_boolean_literal      = 'code_boolean_literal',
+	code_tag                  = 'code_tag',
+	code_string               = 'code_string',
+	code_keyword              = 'code_keyword',
+	code_func_name            = 'code_func_name',
+	code_class_name           = 'code_class_name',
+	code_regex_important      = 'code_regex_important',
+	code_variable             = 'code_variable',
+	code_builtin              = 'code_builtin',
+	code_attr_name            = 'code_attr_name',
+	code_gutter_divider       = 'code_gutter_divider',
+	code_line_number          = 'code_line_number',
+	code_line_highlight       = 'code_line_highlight',
 }
 
-export type ColorThemeData = Record<ColorName, string>;
+export type ColorThemeData = Record<ColorName, string> & {
+	$builtin?: boolean;
+};
 
 export const color_names = [
 	ColorName.sun,
@@ -145,7 +141,6 @@ export const color_names = [
 	ColorName.bg_main,
 	ColorName.bg_light,
 	ColorName.bg_heavy,
-	ColorName.bg_accent,
 	ColorName.line,
 	ColorName.text_heading,
 	ColorName.text_body,
@@ -154,9 +149,12 @@ export const color_names = [
 	ColorName.text_link_active,
 	ColorName.text_link_visited,
 	ColorName.bg_button_primary,
+	ColorName.bg_button_primary_hover,
 	ColorName.text_button_primary,
 	ColorName.bg_button_secondary,
+	ColorName.bg_button_secondary_hover,
 	ColorName.text_button_secondary,
+	ColorName.bg_input,
 	ColorName.border_input,
 	ColorName.border_input_invalid,
 	ColorName.code_normal,

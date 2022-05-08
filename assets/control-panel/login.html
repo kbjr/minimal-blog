@@ -1,15 +1,17 @@
 
-<form id="form-login">
-	<p>Login to continue</p>
+<main>
+	<form id="form-login">
+		<p>Login to continue</p>
+		
+		<label for="in-username">Username</label>
+		<input type="text" id="in-username" required autofocus autocomplete="username">
 	
-	<label for="in-username">Username</label>
-	<input type="text" id="in-username" required autofocus autocomplete="username">
-
-	<label for="in-password">Password</label>
-	<input type="password" id="in-password" required autocomplete="current-password">
-
-	<button type="submit" id="btn-login">Login</button>
-</form>
+		<label for="in-password">Password</label>
+		<input type="password" id="in-password" required autocomplete="current-password">
+	
+		<button type="submit" id="btn-login">Login</button>
+	</form>
+</main>
 
 <script>
 (() => {
@@ -26,14 +28,20 @@ form.addEventListener('submit', (event) => {
 	const username = document.querySelector('#in-username').value;
 	const password = document.querySelector('#in-password').value;
 
-	form.disabled = true;
-
 	disable_form();
 	login(username, password);
 
 	return false;
 });
-	
+
+input_username.addEventListener('change', () => {
+	button_submit.setCustomValidity('');
+});
+
+input_password.addEventListener('change', () => {
+	button_submit.setCustomValidity('');
+});
+
 async function login(username, password) {
 	const headers = app.http_headers(true, {
 		'content-type': 'application/json'
@@ -52,15 +60,23 @@ async function login(username, password) {
 			break;
 		};
 
-		case 422: {
-			// TODO: Tell the user what's wrong
-			console.error(await res.json());
-			enable_form();
-			break;
-		};
-
+		case 401:
+		case 422:
 		default: {
-			console.error(await res.json());
+			let message;
+
+			try {
+				message = (await res.json()).error;
+			}
+
+			catch (error) { }
+
+			message = message || 'Something went wrong';
+
+			console.error(message);
+			button_submit.setCustomValidity(message);
+			button_submit.reportValidity();
+
 			enable_form();
 			break;
 		};

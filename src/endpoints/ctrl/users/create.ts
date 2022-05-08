@@ -57,6 +57,11 @@ ctrl.post('/api/users', opts, async (req: Req, res) => {
 
 	await store.users.create_user(username, password, is_admin);
 
+	// Once the first user is created, disable the first-time setup mode
+	if (first_time_setup) {
+		await store.settings.set_show_setup(0);
+	}
+
 	res.status(201);
 	return { username, is_admin };
 });
