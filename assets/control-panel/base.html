@@ -21,7 +21,6 @@
 			ctrl_panel_url: '{{{ ctrl_panel.url }}}',
 			token_payload: null,
 			current_page: '{{{ page.name }}}',
-			current_nav: '{{{ page.nav_section }}}',
 		};
 	</script>
 
@@ -51,11 +50,11 @@
 
 			{{# page.require_auth }}
 			<nav>
-				<a href="{{{ ctrl_panel.url }}}/posts.html">{{ labels.pages.posts.title }}</a>
-				<a href="{{{ ctrl_panel.url }}}/settings.html">{{ labels.pages.settings.title }}</a>
-				<a href="{{{ ctrl_panel.url }}}/color_themes.html">{{ labels.pages.color_themes.title }}</a>
-				<a href="{{{ ctrl_panel.url }}}/templates.html">{{ labels.pages.templates.title }}</a>
-				<a href="{{{ ctrl_panel.url }}}/users.html">{{ labels.pages.users.title }}</a>
+				<a href="{{{ ctrl_panel.url }}}/posts">{{ labels.pages.posts.title }}</a>
+				<a href="{{{ ctrl_panel.url }}}/settings">{{ labels.pages.settings.title }}</a>
+				<a href="{{{ ctrl_panel.url }}}/color_themes">{{ labels.pages.color_themes.title }}</a>
+				<a href="{{{ ctrl_panel.url }}}/templates">{{ labels.pages.templates.title }}</a>
+				<a href="{{{ ctrl_panel.url }}}/users">{{ labels.pages.users.title }}</a>
 				<button id="btn-logout">{{ labels.logout }}</button>
 				<script>
 					document
@@ -69,6 +68,10 @@
 		</header>
 		
 		{{> page_content }}
+
+		<footer>
+			<p>Blog Control Panel</p>
+		</footer>
 	</div>
 </body>
 </html>

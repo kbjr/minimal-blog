@@ -24,6 +24,7 @@ import './web/feed-html';
 // ===== Control Panel API =====
 
 import './ctrl/status';
+import './ctrl/preview-markdown';
 import './ctrl/token/get';
 import './ctrl/token/validate';
 
@@ -33,6 +34,7 @@ import './ctrl/ui/login';
 import './ctrl/ui/main';
 import './ctrl/ui/color-themes';
 import './ctrl/ui/posts';
+import './ctrl/ui/edit-post';
 import './ctrl/ui/settings';
 import './ctrl/ui/templates';
 import './ctrl/ui/users';

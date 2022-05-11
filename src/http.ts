@@ -31,7 +31,7 @@ if (conf.http.compress.enable) {
 	ctrl.register(compress, { encodings: conf.http.compress.encodings });
 }
 
-ctrl.addContentTypeParser([ 'text/html', 'text/css' ], { parseAs: 'string' }, noop_content_processor);
+ctrl.addContentTypeParser([ 'text/html', 'text/markdown', 'text/css' ], { parseAs: 'string' }, noop_content_processor);
 ctrl.addContentTypeParser([ 'image/png' ], { parseAs: 'buffer' }, noop_content_processor);
 
 web.setErrorHandler(error_handler);

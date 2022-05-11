@@ -32,6 +32,10 @@ body {
 	margin: auto;
 }
 
+	#root main {
+		flex-grow: 1;
+	}
+
 
 
 
@@ -67,11 +71,13 @@ body {
 /* ===== Typography ===== */
 
 h1, h2, h3, h4, h5, h6,
-p, a, li, dt, dd, label {
+p, a, li, dt, dd, label,
+table, th, td {
 	font-family: var(--font-open-sans);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6,
+th {
 	color: var(--theme-text-heading);
 }
 
@@ -87,15 +93,16 @@ pre {
 	border: 0.1rem solid var(--theme-line);
 	border-radius: 1rem;
 	overflow: auto;
+	background: var(--theme-bg-light);
 }
 
 h1 {
-	color: var(--theme-text-heading);
 	font-size: 2rem;
 	font-weight: 300;
 }
 
-p, small, li, dt, dd, label {
+p, small, li, dt, dd, label,
+table, td {
 	color: var(--theme-text-body);
 }
 
@@ -108,7 +115,11 @@ p {
 small {
 	font-size: 0.8rem;
 	font-family: var(--font-open-sans);
-	/* font-family: var(--font-nunito); */
+}
+
+table, th, td {
+	font-size: 1.2rem;
+	line-height: 1.75;
 }
 
 a {
@@ -142,6 +153,28 @@ header p {
 	font-size: 1rem;
 }
 
+footer {
+	margin: 4rem 0 1rem;
+}
+
+footer p {
+	margin: 1rem;
+	text-align: center;
+	font-size: 0.8rem;
+}
+
+blockquote {
+	margin-block: 0.5rem;
+	margin-inline: 1rem;
+	padding-block: 0.5rem;
+	padding-inline: 1.5rem;
+	border-inline-start: 0.25rem var(--theme-line) solid;
+}
+
+	blockquote p {
+		margin: 0;
+	}
+
 #todo {
 	text-align: center;
 	margin: 4rem;
@@ -160,7 +193,12 @@ label {
 	margin-top: 1rem;
 }
 
-input {
+label:not(:first-of-type) {
+	margin-top: 2rem;
+}
+
+input,
+textarea {
 	display: block;
 	margin-top: 0.35rem;
 	margin-bottom: 1rem;
@@ -174,16 +212,28 @@ input {
 	width: 20rem;
 }
 
-	input[disabled] {
+	input[disabled],
+	textarea[disabled] {
 		opacity: 0.4;
 		cursor: default;
 		pointer-events: none;
 	}
 
 	input[type='text']:invalid,
-	input[type='password']:invalid {
+	input[type='password']:invalid,
+	textarea:invalid {
 		border-color: var(--theme-border-input-invalid);
 	}
+
+textarea {
+	font-size: 1.4rem;
+	font-family: var(--font-monospace);
+	min-height: 25rem;
+}
+
+::-webkit-input-placeholder {
+	color: var(--theme-text-light);
+}
 
 button {
 	padding: 0.5rem 1.5rem;
@@ -253,6 +303,26 @@ select {
 
 
 
+/* ===== Tables ===== */
+
+table {
+	border-collapse: collapse;
+}
+
+	tbody tr {
+		border-top: 1px var(--theme-line) solid;
+	}
+
+	th, td {
+		padding: 0.5rem;
+	}
+
+	td {
+		font-weight: 300;
+	}
+
+
+
 /* ===== Login Page ===== */
 
 #page-login main {
@@ -268,6 +338,73 @@ select {
 	padding: 2rem;
 	margin: 5rem auto;
 }
+
+
+
+/* ===== Posts Page ===== */
+
+/*  */
+
+
+
+/* ===== Edit Post Page ===== */
+
+#page-edit-post main {
+	width: 100%;
+	max-width: 80rem;
+	margin: 0 auto;
+	padding: 3rem 1rem;
+}
+
+	#page-edit-post main input,
+	#page-edit-post main textarea {
+		width: 100%;
+		max-width: 80rem;
+	}
+
+	#page-edit-post main[data-preview] #form-edit-post {
+		display: none;
+	}
+
+	#page-edit-post main:not([data-preview]) #preview {
+		display: none;
+	}
+	
+	#page-edit-post p#post-url {
+		font-size: 1rem;
+		color: var(--theme-text-light);
+		font-style: italic;
+		margin: 0 0 2rem;
+	}
+
+	#page-edit-post p#post-publish-status {
+		margin: 0;
+	}
+	
+	#page-edit-post #btn-post-toggle-publish {
+		margin-left: 2rem;
+	}
+
+	#page-edit-post #btn-post-back-to-edit {
+		margin: 0 0 2rem;
+		position: sticky;
+		top: 2rem;
+	}
+
+	#page-edit-post .controls {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+		#page-edit-post .controls .left {
+			flex: 1 0 auto;
+		}
+		
+		#page-edit-post .controls .right {
+			flex: 0 1 auto;
+		}
 
 
 
@@ -354,6 +491,14 @@ select {
 		border: 0.1rem solid var(--theme-code-gutter-divider);
 		border-radius: 1rem;
 		overflow: auto;
+	}
+
+	textarea {
+		min-height: 10rem;
+	}
+
+	#page-edit-post main {
+		padding-top: 1rem;
 	}
 
 	#page-color-themes main {

@@ -5,7 +5,7 @@ import { store } from '../../../storage';
 import { get_unrendered, render } from './render';
 import { current_lang } from './i18n';
 
-ctrl.get('/color_themes.html', async (req, res) => {
+ctrl.get('/color_themes', async (req, res) => {
 	if (store.settings.show_setup) {
 		// If in setup mode, redirect to the main URL for first-time setup
 		res.status(303);
@@ -17,9 +17,8 @@ ctrl.get('/color_themes.html', async (req, res) => {
 
 	const context = {
 		page: {
-			url: `${conf.http.ctrl_url}/color_themes.html`,
+			url: `${conf.http.ctrl_url}/color_themes`,
 			name: 'color-themes',
-			nav_section: 'color-themes',
 			title: current_lang.pages.color_themes.title,
 			require_auth: true
 		}

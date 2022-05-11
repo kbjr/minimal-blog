@@ -14,9 +14,13 @@
   "author": "James Brumond <james@jbrumond.me>",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@types/dompurify": "^2.3.3",
+    "@types/jsdom": "^16.2.14",
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/marked": "^4.0.3",
     "@types/mustache": "^4.1.2",
     "@types/node": "^17.0.29",
+    "@types/prismjs": "^1.26.0",
     "@types/sqlite3": "^3.1.8",
     "pino-pretty": "^7.6.1",
     "typescript": "^4.6.3"

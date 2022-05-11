@@ -1,0 +1,342 @@
+
+<main>
+	<form id="form-edit-post">
+		<h2>Edit Post</h2>
+
+		{{# page.is_new }}
+		<label for="in-post-title">Post Title <sup>*</sup></label>
+		<input type="text" id="in-post-title" autofocus required>
+		<p id="post-url">Post URL: {{ site.url }}/posts/<span></span></p>
+		{{/ page.is_new }}
+		
+		{{^ page.is_new }}
+		<label for="in-post-title">Post Title <sup>*</sup></label>
+		<input type="text" id="in-post-title" value="{{ labels.loading }}" disabled required>
+		<p id="post-url">{{ site.url }}/posts/<span>{{ page.post_id }}</span></p>
+		{{/ page.is_new }}
+		
+		<label for="in-post-title">Post Sub-Title <small>(optional)</small></label>
+		<input type="text" id="in-post-sub-title" value="{{ labels.loading }}" disabled>
+
+		<label for="in-post-markdown">Post Body <sup>*</sup> <small>(GitHub Flavored Markdown)</small></label>
+		<textarea id="in-post-markdown"
+			placeholder="## Headings&#10;&#10;### Sub-Headings&#10;&#10;#### etc.&#10;&#10;**Bold**&#10;_Italic_&#10;`Monospace`&#10;&#10;```js&#10;console.log('hi');&#10;```"
+		>{{ labels.loading }}</textarea>
+
+		<div class="controls">
+			<div class="left">
+				<button type="submit" id="btn-post-save">Save Post</button>
+				<button type="button" id="btn-post-preview" data-style="secondary">Preview</button>
+				<button type="reset" id="btn-post-cancel" data-style="secondary">Cancel</button>
+			</div>
+			<div class="right">
+				<p id="post-publish-status">
+					<span>{{ labels.loading }}</span>
+					<button type="button" id="btn-post-toggle-publish" disabled>Publish Post</button>
+				</p>
+			</div>
+		</div>
+	</form>
+
+	<div id="preview" aria-hidden="true" aria-live="polite">
+		<button id="btn-post-back-to-edit">Back to Editing</button>
+		<markdown-preview title-src="in-post-title" subtitle-src="in-post-sub-title" body-src="in-post-markdown"></markdown-preview>
+	</div>
+</main>
+
+<script>
+(() => {
+
+let post_id = '{{ page.post_id }}';
+let new_post_id = post_id;
+
+let post;
+
+const main_elem           = document.querySelector('#root > main');
+const span_post_url_name  = document.querySelector('#post-url span');
+const span_publish_status = document.querySelector('#post-publish-status span');
+
+const input_title       = document.querySelector('#in-post-title');
+const input_subtitle    = document.querySelector('#in-post-sub-title');
+const textarea_markdown = document.querySelector('#in-post-markdown');
+
+const btn_toggle_publish = document.querySelector('#btn-post-toggle-publish');
+const btn_save           = document.querySelector('#btn-post-save');
+const btn_preview        = document.querySelector('#btn-post-preview');
+const btn_cancel         = document.querySelector('#btn-post-cancel');
+const btn_back_to_edit   = document.querySelector('#btn-post-back-to-edit');
+
+const preview = document.querySelector('markdown-preview');
+
+
+
+// ===== Setup event listeners =====
+
+btn_preview.addEventListener('click', () => {
+	main_elem.setAttribute('data-preview', '');
+	preview.render();
+});
+
+btn_back_to_edit.addEventListener('click', () => {
+	main_elem.removeAttribute('data-preview');
+});
+
+input_title.addEventListener('change', () => {
+	on_title_change(input_title.value);
+});
+
+
+
+// ===== <markdown-preview> component =====
+// FIXME: Find a better way to manage these styles than copy-paste from styles.css
+
+const styles = `
+:host {
+	display: contents;
+}
+
+h1, h2, h3, h4, h5, h6,
+p, a, li, dt, dd, label,
+table, td {
+	font-family: var(--font-open-sans);
+}
+
+h1, h2, h3, h4, h5, h6,
+th {
+	color: var(--theme-text-heading);
+}
+
+code, pre {
+	color: var(--theme-code-normal);
+	font-family: var(--font-monospace);
+	font-size: 1.35rem;
+}
+
+pre {
+	margin: 4rem 2rem;
+	padding: 1rem 1.5rem;
+	border: 0.1rem solid var(--theme-line);
+	border-radius: 1rem;
+	overflow: auto;
+	background: var(--theme-bg-light);
+}
+
+h1 {
+	font-size: 2rem;
+	font-weight: 300;
+}
+
+p, small, li, dt, dd, label,
+table, td {
+	color: var(--theme-text-body);
+}
+
+p {
+	font-size: 1.2rem;
+	line-height: 1.75;
+}
+
+p, table {
+	margin: 0 0 3rem;
+}
+
+table, th, td {
+	font-size: 1.2rem;
+	line-height: 1.75;
+}
+
+small {
+	font-size: 0.8rem;
+	font-family: var(--font-open-sans);
+}
+
+a {
+	color: var(--theme-text-link);
+	text-decoration: none;
+}
+
+a:active,
+a:hover,
+a:focus {
+	color: var(--theme-text-link-active);
+}
+
+a:visited {
+	color: var(--theme-text-link-visited);
+}
+
+blockquote {
+	margin-block: 0.5rem 3rem;
+	margin-inline: 1rem;
+	padding-block: 0.5rem;
+	padding-inline: 1.5rem;
+	border-inline-start: 0.25rem var(--theme-line) solid;
+}
+
+blockquote p {
+	margin: 0;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+tbody tr {
+	border-top: 1px var(--theme-line) solid;
+}
+
+th, td {
+	padding: 0.5rem;
+}
+
+td {
+	font-weight: 300;
+}
+`;
+
+const template = `
+<style>${styles}</style>
+<link rel="stylesheet" href="{{{ site.url }}}/prism.css">
+<article>
+	<p>{{ labels.loading }}</p>
+</article>
+`;
+
+customElements.define('markdown-preview',
+	class MarkdownPreview extends HTMLElement {
+		constructor() {
+			super();
+			this.attachShadow({ mode: 'open' });
+			this.shadowRoot.innerHTML = template;
+			this.article = this.shadowRoot.querySelector('article');
+		}
+
+		get title_src() {
+			return document.querySelector('#' + this.getAttribute('title-src'));
+		}
+		
+		get subtitle_src() {
+			return document.querySelector('#' + this.getAttribute('subtitle-src'));
+		}
+
+		get body_src() {
+			return document.querySelector('#' + this.getAttribute('body-src'));
+		}
+
+		async render() {
+			this.article.innerHTML = '<p>{{ labels.loading }}</p>';
+
+			const title = this.title_src.value;
+			const subtitle = this.subtitle_src.value;
+			const markdown = this.body_src.value;
+
+			try {
+				const title_html = `
+					<header>
+						<h1>${title}</h1>
+						<!--
+						${subtitle ? `<p class="subtitle">${subtitle}</p>` : ''}
+						<p class="author">By: Someone</p>
+						<p class="published">Published: <time>Sometime</time></p>
+						-->
+					</header>
+				`;
+				const body_html = await render_markdown(markdown);
+				this.article.innerHTML = title_html + body_html;
+			}
+
+			catch (error) {
+				this.article.innerHTML = '<p>Failed to render markdown preview</p>';
+			}
+		}
+	}
+);
+
+
+
+// ===== Start loading data =====
+
+load();
+
+
+
+// ===== Utility Functions =====
+
+async function load() {
+	if (! post_id) {
+		return load_new_post();
+	}
+
+	// TODO: Load existing post
+}
+
+function load_new_post() {
+	textarea_markdown.disabled = false;
+	textarea_markdown.innerHTML = '';
+
+	input_subtitle.disabled = false;
+	input_subtitle.value = '';
+
+	btn_toggle_publish.disabled = false;
+	span_publish_status.innerHTML = 'Post Not Published';
+}
+
+function on_title_change(new_title) {
+	new_post_id = convert_title_to_uri(new_title);
+	span_post_url_name.innerHTML = new_post_id;
+}
+
+// TODO: More feature-complete URI generator
+function convert_title_to_uri(title) {
+	return title
+		// Convert all unallowed characters into spaces
+		.replace(/[^a-zA-Z0-9 :]/g, ' ')
+		// Collapse all runs of whitespace into a single hyphen
+		.replace(/\s+/g, '-')
+		// Lowercase
+		.toLowerCase();
+}
+
+async function cancel_edit() {
+	// TODO: Confirm cancel
+	// TODO: Navigate back to /posts
+}
+
+async function save_post() {
+	// 
+}
+
+async function publish_post() {
+	// TODO: Confirm publish
+	// TODO: Disable button / show indication
+	// TODO: Publish post
+	// TODO: Enable button / change verbage / change message / show indication
+}
+
+async function unpublish_post() {
+	// TODO: Confirm unpublish
+	// TODO: Disable button / show indication
+	// TODO: Publish post
+	// TODO: Enable button / change verbage / change message / show indication
+}
+
+/**
+ * @param {string} markdown
+ * @returns {Promise<string>}
+ */
+async function render_markdown(markdown) {
+	const headers = app.http_headers(true, {
+		'content-type': 'text/markdown'
+	});
+
+	const res = await app.http('POST', '/api/preview-markdown', headers, markdown);
+	
+	switch (res.status) {
+		case 200: return res.text();
+		case 401: return app.redirect_to_login(true);
+		default: return app.throw_http_error(res);
+	}
+}
+
+})();
+</script>

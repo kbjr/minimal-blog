@@ -11,9 +11,9 @@ https://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javasc
 
 code[class*="language-"],
 pre[class*="language-"] {
-	color: var(--color-code-normal);
+	color: var(--theme-code-normal);
 	background: none;
-	text-shadow: 0 1px var(--color-code-shadow);
+	text-shadow: 0 1px var(--theme-code-shadow);
 	font-family: var(--font-monospace);
 	font-weight: 400;
 	text-align: left;
@@ -36,13 +36,13 @@ pre[class*="language-"] {
 pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
 code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
 	text-shadow: none;
-	background: var(--color-code-selection);
+	background: var(--theme-code-selection);
 }
 
 pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
 code[class*="language-"]::selection, code[class*="language-"] ::selection {
 	text-shadow: none;
-	background: var(--color-code-selection);
+	background: var(--theme-code-selection);
 }
 
 @media print {
@@ -59,7 +59,7 @@ pre[class*="language-"] {
 
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
-	background: var(--color-code-background);
+	background: var(--theme-code-background);
 }
 
 /* Inline code */
@@ -73,11 +73,11 @@ pre[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-	color: var(--color-code-comment);
+	color: var(--theme-code-comment);
 }
 
 .token.punctuation {
-	color: var(--color-code-punc);
+	color: var(--theme-code-punc);
 }
 
 .token.namespace {
@@ -88,34 +88,34 @@ pre[class*="language-"] {
 .token.constant,
 .token.symbol,
 .token.deleted {
-	color: var(--color-code-const-literal);
+	color: var(--theme-code-const-literal);
 }
 
 .token.tag {
-	color: var(--color-code-tag);
+	color: var(--theme-code-tag);
 }
 
 .token.number {
-	color: var(--color-code-number-literal);
+	color: var(--theme-code-number-literal);
 }
 
 .token.boolean {
-	color: var(--color-code-boolean-literal);
+	color: var(--theme-code-boolean-literal);
 }
 
 .token.selector,
 .token.attr-name {
-	color: var(--color-code-attr-name);
+	color: var(--theme-code-attr-name);
 }
 
 .token.builtin {
-	color: var(--color-code-builtin);
+	color: var(--theme-code-builtin);
 }
 
 .token.string,
 .token.char,
 .token.inserted {
-	color: var(--color-code-string);
+	color: var(--theme-code-string);
 }
 
 .token.operator,
@@ -123,30 +123,30 @@ pre[class*="language-"] {
 .token.url,
 .language-css .token.string,
 .style .token.string {
-	color: var(--color-code-operator);
+	color: var(--theme-code-operator);
 }
 
 .token.atrule,
 .token.attr-value,
 .token.keyword {
-	color: var(--color-code-keyword);
+	color: var(--theme-code-keyword);
 }
 
 .token.function {
-	color: var(--color-code-func-name);
+	color: var(--theme-code-func-name);
 }
 
 .token.class-name {
-	color: var(--color-code-class-name);
+	color: var(--theme-code-class-name);
 }
 
 .token.regex,
 .token.important {
-	color: var(--color-code-regex-important);
+	color: var(--theme-code-regex-important);
 }
 
 .token.variable {
-	color: var(--color-code-variable);
+	color: var(--theme-code-variable);
 }
 
 .token.important,
@@ -174,7 +174,7 @@ pre[data-line] {
 	padding: inherit 0;
 	margin-top: 1rem;
 
-	background: var(--color-code-line-highlight);
+	background: var(--theme-code-line-highlight);
 
 	pointer-events: none;
 
@@ -201,7 +201,7 @@ pre[data-line] {
 		left: .6rem;
 		min-width: 1rem;
 		padding: 0 .5rem;
-		background: var(--color-code-line-highlight);
+		background: var(--theme-code-line-highlight);
 		font: bold 65%/1.5 sans-serif;
 		text-align: center;
 		vertical-align: .3rem;
@@ -253,7 +253,7 @@ pre[class*="language-"].line-numbers > code {
 	left: -3.8rem;
 	width: 3rem; /* works for line-numbers below 1000 lines */
 	letter-spacing: -1px;
-	border-right: 1px solid var(--color-code-gutter-divider);
+	border-right: 1px solid var(--theme-code-gutter-divider);
 
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -269,7 +269,7 @@ pre[class*="language-"].line-numbers > code {
 
 		.line-numbers-rows > span:before {
 			content: counter(linenumber);
-			color: var(--color-code-line-number);
+			color: var(--theme-code-line-number);
 			display: block;
 			padding-right: 0.8rem;
 			text-align: right;

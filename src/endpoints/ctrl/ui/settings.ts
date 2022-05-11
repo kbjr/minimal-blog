@@ -6,7 +6,7 @@ import * as http_error from '../../../http-error';
 import { store } from '../../../storage';
 import { current_lang } from './i18n';
 
-ctrl.get('/settings.html', async (req, res) => {
+ctrl.get('/settings', async (req, res) => {
 	if (store.settings.show_setup) {
 		// If in setup mode, redirect to the main URL for first-time setup
 		res.status(303);
@@ -18,9 +18,8 @@ ctrl.get('/settings.html', async (req, res) => {
 
 	const context = {
 		page: {
-			url: `${conf.http.ctrl_url}/settings.html`,
+			url: `${conf.http.ctrl_url}/settings`,
 			name: 'settings',
-			nav_section: 'settings',
 			title: current_lang.pages.settings.title,
 			require_auth: true
 		},

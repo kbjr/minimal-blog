@@ -22,8 +22,13 @@ app.redirect_to_login = function redirect_to_login(redirect_back = false) {
 		}
 	}
 
-	app.redirect_to('login.html');
+	app.redirect_to('login');
 };
+
+app.replace_url = function replace_url(new_uri) {
+	const new_url = `${conf.ctrl_panel_url}/${path}`;
+	history.replaceState({ }, '', new_url);
+}
 
 app.login = function login(token, payload, redirect = false) {
 	set_auth_token(token);
@@ -45,7 +50,7 @@ app.login = function login(token, payload, redirect = false) {
 
 app.logout = function logout() {
 	clear_auth_token();
-	app.redirect_to('login.html');
+	app.redirect_to('login');
 };
 
 app.http = async function http(method, path, headers = { }, body = null) {
