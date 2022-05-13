@@ -37,8 +37,31 @@ export function render_markdown_to_html(markdown: string, options: MarkdownOptio
 	});
 }
 
+const renderer: Partial<marked.Renderer> = {
+	heading(text, level, raw, slugger) {
+		const id = slugger.slug(raw);
+		
+		return `
+			<h${level} id="${id}">
+				${text}
+				<a class="heading-anchor" href="#${id}">
+					<svg-icon icon="link" aria-hidden="true"></svg-icon>
+					<span></span>
+				</a>
+			</h${level}>
+		`;
+	}
+};
+
+marked.use({ renderer });
+
 function sanitize_html(html: string) : string {
 	const { window } = new JSDOM('');
 	const dom_purify = createDOMPurify(window as any as Window);
-	return dom_purify.sanitize(html);
+	return dom_purify.sanitize(html, {
+		CUSTOM_ELEMENT_HANDLING: {
+			tagNameCheck: (tag_name) => tag_name === 'svg-icon',
+			attributeNameCheck: (attr_name) => attr_name === 'icon',
+		}
+	});
 }

@@ -61,6 +61,15 @@
 			<line x1="10" y1="11" x2="10" y2="17"></line>
 			<line x1="14" y1="11" x2="14" y2="17"></line>		
 		`,
+		'link': `
+			<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+			<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+		`,
+		'external-link': `
+			<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+			<polyline points="15 3 21 3 21 9"></polyline>
+			<line x1="10" y1="14" x2="21" y2="3"></line>
+		`,
 	};
 
 	const template = `
@@ -93,18 +102,6 @@
 
 			get icon() {
 				return this.getAttribute('icon');
-			}
-	
-			connectedCallback() {
-				// 
-			}
-	
-			disconnectedCallback() {
-				// 
-			}
-	
-			adoptedCallback() {
-				// 
 			}
 	
 			attributeChangedCallback(attr, old_value, new_value) {

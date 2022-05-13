@@ -9,15 +9,23 @@
 	<link rel="icon" href="{{{ site.url }}}/favicon.png">
 	<link rel="self" href="{{{ page.url }}}">
 	<link rel="cannonical" href="{{{ page.url }}}">
-	<link rel="alternate" type="application/rss+xml" href="{{{ feed.url_rss }}}">
-	<link rel="alternate" type="application/atom+xml" href="{{{ feed.url_atom }}}">
-	<link rel="alternate" type="application/feed+json" href="{{{ feed.url_json_feed }}}">
+	<link rel="sitemap" href="{{{ site.url }}}/sitemap.xml">
+	<link rel="alternate" type="application/rss+xml" href="{{{ feed.url_rss }}}" title="RSS Feed">
+	<link rel="alternate" type="application/atom+xml" href="{{{ feed.url_atom }}}" title="Atom Feed">
+	<link rel="alternate" type="application/feed+json" href="{{{ feed.url_json_feed }}}" title="JSON Feed">
+	{{# feed.receive_webmention }}
+	<link rel="webmention" href="{{{ feed.url_webmention }}}">
+	<!-- Non-standard "rel" value; What is the best way to communicate this information? -->
+	<link rel="webmention-trusted-sources" href="{{{ feed.url_webmention_trusted }}}">
+	{{/ feed.receive_webmention }}
+	{{# feed.receive_pingback }}
+	<link rel="pingback" href="{{{ feed.url_pingback }}}">
+	{{/ feed.receive_pingback }}
 
 	<!-- Font imports -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap">
-	<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Source+Code+Pro:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"> -->
 
 	<link rel="stylesheet" href="{{{ site.url }}}/colors.css">
 	<link rel="stylesheet" href="{{{ site.url }}}/prism.css">

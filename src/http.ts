@@ -1,7 +1,9 @@
 
 import { conf } from './conf';
 import { HttpError } from './http-error';
+import { xml_content_processor, xml_rpc_fault } from './xml-rpc';
 import fastify, { FastifyError, FastifyLoggerOptions, FastifyReply, FastifyRequest } from 'fastify';
+import formbody from '@fastify/formbody';
 
 const logging: FastifyLoggerOptions = conf.logging.level !== 'none' && {
 	level: conf.logging.level,
@@ -31,33 +33,46 @@ if (conf.http.compress.enable) {
 	ctrl.register(compress, { encodings: conf.http.compress.encodings });
 }
 
-ctrl.addContentTypeParser([ 'text/html', 'text/markdown', 'text/css' ], { parseAs: 'string' }, noop_content_processor);
+web.register(formbody);
+
+
+
+// ===== Request Body Parsers =====
+
+// PNG for favicon uploads
 ctrl.addContentTypeParser([ 'image/png' ], { parseAs: 'buffer' }, noop_content_processor);
 
-web.setErrorHandler(error_handler);
-ctrl.setErrorHandler(error_handler);
+// Various text formats for templates and markdown previews
+ctrl.addContentTypeParser([ 'text/html', 'text/markdown', 'text/css' ], { parseAs: 'string' }, noop_content_processor);
 
-export function listen() {
-	web.listen(conf.http.web_port, '0.0.0.0', (error, addr) => {
-		if (error) {
-			web.log.error(error);
-			process.exit(1);
-		}
-	});
-
-	ctrl.listen(conf.http.ctrl_port, '0.0.0.0', (error, addr) => {
-		if (error) {
-			ctrl.log.error(error);
-			process.exit(1);
-		}
-	});
-}
+// XML for pingbacks
+web.addContentTypeParser([ 'text/xml', 'application/xml', 'application/rss+xml' ], { parseAs: 'string' }, xml_content_processor);
 
 function noop_content_processor(req: FastifyRequest, payload: string | Buffer, done: (err: Error | null, body?: any) => void) {
 	done(null, payload);
 }
 
-function error_handler(error: Error | FastifyError, req: FastifyRequest, res: FastifyReply) {
+
+
+// ===== Error Handlers =====
+
+web.setErrorHandler(error_handler);
+ctrl.setErrorHandler(error_handler);
+
+type ValidationError = Error & {
+	validation: object[];
+	validationContext: string;
+};
+
+function error_handler(error: Error | FastifyError | ValidationError, req: FastifyRequest, res: FastifyReply) {
+	// If hitting the XML-RPC pingback endpoint, respond with an XML-RPC formatted error
+	if (req.url === '/pingback') {
+		res.status(200);
+		res.type('text/xml');
+		res.send(xml_rpc_fault(-32700, error.message));
+		return;
+	}
+
 	if (error instanceof HttpError) {
 		res.status(error.status_code);
 		res.send({ error: error.message });
@@ -79,9 +94,39 @@ function error_handler(error: Error | FastifyError, req: FastifyRequest, res: Fa
 		return;
 	}
 
+	if ('validationContext' in error) {
+		res.status(422);
+		res.send({
+			error: error.message,
+			validation: error.validation
+		});
+
+		return;
+	}
+
 	ctrl.log.error(error);
 
 	res.status(500);
 	res.type('application/json');
 	res.send({ error: 'unknown error' });
+}
+
+
+
+// ===== Listen =====
+
+export function listen() {
+	web.listen(conf.http.web_port, '0.0.0.0', (error, addr) => {
+		if (error) {
+			web.log.error(error);
+			process.exit(1);
+		}
+	});
+
+	ctrl.listen(conf.http.ctrl_port, '0.0.0.0', (error, addr) => {
+		if (error) {
+			ctrl.log.error(error);
+			process.exit(1);
+		}
+	});
 }

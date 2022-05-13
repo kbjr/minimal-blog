@@ -10,6 +10,11 @@ export class HttpError extends Error {
 		super(message);
 	}
 
+	/** @deprecated */
+	public get statusCode() {
+		return this.status_code;
+	}
+
 	public get status_message() {
 		return STATUS_CODES[this.status_code];
 	}

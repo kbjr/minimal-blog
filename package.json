@@ -28,8 +28,10 @@
   "dependencies": {
     "@fastify/compress": "^5.0.0",
     "@fastify/etag": "^3.0.0",
+    "@fastify/formbody": "^6.0.0",
     "argon2": "^0.28.5",
     "dompurify": "^2.3.6",
+    "fast-xml-parser": "^4.0.7",
     "fastify": "^3.28.0",
     "jsdom": "^19.0.0",
     "jsonwebtoken": "^8.5.1",

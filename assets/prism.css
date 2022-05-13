@@ -84,7 +84,6 @@ pre[class*="language-"] {
 	opacity: .7;
 }
 
-.token.property,
 .token.constant,
 .token.symbol,
 .token.deleted {
@@ -128,7 +127,10 @@ pre[class*="language-"] {
 
 .token.atrule,
 .token.attr-value,
-.token.keyword {
+.token.keyword,
+.token.request-line .token.method,
+.token.request-line .token.http-version,
+.token.response-status .token.http-version {
 	color: var(--theme-code-keyword);
 }
 
@@ -145,6 +147,7 @@ pre[class*="language-"] {
 	color: var(--theme-code-regex-important);
 }
 
+.token.property,
 .token.variable {
 	color: var(--theme-code-variable);
 }

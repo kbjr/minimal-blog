@@ -271,6 +271,25 @@ header p.p-summary {
 	font-size: 1rem;
 }
 
+/* Represents the icon links that display next to headings that link directly to
+ * to that sub-section. */
+a.heading-anchor {
+	margin-left: 0.5rem;
+	display: inline-block;
+}
+
+	/* The internal <span> contains label text to be read by screen readers. Should
+	 * not be visible to normal users. */ 
+	.heading-anchor span {
+		display: none;
+	}
+
+	.heading-anchor svg-icon {
+		display: inline-block;
+		color: var(--theme-text-light);
+		--icon-size: 1rem;
+	}
+
 
 
 

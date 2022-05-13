@@ -21,7 +21,6 @@ export const enum TemplateName {
 	styles_css            = 'styles.css',
 	robots_txt            = 'robots.txt',
 	time_js               = 'time.js',
-	prism_js              = 'prism.js',
 	svg_icon_js           = 'svg_icon.js',
 	color_theme_toggle_js = 'color_theme_toggle.js',
 }
@@ -38,7 +37,6 @@ const template_names = [
 	TemplateName.styles_css,
 	TemplateName.robots_txt,
 	TemplateName.time_js,
-	TemplateName.prism_js,
 	TemplateName.svg_icon_js,
 	TemplateName.color_theme_toggle_js,
 ];

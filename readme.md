@@ -3,7 +3,10 @@
 
 - Entire application runs in a single container
 	- No database needed, just needs a volume for file storage
-- Control panel API / UI (served on a separate port from the main web UI)
+- Control panel API / UI for managing the site
+	- Served on a separate port from the main web UI so you don't have to expose it to the internet if you don't want to
+- Write posts using [GitHub Flavored Markdown](https://github.github.com/gfm/)
+	- Code-block syntax highlighting with [Prism](https://prismjs.com/) for [more than 200 languages](https://prismjs.com/#supported-languages)
 - Produces multiple standard feed formats:
 	- [RSS](https://www.rssboard.org/rss-specification)
 	- [Atom](https://datatracker.ietf.org/doc/html/rfc4287)
@@ -15,7 +18,6 @@
 - Customizable color themes
 - Designed to support multiple storage backends (currently only one available)
 	- [SQLite3](https://www.sqlite.org/index.html) (Default)
-- Code syntax highlighting with [Prism](https://prismjs.com/)
 
 
 

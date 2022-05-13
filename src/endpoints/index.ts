@@ -21,9 +21,14 @@ import './web/feed-rss';
 import './web/feed-html';
 // import './web/post-html';
 
+// Interactions
+import './web/pingback';
+import './web/webmention';
+
 // ===== Control Panel API =====
 
 import './ctrl/status';
+import './ctrl/robots';
 import './ctrl/preview-markdown';
 import './ctrl/token/get';
 import './ctrl/token/validate';

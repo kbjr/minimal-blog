@@ -45,8 +45,20 @@ export function open(file: string, mode: number) {
 	});
 }
 
+export function close(db: sqlite3.Database) {
+	return new Promise<void>((resolve, reject) => {
+		db.close((error) => {
+			if (error) {
+				return reject(error);
+			}
+
+			resolve();
+		});
+	});
+}
+
 export function sql(query: string) {
-	return query.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+	return query.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 export function run(db: sqlite3.Database, query: string, params: any[] | object = [ ]) {

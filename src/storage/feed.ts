@@ -21,6 +21,34 @@ export class Feed extends EventEmitter {
 	get url_atom() {
 		return `${conf.http.web_url}/feed.atom.xml`;
 	}
+	
+	get send_pingback() {
+		return false;
+	}
+
+	get receive_pingback() {
+		return false;
+	}
+	
+	get send_webmention() {
+		return false;
+	}
+
+	get receive_webmention() {
+		return false;
+	}
+
+	get url_pingback() {
+		return `${conf.http.web_url}/pingback`;
+	}
+
+	get url_webmention() {
+		return `${conf.http.web_url}/webmention`;
+	}
+
+	get url_webmention_trusted() {
+		return `${conf.http.web_url}/webmention/trusted`;
+	}
 
 	public get_posts(count: number, tagged_with?: string, before?: string) {
 		// 

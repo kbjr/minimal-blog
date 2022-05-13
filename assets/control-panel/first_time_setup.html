@@ -26,6 +26,14 @@ const input_password         = form.querySelector('#in-password');
 const input_password_confirm = form.querySelector('#in-password-confirm');
 const button_submit          = form.querySelector('#btn-create-user');
 
+input_password.addEventListener('change', () => {
+	input_password_confirm.setCustomValidity('');
+});
+
+input_password_confirm.addEventListener('change', () => {
+	input_password_confirm.setCustomValidity('');
+});
+
 form.addEventListener('submit', (event) => {
 	event.preventDefault();
 	event.stopImmediatePropagation();
@@ -38,6 +46,10 @@ form.addEventListener('submit', (event) => {
 		input_password_confirm.setCustomValidity('Password and confirmation do not match');
 		input_password_confirm.reportValidity();
 		return;
+	}
+
+	else {
+		input_password_confirm.setCustomValidity('');
 	}
 
 	disable_form();

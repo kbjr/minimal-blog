@@ -14,9 +14,10 @@ export class Storage_sqlite3 extends Storage {
 		super();
 	}
 
-	protected async init() {
+	protected async init(no_update = false) {
 		// TODO: Check version number in settings database
 		// TODO: If version is out of date:
+		// TODO:   - If `no_update` is set: crash
 		// TODO:   - Create a backup of the database files
 		// TODO:   - Do any database upgrade(s) needed
 
