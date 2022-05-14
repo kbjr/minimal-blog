@@ -18,11 +18,10 @@
 		<label for="in-post-title">Post Sub-Title <small>(optional)</small></label>
 		<input type="text" id="in-post-sub-title" value="{{ labels.loading }}" disabled>
 
-		<label for="in-post-markdown">Post Body <sup>*</sup> <small>(GitHub Flavored Markdown)</small></label>
+		<label for="in-post-markdown">Post Body <sup>*</sup> <small>(GitHub Flavored Markdown + KaTeX)</small></label>
 		<textarea id="in-post-markdown"
-			placeholder="## Headings&#10;&#10;### Sub-Headings&#10;&#10;#### etc.&#10;&#10;**Bold**&#10;_Italic_&#10;`Monospace`&#10;&#10;```js&#10;console.log('hi');&#10;```"
+			placeholder="## Headings&#10;&#10;### Sub-Headings&#10;&#10;#### etc.&#10;&#10;**Bold**&#10;_Italic_&#10;`Monospace`&#10;&#10;```js&#10;console.log('Code Blocks');&#10;```&#10;&#10;$$&#10;\text{KaTeX Block}&#10;$$"
 		>{{ labels.loading }}</textarea>
-
 		<div class="controls">
 			<div class="left">
 				<button type="submit" id="btn-post-save">Save Post</button>
@@ -117,7 +116,7 @@ code, pre {
 }
 
 pre {
-	margin: 4rem 2rem;
+	margin: 3rem 2rem;
 	padding: 1rem 1.5rem;
 	border: 0.1rem solid var(--theme-line);
 	border-radius: 1rem;
@@ -130,18 +129,34 @@ h1 {
 	font-weight: 300;
 }
 
+h2 {
+	font-size: 1.5rem;
+	margin-block: 6rem 1rem;
+}
+
+h3 {
+	font-size: 1.17rem;
+	margin-block: 3rem 1rem;
+}
+
 p, small, li, dt, dd, label,
 table, td {
 	color: var(--theme-text-body);
 }
 
 p {
+	margin: 2rem 0;
 	font-size: 1.2rem;
 	line-height: 1.75;
 }
 
-p, table {
-	margin: 0 0 3rem;
+li {
+	font-size: 1.2rem;
+	margin-block: 0.5rem;
+}
+
+table {
+	margin-block: 2rem;
 }
 
 table, th, td {
@@ -170,7 +185,7 @@ a:visited {
 }
 
 blockquote {
-	margin-block: 0.5rem 3rem;
+	margin-block: 2rem;
 	margin-inline: 1rem;
 	padding-block: 0.5rem;
 	padding-inline: 1.5rem;

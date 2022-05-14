@@ -47,6 +47,9 @@ export const en_us: LanguageLabels = {
 		templates: {
 			title: 'Templates',
 		},
+		interactions: {
+			title: 'Interactions'
+		},
 		users: {
 			title: 'Users',
 		},

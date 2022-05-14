@@ -248,7 +248,7 @@ code, pre {
 }
 
 pre {
-	margin: 4rem 2rem;
+	margin: 3rem 2rem;
 	padding: 1rem 1.5rem;
 	border: 0.1rem solid var(--theme-line);
 	border-radius: 1rem;
@@ -256,9 +256,18 @@ pre {
 }
 
 h1 {
-	color: var(--theme-text-heading);
 	font-size: 2rem;
 	font-weight: 300;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-block: 6rem 1rem;
+}
+
+h3 {
+	font-size: 1.17rem;
+	margin-block: 3rem 1rem;
 }
 
 p, small, li, dt, dd {

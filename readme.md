@@ -15,11 +15,11 @@
 	- [JSON Feed](https://www.jsonfeed.org/)
 	- [`h-feed` Microformat](https://microformats.org/wiki/h-feed)
 - Produces standard [sitemap.xml](https://www.sitemaps.org/protocol.html)
-- Can both send and receive interactions in multiple standard formats:
+- Can both send and receive interactions in multiple standard formats (with moderation / spam blocking features):
 	- [Pingbacks](https://www.hixie.ch/specs/pingback/pingback)
 	- [WebMentions](https://www.w3.org/TR/webmention) (with support for [vouches](https://indieweb.org/Vouch))
 - Light / dark mode toggle (defaulting to system preference)
-- Color themes, templates customizable in
+- Easy to manage color themes in control panel
 
 ## Building from source
 

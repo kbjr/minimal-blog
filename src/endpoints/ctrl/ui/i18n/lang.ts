@@ -48,6 +48,9 @@ export interface LanguageLabels {
 		templates: {
 			title: string;
 		};
+		interactions: {
+			title: string;
+		};
 		users: {
 			title: string;
 		};
