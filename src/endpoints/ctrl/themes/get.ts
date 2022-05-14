@@ -68,5 +68,5 @@ const opts: RouteShorthandOptions = {
 
 ctrl.get('/api/themes', opts, async (req: Req, res) => {
 	require_auth(req);
-	return store.color_themes.get_all();
+	return store.colors.get_all();
 });

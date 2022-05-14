@@ -1,4 +1,5 @@
 
+import { dict } from '../util';
 import { store } from './store';
 import * as http_error from '../http-error';
 import { verify_password, hash_password } from '../auth';
@@ -10,7 +11,7 @@ export class UserManager {
 
 	public async load() {
 		this.users = await store.get_all_users();
-		this.users_by_name = Object.create(null);
+		this.users_by_name = dict();
 		this.loaded = true;
 	}
 

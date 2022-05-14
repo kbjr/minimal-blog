@@ -3,13 +3,11 @@
 
 import './web/status';
 
-// Sitemap + Robots
-import './web/robots';
+// Sitemap
 import './web/sitemap';
 
 // Asset files (CSS/JS/Images)
-import './web/js';
-import './web/css';
+import './web/assets';
 // import './web/favicon';
 
 // Various feed formats

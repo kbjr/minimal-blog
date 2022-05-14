@@ -1,7 +1,8 @@
 
 import * as sqlite3 from 'sqlite3';
 import { conf } from '../../../conf';
-import { run, get_one, get_all, open, close, sql } from '../db';
+import { run, open, close, sql } from '../db';
+import { default_settings } from '../../default-settings';
 
 export async function build_v1() {
 	console.log('Building v1 sqlite3 datastore...');
@@ -36,7 +37,7 @@ namespace settings_db {
 
 	async function create_settings(db: sqlite3.Database) {
 		await run(db, sql_create_settings);
-		await run(db, sql_set_default_settings);
+		await set_default_settings(db);
 	}
 
 	const sql_create_settings = sql(`
@@ -45,38 +46,57 @@ namespace settings_db {
 			value any
 		)
 	`);
+
+	async function set_default_settings(db: sqlite3.Database) {
+		const entries = Object.entries(default_settings);
+		const placeholders = entries.map(() => '(?, ?)').join(', ');
+		const params = entries.flat();
+		const sql_set_default_settings = sql(`
+			insert into settings
+				(name, value)
+			values ${placeholders}
+		`);
+
+		await run(db, sql_set_default_settings, params);
+	}
 	
-	const sql_set_default_settings = sql(`
-		insert into settings
-			(name, value)
-		values
-			('version',            0),
-			('language',           'en'),
-			('theme_light',        'Default (Light)'),
-			('theme_dark',         'Default (Dark)'),
-			('feed_title',         'Untitled'),
-			('show_setup',         1),
-			('https_only',         1),
-			('send_pingback',      0),
-			('send_webmention',    0),
-			('receive_pingback',   0),
-			('receive_webmention', 0),
-			('default_pingback',   'review'),
-			('default_webmention', 'review')
+	async function create_templates(db: sqlite3.Database) {
+		await run(db, sql_create_templates);
+	}
+
+	const sql_create_templates = sql(`
+		create table if not exists templates (
+			name varchar(50) primary key,
+			content text
+		)
 	`);
 
-	async function create_templates(db: sqlite3.Database) {
-		// await run(db, sql_create_templates);
+	async function create_colors(db: sqlite3.Database) {
+		await run(db, sql_create_colors);
 	}
 
-	async function create_colors(db: sqlite3.Database) {
-		// await run(db, sql_create_colors);
-	}
+	const sql_create_colors = sql(`
+		create table if not exists color_themes (
+			theme_name varchar(50),
+			color_name varchar(50),
+			value varchar(50),
+		
+			primary key (theme_name, color_name)
+		)
+	`);
 
 	async function create_users(db: sqlite3.Database) {
-		// await run(db, sql_create_users);
+		await run(db, sql_create_users);
 	}
 
+	const sql_create_users = sql(`
+		create table if not exists users (
+			name varchar(50) primary key,
+			password_hash varchar(255) not null,
+			is_admin int not null
+		)
+	`);
+	
 	async function create_mention_rules(db: sqlite3.Database) {
 		await create_mention_types(db);
 		await create_rule_types(db);

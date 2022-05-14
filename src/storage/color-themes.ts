@@ -1,10 +1,11 @@
 
+import { dict } from '../util';
 import { store } from './store';
 import { EventEmitter } from 'events';
 import { default_themes, default_light, default_dark } from './default-color-themes';
 
 export class ColorThemeManager extends EventEmitter {
-	protected themes: Record<string, Partial<ColorThemeData>> = { };
+	protected themes: Record<string, Partial<ColorThemeData>> = dict();
 
 	public async load() {
 		this.themes = await store.get_all_color_themes();
@@ -35,15 +36,15 @@ export class ColorThemeManager extends EventEmitter {
 
 	public get(theme_name: string) {
 		if (this.exists(theme_name)) {
-			return Object.assign({ }, this.themes[theme_name]);
+			return Object.assign(Object.create(null), this.themes[theme_name]);
 		}
 	}
 
 	public get_all() {
-		const copy: Record<string, Partial<ColorThemeData>> = { };
+		const copy: Record<string, Partial<ColorThemeData>> = dict();
 
 		for (const [name, colors] of Object.entries(this.themes)) {
-			copy[name] = Object.assign({ }, colors);
+			copy[name] = Object.assign(Object.create(null), colors);
 		}
 
 		return copy;
@@ -55,7 +56,7 @@ export class ColorThemeManager extends EventEmitter {
 		}
 
 		const theme = base_name
-			? Object.assign({ }, this.themes[base_name])
+			? Object.assign(Object.create(null), this.themes[base_name])
 			: { };
 
 		delete theme.$builtin;

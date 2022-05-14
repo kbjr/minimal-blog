@@ -78,16 +78,16 @@ ctrl.post('/api/themes', opts, async (req: Req, res) => {
 
 	const { base_name, theme_name } = req.body;
 
-	if (store.color_themes.exists(theme_name)) {
+	if (store.colors.exists(theme_name)) {
 		http_error.throw_422_unprocessable_entity('Given theme name already exists');
 	}
 
-	if (base_name && ! store.color_themes.exists(base_name)) {
+	if (base_name && ! store.colors.exists(base_name)) {
 		http_error.throw_422_unprocessable_entity('Given base theme name does not exist');
 	}
 
-	await store.color_themes.create_theme(theme_name, base_name);
-	const theme = store.color_themes.get(theme_name);
+	await store.colors.create_theme(theme_name, base_name);
+	const theme = store.colors.get(theme_name);
 
 	res.status(201);
 	return theme;

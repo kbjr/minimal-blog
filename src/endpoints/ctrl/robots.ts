@@ -1,8 +1,8 @@
 
 import { ctrl } from '../../http';
-import { get_unrendered } from './ui/render';
+import { assets } from '../../storage';
 
 ctrl.get('/robots.txt', async (req, res) => {
 	res.type('text/plain');
-	return get_unrendered('robots.txt');
+	return assets.load_control_panel_asset('robots.txt');
 });

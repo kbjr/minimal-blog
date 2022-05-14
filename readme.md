@@ -2,24 +2,25 @@
 ## Features
 
 - Entire application runs in a single container
-	- No database needed, just needs a volume for file storage
+	- No database needed, just a volume for file storage
 - Control panel API / UI for managing the site
 	- Served on a separate port from the main web UI so you don't have to expose it to the internet if you don't want to
 - Write posts using [GitHub Flavored Markdown](https://github.github.com/gfm/)
-	- Code-block syntax highlighting with [Prism](https://prismjs.com/) for [more than 200 languages](https://prismjs.com/#supported-languages)
+	- Also includes support for:
+		- Code-block syntax highlighting with [Prism](https://prismjs.com/) for [more than 200 languages](https://prismjs.com/#supported-languages)
+		- Rendering math expressions with [KaTeX](https://katex.org/)
+		- Rendering flow charts and diagrams with [mermaid](https://mermaid-js.github.io/mermaid)
 - Produces multiple standard feed formats:
 	- [RSS](https://www.rssboard.org/rss-specification)
 	- [Atom](https://datatracker.ietf.org/doc/html/rfc4287)
 	- [JSON Feed](https://www.jsonfeed.org/)
 	- [`h-feed` Microformat](https://microformats.org/wiki/h-feed)
 - Produces standard [sitemap.xml](https://www.sitemaps.org/protocol.html)
-- Customizable HTML with [mustache](https://mustache.github.io/) templates
+- Can both send and receive interactions in multiple standard formats:
+	- [Pingbacks](https://www.hixie.ch/specs/pingback/pingback)
+	- [WebMentions](https://www.w3.org/TR/webmention) (with support for [vouches](https://indieweb.org/Vouch))
 - Light / dark mode toggle (defaulting to system preference)
-- Customizable color themes
-- Designed to support multiple storage backends (currently only one available)
-	- [SQLite3](https://www.sqlite.org/index.html) (Default)
-
-
+- Color themes, templates customizable in
 
 ## Building from source
 

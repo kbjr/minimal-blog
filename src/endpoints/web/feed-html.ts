@@ -1,25 +1,29 @@
 
 import { web } from '../../http';
 import { conf } from '../../conf';
-import { store, TemplateName } from '../../storage';
+import { store } from '../../storage';
 import { FastifyRequest } from 'fastify';
 import { TemplateContext } from '../../storage/templates';
-import { template_cache } from '../../cache';
+import { rendered_template_cache } from '../../cache';
 import { PostData } from '../../storage/feed';
 
 const default_count = 10;
 
 const partials = Object.freeze({
 	get page_head() {
-		return store.templates.templates[TemplateName.feed_head_html];
+		return store.templates.templates['feed_head.html'];
 	},
 	get page_content() {
-		return store.templates.templates[TemplateName.feed_content_html];
+		return store.templates.templates['feed_content.html'];
 	}
 });
 
 const default_context = new TemplateContext(page_context(default_count));
-const cached_page = template_cache(TemplateName.page_html, partials, default_context);
+const cached_page = rendered_template_cache('page.html', default_context, partials, {
+	settings: true,
+	templates: true,
+	color_themes: true
+});
 
 type Req = FastifyRequest<{
 	Params: {
@@ -34,7 +38,7 @@ type Req = FastifyRequest<{
 web.get('/', async (req: Req, res) => {
 	const count = Math.max(1, req.query.count ? Math.min(parseInt(req.query.count, 10), 25) : default_count) | 0;
 	const html = (! req.query.before && count === default_count)
-		? cached_page.get_value()
+		? cached_page()
 		: build_feed_html(count, null, req.query.before);
 
 	res.type('text/html');
@@ -88,5 +92,5 @@ function page_context(count: number, tagged_with?: string, before?: string) {
 
 function build_html_for_posts(posts: PostData[], count: number, tagged_with?: string, before?: string) {
 	const context = new TemplateContext(page_context(count, tagged_with, before), posts);
-	return store.templates.render(TemplateName.page_html, context, partials);
+	return store.templates.render('page.html', context, partials);
 }

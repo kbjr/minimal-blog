@@ -1,11 +1,12 @@
 
+import { dict } from '../util';
 import { ColorThemeData } from './color-themes';
 
 export const default_light = 'Default (Light)';
 export const default_dark = 'Default (Dark)';
 
-export const default_themes: Record<string, ColorThemeData> = {
-	[default_light]: {
+export const default_themes = <Record<string, ColorThemeData>> dict({
+	[default_light]: dict({
 		$builtin: true,
 		sun: '#ffb685',
 		moon: '#85acff',
@@ -50,8 +51,8 @@ export const default_themes: Record<string, ColorThemeData> = {
 		code_gutter_divider: '#eff1f5',
 		code_line_number: '#4f5b66',
 		code_line_highlight: '#a7adba30',
-	},
-	[default_dark]: {
+	}),
+	[default_dark]: dict({
 		$builtin: true,
 		sun: '#ffb685',
 		moon: '#85acff',
@@ -96,5 +97,5 @@ export const default_themes: Record<string, ColorThemeData> = {
 		code_gutter_divider: '#343d46',
 		code_line_number: '#65737e',
 		code_line_highlight: '#65737e30',
-	}
-};
+	})
+});

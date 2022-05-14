@@ -1,10 +1,9 @@
 
 import { ctrl } from '../../../http';
 import { conf } from '../../../conf';
-import { get_unrendered, render } from './render';
-import * as http_error from '../../../http-error';
-import { store } from '../../../storage';
+import { render } from './render';
 import { current_lang } from './i18n';
+import { store, assets } from '../../../storage';
 
 ctrl.get('/settings', async (req, res) => {
 	if (store.settings.show_setup) {
@@ -34,7 +33,7 @@ ctrl.get('/settings', async (req, res) => {
 	
 	const html = await render('base.html', context, {
 		page_head: '<meta name="description" content="Control panel page for managing core site-wide settings">',
-		page_content: await get_unrendered('settings.html')
+		page_content: await assets.load_control_panel_asset('settings.html')
 	});
 
 	return html;

@@ -10,7 +10,13 @@ export interface SettingsData {
 	theme_dark: string;
 	feed_title: string;
 	show_setup: 1 | 0;
-	// ...
+	https_only: 1 | 0;
+	send_pingback: 1 | 0;
+	send_webmention: 1 | 0;
+	receive_pingback: 1 | 0;
+	receive_webmention: 1 | 0;
+	default_pingback: 'allow' | 'block' | 'review';
+	default_webmention: 'allow' | 'block' | 'review';
 }
 
 export class Settings extends EventEmitter {

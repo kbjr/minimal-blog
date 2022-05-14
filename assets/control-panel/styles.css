@@ -19,9 +19,11 @@ html, body, #root {
 
 body {
 	background: var(--theme-bg-main);
+}
 
-	/* NOTE: This style is added dynamically by JS */
-	/* transition: background linear .1s; */
+body[data-color-transition-enabled],
+body[data-color-transition-enabled] :is(button, pre, input, textarea, select) {
+	transition: background linear .5s;
 }
 
 #root {

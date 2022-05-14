@@ -3,6 +3,7 @@
 	const animation = 'linear .5s';
 	const color_scheme = 'color_scheme';
 	const color_scheme_attr = 'data-color-scheme';
+	const transition_attr = 'data-color-transition-enabled';
 	const prefers_dark_scheme = window.matchMedia('(prefers-color-scheme: dark)');
 	
 	// Make sure we set the correct starting color scheme where loading
@@ -14,7 +15,7 @@
 	}
 
 	setTimeout(() => {
-		document.body.style.transition = `background ${animation}`;
+		document.body.setAttribute(transition_attr, '');
 	}, 50);
 
 	const size = 2;

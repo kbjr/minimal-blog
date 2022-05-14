@@ -1,7 +1,7 @@
 
 import { ctrl } from '../../../http';
-import { store } from '../../../storage';
-import { get_unrendered, render } from './render';
+import { render } from './render';
+import { store,assets } from '../../../storage';
 
 let colors_css: string;
 
@@ -11,8 +11,8 @@ ctrl.get('/colors.css', async (req, res) => {
 	if (! colors_css) {
 		colors_css = await render('../colors.css', {
 			colors: {
-				light: store.color_themes.default_light,
-				dark: store.color_themes.default_dark,
+				light: store.colors.default_light,
+				dark: store.colors.default_dark,
 			}
 		});
 	}
@@ -22,30 +22,30 @@ ctrl.get('/colors.css', async (req, res) => {
 
 ctrl.get('/time.js', async (req, res) => {
 	res.type('application/javascript');
-	return get_unrendered('../time.js');
+	return assets.load_control_panel_asset('../time.js');
 });
 
 ctrl.get('/app.js', async (req, res) => {
 	res.type('application/javascript');
-	return get_unrendered('app.js');
+	return assets.load_control_panel_asset('app.js');
 });
 
 ctrl.get('/login_check.js', async (req, res) => {
 	res.type('application/javascript');
-	return get_unrendered('login_check.js');
+	return assets.load_control_panel_asset('login_check.js');
 });
 
 ctrl.get('/color_theme_toggle.js', async (req, res) => {
 	res.type('application/javascript');
-	return get_unrendered('../color_theme_toggle.js');
+	return assets.load_control_panel_asset('../color_theme_toggle.js');
 });
 
 ctrl.get('/svg_icon.js', async (req, res) => {
 	res.type('application/javascript');
-	return get_unrendered('svg_icon.js');
+	return assets.load_control_panel_asset('svg_icon.js');
 });
 
 ctrl.get('/styles.css', async (req, res) => {
 	res.type('text/css');
-	return get_unrendered('styles.css');
+	return assets.load_control_panel_asset('styles.css');
 });

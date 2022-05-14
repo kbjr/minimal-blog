@@ -19,9 +19,11 @@ html, body, #root {
 
 body {
 	background: var(--theme-bg-main);
+}
 
-	/* NOTE: This style is added dynamically by JS */
-	/* transition: background linear .1s; */
+body[data-color-transition-enabled],
+body[data-color-transition-enabled] :is(button, pre, input, textarea, select) {
+	transition: background linear .5s;
 }
 
 #root {
@@ -102,6 +104,42 @@ body {
 				margin-bottom: 1rem;
 			}
 
+
+
+
+
+/* ===== Articles / Posts ===== */
+
+article.h-entry {
+	/*  */
+}
+
+	article.h-entry header {
+		margin-bottom: 6rem;
+	}
+
+		article.h-entry header h1 {
+			margin-bottom: 0;
+		}
+	
+		article.h-entry header p {
+			margin: 0;
+		}
+	
+		article.h-entry header p.subtitle {
+			margin-block: 0.5rem;
+			margin-inline-start: 2rem;
+		}
+	
+		article.h-entry header p:not(.subtitle) {
+			color: var(--theme-text-light);
+			font-size: 0.8rem;
+			margin-inline-start: 4rem
+		}
+	
+		article.h-entry header p.p-author {
+			margin-block-start: 0.5rem;
+		}
 
 
 
@@ -289,6 +327,10 @@ a.heading-anchor {
 		color: var(--theme-text-light);
 		--icon-size: 1rem;
 	}
+
+:not(.katex-display) > .katex {
+	margin-inline: 1rem;
+}
 
 
 

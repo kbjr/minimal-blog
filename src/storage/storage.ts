@@ -28,7 +28,7 @@ export abstract class Storage {
 
 	public readonly users = new UserManager();
 	public readonly settings = new Settings();
-	public readonly color_themes = new ColorThemeManager();
+	public readonly colors = new ColorThemeManager();
 	public readonly templates = new TemplateManager();
 	public readonly feed = new Feed();
 
@@ -38,7 +38,7 @@ export abstract class Storage {
 		await this.init();
 		await this.users.load();
 		await this.settings.load();
-		await this.color_themes.load();
+		await this.colors.load();
 		await this.templates.load();
 		// await this.feed.load();
 	}

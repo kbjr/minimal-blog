@@ -1,11 +1,10 @@
 
 import { ctrl } from '../../../http';
 import { conf } from '../../../conf';
-import { get_unrendered, render } from './render';
-import { store } from '../../../storage';
+import { render } from './render';
+import { assets, store } from '../../../storage';
 import { current_lang } from './i18n';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import * as http_error from '../../../http-error';
 
 type Req = FastifyRequest<{
 	Params: {
@@ -55,7 +54,7 @@ async function edit_post_endpoint(req: Req, res: FastifyReply) {
 	
 	const html = await render('base.html', context, {
 		page_head: '<meta name="description" content="Control panel page for creating, editing, and publishing posts">',
-		page_content: await get_unrendered('edit_post.html')
+		page_content: await assets.load_control_panel_asset('edit_post.html')
 	});
 
 	return html;

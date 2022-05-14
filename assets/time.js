@@ -1,4 +1,4 @@
-(async () => {
+(() => {
 	
 	const elems = document.querySelectorAll('time');
 

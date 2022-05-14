@@ -1,47 +1,29 @@
 
-import { store } from './store';
-import { EventEmitter } from 'events';
 import { conf } from '../conf';
-import { render, parse } from 'mustache';
-import { load_default_template } from './default-templates';
+import { store } from './store';
 import { PostData } from './feed';
 import { debug_logger } from '../debug';
+import { load_default_template } from './assets';
+import { EventEmitter } from 'events';
+import { render, parse } from 'mustache';
 
-const log = debug_logger('web_templates', `[web_templates]: `);
+const log = debug_logger('asset_files', `[asset_files]: `);
 
-export const enum TemplateName {
-	page_html             = 'page.html',
-	feed_head_html        = 'feed_head.html',
-	feed_content_html     = 'feed_content.html',
-	post_head_html        = 'post_head.html',
-	post_content_html     = 'post_content.html',
-	not_found_html        = 'not_found.html',
-	colors_css            = 'colors.css',
-	prism_css             = 'prism.css',
-	styles_css            = 'styles.css',
-	robots_txt            = 'robots.txt',
-	time_js               = 'time.js',
-	svg_icon_js           = 'svg_icon.js',
-	color_theme_toggle_js = 'color_theme_toggle.js',
-}
-
-const template_names = [
-	TemplateName.page_html,
-	TemplateName.feed_head_html,
-	TemplateName.feed_content_html,
-	TemplateName.post_head_html,
-	TemplateName.post_content_html,
-	TemplateName.not_found_html,
-	TemplateName.colors_css,
-	TemplateName.prism_css,
-	TemplateName.styles_css,
-	TemplateName.robots_txt,
-	TemplateName.time_js,
-	TemplateName.svg_icon_js,
-	TemplateName.color_theme_toggle_js,
+const default_templates = [
+	'page.html',
+	'feed_head.html',
+	'feed_content.html',
+	'post_head.html',
+	'post_content.html',
+	'not_found.html',
+	'colors.css',
+	'prism.css',
+	'styles.css',
+	'robots.txt',
+	'svg_icon.js',
 ];
 
-export type Templates = Record<TemplateName, string>;
+export type Templates = Record<string, string>;
 
 export class TemplateManager extends EventEmitter {
 	public templates: Partial<Templates>;
@@ -56,7 +38,7 @@ export class TemplateManager extends EventEmitter {
 			parse(template);
 		}
 
-		for (const name of template_names) {
+		for (const name of default_templates) {
 			if (this.templates[name] == null) {
 				log(`Template ${name} not found in storage; Loading default from disk`);
 				const content = await load_default_template(name);
@@ -67,16 +49,16 @@ export class TemplateManager extends EventEmitter {
 		this.emit('load');
 	}
 
-	public render(name: TemplateName, context: TemplateContext, partials: Record<string, string> = { }) : string {
+	public render(name: string, context: TemplateContext, partials: Record<string, string> = { }) : string {
 		log(`Rendering template ${name}`);
 		return render(this.templates[name], context, partials);
 	}
 
-	public get_template(name: TemplateName) {
+	public get_template(name: string) {
 		return this.templates[name];
 	}
 
-	public update_template(name: TemplateName, content: string) {
+	public update_template(name: string, content: string) {
 		log(`Updating template ${name}`);
 		this.templates[name] = content;
 		parse(content);
@@ -91,8 +73,8 @@ const site_context = Object.freeze({
 });
 
 const colors_context = Object.freeze({
-	get light() { return store.color_themes.light; },
-	get dark() { return store.color_themes.dark; },
+	get light() { return store.colors.light; },
+	get dark() { return store.colors.dark; },
 });
 
 export class TemplateContext {

@@ -1,61 +1,71 @@
 
-import { store, TemplateName } from './storage';
+import { store } from './storage';
 import { TemplateContext } from './storage/templates';
-import { debug_logger } from './debug';
+import { load_asset } from './storage/assets';
+import { render } from 'mustache';
 
-export class Cache<T> {
-	private value: T;
-	private log = debug_logger('cache', `[cache:${this.name}]: `);
+export interface ExpirationTriggers {
+	settings?: boolean;
+	color_themes?: boolean;
+	templates?: boolean;
+}
 
-	constructor(
-		private name: string,
-		private render: () => T
-	) { }
+export function rendered_asset_cache(asset: string, context: object, partials: Record<string, string>, triggers: ExpirationTriggers = { }) {
+	let cache: string;
+	set_invalidate_triggers(invalidate, triggers);
 
-	public get_value() {
-		if (this.value == null) {
-			this.log('render');
-			this.value = this.render();
+	function invalidate() {
+		cache = void 0;
+	}
+
+	async function render_asset() {
+		const raw = await load_asset(asset);
+		return render(raw, context, partials);
+	}
+
+	return async function() {
+		if (cache) {
+			return cache;
 		}
 
-		return this.value;
-	}
-
-	public invalidate() {
-		this.log('invalidate');
-		this.value = null;
+		return cache = await render_asset();
 	}
 }
 
-export function template_cache(template_name: TemplateName, partials: Record<string, string>, context: TemplateContext) {
-	const cache = new Cache(`template:${template_name}`, () => {
-		return store.templates.render(template_name, context, partials);
-	});
+export function rendered_template_cache(template: string, context: TemplateContext, partials: Record<string, string>, triggers: ExpirationTriggers = { }) {
+	let cache: string;
+	set_invalidate_triggers(invalidate, triggers);
 
-	store.settings.on('load', () => cache.invalidate());
-	store.settings.on('update', () => cache.invalidate());
-	store.color_themes.on('load', () => cache.invalidate());
-	store.color_themes.on('update', () => cache.invalidate());
-	store.templates.on('load', () => cache.invalidate());
-	store.templates.on('update', () => cache.invalidate());
+	function invalidate() {
+		cache = void 0;
+	}
 
-	return cache;
+	function render_template() {
+		return store.templates.render(template, context, partials);
+	}
+
+	return async function() {
+		if (cache) {
+			return cache;
+		}
+
+		return cache = await render_template();
+	}
 }
 
-export function simple_template_cache(template_name: TemplateName, no_render = false) {
-	const cache = no_render
-		? new Cache(`simple_template:${template_name}`, () => store.templates.templates[template_name])
-		: new Cache(`simple_template:${template_name}`, () => {
-			const context = new TemplateContext(null);
-			return store.templates.render(template_name, context);
-		});
+function set_invalidate_triggers(invalidate: () => void, triggers: ExpirationTriggers) {
+	if (triggers.settings) {
+		store.settings.on('load', invalidate);
+		store.settings.on('update', invalidate);
+	}
 
-	store.settings.on('load', () => cache.invalidate());
-	store.settings.on('update', () => cache.invalidate());
-	store.color_themes.on('load', () => cache.invalidate());
-	store.color_themes.on('update', () => cache.invalidate());
-	store.templates.on('load', () => cache.invalidate());
-	store.templates.on('update', () => cache.invalidate());
+	if (triggers.color_themes) {
+		store.colors.on('load', invalidate);
+		store.colors.on('update', invalidate);
+	}
 
-	return cache;
+	if (triggers.templates) {
+		store.templates.on('load', invalidate);
+		store.templates.on('update', invalidate);
+	}
 }

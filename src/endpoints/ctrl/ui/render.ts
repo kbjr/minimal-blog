@@ -1,18 +1,19 @@
 
-import * as mustache from 'mustache';
-import { conf } from '../../../conf';
-import { load_control_panel_template } from '../../../storage/control-panel-templates';
 import { languages } from './i18n';
+import { conf } from '../../../conf';
+import { dict } from '../../../util';
+import { load_control_panel_asset } from '../../../storage/assets';
+import * as mustache from 'mustache';
 
-let templates: Record<string, string> = { };
+let templates = dict<string, string>();
 
 export function clear_templates() {
-	templates = { };
+	templates = dict();
 }
 
 export async function render(name: string, context: Readonly<object>, partials?: Readonly<Record<string, string>>) {
 	if (! templates[name]) {
-		templates[name] = await load_control_panel_template(name);
+		templates[name] = await load_control_panel_asset(name);
 	}
 
 	context = Object.assign({
@@ -27,12 +28,4 @@ export async function render(name: string, context: Readonly<object>, partials?:
 	}, context);
 
 	return mustache.render(templates[name], context, partials);
-}
-
-export async function get_unrendered(name: string) {
-	if (! templates[name]) {
-		templates[name] = await load_control_panel_template(name);
-	}
-
-	return templates[name];
 }

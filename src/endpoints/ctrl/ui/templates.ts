@@ -1,9 +1,8 @@
 
 import { ctrl } from '../../../http';
 import { conf } from '../../../conf';
-import { get_unrendered, render } from './render';
-import * as http_error from '../../../http-error';
-import { store } from '../../../storage';
+import { render } from './render';
+import { assets, store } from '../../../storage';
 import { current_lang } from './i18n';
 
 ctrl.get('/templates', async (req, res) => {
@@ -34,7 +33,7 @@ ctrl.get('/templates', async (req, res) => {
 	
 	const html = await render('base.html', context, {
 		page_head: '<meta name="description" content="Control panel page for editing the HTML and CSS templates used to render the site">',
-		page_content: await get_unrendered('templates.html')
+		page_content: await assets.load_control_panel_asset('templates.html')
 	});
 
 	return html;

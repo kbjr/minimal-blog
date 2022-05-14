@@ -68,8 +68,14 @@ export namespace conf {
 			export const posts_path = `${path}/posts.db`;
 		}
 
+	}
+	
+	export namespace assets {
 		/** The directory where static files and default templates are loaded from */
-		export const assets_path = resolve_path(__dirname, '../assets');
+		export const path = resolve_path(__dirname, '../assets');
+		
+		/** Directory where KaTeX static asset files are loaded from */
+		export const katex_path = resolve_path(__dirname, '../node_modules/katex/dist');
 	}
 
 	/** Configuration for the control API authentication mechanism */
@@ -117,8 +123,7 @@ export namespace conf {
 		export const debug_loggers = Object.freeze<Partial<Loggers>>({
 			sqlite: false,
 			sqlite_sql: false,
-			web_templates: false,
-			ctrl_templates: false,
+			asset_files: false,
 			cache: false,
 			auth: false,
 		});

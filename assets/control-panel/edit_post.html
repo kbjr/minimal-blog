@@ -95,6 +95,10 @@ const styles = `
 	display: contents;
 }
 
+button, pre, input, textarea, select {
+	transition: background linear .5s;
+}
+
 h1, h2, h3, h4, h5, h6,
 p, a, li, dt, dd, label,
 table, td {
@@ -207,12 +211,45 @@ a.heading-anchor {
 	color: var(--theme-text-light);
 	--icon-size: 1rem;
 }
+
+:not(.katex-display) > .katex {
+	margin-inline: 1rem;
+}
+
+header {
+	margin-bottom: 6rem;
+}
+
+header h1 {
+	margin-bottom: 0;
+}
+
+header p {
+	margin: 0;
+}
+
+header p.subtitle {
+	margin-block: 0.5rem;
+	margin-inline-start: 2rem;
+}
+
+header p:not(.subtitle) {
+	color: var(--theme-text-light);
+	font-size: 0.8rem;
+	margin-inline-start: 4rem
+}
+
+header p.p-author {
+	margin-block-start: 0.5rem;
+}
+
 `;
 
 const template = `
 <style>${styles}</style>
 <link rel="stylesheet" href="{{{ site.url }}}/prism.css">
-<article>
+<link rel="stylesheet" href="{{{ site.url }}}/katex/katex.css">
+<article class="h-entry">
 	<p>{{ labels.loading }}</p>
 </article>
 `;
@@ -248,16 +285,18 @@ customElements.define('markdown-preview',
 			try {
 				const title_html = `
 					<header>
-						<h1>${title}</h1>
-						<!--
+						<h1 class="p-name">${title}</h1>
 						${subtitle ? `<p class="subtitle">${subtitle}</p>` : ''}
-						<p class="author">By: Someone</p>
-						<p class="published">Published: <time>Sometime</time></p>
-						-->
+						<p class="p-author">By: Someone</p>
+						<p class="dates">
+							Published: <time class="dt-published">Sometime</time>
+							${''/* In a real post, there might also be a modified data, which would be `dt-update` */}
+						</p>
 					</header>
+					<main class="e-content">
 				`;
 				const body_html = await render_markdown(markdown);
-				this.article.innerHTML = title_html + body_html;
+				this.article.innerHTML = title_html + body_html + '</main>';
 			}
 
 			catch (error) {

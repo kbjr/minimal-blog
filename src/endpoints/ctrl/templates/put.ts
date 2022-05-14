@@ -1,6 +1,6 @@
 
 import { ctrl } from '../../../http';
-import { store, TemplateName } from '../../../storage';
+import { store } from '../../../storage';
 import { require_auth, ReqUser } from '../../../auth';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import * as http_error from '../../../http-error';
@@ -21,20 +21,20 @@ const opts: RouteShorthandOptions = {
 };
 
 const putable_templates = new Set([
-	TemplateName.page_html,
-	TemplateName.feed_head_html,
-	TemplateName.feed_content_html,
-	TemplateName.post_head_html,
-	TemplateName.post_content_html,
-	TemplateName.not_found_html,
-	TemplateName.styles_css,
-	TemplateName.robots_txt,
+	'page.html',
+	'feed_head.html',
+	'feed_content.html',
+	'post_head.html',
+	'post_content.html',
+	'not_found.html',
+	'styles.css',
+	'robots.txt',
 ]);
 
 ctrl.put('/api/templates/:template_name', opts, async (req: Req, res) => {
 	require_auth(req);
 
-	const name = req.params.template_name as TemplateName;
+	const name = req.params.template_name;
 
 	if (! putable_templates.has(name)) {
 		http_error.throw_404_not_found('template not found');

@@ -1,9 +1,8 @@
 
 import { ctrl } from '../../../http';
 import { conf } from '../../../conf';
-import { get_unrendered, render } from './render';
-import * as http_error from '../../../http-error';
-import { store } from '../../../storage';
+import { render } from './render';
+import { assets, store } from '../../../storage';
 import { current_lang } from './i18n';
 
 ctrl.get('/posts', async (req, res) => {
@@ -34,7 +33,7 @@ ctrl.get('/posts', async (req, res) => {
 	
 	const html = await render('base.html', context, {
 		page_head: '<meta name="description" content="Control panel page for viewing a listing of posts to take action on">',
-		page_content: await get_unrendered('posts.html')
+		page_content: await assets.load_control_panel_asset('posts.html')
 	});
 
 	return html;
