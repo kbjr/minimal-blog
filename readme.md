@@ -9,7 +9,6 @@
 	- Also includes support for:
 		- Code-block syntax highlighting with [Prism](https://prismjs.com/) for [more than 200 languages](https://prismjs.com/#supported-languages)
 		- Rendering math expressions with [KaTeX](https://katex.org/)
-		- Rendering flow charts and diagrams with [mermaid](https://mermaid-js.github.io/mermaid)
 - Produces multiple standard feed formats:
 	- [RSS](https://www.rssboard.org/rss-specification)
 	- [Atom](https://datatracker.ietf.org/doc/html/rfc4287)
