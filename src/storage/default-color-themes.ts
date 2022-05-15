@@ -1,6 +1,6 @@
 
 import { dict } from '../util';
-import { ColorThemeData } from './color-themes';
+import { ColorThemeData } from './colors';
 
 export const default_light = 'Default (Light)';
 export const default_dark = 'Default (Dark)';

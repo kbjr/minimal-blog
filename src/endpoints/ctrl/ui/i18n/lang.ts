@@ -10,6 +10,20 @@ export interface LanguageLabels {
 	password: string;
 	noscript: string;
 
+	enums: {
+		mention_type: {
+			all: string;
+			pingback: string;
+			webmention: string;
+		};
+		rule_type: {
+			block: string;
+			review: string;
+			allow: string;
+			trust: string;
+		};
+	};
+
 	pages: {
 		first_time_setup: {
 			title: string;

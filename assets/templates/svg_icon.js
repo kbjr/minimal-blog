@@ -35,13 +35,21 @@
 
 	const template = `
 		<style>
-			:host svg {
-				width: var(--icon-size, 40px);
-				height: var(--icon-size, 40px);
-				display: inline-block;
+			svg {
+				width: var(--icon-size, 2.5rem);
+				height: var(--icon-size, 2.5rem);
+				display: block;
 			}
 		</style>
-		<div class="wrapper"></div>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		></svg>
 	`;
 
 	customElements.define('svg-icon',
@@ -55,8 +63,7 @@
 				this.attachShadow({ mode: 'open' });
 	
 				this.shadowRoot.innerHTML = template;
-				this.svg = null;
-				this.wrapper = this.shadowRoot.querySelector('.wrapper');
+				this.svg = this.shadowRoot.querySelector('svg');
 
 				this.update_icon();
 			}
@@ -72,13 +79,7 @@
 			}
 
 			update_icon() {
-				this.wrapper.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						${icons[this.icon] || ''}
-					</svg>
-				`;
-
-				this.svg = document.querySelector('svg');
+				this.svg.innerHTML = icons[this.icon] || '';
 			}
 		}
 	);

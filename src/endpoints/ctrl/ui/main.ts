@@ -8,12 +8,12 @@ import { current_lang } from './i18n';
 ctrl.get('/', async (req, res) => {
 	res.type('text/html');
 
-	if (store.settings.show_setup) {
-		if (store.users.no_users) {
+	if (store.settings.get('show_setup')) {
+		if (store.users.has_no_users()) {
 			return render_first_time_setup_page();
 		}
 
-		await store.settings.set_show_setup(0);
+		await store.settings.set('show_setup', false);
 	}
 
 	return render_main_page();

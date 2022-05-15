@@ -50,7 +50,7 @@ ctrl.patch('/api/settings', opts, async (req: Req, res) => {
 	const promises: Promise<void>[] = [ ];
 
 	for (const [ name, value ] of entries) {
-		promises.push(store.settings.set(name, value));
+		promises.push(store.settings.set(name as keyof Req['body'], value));
 	}
 
 	await Promise.all(promises);

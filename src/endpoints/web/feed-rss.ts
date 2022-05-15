@@ -4,16 +4,11 @@ import { conf } from '../../conf';
 import { store } from '../../storage';
 import { FastifyRequest } from 'fastify';
 import { create as create_xml } from 'xmlbuilder2';
+import { custom_cache } from '../../cache';
 
-let cached_feed: string;
 const default_count = 10;
-
-store.feed.on('load', () => {
-	cached_feed = null;
-});
-
-store.feed.on('update', () => {
-	cached_feed = null;
+const front_page = custom_cache(async () => build_xml_for_posts([ ], default_count), {
+	feed: true
 });
 
 type Req = FastifyRequest<{
@@ -29,18 +24,13 @@ web.get('/feed.rss.xml', async (req: Req, res) => {
 	const xml = build_feed_xml(count, req.query.tagged_with, req.query.before);
 
 	res.type('application/rss+xml');
-	res.header('content-language', store.settings.language);
+	res.header('content-language', store.settings.get('language'));
 	res.send(xml);
 });
 
 function build_feed_xml(count: number, tagged_with?: string, before?: string) {
 	if (! before && ! tagged_with && count === default_count) {
-		if (! cached_feed) {
-			// TODO: page generation
-			cached_feed = build_xml_for_posts([ ], count, tagged_with, before);
-		}
-		
-		return cached_feed;
+		return front_page();
 	}
 
 	return '<!-- Params not yet implemented -->';
@@ -51,10 +41,10 @@ function build_xml_for_posts(posts: any[], count: number, tagged_with?: string, 
 	const rss = doc.ele('rss', { version: '2.0' });
 	const channel = rss.ele('channel');
 
-	channel.ele('title').txt(store.settings.feed_title);
+	channel.ele('title').txt(store.settings.get('feed_title'));
 	channel.ele('link').txt(conf.http.web_url);
 	// channel.ele('description').txt('');
-	channel.ele('language').txt(store.settings.language);
+	channel.ele('language').txt(store.settings.get('language'));
 	// channel.ele('copyright').txt(`Copyright ${(new Date).getFullYear()} James Brumond`);
 	// channel.ele('pubDate').txt(publish_date.toUTCString());
 	// channel.ele('lastBuildDate').txt(build_date.toUTCString());

@@ -1,89 +1,87 @@
 
 import { dict } from '../util';
-import { store } from './store';
-import { EventEmitter } from 'events';
+import { store, settings, events } from './store';
 import { default_themes, default_light, default_dark } from './default-color-themes';
 
-export class ColorThemeManager extends EventEmitter {
-	protected themes: Record<string, Partial<ColorThemeData>> = dict();
+type Themes = Record<string, Partial<ColorThemeData>>;
+let themes: Themes;
 
-	public async load() {
-		this.themes = await store.get_all_color_themes();
-		this.themes[default_light] = default_themes[default_light];
-		this.themes[default_dark] = default_themes[default_dark];
-		this.emit('load');
+export async function load() {
+	themes = await store.get_all_color_themes();
+	themes[default_light] = default_themes[default_light];
+	themes[default_dark] = default_themes[default_dark];
+	events.emit('colors.load');
+}
+
+export function get_light() {
+	return themes[settings.get('theme_light')] || get_default_light();
+}
+
+export function get_dark() {
+	return themes[settings.get('theme_dark')] || get_default_dark();
+}
+
+export function get_default_light() {
+	return themes[default_light];
+}
+
+export function get_default_dark() {
+	return themes[default_dark];
+}
+
+export function exists(theme_name: string) {
+	return themes[theme_name] != null;
+}
+
+export function get(theme_name: string) {
+	if (exists(theme_name)) {
+		return Object.assign(Object.create(null), themes[theme_name]);
+	}
+}
+
+export function get_all() {
+	const copy: Themes = dict();
+
+	for (const [name, colors] of Object.entries(themes)) {
+		copy[name] = Object.assign(Object.create(null), colors);
 	}
 
-	public get light() {
-		return this.themes[store.settings.theme_light];
+	return copy;
+}
+
+export function create_theme(theme_name: string, base_name?: string) {
+	if (exists(theme_name)) {
+		throw new Error('Theme with the given name already exists');
 	}
 
-	public get dark() {
-		return this.themes[store.settings.theme_dark];
-	}
+	const theme = base_name
+		? Object.assign(Object.create(null), themes[base_name])
+		: { };
 
-	public get default_light() {
-		return this.themes[default_light];
-	}
+	delete theme.$builtin;
 
-	public get default_dark() {
-		return this.themes[default_dark];
-	}
-
-	public exists(theme_name: string) {
-		return this.themes[theme_name] != null;
-	}
-
-	public get(theme_name: string) {
-		if (this.exists(theme_name)) {
-			return Object.assign(Object.create(null), this.themes[theme_name]);
+	for (const name of color_names) {
+		if (! theme[name]) {
+			theme[name] = '#000000';
 		}
 	}
 
-	public get_all() {
-		const copy: Record<string, Partial<ColorThemeData>> = dict();
+	themes[theme_name] = theme;
+	return store_theme(theme_name);
+}
 
-		for (const [name, colors] of Object.entries(this.themes)) {
-			copy[name] = Object.assign(Object.create(null), colors);
-		}
-
-		return copy;
+async function store_theme(theme_name: string) {
+	if (themes[theme_name].$builtin) {
+		throw new Error('Should not be attempting to store a built-in theme');
 	}
 
-	public create_theme(theme_name: string, base_name?: string) {
-		if (this.exists(theme_name)) {
-			throw new Error('Theme with the given name already exists');
+	for (const [color_name, value] of Object.entries(themes[theme_name])) {
+		if (color_name !== '$builtin') {
+			await store.set_color(theme_name, color_name, value as string);
 		}
-
-		const theme = base_name
-			? Object.assign(Object.create(null), this.themes[base_name])
-			: { };
-
-		delete theme.$builtin;
-
-		for (const name of color_names) {
-			if (! theme[name]) {
-				theme[name] = '#000000';
-			}
-		}
-
-		this.themes[theme_name] = theme;
-		return this.store_theme(theme_name);
 	}
 
-	private async store_theme(theme_name: string) {
-		if (this.themes[theme_name].$builtin) {
-			throw new Error('Should not be attempting to store a built-in theme');
-		}
-
-		for (const [color_name, value] of Object.entries(this.themes[theme_name])) {
-			if (color_name !== '$builtin') {
-				await store.set_color(theme_name, color_name, value as string);
-			}
-		}
-
-		this.emit('update', theme_name);
-	}
+	events.emit('colors.update', theme_name);
 }
 
 export const enum ColorName {

@@ -11,10 +11,10 @@ const default_count = 10;
 
 const partials = Object.freeze({
 	get page_head() {
-		return store.templates.templates['feed_head.html'];
+		return store.templates.get_template('feed_head.html');
 	},
 	get page_content() {
-		return store.templates.templates['feed_content.html'];
+		return store.templates.get_template('feed_content.html');
 	}
 });
 
@@ -22,7 +22,7 @@ const default_context = new TemplateContext(page_context(default_count));
 const cached_page = rendered_template_cache('page.html', default_context, partials, {
 	settings: true,
 	templates: true,
-	color_themes: true
+	colors: true
 });
 
 type Req = FastifyRequest<{
@@ -42,7 +42,7 @@ web.get('/', async (req: Req, res) => {
 		: build_feed_html(count, null, req.query.before);
 
 	res.type('text/html');
-	res.header('content-language', store.settings.language);
+	res.header('content-language', store.settings.get('language'));
 	res.send(html);
 });
 
@@ -51,7 +51,7 @@ web.get('/tagged/:tag', async (req: Req, res) => {
 	const html = build_feed_html(count, req.params.tag, req.query.before);
 
 	res.type('text/html');
-	res.header('content-language', store.settings.language);
+	res.header('content-language', store.settings.get('language'));
 	res.send(html);
 });
 
@@ -82,7 +82,7 @@ function page_context(count: number, tagged_with?: string, before?: string) {
 	return {
 		get title() {
 			// TODO: More flexibility here
-			return store.settings.feed_title;
+			return store.settings.get('feed_title');
 		},
 		get url() {
 			return page_url(count);

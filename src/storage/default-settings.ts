@@ -1,19 +1,20 @@
 
 import { obj } from '../util';
 import { SettingsData } from './settings';
+import { default_dark, default_light } from './default-color-themes';
 
 export const default_settings = obj<SettingsData>({
 	version: 1,
 	language: 'en',
-	theme_light: 'Default (Light)',
-	theme_dark: 'Default (Dark)',
+	theme_light: default_light,
+	theme_dark: default_dark,
 	feed_title: 'Untitled',
-	show_setup: 1,
-	https_only: 1,
-	send_pingback: 0,
-	send_webmention: 0,
-	receive_pingback: 0,
-	receive_webmention: 0,
+	show_setup: true,
+	https_only: true,
+	send_pingback: false,
+	send_webmention: false,
+	receive_pingback: false,
+	receive_webmention: false,
 	default_pingback: 'review',
 	default_webmention: 'review',
 });

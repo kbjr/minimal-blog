@@ -1,7 +1,7 @@
 
 import * as sqlite3 from 'sqlite3';
 import { promises as fs } from 'fs';
-import { debug_logger, log_debug } from '../../debug';
+import { debug_logger } from '../../debug';
 
 const db_files = new WeakMap<sqlite3.Database, string>();
 const db_promises: Record<string, Promise<sqlite3.Database>> = { };

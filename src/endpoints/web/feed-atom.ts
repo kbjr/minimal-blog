@@ -8,6 +8,6 @@ import { store } from '../../storage';
 // https://datatracker.ietf.org/doc/html/rfc4287
 web.get('/feed.atom.xml', async (req, res) => {
 	res.type('application/atom+xml');
-	res.header('content-language', store.settings.language);
+	res.header('content-language', store.settings.get('language'));
 	res.send('');  // TODO: build atom feed
 });

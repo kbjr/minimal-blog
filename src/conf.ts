@@ -81,7 +81,7 @@ export namespace conf {
 	/** Configuration for the control API authentication mechanism */
 	export namespace auth {
 		/** Time to live (TTL) to set on issued tokens */
-		export const token_ttl = '1h';
+		export const token_ttl = '3h';
 
 		/**
 		 * Path to key file to use for signing JWTs. If not supplied, the server will use HMAC token signing
@@ -121,7 +121,7 @@ export namespace conf {
 
 		/** Controls which additional debug loggers are enabled */
 		export const debug_loggers = Object.freeze<Partial<Loggers>>({
-			sqlite: false,
+			sqlite: true,
 			sqlite_sql: false,
 			asset_files: false,
 			cache: false,

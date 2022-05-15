@@ -70,17 +70,33 @@
 			<polyline points="15 3 21 3 21 9"></polyline>
 			<line x1="10" y1="14" x2="21" y2="3"></line>
 		`,
+		'arrow-left': `
+			<line x1="19" y1="12" x2="5" y2="12"></line>
+			<polyline points="12 19 5 12 12 5"></polyline>
+		`,
+		'arrow-right': `
+			<line x1="5" y1="12" x2="19" y2="12"></line>
+			<polyline points="12 5 19 12 12 19"></polyline>
+		`,
 	};
 
 	const template = `
 		<style>
-			:host svg {
-				width: var(--icon-size, 40px);
-				height: var(--icon-size, 40px);
-				display: inline-block;
+			svg {
+				width: var(--icon-size, 2.5rem);
+				height: var(--icon-size, 2.5rem);
+				display: block;
 			}
 		</style>
-		<div class="wrapper"></div>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		></svg>
 	`;
 
 	customElements.define('svg-icon',
@@ -94,8 +110,7 @@
 				this.attachShadow({ mode: 'open' });
 	
 				this.shadowRoot.innerHTML = template;
-				this.svg = null;
-				this.wrapper = this.shadowRoot.querySelector('.wrapper');
+				this.svg = this.shadowRoot.querySelector('svg');
 
 				this.update_icon();
 			}
@@ -111,13 +126,7 @@
 			}
 
 			update_icon() {
-				this.wrapper.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						${icons[this.icon] || ''}
-					</svg>
-				`;
-
-				this.svg = document.querySelector('svg');
+				this.svg.innerHTML = icons[this.icon] || '';
 			}
 		}
 	);

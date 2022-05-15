@@ -2,7 +2,7 @@
 import { conf } from '../../conf';
 import * as sqlite3 from 'sqlite3';
 import { run, get_one, get_all, open, sql } from './db';
-import { UserData } from '../users';
+import { FullUserData } from '../users';
 
 let db: sqlite3.Database;
 
@@ -15,8 +15,6 @@ export async function init() {
 	db.on('close', () => {
 		db = null;
 	});
-
-	await create_users();
 }
 
 export interface UserRow {
@@ -28,7 +26,7 @@ export interface UserRow {
 export async function get_all_users() {
 	const rows = await get_all<UserRow>(db, sql_get_user);
 	return rows.map((row) => {
-		const mapped: UserData = row as any as UserData;
+		const mapped: FullUserData = row as any as FullUserData;
 		mapped.is_admin = Boolean(row.is_admin);
 		return mapped;
 	});
@@ -36,7 +34,7 @@ export async function get_all_users() {
 
 export async function get_user(name: string) {
 	const row = await get_one<UserRow>(db, sql_get_user + 'where name = ?', [ name ]);
-	const mapped: UserData = row as any as UserData;
+	const mapped: FullUserData = row as any as FullUserData;
 	mapped.is_admin = Boolean(row.is_admin);
 	return mapped;
 }
@@ -46,11 +44,11 @@ select name, password_hash, is_admin
 from users
 `);
 
-export async function create_user(name: string, password_hash: string, is_admin: 1 | 0 = 0) {
-	return run(db, sql_create_user, {
+export async function create_user(name: string, password_hash: string, is_admin = false) {
+	await run(db, sql_create_user, {
 		$name: name,
 		$password_hash: password_hash,
-		$is_admin: is_admin
+		$is_admin: is_admin ? 1 : 0
 	});
 }
 
@@ -62,7 +60,7 @@ values
 `);
 
 export async function delete_user(name: string) {
-	return run(db, sql_delete_user, {
+	await run(db, sql_delete_user, {
 		$name: name
 	});
 }
@@ -73,7 +71,7 @@ where name = $name
 `);
 
 export async function update_password(name: string, password_hash: string) {
-	return run(db, sql_update_password, {
+	await run(db, sql_update_password, {
 		$name: name,
 		$password_hash: password_hash
 	});
@@ -86,15 +84,3 @@ where name = $name
 `);
 
 // TODO: Add a toggle_admin() function
-
-export function create_users() {
-	return run(db, sql_create_users);
-}
-
-const sql_create_users = sql(`
-create table if not exists users (
-	name varchar(50) primary key,
-	password_hash varchar(255) not null,
-	is_admin int not null
-)
-`);

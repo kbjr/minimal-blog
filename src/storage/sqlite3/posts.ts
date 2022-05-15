@@ -15,11 +15,6 @@ export async function init() {
 	db.on('close', () => {
 		db = null;
 	});
-
-	await create_posts();
-	await create_tags();
-	await create_authors();
-	await create_post_authors();
 }
 
 // interface SettingRow<V = unknown> {
@@ -72,75 +67,4 @@ export async function list_all_tags() {
 const sql_list_all_tags = sql(`
 select distinct tag_name
 from tags
-`);
-
-export function create_posts() {
-	return run(db, sql_create_posts);
-}
-
-const sql_create_posts = sql(`
-create table if not exists posts (
-	uri_name varchar(255) primary key,
-	is_draft int,
-	title varchar(255) not null,
-	subtitle varchar(255),
-	external_url varchar(2000),
-	content_html text,
-	content_markdown text,
-	image varchar(2000),
-	banner_image varchar(2000),
-	date_published timestamp,
-	date_modified timestamp
-)
-`);
-
-export async function create_tags() {
-	await run(db, sql_create_tags);
-	await run(db, sql_create_tags_index);
-}
-
-const sql_create_tags = sql(`
-create table if not exists tags (
-	tag_name varchar(255),
-	post_uri_name varchar(255),
-	primary key (tag_name, post_uri_name),
-
-	foreign key (post_uri_name)
-		references posts (uri_name)
-)
-`);
-
-const sql_create_tags_index = sql(`
-create index if not exists idx_tags_post_uri_name
-	on tags (post_uri_name)
-`);
-
-export function create_authors() {
-	return run(db, sql_create_authors);
-}
-
-const sql_create_authors = sql(`
-create table if not exists authors (
-	id int auto increment,
-	name varchar(255),
-	url varchar(2000),
-	avatar varchar(2000)
-)
-`);
-
-export function create_post_authors() {
-	return run(db, sql_create_post_authors);
-}
-
-const sql_create_post_authors = sql(`
-create table if not exists post_authors (
-	post_uri_name varchar(255),
-	author_id int,
-	primary key (post_uri_name, author_id),
-
-	foreign key (post_uri_name)
-		references posts (uri_name),
-	foreign key (author_id)
-		references authors (id)
-)
 `);

@@ -23,16 +23,14 @@
 			placeholder="## Headings&#10;&#10;### Sub-Headings&#10;&#10;#### etc.&#10;&#10;**Bold**&#10;_Italic_&#10;`Monospace`&#10;&#10;```js&#10;console.log('Code Blocks');&#10;```&#10;&#10;$$&#10;\text{KaTeX Block}&#10;$$"
 		>{{ labels.loading }}</textarea>
 		<div class="controls">
-			<div class="left">
+			<div class="left" data-flex="row align-center">
 				<button type="submit" id="btn-post-save">Save Post</button>
 				<button type="button" id="btn-post-preview" data-style="secondary">Preview</button>
 				<button type="reset" id="btn-post-cancel" data-style="secondary">Cancel</button>
 			</div>
-			<div class="right">
-				<p id="post-publish-status">
-					<span>{{ labels.loading }}</span>
-					<button type="button" id="btn-post-toggle-publish" disabled>Publish Post</button>
-				</p>
+			<div class="right" data-flex="row align-center">
+				<p id="post-publish-status">{{ labels.loading }}</p>
+				<button type="button" id="btn-post-toggle-publish" disabled>Publish Post</button>
 			</div>
 		</div>
 	</form>
@@ -53,7 +51,7 @@ let post;
 
 const main_elem           = document.querySelector('#root > main');
 const span_post_url_name  = document.querySelector('#post-url span');
-const span_publish_status = document.querySelector('#post-publish-status span');
+const span_publish_status = document.querySelector('#post-publish-status');
 
 const input_title       = document.querySelector('#in-post-title');
 const input_subtitle    = document.querySelector('#in-post-sub-title');

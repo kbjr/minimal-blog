@@ -15,8 +15,6 @@ export async function init() {
 	db.on('close', () => {
 		db = null;
 	});
-
-	await create_templates();
 }
 
 interface TemplateRow {
@@ -41,7 +39,7 @@ from templates
 `);
 
 export async function set_template(name: string, content: string) {
-	return run(db, sql_set_template, {
+	await run(db, sql_set_template, {
 		$name: name,
 		$content: content,
 	});
@@ -54,15 +52,4 @@ values
 	($name, $content)
 on conflict (name) do update
 	set content = $content
-`);
-
-export function create_templates() {
-	return run(db, sql_create_templates);
-}
-
-const sql_create_templates = sql(`
-create table if not exists templates (
-	name varchar(50) primary key,
-	content text
-)
 `);

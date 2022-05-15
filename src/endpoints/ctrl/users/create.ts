@@ -44,7 +44,7 @@ ctrl.post('/api/users', opts, async (req: Req, res) => {
 	// NOTE: For first-time setup; If there are no users currently registered
 	// in the system, a user can be created without authentication
 	if (first_time_setup) {
-		if (! store.users.no_users) {
+		if (! store.users.has_no_users()) {
 			http_error.throw_401_not_authorized('"first_time_setup" not valid', 'Attempted first time setup despite users already existing');
 		}
 
@@ -59,7 +59,7 @@ ctrl.post('/api/users', opts, async (req: Req, res) => {
 
 	// Once the first user is created, disable the first-time setup mode
 	if (first_time_setup) {
-		await store.settings.set_show_setup(0);
+		await store.settings.set('show_setup', false);
 	}
 
 	res.status(201);

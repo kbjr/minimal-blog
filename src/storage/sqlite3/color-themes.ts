@@ -1,8 +1,8 @@
 
 import { conf } from '../../conf';
 import * as sqlite3 from 'sqlite3';
-import { run, get_one, get_all, open, sql } from './db';
-import { ColorThemeData } from '../color-themes';
+import { ColorThemeData } from '../colors';
+import { run, get_all, open, sql } from './db';
 
 let db: sqlite3.Database;
 
@@ -15,8 +15,6 @@ export async function init() {
 	db.on('close', () => {
 		db = null;
 	});
-
-	await create_color_themes();
 }
 
 interface ColorRow {
@@ -42,11 +40,11 @@ export async function get_all_color_themes() {
 
 const sql_get_themes = sql(`
 select theme_name, color_name, value
-from color_themes
+from colors
 `);
 
 export async function set_color(theme_name: string, color_name: string, value: string) {
-	return run(db, sql_set_color, {
+	await run(db, sql_set_color, {
 		$theme_name: theme_name,
 		$color_name: color_name,
 		$value: value
@@ -54,24 +52,10 @@ export async function set_color(theme_name: string, color_name: string, value: s
 }
 
 const sql_set_color = sql(`
-insert into color_themes
+insert into colors
 	(theme_name, color_name, value)
 values
 	($theme_name, $color_name, $value)
 on conflict (theme_name, color_name) do update
 	set value = $value
-`);
-
-export function create_color_themes() {
-	return run(db, sql_create_color_themes);
-}
-
-const sql_create_color_themes = sql(`
-create table if not exists color_themes (
-	theme_name varchar(50),
-	color_name varchar(50),
-	value varchar(50),
-
-	primary key (theme_name, color_name)
-)
 `);

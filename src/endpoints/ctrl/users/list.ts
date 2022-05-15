@@ -25,5 +25,5 @@ const opts: RouteShorthandOptions = {
 
 ctrl.get('/api/users', opts, async (req: Req, res) => {
 	require_auth(req);
-	return store.users.all_users;
+	return store.users.get_all_users();
 });

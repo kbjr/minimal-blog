@@ -6,8 +6,9 @@ import { render } from 'mustache';
 
 export interface ExpirationTriggers {
 	settings?: boolean;
-	color_themes?: boolean;
+	colors?: boolean;
 	templates?: boolean;
+	feed?: boolean;
 }
 
 export function rendered_asset_cache(asset: string, context: object, partials: Record<string, string>, triggers: ExpirationTriggers = { }) {
@@ -53,19 +54,41 @@ export function rendered_template_cache(template: string, context: TemplateConte
 	}
 }
 
-function set_invalidate_triggers(invalidate: () => void, triggers: ExpirationTriggers) {
-	if (triggers.settings) {
-		store.settings.on('load', invalidate);
-		store.settings.on('update', invalidate);
+export function custom_cache(func: () => Promise<string>, triggers: ExpirationTriggers = { }) {
+	let cache: string;
+	set_invalidate_triggers(invalidate, triggers);
+
+	function invalidate() {
+		cache = void 0;
 	}
 
-	if (triggers.color_themes) {
-		store.colors.on('load', invalidate);
-		store.colors.on('update', invalidate);
+	return async function() {
+		if (cache) {
+			return cache;
+		}
+
+		return cache = await func();
+	}
+}
+
+function set_invalidate_triggers(invalidate: () => void, triggers: ExpirationTriggers) {
+	if (triggers.settings) {
+		store.events.on('settings.load', invalidate);
+		store.events.on('settings.update', invalidate);
+	}
+
+	if (triggers.colors) {
+		store.events.on('colors.load', invalidate);
+		store.events.on('colors.update', invalidate);
 	}
 
 	if (triggers.templates) {
-		store.templates.on('load', invalidate);
-		store.templates.on('update', invalidate);
+		store.events.on('templates.load', invalidate);
+		store.events.on('templates.update', invalidate);
+	}
+
+	if (triggers.feed) {
+		store.events.on('feed.load', invalidate);
+		store.events.on('feed.update', invalidate);
 	}
 }

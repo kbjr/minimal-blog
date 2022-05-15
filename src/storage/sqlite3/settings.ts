@@ -15,8 +15,6 @@ export async function init() {
 	db.on('close', () => {
 		db = null;
 	});
-
-	await create_settings();
 }
 
 interface SettingRow<V = unknown> {
@@ -42,32 +40,21 @@ export async function get_setting(name: string) {
 
 const sql_get_setting = sql(`
 select name, value
-from site_settings
+from settings
 `);
 
 export async function set_setting(name: string, value: any) {
-	return run(db, sql_set_setting, {
+	await run(db, sql_set_setting, {
 		$name: name,
 		$value: value
 	});
 }
 
 const sql_set_setting = sql(`
-insert into site_settings
+insert into settings
 	(name, value)
 values
 	($name, $value)
 on conflict (name) do update
 	set value = $value
-`);
-
-export function create_settings() {
-	return run(db, sql_create_settings);
-}
-
-const sql_create_settings = sql(`
-create table if not exists site_settings (
-	name varchar(50) primary key,
-	value any
-)
 `);

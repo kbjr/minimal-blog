@@ -1,33 +1,31 @@
 
+import { custom_cache } from '../../cache';
 import { conf } from '../../conf';
 import { web } from '../../http';
 import { store } from '../../storage';
 
-let cached_sitemap: string;
-
-store.feed.on('load', () => {
-	cached_sitemap = null;
-});
-
-store.feed.on('update', () => {
-	cached_sitemap = null;
+const sitemap = custom_cache(build_sitemap, {
+	feed: true
 });
 
 web.get('/sitemap.xml', async (req, res) => {
-	if (cached_sitemap == null) {
-		const last_mod = (new Date).toISOString();
-
-		cached_sitemap = urlset_elem([
-			url_elem(conf.http.web_url, last_mod)
-		]);
-	}
+	const xml = sitemap();
 
 	res.type('text/xml');
-	res.header('content-language', store.settings.language);
-	res.send(cached_sitemap);
+	res.header('content-language', store.settings.get('language'));
+	res.send(xml);
 });
 
 // TODO: Updates to sitemap generation to read from `store.feed`
+// TODO: Updates to use xmlbuilder
+
+async function build_sitemap() {
+	const last_mod = (new Date).toISOString();
+
+	return urlset_elem([
+		url_elem(conf.http.web_url, last_mod)
+	]);
+}
 
 const tag_url = (tag: string) => url_elem(
 	`${conf.http.web_url}/tagged/${tag}`,

@@ -69,6 +69,35 @@ body[data-color-transition-enabled] :is(button, pre, input, textarea, select) {
 
 
 
+/* ===== Flexbox shortcuts ===== */
+
+[data-flex] {
+	display: flex;
+}
+
+[data-flex~='row'] {
+	flex-direction: row;
+}
+
+[data-flex~='column'] {
+	flex-direction: column;
+}
+
+[data-flex~='wrap'] {
+	flex-wrap: wrap;
+}
+
+[data-flex~='nowrap'] {
+	flex-wrap: nowrap;
+}
+
+[data-flex~='align-center'] {
+	align-items: center;
+}
+
+
+
+
 	
 /* ===== Typography ===== */
 
@@ -272,7 +301,8 @@ button {
 	padding: 0.5rem 1.5rem;
 	border-radius: 0.5rem;
 	font-size: 1rem;
-	margin-top: 1rem;
+	margin-block-start: 1rem;
+	margin-inline-end: 1rem;
 	cursor: pointer;
 	user-select: none;
 	appearance: none;
@@ -284,7 +314,21 @@ button {
 	font-family: var(--font-open-sans);
 	font-weight: 700;
 	line-height: 2rem;
+	display: flex;
+	align-items: center;
 }
+
+	button svg-icon {
+		--icon-size: 2rem;
+	}
+
+	button svg-icon:first-child {
+		margin-inline-end: 0.5rem;
+	}
+
+	button svg-icon:last-child {
+		margin-inline-start: 0.5rem;
+	}
 
 	button[data-style='secondary'] {
 		color: var(--theme-text-button-secondary);
@@ -430,6 +474,10 @@ table {
 		flex-wrap: wrap;
 		justify-content: space-between;
 	}
+
+		#page-edit-post .controls button {
+			margin-block-start: 0;
+		}
 
 		#page-edit-post .controls .left {
 			flex: 1 0 auto;

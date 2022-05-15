@@ -18,3 +18,13 @@ export function obj<T>(data?: T) : T {
 
 	return result;
 }
+
+export function obj_frozen<T>(data?: T) : Readonly<T> {
+	const result = Object.create(null);
+
+	if (data) {
+		Object.assign(result, data);
+	}
+
+	return Object.freeze(result);
+}

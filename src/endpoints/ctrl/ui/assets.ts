@@ -11,8 +11,8 @@ ctrl.get('/colors.css', async (req, res) => {
 	if (! colors_css) {
 		colors_css = await render('../colors.css', {
 			colors: {
-				light: store.colors.default_light,
-				dark: store.colors.default_dark,
+				get light() { return store.colors.get_default_light(); },
+				get dark() { return store.colors.get_default_dark(); },
 			}
 		});
 	}

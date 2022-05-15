@@ -12,6 +12,20 @@ export const en_us: LanguageLabels = {
 	password: 'Password',
 	noscript: 'JavaScript is required to use this control panel',
 
+	enums: {
+		mention_type: {
+			all: 'All',
+			pingback: 'Pingback',
+			webmention: 'WebMention',
+		},
+		rule_type: {
+			block: 'Block',
+			review: 'Review',
+			allow: 'Allow',
+			trust: 'Trust',
+		},
+	},
+
 	pages: {
 		first_time_setup: {
 			title: 'First Time Setup',

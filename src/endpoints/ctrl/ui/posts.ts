@@ -6,7 +6,7 @@ import { assets, store } from '../../../storage';
 import { current_lang } from './i18n';
 
 ctrl.get('/posts', async (req, res) => {
-	if (store.settings.show_setup) {
+	if (store.settings.get('show_setup')) {
 		// If in setup mode, redirect to the main URL for first-time setup
 		res.status(303);
 		res.header('location', conf.http.ctrl_url);

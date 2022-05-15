@@ -32,12 +32,12 @@ const opts: RouteShorthandOptions = {
 
 web.get('/feed.json', opts, async (req, res) => {
 	res.type('application/feed+json');
-	res.header('content-language', store.settings.language);
+	res.header('content-language', store.settings.get('language'));
 
 	// TODO: build json feed
 	return {
 		version: 'https://jsonfeed.org/version/1.1',
-		title: store.settings.feed_title,
+		title: store.settings.get('feed_title'),
 		home_page_url: conf.http.web_url,
 		feed_url: `${conf.http.web_url}/feed.json`,
 		// description: '',
@@ -46,7 +46,7 @@ web.get('/feed.json', opts, async (req, res) => {
 		// icon: { },
 		// favicon: { },
 		// authors: [ ],
-		language: store.settings.language,
+		language: store.settings.get('language'),
 		// expired: false,
 		// hubs: [ ],
 		// items: [ ],

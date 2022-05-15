@@ -10,10 +10,10 @@ import { TemplateContext } from '../../storage/templates';
 const colors_context = Object.freeze({
 	colors: Object.freeze({
 		get light() {
-			return store.colors.light;
+			return store.colors.get_light();
 		},
 		get dark() {
-			return store.colors.dark;
+			return store.colors.get_dark();
 		}
 	})
 });
@@ -22,7 +22,7 @@ const colors_context = Object.freeze({
 
 const robots_txt = rendered_template_cache('robots.txt', new TemplateContext(null), { }, {
 	settings: true,
-	color_themes: true,
+	colors: true,
 	templates: false
 });
 
@@ -40,7 +40,7 @@ web.get('/time.js', async (req, res) => {
 
 const svg_icon_js = rendered_template_cache('svg_icon.js', new TemplateContext(null), { }, {
 	settings: true,
-	color_themes: true,
+	colors: true,
 	templates: true
 });
 
@@ -63,7 +63,7 @@ web.get('/prism.css', async (req, res) => {
 
 const colors_css = rendered_asset_cache('colors.css', colors_context, { }, {
 	settings: true,
-	color_themes: true,
+	colors: true,
 	templates: false
 });
 
@@ -74,7 +74,7 @@ web.get('/colors.css', async (req, res) => {
 
 const styles_css = rendered_template_cache('styles.css', new TemplateContext(null), { }, {
 	settings: true,
-	color_themes: true,
+	colors: true,
 	templates: true
 });
 
