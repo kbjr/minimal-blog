@@ -5,6 +5,11 @@ import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['auth'],
+		description: 'Verifies that the provided token is valid, not expired, and was issued by this server',
+		security: [
+			{ bearer: [ ] }
+		],
 		response: {
 			200: {
 				type: 'object',

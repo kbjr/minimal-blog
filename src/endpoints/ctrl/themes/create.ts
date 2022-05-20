@@ -14,6 +14,8 @@ type Req = ReqUser & FastifyRequest<{
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['themes'],
+		description: 'Creates a new Color Theme, optionally starting with another Theme as a base',
 		response: {
 			201: {
 				type: 'object',

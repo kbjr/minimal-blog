@@ -1,31 +1,85 @@
 
 import * as sqlite3 from 'sqlite3';
 import { promises as fs } from 'fs';
-import { debug_logger } from '../../debug';
+import { debug_logger, log_error } from '../../debug';
+import { createPool, Factory, Pool } from 'generic-pool';
+import { conf } from '../../conf';
 
-const db_files = new WeakMap<sqlite3.Database, string>();
-const db_promises: Record<string, Promise<sqlite3.Database>> = { };
+let next_conn_id = 1;
+let next_query_id = 1;
 
-export function open(file: string, mode: number) {
-	const log = debug_logger('sqlite', `[sqlite://${file}]: `);
+const log = debug_logger('sqlite', '[sqlite]: ');
+const log_sql = debug_logger('sqlite_sql', '[sqlite]: ');
+const db_info = new WeakMap<sqlite3.Database, DBInfo>();
 
-	if (db_promises[file]) {
-		log('Another client waiting for database to open...');
-		return db_promises[file];
-	}
+interface DBInfo {
+	file: string;
+	mode: number;
+	connection_id: number;
+}
 
-	log('Opening database...');
+const posts_db_factory = db_factory(
+	conf.data.sqlite3.posts_path,
+	sqlite3.OPEN_CREATE | sqlite3.OPEN_READWRITE
+);
 
-	return db_promises[file] = new Promise((resolve, reject) => {
+const settings_db_factory = db_factory(
+	conf.data.sqlite3.settings_path,
+	sqlite3.OPEN_CREATE | sqlite3.OPEN_READWRITE
+);
+
+export const posts_pool = createPool(posts_db_factory, {
+	min: conf.data.sqlite3.posts_pool_min,
+	max: conf.data.sqlite3.posts_pool_max,
+});
+
+export const settings_pool = createPool(settings_db_factory, {
+	min: conf.data.sqlite3.settings_pool_min,
+	max: conf.data.sqlite3.settings_pool_max,
+});
+
+export async function close_all() {
+	await Promise.all([
+		close_pool(posts_pool),
+		close_pool(settings_pool),
+	]);
+}
+
+async function close_pool(pool: Pool<sqlite3.Database>) {
+	await pool.drain();
+	await pool.clear();
+}
+
+function db_factory(file: string, mode: number) : Factory<sqlite3.Database> {
+	return {
+		create() {
+			return open(file, mode);
+		},
+		destroy(db: sqlite3.Database) {
+			return close(db);
+		}
+	};
+}
+
+function open(file: string, mode: number) {
+	const info = {
+		connection_id: next_conn_id++,
+		file,
+		mode,
+	};
+
+	log('Opening database connection...', info);
+
+	return new Promise<sqlite3.Database>((resolve, reject) => {
 		const db = new sqlite3.Database(file, mode, async (error) => {
 			if (error) {
 				return reject(error);
 			}
 
-			db_files.set(db, file);
+			db_info.set(db, info);
 
-			log('Database open');
-			log('Confirming file permissions = 0600');
+			log('Database open', info);
+			log('Confirming file permissions = 0600', info);
 			
 			// Ensure the file is not accessible to anyone but the server user
 			await fs.chmod(file, 0o600);
@@ -33,25 +87,26 @@ export function open(file: string, mode: number) {
 			log('Enabling foreign keys');
 
 			// Enable foreign keys
-			await run(db, `PRAGMA foreign_keys = ON`);
+			await run(db, 'PRAGMA foreign_keys = ON');
 
-			db.on('close', () => {
-				db_promises[file] = null;
-			});
-
-			log('Ready.');
+			log('Ready', info);
 			resolve(db);
 		});
 	});
 }
 
-export function close(db: sqlite3.Database) {
+function close(db: sqlite3.Database) {
+	const info = db_info.get(db);
+
+	log('Closing database connection...', info);
+
 	return new Promise<void>((resolve, reject) => {
 		db.close((error) => {
 			if (error) {
 				return reject(error);
 			}
 
+			log('Closed', info);
 			resolve();
 		});
 	});
@@ -62,13 +117,15 @@ export function sql(query: string) {
 }
 
 export function run(db: sqlite3.Database, query: string, params: any[] | object = [ ]) {
-	const log = debug_logger('sqlite_sql', `[sqlite://${db_files.get(db)}]: `);
+	const query_id = next_query_id++;
 
 	return new Promise<sqlite3.RunResult>((resolve, reject) => {
-		log(`run(${query})`);
+		log_sql(`run #${query_id} (${query})`, db_info.get(db));
 
 		db.run(query, params, function(error) {
 			if (error) {
+				log(`run #${query_id} failed`, db_info.get(db));
+				log_error('sqlite', error.stack);
 				return reject(error);
 			}
 
@@ -78,13 +135,15 @@ export function run(db: sqlite3.Database, query: string, params: any[] | object 
 }
 
 export function get_one<T>(db: sqlite3.Database, query: string, params: any[] | object = [ ]) {
-	const log = debug_logger('sqlite_sql', `[sqlite://${db_files.get(db)}]: `);
-
+	const query_id = next_query_id++;
+	
 	return new Promise<T>((resolve, reject) => {
-		log(`get_one(${query})`);
+		log_sql(`get_one #${query_id} (${query})`, db_info.get(db));
 
 		db.get(query, params, function(error, row) {
 			if (error) {
+				log(`get_one #${query_id} failed`, db_info.get(db));
+				log_error('sqlite', error.stack);
 				return reject(error);
 			}
 
@@ -94,13 +153,15 @@ export function get_one<T>(db: sqlite3.Database, query: string, params: any[] | 
 }
 
 export function get_all<T>(db: sqlite3.Database, query: string, params: any[] | object = [ ]) {
-	const log = debug_logger('sqlite_sql', `[sqlite://${db_files.get(db)}]: `);
-
+	const query_id = next_query_id++;
+	
 	return new Promise<T[]>((resolve, reject) => {
-		log(`get_all(${query})`);
+		log_sql(`get_all #${query_id} (${query})`, db_info.get(db));
 
 		db.all(query, params, function(error, rows) {
 			if (error) {
+				log(`run #${query_id} failed`, db_info.get(db));
+				log_error('sqlite', error.stack);
 				return reject(error);
 			}
 

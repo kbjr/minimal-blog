@@ -17,4 +17,7 @@ export const default_settings = obj<SettingsData>({
 	receive_webmention: false,
 	default_pingback: 'review',
 	default_webmention: 'review',
+	author_name: 'Unknown Author',
+	author_url: null,
+	author_avatar: null,
 });

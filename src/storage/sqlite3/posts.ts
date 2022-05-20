@@ -1,70 +1,165 @@
 
-import { conf } from '../../conf';
-import * as sqlite3 from 'sqlite3';
-import { run, get_one, get_all, open, sql } from './db';
-import { PostData, AuthorData } from '../feed';
+import { obj } from '../../util';
+import { PostData, PostDataPatch } from '../posts';
+import { run, get_one, get_all, sql, posts_pool } from './db';
 
-let db: sqlite3.Database;
+type RawPostRecord = Omit<PostData, 'tags'> & {
+	tags: string;
+};
 
-export async function init() {
-	const file = conf.data.sqlite3.posts_path;
-	const mode = sqlite3.OPEN_CREATE | sqlite3.OPEN_READWRITE;
+export async function get_all_posts() : Promise<PostData[]> {
+	const sql = `${sql_get_posts} ${sql_get_posts__group_order_by}`;
+	const db = await posts_pool.acquire();
 
-	db = await open(file, mode);
-	
-	db.on('close', () => {
-		db = null;
-	});
+	try {
+		const posts = await get_all<RawPostRecord>(db, sql);
+		return posts.map(split_tags);
+	}
+
+	finally {
+		posts_pool.release(db);
+	}
 }
 
-// interface SettingRow<V = unknown> {
-// 	name: string;
-// 	value: V;
-// }
+export async function get_post(uri_name: string) : Promise<PostData> {
+	const sql = `${sql_get_posts} where uri_name = ? ${sql_get_posts__group_order_by}`;
+	const db = await posts_pool.acquire();
 
-// export async function get_all_settings() {
-// 	const rows = await get_all<SettingRow>(db, sql_get_setting);
-// 	const config: Partial<SettingsData> = { };
-	
-// 	for (const row of rows) {
-// 		config[row.name] = row.value;
-// 	}
+	try {
+		const post = await get_one<RawPostRecord>(db, sql, [ uri_name ]);
+		return split_tags(post);
+	}
 
-// 	return config;
-// }
+	finally {
+		posts_pool.release(db);
+	}
+}
 
-// export async function get_setting(name: string) {
-// 	const row = await get_one<SettingRow>(db, sql_get_setting + 'where name = ?', [ name ]);
-// 	return row.value;
-// }
+function split_tags(record: RawPostRecord) {
+	const mapped: PostData = record as any;
+	mapped.tags = record.tags ? record.tags.split('\x31') : [ ];
+	return mapped;
+}
 
-// const sql_get_setting = `
-// select name, value
-// from posts
-// `;
+const sql_get_posts = sql(`
+select
+	post.post_id                         as post_id,
+	post.post_type                       as post_type,
+	post.uri_name                        as uri_name,
+	post.title                           as title,
+	post.subtitle                        as subtitle,
+	post.external_url                    as external_url,
+	post.content_html                    as content_html,
+	post.content_markdown                as content_markdown,
+	post.image                           as image,
+	post.banner_image                    as banner_image,
+	post.is_draft                        as is_draft,
+	post.date_published                  as date_published,
+	post.date_updated                    as date_updated,
+	group_concat(tag.tag_name, char(31)) as tags
+from posts post
+left outer join tags tag
+	on tag.post_id = post.post_id
+`);
 
-// export async function set_setting(name: string, value: any) {
-// 	return run(db, sql_set_setting, {
-// 		$name: name,
-// 		$value: value
-// 	});
-// }
+const sql_get_posts__group_order_by = sql(`
+group by post.uri_name
+order by post.date_published asc
+`);
 
-// const sql_set_setting = `
-// insert into posts
-// 	(name, value)
-// values
-// 	($name, $value)
-// on conflict (name) do update
-// 	set value = $value
-// `;
+export async function create_post(data: PostDataPatch) : Promise<PostData> {
+	const db = await posts_pool.acquire();
+	const now = (new Date).toISOString();
+
+	try {
+		const result = await run(db, sql_create_post, {
+			$post_type: data.post_type,
+			$uri_name: data.uri_name,
+			$title: data.title,
+			$subtitle: data.subtitle,
+			$external_url: data.external_url,
+			$content_html: data.content_html,
+			$content_markdown: data.content_markdown,
+			$image: data.image,
+			$banner_image: data.banner_image,
+			$is_draft: data.is_draft ? 1 : 0,
+			$date_published: now,
+			$date_updated: now,
+		});
+
+		return Object.assign(
+			obj({ post_id: result.lastID }), data, {
+				date_published: now,
+				date_updated: now,
+			}
+		);
+	}
+
+	finally {
+		posts_pool.release(db);
+	}
+}
+
+const sql_create_post = sql(`
+insert into posts
+	(post_type, uri_name, title, subtitle, external_url, content_html, content_markdown, image, banner_image, is_draft, date_published, date_updated)
+values
+	($post_type, $uri_name, $title, $subtitle, $external_url, $content_html, $content_markdown, $image, $banner_image, $is_draft, $date_published, $date_updated)
+`);
+
+export async function update_post(data: Partial<PostDataPatch>) : Promise<void> {
+	// 
+}
+
+export async function delete_post(uri_name: string) : Promise<void> {
+	// 
+}
+
+export async function move_post(old_uri_name: string, new_uri_name: string) : Promise<void> {
+	// 
+}
 
 export async function list_all_tags() {
-	const rows = await get_all<{ tag_name: string }>(db, sql_list_all_tags);
-	return rows.map((row) => row.tag_name);
+	const db = await posts_pool.acquire();
+
+	try {
+		const rows = await get_all<{ tag_name: string }>(db, sql_list_all_tags);
+		return rows.map((row) => row.tag_name);
+	}
+
+	finally {
+		posts_pool.release(db);
+	}
 }
 
 const sql_list_all_tags = sql(`
 select distinct tag_name
 from tags
+`);
+
+async function create_post_tags(uri_name: string, tag_names: string[]) {
+	const rows = tag_names.map((tag) => `($uri_name, ?)`).join(', ');
+	const sql = sql_create_post_tag + ' ' + rows;
+	const db = await posts_pool.acquire();
+
+	try {
+		run(db, sql, [
+			...tag_names,
+	
+		])
+	}
+
+	finally {
+		posts_pool.release(db);
+	}
+}
+
+const sql_create_post_tag = sql(`
+insert into tags
+	(uri_name, tag_name)
+values
+`);
+
+const sql_delete_post_tag = sql(`
+
 `);

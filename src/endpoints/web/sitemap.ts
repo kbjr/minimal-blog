@@ -11,7 +11,7 @@ const sitemap = custom_cache(build_sitemap, {
 web.get('/sitemap.xml', async (req, res) => {
 	const xml = sitemap();
 
-	res.type('text/xml');
+	res.type('text/xml; charset=utf-8');
 	res.header('content-language', store.settings.get('language'));
 	res.send(xml);
 });

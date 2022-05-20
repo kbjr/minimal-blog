@@ -1,7 +1,7 @@
 
 import { ctrl } from '../../http';
-import { hostname } from 'os';
 import { RouteShorthandOptions } from 'fastify';
+import { unique_id } from '../../storage/unique-id';
 
 const opts: RouteShorthandOptions = {
 	schema: {
@@ -11,15 +11,9 @@ const opts: RouteShorthandOptions = {
 			200: {
 				type: 'object',
 				properties: {
-					status: {
+					snowflake: {
 						type: 'string',
-						enum: ['ok']
-					},
-					hostname: {
-						type: 'string'
-					},
-					time: {
-						type: 'string'
+						format: '\\d+'
 					}
 				}
 			}
@@ -27,10 +21,8 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
-ctrl.get('/.status', opts, async (req, res) => {
+ctrl.get('/api/snowflake', opts, async (req, res) => {
 	return {
-		status: 'ok',
-		hostname: hostname(),
-		time: (new Date).toISOString(),
+		snowflake: unique_id().toString()
 	};
 });

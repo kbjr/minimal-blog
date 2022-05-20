@@ -19,7 +19,17 @@ const opts: RouteShorthandOptions = {
 					// next_url: { type: 'string' },
 					// icon: { type: 'object' },
 					// favicon: { type: 'object' },
-					// authors: { type: 'array' },
+					authors: {
+						type: 'array',
+						items: {
+							type: 'object',
+							properties: {
+								name: { type: 'string' },
+								url: { type: 'string' },
+								avatar: { type: 'string' },
+							}
+						}
+					},
 					language: { type: 'string' },
 					expired: { type: 'boolean' },
 					// hubs: { type: 'array' },
@@ -31,7 +41,7 @@ const opts: RouteShorthandOptions = {
 };
 
 web.get('/feed.json', opts, async (req, res) => {
-	res.type('application/feed+json');
+	res.type('application/feed+json; charset=utf-8');
 	res.header('content-language', store.settings.get('language'));
 
 	// TODO: build json feed
@@ -45,7 +55,11 @@ web.get('/feed.json', opts, async (req, res) => {
 		// next_url: '',
 		// icon: { },
 		// favicon: { },
-		// authors: [ ],
+		authors: [{
+			name: store.settings.get('author_name'),
+			url: store.settings.get('author_url'),
+			avatar: store.settings.get('author_avatar'),
+		}],
 		language: store.settings.get('language'),
 		// expired: false,
 		// hubs: [ ],

@@ -8,6 +8,8 @@ type Req = ReqUser & FastifyRequest<{ }>;
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['themes'],
+		description: 'Returns a list of all existing Color Themes',
 		response: {
 			200: {
 				type: 'object',

@@ -5,6 +5,13 @@ import { render } from './render';
 import { assets, store } from '../../../storage';
 import { current_lang } from './i18n';
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { RouteShorthandOptions } from 'fastify';
+
+const opts: RouteShorthandOptions = {
+	schema: {
+		tags: ['X-HIDDEN']
+	}
+};
 
 type Req = FastifyRequest<{
 	Params: {
@@ -13,11 +20,11 @@ type Req = FastifyRequest<{
 	};
 }>;
 
-ctrl.get('/edit_post/:post_id', (req: Req, res: FastifyReply) => {
+ctrl.get('/edit_post/:post_id', opts, (req: Req, res: FastifyReply) => {
 	return edit_post_endpoint(req, res);
 });
 
-ctrl.get('/edit_post', (req: Req, res: FastifyReply) => {
+ctrl.get('/edit_post', opts, (req: Req, res: FastifyReply) => {
 	req.params.is_new = true;
 	return edit_post_endpoint(req, res);
 });
@@ -30,7 +37,7 @@ async function edit_post_endpoint(req: Req, res: FastifyReply) {
 		return { redirect_to: conf.http.ctrl_url };
 	}
 
-	res.type('text/html');
+	res.type('text/html; charset=utf-8');
 
 	const { is_new, post_id } = req.params;
 	const id_fragment = is_new ? '' : '/' + post_id;

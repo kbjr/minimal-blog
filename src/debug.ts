@@ -12,6 +12,24 @@ export interface Loggers {
 	auth: boolean;
 }
 
+export function log_fatal(logger: Logger, message: string, ...args: any[]) {
+	if (conf.logging.debug_loggers[logger]) {
+		ctrl.log.fatal(message, ...args);
+	}
+}
+
+export function log_error(logger: Logger, message: string, ...args: any[]) {
+	if (conf.logging.debug_loggers[logger]) {
+		ctrl.log.error(message, ...args);
+	}
+}
+
+export function log_warn(logger: Logger, message: string, ...args: any[]) {
+	if (conf.logging.debug_loggers[logger]) {
+		ctrl.log.warn(message, ...args);
+	}
+}
+
 export function log_info(logger: Logger, message: string, ...args: any[]) {
 	if (conf.logging.debug_loggers[logger]) {
 		ctrl.log.info(message, ...args);

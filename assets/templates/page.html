@@ -14,14 +14,14 @@
 	<link rel="alternate" type="application/rss+xml" href="{{{ feed.url_rss }}}" title="RSS Feed">
 	<link rel="alternate" type="application/atom+xml" href="{{{ feed.url_atom }}}" title="Atom Feed">
 	<link rel="alternate" type="application/feed+json" href="{{{ feed.url_json_feed }}}" title="JSON Feed">
-	{{# feed.receive_webmention }}
+	{{# feed.receive_webmention_enabled }}
 	<link rel="webmention" href="{{{ feed.url_webmention }}}">
-	<!-- Non-standard "rel" value; What is the best way to communicate this information? -->
+	<!-- Non-standard "rel" value; What is the best way to communicate the location of this information? -->
 	<link rel="webmention-trusted-sources" href="{{{ feed.url_webmention_trusted }}}">
-	{{/ feed.receive_webmention }}
-	{{# feed.receive_pingback }}
+	{{/ feed.receive_webmention_enabled }}
+	{{# feed.receive_pingback_enabled }}
 	<link rel="pingback" href="{{{ feed.url_pingback }}}">
-	{{/ feed.receive_pingback }}
+	{{/ feed.receive_pingback_enabled }}
 
 	<!-- Font imports -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">

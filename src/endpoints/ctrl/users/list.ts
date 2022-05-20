@@ -8,6 +8,11 @@ type Req = ReqUser & FastifyRequest<{ }>;
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['users'],
+		description: 'Returns a list of all users registered with the server',
+		security: [
+			{ bearer: [ ] }
+		],
 		response: {
 			200: {
 				type: 'array',

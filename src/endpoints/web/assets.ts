@@ -27,14 +27,14 @@ const robots_txt = rendered_template_cache('robots.txt', new TemplateContext(nul
 });
 
 web.get('/robots.txt', async (req, res) => {
-	res.type('text/plain');
+	res.type('text/plain; charset=utf-8');
 	return robots_txt();
 });
 
 // ===== JS Assets =====
 
 web.get('/time.js', async (req, res) => {
-	res.type('application/javascript');
+	res.type('application/javascript; charset=utf-8');
 	return load_asset('time.js');
 });
 
@@ -45,19 +45,19 @@ const svg_icon_js = rendered_template_cache('svg_icon.js', new TemplateContext(n
 });
 
 web.get('/svg_icon.js', async (req, res) => {
-	res.type('application/javascript');
+	res.type('application/javascript; charset=utf-8');
 	return svg_icon_js();
 });
 
 web.get('/color_theme_toggle.js', async (req, res) => {
-	res.type('application/javascript');
+	res.type('application/javascript; charset=utf-8');
 	return load_asset('color_theme_toggle.js');
 });
 
 // ===== CSS Assets =====
 
 web.get('/prism.css', async (req, res) => {
-	res.type('text/css');
+	res.type('text/css; charset=utf-8');
 	return load_asset('prism.css');
 });
 
@@ -68,7 +68,7 @@ const colors_css = rendered_asset_cache('colors.css', colors_context, { }, {
 });
 
 web.get('/colors.css', async (req, res) => {
-	res.type('text/css');
+	res.type('text/css; charset=utf-8');
 	return colors_css();
 });
 
@@ -79,14 +79,14 @@ const styles_css = rendered_template_cache('styles.css', new TemplateContext(nul
 });
 
 web.get('/styles.css', async (req, res) => {
-	res.type('text/css');
+	res.type('text/css; charset=utf-8');
 	return styles_css();
 });
 
 // ===== KaTeX Assets =====
 
 web.get('/katex/katex.css', async (req, res) => {
-	res.type('text/css');
+	res.type('text/css; charset=utf-8');
 	return load_katex_asset('katex.min.css');
 });
 

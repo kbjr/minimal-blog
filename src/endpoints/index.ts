@@ -1,83 +1,83 @@
 
-// ===== Public Web API =====
+export function import_endpoints() {
+	// ===== Public Web API =====
+	
+	require('./web/status');
+	
+	// Sitemap
+	require('./web/sitemap');
+	
+	// Asset files (CSS/JS/Images)
+	require('./web/assets');
+	// require('./web/favicon');
+	
+	// Various feed formats
+	require('./web/feed-atom');
+	require('./web/feed-json');
+	require('./web/feed-rss');
+	
+	// HTML pages
+	require('./web/feed-html');
+	// require('./web/post-html');
+	// require('./web/comment-html');
+	
+	// Interactions
+	require('./web/pingback');
+	require('./web/webmention');
+	
+	// ===== Control Panel API =====
+	
+	require('./ctrl/status');
+	require('./ctrl/robots');
+	require('./ctrl/preview-markdown');
+	require('./ctrl/token/get');
+	require('./ctrl/token/validate');
+	require('./ctrl/snowflake');
+	
+	// UI
+	require('./ctrl/ui/assets');
+	require('./ctrl/ui/login');
+	require('./ctrl/ui/main');
+	require('./ctrl/ui/color-themes');
+	require('./ctrl/ui/posts');
+	require('./ctrl/ui/edit-post');
+	require('./ctrl/ui/interactions');
+	require('./ctrl/ui/settings');
+	require('./ctrl/ui/templates');
+	require('./ctrl/ui/users');
+	
+	// Users / authentication
+	require('./ctrl/token/get');
+	require('./ctrl/users/list');
+	require('./ctrl/users/create');
+	require('./ctrl/users/update-password');
+	require('./ctrl/users/delete');
+	
+	// Settings
+	require('./ctrl/settings/get');
+	require('./ctrl/settings/update');
+	
+	// Templates
+	require('./ctrl/templates/get');
+	require('./ctrl/templates/update');
+	// require('./ctrl/templates/update-favicon');
+	
+	// Themes
+	require('./ctrl/themes/get');
+	require('./ctrl/themes/create');
+	// require('./ctrl/themes/update');
+	// require('./ctrl/themes/delete');
+	
+	// Posts
+	require('./ctrl/posts/list');
+	// require('./ctrl/posts/get');
+	// require('./ctrl/posts/update');
+	// require('./ctrl/posts/delete');
 
-import './web/status';
-
-// Sitemap
-import './web/sitemap';
-
-// Asset files (CSS/JS/Images)
-import './web/assets';
-// import './web/favicon';
-
-// Various feed formats
-import './web/feed-atom';
-import './web/feed-json';
-import './web/feed-rss';
-
-// HTML pages
-import './web/feed-html';
-// import './web/post-html';
-
-// Interactions
-import './web/pingback';
-import './web/webmention';
-
-// ===== Control Panel API =====
-
-import './ctrl/status';
-import './ctrl/robots';
-import './ctrl/preview-markdown';
-import './ctrl/token/get';
-import './ctrl/token/validate';
-
-// UI
-import './ctrl/ui/assets';
-import './ctrl/ui/login';
-import './ctrl/ui/main';
-import './ctrl/ui/color-themes';
-import './ctrl/ui/posts';
-import './ctrl/ui/edit-post';
-import './ctrl/ui/settings';
-import './ctrl/ui/templates';
-import './ctrl/ui/users';
-
-// Users / authentication
-import './ctrl/token/get';
-import './ctrl/users/list';
-import './ctrl/users/create';
-import './ctrl/users/update-password';
-import './ctrl/users/delete';
-
-// Settings
-import './ctrl/settings/get';
-import './ctrl/settings/update';
-
-// Templates
-import './ctrl/templates/get';
-import './ctrl/templates/put';
-// import './ctrl/templates/put-favicon';
-
-// Themes
-import './ctrl/themes/get';
-import './ctrl/themes/create';
-// import './ctrl/themes/put';
-// import './ctrl/themes/delete';
-
-// Posts
-// import './ctrl/posts/list';
-// import './ctrl/posts/get';
-// import './ctrl/posts/put';
-// import './ctrl/posts/delete';
-// import './ctrl/posts/preview';
-
-// Authors
-// import './ctrl/authors/list';
-// import './ctrl/authors/get';
-// import './ctrl/authors/post';
-// import './ctrl/authors/put';
-// import './ctrl/authors/delete';
-
-// Tags
-// import './ctrl/tags/list';
-// import './ctrl/tags/delete';
+	// Interactions
+	// TODO: Interactions
+	
+	// Tags
+	// require('./ctrl/tags/list');
+	// require('./ctrl/tags/delete');
+}

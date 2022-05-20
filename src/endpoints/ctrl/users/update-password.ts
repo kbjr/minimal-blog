@@ -16,6 +16,23 @@ type Req = ReqUser & FastifyRequest<{
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['users', 'auth'],
+		description: 'Updates a users password',
+		security: [
+			{ bearer: [ ] }
+		],
+		body: {
+			type: 'object',
+			properties: {
+				password: { type: 'string' }
+			}
+		},
+		params: {
+			type: 'object',
+			properties: {
+				username: { type: 'string' }
+			}
+		},
 		response: {
 			204: { }
 		}

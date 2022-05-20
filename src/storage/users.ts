@@ -3,6 +3,8 @@ import { dict } from '../util';
 import { store } from './store';
 import * as http_error from '../http-error';
 import { verify_password, hash_password } from '../auth';
+import { calculate_password_complexity } from '../auth/password-complexity';
+import { conf } from '../conf';
 
 export interface UserData {
 	name: string;
@@ -60,6 +62,8 @@ export async function create_user(name: string, password: string, is_admin = fal
 		is_admin,
 	};
 
+	check_password_complexity(password);
+	
 	users.push(new_user);
 	users_by_name[name] = new_user;
 
@@ -72,7 +76,7 @@ export async function update_password(name: string, new_password: string) {
 		http_error.throw_403_forbidden('Password update failed', 'Attempted to update password for user that does not exist');
 	}
 
-	// TODO: Validate password strength
+	check_password_complexity(new_password);
 
 	const new_hash = await hash_password(new_password);
 	const user = _get_user(name);
@@ -83,6 +87,16 @@ export async function update_password(name: string, new_password: string) {
 
 	user.password_hash = new_hash;
 	await store.update_password(name, new_hash);
+}
+
+function check_password_complexity(password: string) {
+	const password_complexity = calculate_password_complexity(password);
+	console.log(password_complexity);
+
+	if (password_complexity.score < conf.auth.minimum_password_complexity) {
+		const error = 'Password complexity too low; Try adding more length, and a wider mix of different types of characters';
+		http_error.throw_422_unprocessable_entity(error, null, password_complexity);
+	}
 }
 
 export async function delete_user(name: string) {

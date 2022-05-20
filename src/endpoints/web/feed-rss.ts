@@ -21,9 +21,9 @@ type Req = FastifyRequest<{
 
 web.get('/feed.rss.xml', async (req: Req, res) => {
 	const count = Math.max(1, req.query.count ? Math.min(parseInt(req.query.count, 10), 25) : default_count) | 0;
-	const xml = build_feed_xml(count, req.query.tagged_with, req.query.before);
+	const xml = await build_feed_xml(count, req.query.tagged_with, req.query.before);
 
-	res.type('application/rss+xml');
+	res.type('application/rss+xml; charset=utf-8');
 	res.header('content-language', store.settings.get('language'));
 	res.send(xml);
 });

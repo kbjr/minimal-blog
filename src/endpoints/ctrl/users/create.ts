@@ -16,6 +16,11 @@ type Req = ReqUser & FastifyRequest<{
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['users'],
+		description: 'Creates a new user',
+		security: [
+			{ bearer: [ ] }
+		],
 		response: {
 			201: {
 				type: 'object',

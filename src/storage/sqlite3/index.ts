@@ -8,18 +8,12 @@ import { Store } from '../store';
 import { bring_db_schema_up_to_date } from './migrate';
 import { create_backup } from './backup';
 import { obj_frozen } from '../../util';
+import { close_all } from './db';
 
 export const store_sqlite3 = obj_frozen<Store>({
-	async init(no_update = false) {
-		await bring_db_schema_up_to_date(no_update);
-		await users.init();
-		await settings.init();
-		await color_themes.init();
-		await templates.init();
-		await posts.init();
-	},
-
+	init: bring_db_schema_up_to_date,
 	backup: create_backup,
+	shutdown: close_all,
 
 	get_all_users: users.get_all_users,
 	get_user: users.get_user,
@@ -35,4 +29,19 @@ export const store_sqlite3 = obj_frozen<Store>({
 
 	get_all_templates: templates.get_all_templates,
 	set_template: templates.set_template,
+
+	get_all_posts: posts.get_all_posts,
+	get_post: posts.get_post,
+	create_post: posts.create_post,
+	update_post: posts.update_post,
+	delete_post: posts.delete_post,
+	move_post: posts.move_post,
+	get_all_distinct_tags: posts.list_all_tags,
+
+	// TODO: Interactions
+
+	// create_attachment: null,
+	// read_attachment_streaming: null,
+	// write_attachment_streaming: null,
+	// delete_attachment: null,
 });

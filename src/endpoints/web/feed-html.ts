@@ -2,10 +2,9 @@
 import { web } from '../../http';
 import { conf } from '../../conf';
 import { store } from '../../storage';
-import { FastifyRequest } from 'fastify';
-import { TemplateContext } from '../../storage/templates';
+import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { rendered_template_cache } from '../../cache';
-import { PostData } from '../../storage/feed';
+import { posts, templates } from '../../storage/store';
 
 const default_count = 10;
 
@@ -18,7 +17,7 @@ const partials = Object.freeze({
 	}
 });
 
-const default_context = new TemplateContext(page_context(default_count));
+const default_context = new templates.TemplateContext(page_context(default_count));
 const cached_page = rendered_template_cache('page.html', default_context, partials, {
 	settings: true,
 	templates: true,
@@ -30,27 +29,44 @@ type Req = FastifyRequest<{
 		tag?: string;
 	};
 	Querystring: {
+		count?: number;
 		before?: string;
-		count?: string;
 	};
 }>;
 
-web.get('/', async (req: Req, res) => {
-	const count = Math.max(1, req.query.count ? Math.min(parseInt(req.query.count, 10), 25) : default_count) | 0;
+const opts: RouteShorthandOptions = {
+	schema: {
+		querystring: {
+			count: {
+				type: 'integer',
+				minimum: 1,
+				maximum: 25,
+				default: default_count,
+			},
+			before: {
+				type: 'string',
+				format: 'date-time',
+			},
+		}
+	}
+};
+
+web.get('/', opts, async (req: Req, res) => {
+	const count = req.query.count ? req.query.count : default_count;
 	const html = (! req.query.before && count === default_count)
-		? cached_page()
+		? await cached_page()
 		: build_feed_html(count, null, req.query.before);
 
-	res.type('text/html');
+	res.type('text/html; charset=utf-8');
 	res.header('content-language', store.settings.get('language'));
 	res.send(html);
 });
 
-web.get('/tagged/:tag', async (req: Req, res) => {
-	const count = Math.max(1, req.query.count ? Math.min(parseInt(req.query.count, 10), 25) : default_count) | 0;
+web.get('/tagged/:tag', opts, async (req: Req, res) => {
+	const count = req.query.count ? req.query.count : default_count;
 	const html = build_feed_html(count, req.params.tag, req.query.before);
 
-	res.type('text/html');
+	res.type('text/html; charset=utf-8');
 	res.header('content-language', store.settings.get('language'));
 	res.send(html);
 });
@@ -90,7 +106,7 @@ function page_context(count: number, tagged_with?: string, before?: string) {
 	};
 }
 
-function build_html_for_posts(posts: PostData[], count: number, tagged_with?: string, before?: string) {
-	const context = new TemplateContext(page_context(count, tagged_with, before), posts);
+function build_html_for_posts(posts: posts.PostData[], count: number, tagged_with?: string, before?: string) {
+	const context = new templates.TemplateContext(page_context(count, tagged_with, before), posts);
 	return store.templates.render('page.html', context, partials);
 }

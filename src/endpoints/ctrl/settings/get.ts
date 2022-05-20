@@ -8,19 +8,22 @@ type Req = ReqUser & FastifyRequest<{ }>;
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['settings'],
+		description: 'Returns all of the current settings',
+		security: [
+			{ bearer: [ ] }
+		],
 		response: {
 			200: {
 				type: 'object',
 				properties: {
-					version: { type: 'number' },
 					language: { type: 'string' },
 					theme_light: { type: 'string' },
 					theme_dark: { type: 'string' },
 					feed_title: { type: 'string' },
-					show_setup: {
-						type: 'number',
-						enum: [ 0, 1 ]
-					}
+					author_name: { type: 'string' },
+					author_url: { type: 'string' },
+					author_avatar: { type: 'string' },
 				}
 			}
 		}

@@ -60,7 +60,7 @@ const opts: RouteShorthandOptions = {
 
 web.post('/pingback', opts, async (req: Req, res) => {
 	res.status(200);
-	res.type('text/xml');
+	res.type('text/xml; charset=utf-8');
 
 	// SEE: https://www.hixie.ch/specs/pingback/pingback
 	// TODO: Validate pingback and register

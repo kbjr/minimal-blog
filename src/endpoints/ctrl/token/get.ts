@@ -7,6 +7,8 @@ import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['auth'],
+		description: 'The primary "login" endpoint; Exchanges user credentials for a JWT access token',
 		response: {
 			200: {
 				type: 'object',

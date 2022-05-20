@@ -1,10 +1,10 @@
 
 import { conf } from '../conf';
-import { PostData } from './feed';
 import { debug_logger } from '../debug';
 import { load_default_template } from './assets';
 import { render as mustache_render, parse } from 'mustache';
 import { settings, colors, feed, store, events } from './store';
+import { PostData } from './posts';
 
 const log = debug_logger('asset_files', `[asset_files]: `);
 
@@ -71,13 +71,24 @@ const colors_context = Object.freeze({
 	get dark() { return colors.get_dark(); },
 });
 
+const feed_context = Object.freeze({
+	get url_html() { return feed.get_url_html(); },
+	get url_json_feed() { return feed.get_url_json_feed(); },
+	get url_rss() { return feed.get_url_rss(); },
+	get url_atom() { return feed.get_url_atom(); },
+	get url_pingback() { return feed.get_url_pingback(); },
+	get url_webmention() { return feed.get_url_webmention(); },
+	get url_webmention_trusted() { return feed.get_url_webmention_trusted(); },
+	get send_pingback_enabled() { return feed.send_pingback_enabled(); },
+	get receive_pingback_enabled() { return feed.receive_pingback_enabled(); },
+	get send_webmention_enabled() { return feed.send_webmention_enabled(); },
+	get receive_webmention_enabled() { return feed.receive_webmention_enabled(); },
+});
+
 export class TemplateContext {
 	public readonly site = site_context;
 	public readonly colors = colors_context;
-
-	public get feed() {
-		return feed;
-	}
+	public readonly feed = feed_context;
 
 	constructor(
 		public readonly page: Readonly<PageContext>,

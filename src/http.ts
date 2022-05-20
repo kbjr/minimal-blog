@@ -4,6 +4,8 @@ import { HttpError } from './http-error';
 import { xml_content_processor, xml_rpc_fault } from './xml-rpc';
 import fastify, { FastifyError, FastifyLoggerOptions, FastifyReply, FastifyRequest } from 'fastify';
 import formbody from '@fastify/formbody';
+import { URL } from 'url';
+import { swagger_opts } from './swagger';
 
 const logging: FastifyLoggerOptions = conf.logging.level !== 'none' && {
 	level: conf.logging.level,
@@ -21,19 +23,26 @@ export const ctrl = fastify({
 	logger: logging
 });
 
-if (conf.http.cache.enable_etags) {
-	const etags = require('@fastify/etag');
-	web.register(etags);
-	ctrl.register(etags);
-}
+export async function setup_plugins() {
+	if (conf.http.cache.enable_etags) {
+		const etags = require('@fastify/etag');
+		await web.register(etags);
+		await ctrl.register(etags);
+	}
 
-if (conf.http.compress.enable) {
-	const compress = require('@fastify/compress');
-	web.register(compress, { encodings: conf.http.compress.encodings });
-	ctrl.register(compress, { encodings: conf.http.compress.encodings });
-}
+	if (conf.http.compress.enable) {
+		const compress = require('@fastify/compress');
+		await web.register(compress, { encodings: conf.http.compress.encodings });
+		await ctrl.register(compress, { encodings: conf.http.compress.encodings });
+	}
 
-web.register(formbody);
+	if (conf.http.ctrl_enable_swagger) {
+		const swagger = require('@fastify/swagger');
+		await ctrl.register(swagger, swagger_opts);
+	}
+
+	await web.register(formbody);
+}
 
 
 
@@ -68,17 +77,23 @@ function error_handler(error: Error | FastifyError | ValidationError, req: Fasti
 	// If hitting the XML-RPC pingback endpoint, respond with an XML-RPC formatted error
 	if (req.url === '/pingback') {
 		res.status(200);
-		res.type('text/xml');
+		res.type('text/xml; charset=utf-8');
 		res.send(xml_rpc_fault(-32700, error.message));
 		return;
 	}
 
 	if (error instanceof HttpError) {
-		res.status(error.status_code);
-		res.send({ error: error.message });
+		const body = { error: error.message };
 
 		if (error.additional) {
-			ctrl.log.error(error.additional);
+			Object.assign(body, error.additional);
+		}
+
+		res.status(error.status_code);
+		res.send(body);
+
+		if (error.log_message) {
+			ctrl.log.error(error.log_message);
 		}
 
 		return;
@@ -107,7 +122,7 @@ function error_handler(error: Error | FastifyError | ValidationError, req: Fasti
 	ctrl.log.error(error);
 
 	res.status(500);
-	res.type('application/json');
+	res.type('application/json; charset=utf-8');
 	res.send({ error: 'unknown error' });
 }
 
@@ -115,7 +130,12 @@ function error_handler(error: Error | FastifyError | ValidationError, req: Fasti
 
 // ===== Listen =====
 
-export function listen() {
+export async function listen() {
+	if (conf.http.ctrl_enable_swagger) {
+		await ctrl.ready();
+		ctrl.swagger();
+	}
+
 	web.listen(conf.http.web_port, '0.0.0.0', (error, addr) => {
 		if (error) {
 			web.log.error(error);

@@ -14,6 +14,11 @@ type Req = ReqUser & FastifyRequest<{
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['templates'],
+		description: 'Updates the contents of the specified template',
+		security: [
+			{ bearer: [ ] }
+		],
 		response: {
 			204: { }
 		}

@@ -4,9 +4,16 @@ import { conf } from '../../../conf';
 import { assets, store } from '../../../storage';
 import { render } from './render';
 import { current_lang } from './i18n';
+import { RouteShorthandOptions } from 'fastify';
 
-ctrl.get('/', async (req, res) => {
-	res.type('text/html');
+const opts: RouteShorthandOptions = {
+	schema: {
+		tags: ['X-HIDDEN']
+	}
+};
+
+ctrl.get('/', opts, async (req, res) => {
+	res.type('text/html; charset=utf-8');
 
 	if (store.settings.get('show_setup')) {
 		if (store.users.has_no_users()) {

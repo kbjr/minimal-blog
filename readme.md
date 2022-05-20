@@ -5,6 +5,7 @@
 	- No database needed, just a volume for file storage
 - Control panel API / UI for managing the site
 	- Served on a separate port from the main web UI so you don't have to expose it to the internet if you don't want to
+	- Can enable a Swagger documentation page for control panel API at `/api/docs`
 - Write posts using [GitHub Flavored Markdown](https://github.github.com/gfm/)
 	- Also includes support for:
 		- Code-block syntax highlighting with [Prism](https://prismjs.com/) for [more than 200 languages](https://prismjs.com/#supported-languages)

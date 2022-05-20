@@ -1,10 +1,8 @@
 
-import * as sqlite3 from 'sqlite3';
-import { conf } from '../../../conf';
 import { build_v1 } from './v1';
-import { open, close, list_tables, get_one } from '../db';
-import { create_backup } from '../backup';
 import { log_info } from '../../../debug';
+import { create_backup } from '../backup';
+import { list_tables, get_one, settings_pool, sql } from '../db';
 // import { migrate_v1_to_v2 } from './v1-to-v2';
 
 const supported_db_version = 1;
@@ -51,12 +49,10 @@ export async function bring_db_schema_up_to_date(no_update = false) {
 	}
 }
 
-async function get_current_version() : Promise<number> {
-	const file = conf.data.sqlite3.settings_path;
-	const mode = sqlite3.OPEN_CREATE | sqlite3.OPEN_READWRITE;
-	const table = 'settings';
+const settings_table = 'settings';
 
-	const db = await open(file, mode);
+async function get_current_version() : Promise<number> {
+	const db = await settings_pool.acquire();
 
 	try {
 		const tables = await list_tables(db);
@@ -65,16 +61,11 @@ async function get_current_version() : Promise<number> {
 			return 0;
 		}
 	
-		if (! tables.find(({ name }) => name === table)) {
+		if (! tables.find(({ name }) => name === settings_table)) {
 			throw new Error('settings.db invalid; no settings table found');
 		}
-	
-		const { version } = await get_one(db, `
-			select
-				value as version
-			from ${table}
-			where name = 'version'
-		`);
+
+		const { version } = await get_one(db, sql_get_current_version);
 
 		if (typeof version !== 'number' || (version | 0) !== version) {
 			throw new Error('settings.db invalid; version does not appear to be an integer');
@@ -84,9 +75,16 @@ async function get_current_version() : Promise<number> {
 	}
 	
 	finally {
-		await close(db);
+		await settings_pool.release(db);
 	}
 }
+
+const sql_get_current_version = sql(`
+select
+value as version
+	from ${settings_table}
+where name = 'version'
+`);
 
 const migrations: Migration[] = [
 	build_v1,

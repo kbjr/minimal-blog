@@ -7,31 +7,36 @@ import * as http_error from '../../../http-error';
 
 type Req = ReqUser & FastifyRequest<{
 	Body: {
-		// version?: number;
 		language?: string;
 		theme_light?: string;
 		theme_dark?: string;
 		feed_title?: string;
+		author_name?: string;
+		author_url?: string;
+		author_avatar?: string;
 	};
 }>;
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['settings'],
+		description: 'Updates the given settings',
+		security: [
+			{ bearer: [ ] }
+		],
 		response: {
 			204: { }
 		},
 		body: {
 			type: 'object',
 			properties: {
-				// version: { type: 'number' },
 				language: { type: 'string' },
 				theme_light: { type: 'string' },
 				theme_dark: { type: 'string' },
 				feed_title: { type: 'string' },
-				// show_setup: {
-				// 	type: 'number',
-				// 	enum: [ 0, 1 ]
-				// }
+				author_name: { type: 'string' },
+				author_url: { type: 'string' },
+				author_avatar: { type: 'string' },
 			},
 			additionalProperties: false
 		}

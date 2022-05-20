@@ -20,6 +20,9 @@ export namespace conf {
 		/** Controls whether or not the `/.status` endpoint will be accessible under the web URL */
 		export const web_enable_status = cast_bool(process.env.HTTP_WEB_ENABLE_STATUS, true);
 
+		/** Controls whether or not Swagger API docs can be found at /api/docs on the control API */
+		export const ctrl_enable_swagger = cast_bool(process.env.HTTP_CTRL_SWAGGER, true);
+
 		/** Configuration for HTTP response caching mechanisms */
 		export namespace cache {
 			/** Controls whether or not to send ETag headers on all HTTP responses */
@@ -66,10 +69,27 @@ export namespace conf {
 	
 			/** Path to the file where the posts database is stored */
 			export const posts_path = `${path}/posts.db`;
+
+			/** Path to the directory where attachment files are stored */
+			export const attachments_path = `${path}/attachments`;
+
+			/** Minimum connection pool size for settings.db */
+			export const settings_pool_min = 1;
+
+			/** Maximum connection pool size for settings.db */
+			export const settings_pool_max = 10;
+
+			/** Minimum connection pool size for posts.db */
+			export const posts_pool_min = 1;
+			
+			/** Maximum connection pool size for posts.db */
+			export const posts_pool_max = 10;
 		}
 
+		// 
 	}
 	
+	/** Static file asset configuration */
 	export namespace assets {
 		/** The directory where static files and default templates are loaded from */
 		export const path = resolve_path(__dirname, '../assets');
@@ -82,6 +102,9 @@ export namespace conf {
 	export namespace auth {
 		/** Time to live (TTL) to set on issued tokens */
 		export const token_ttl = '3h';
+
+		/** Minimum password complexity required for all users */
+		export const minimum_password_complexity = 125;
 
 		/**
 		 * Path to key file to use for signing JWTs. If not supplied, the server will use HMAC token signing
@@ -122,7 +145,7 @@ export namespace conf {
 		/** Controls which additional debug loggers are enabled */
 		export const debug_loggers = Object.freeze<Partial<Loggers>>({
 			sqlite: true,
-			sqlite_sql: false,
+			sqlite_sql: true,
 			asset_files: false,
 			cache: false,
 			auth: false,

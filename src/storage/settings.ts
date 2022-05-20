@@ -16,6 +16,9 @@ export interface SettingsData {
 	receive_webmention: boolean;
 	default_pingback: 'allow' | 'block' | 'review';
 	default_webmention: 'allow' | 'block' | 'review';
+	author_name: string;
+	author_url: string;
+	author_avatar: string;
 }
 
 let data: Partial<SettingsData> = obj();

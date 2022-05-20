@@ -1,21 +1,6 @@
 
-import { conf } from '../../conf';
-import * as sqlite3 from 'sqlite3';
 import { ColorThemeData } from '../colors';
-import { run, get_all, open, sql } from './db';
-
-let db: sqlite3.Database;
-
-export async function init() {
-	const file = conf.data.sqlite3.settings_path;
-	const mode = sqlite3.OPEN_CREATE | sqlite3.OPEN_READWRITE;
-
-	db = await open(file, mode);
-	
-	db.on('close', () => {
-		db = null;
-	});
-}
+import { run, get_all, sql, settings_pool } from './db';
 
 interface ColorRow {
 	theme_name: string;
@@ -24,18 +9,26 @@ interface ColorRow {
 }
 
 export async function get_all_color_themes() {
-	const rows = await get_all<ColorRow>(db, sql_get_themes);
-	const themes: Record<string, Partial<ColorThemeData>> = { };
-	
-	for (const row of rows) {
-		if (! themes[row.theme_name]) {
-			themes[row.theme_name] = { };
-		}
+	const db = await settings_pool.acquire();
 
-		themes[row.theme_name][row.color_name] = row.value;
+	try {
+		const rows = await get_all<ColorRow>(db, sql_get_themes);
+		const themes: Record<string, Partial<ColorThemeData>> = { };
+		
+		for (const row of rows) {
+			if (! themes[row.theme_name]) {
+				themes[row.theme_name] = { };
+			}
+	
+			themes[row.theme_name][row.color_name] = row.value;
+		}
+	
+		return themes;
 	}
 
-	return themes;
+	finally {
+		await settings_pool.release(db);
+	}
 }
 
 const sql_get_themes = sql(`
@@ -44,11 +37,19 @@ from colors
 `);
 
 export async function set_color(theme_name: string, color_name: string, value: string) {
-	await run(db, sql_set_color, {
-		$theme_name: theme_name,
-		$color_name: color_name,
-		$value: value
-	});
+	const db = await settings_pool.acquire();
+
+	try {
+		await run(db, sql_set_color, {
+			$theme_name: theme_name,
+			$color_name: color_name,
+			$value: value
+		});
+	}
+
+	finally {
+		await settings_pool.release(db);
+	}
 }
 
 const sql_set_color = sql(`

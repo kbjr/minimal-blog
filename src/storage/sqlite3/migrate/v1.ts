@@ -1,9 +1,10 @@
 
 import * as sqlite3 from 'sqlite3';
-import { conf } from '../../../conf';
-import { run, open, close, sql } from '../db';
-import { default_settings } from '../../default-settings';
+// import { conf } from '../../../conf';
 import { log_debug } from '../../../debug';
+// import { promises as fs } from 'fs';
+import { default_settings } from '../../default-settings';
+import { run, sql, settings_pool, posts_pool } from '../db';
 
 export async function build_v1() {
 	log_debug('sqlite', `[sqlite]: Building initial v1 database...`);
@@ -11,6 +12,7 @@ export async function build_v1() {
 	await Promise.all([
 		settings_db.build(),
 		posts_db.build(),
+		// fs.mkdir(conf.data.sqlite3.attachments_path, 0o0700),
 	]);
 
 	log_debug('sqlite', `[sqlite]: Finished building v1 database`);
@@ -22,18 +24,19 @@ export async function build_v1() {
 
 namespace settings_db {
 	export async function build() {
-		const file = conf.data.sqlite3.settings_path;
-		const mode = sqlite3.OPEN_CREATE | sqlite3.OPEN_READWRITE;
+		const db = await settings_pool.acquire();
 
-		const db = await open(file, mode);
+		try {
+			await create_settings(db);
+			await create_templates(db);
+			await create_colors(db);
+			await create_users(db);
+			await create_mention_rules(db);
+		}
 
-		await create_settings(db);
-		await create_templates(db);
-		await create_colors(db);
-		await create_users(db);
-		await create_mention_rules(db);
-		
-		await close(db);
+		finally {
+			await settings_pool.release(db);
+		}
 	}
 
 	async function create_settings(db: sqlite3.Database) {
@@ -158,18 +161,36 @@ namespace settings_db {
 
 namespace posts_db {
 	export async function build() {
-		const file = conf.data.sqlite3.posts_path;
-		const mode = sqlite3.OPEN_CREATE | sqlite3.OPEN_READWRITE;
+		const db = await posts_pool.acquire();
 
-		const db = await open(file, mode);
+		try {
+			await create_post_types(db);
+			await create_posts(db);
+			await create_tags(db);
+			await create_mentions(db);
+			await create_attachments(db);
+		}
 
-		await create_posts(db);
-		await create_authors(db);
-		await create_tags(db);
-		await create_mentions(db);
-		
-		await close(db);
+		finally {
+			await posts_pool.release(db);
+		}
 	}
+
+	async function create_post_types(db: sqlite3.Database) {
+		await run(db, sql_create_post_types);
+		await run(db, sql_set_post_types);
+	}
+
+	const sql_create_post_types = sql(`
+		create table if not exists post_types (
+			name varchar(50) primary key
+		)
+	`);
+	
+	const sql_set_post_types = sql(`
+		insert into post_types (name)
+		values ('post'), ('comment')
+	`);
 
 	async function create_posts(db: sqlite3.Database) {
 		await run(db, sql_create_posts);
@@ -177,45 +198,24 @@ namespace posts_db {
 
 	const sql_create_posts = sql(`
 		create table if not exists posts (
-			uri_name varchar(1000) primary key,
+			post_id int unsigned auto_increment primary key,
+			post_type varchar(50),
+			uri_name varchar(1000),
 			title varchar(255),
 			subtitle varchar(255),
 			external_url varchar(1000),
 			content_html text,
-			content_text text,
+			content_markdown text,
 			image varchar(1000),
 			banner_image varchar(1000),
 			date_published timestamp,
 			date_updated timestamp,
-			is_draft tinyint
-		)
-	`);
-	
-	async function create_authors(db: sqlite3.Database) {
-		await run(db, sql_create_authors);
-		await run(db, sql_create_post_authors);
-	}
+			is_draft tinyint,
 
-	const sql_create_authors = sql(`
-		create table if not exists authors (
-			id int auto_increment primary key,
-			name varchar(255),
-			url varchar(1000),
-			avatar varchar(1000)
-		)
-	`);
-	
-	const sql_create_post_authors = sql(`
-		create table if not exists post_authors (
-			uri_name varchar(255),
-			author_id int,
+			unique (post_type, uri_name),
 
-			primary key (uri_name, author_id),
-
-			foreign key (uri_name)
-				references posts (uri_name),
-			foreign key (author_id)
-				references authors (id)
+			foreign key (post_type)
+				references post_types (name)
 		)
 	`);
 
@@ -227,18 +227,18 @@ namespace posts_db {
 	const sql_create_tags = sql(`
 		create table if not exists tags (
 			tag_name varchar(50),
-			uri_name varchar(255),
+			post_id int unsigned,
 
-			primary key (tag_name, uri_name),
+			primary key (tag_name, post_id),
 
-			foreign key (uri_name)
-				references posts (uri_name)
+			foreign key (post_id)
+				references posts (post_id)
 		)
 	`);
 	
 	const sql_create_tags_index = sql(`
-		create index if not exists idx_tags_uri_name
-			on tags (uri_name)
+		create index if not exists idx_tags_post_id
+			on tags (post_id)
 	`);
 
 	async function create_mentions(db: sqlite3.Database) {
@@ -248,7 +248,7 @@ namespace posts_db {
 	
 	const sql_create_mentions = sql(`
 		create table if not exists mentions (
-			uri_name varchar(1000),
+			post_id int unsigned,
 			source_url varchar(1000),
 			vouch_url varchar(1000),
 			needs_moderation tinyint,
@@ -256,10 +256,10 @@ namespace posts_db {
 			received_time timestamp,
 			verified tinyint,
 
-			primary key (uri_name, source_url),
+			primary key (post_id, source_url),
 
-			foreign key (uri_name)
-				references posts (uri_name),
+			foreign key (post_id)
+				references posts (post_id)
 			foreign key (mention_type)
 				references mention_types (name)
 		)
@@ -279,5 +279,25 @@ namespace posts_db {
 	const sql_set_mention_types = sql(`
 		insert into mention_types (name)
 		values ('webmention'), ('pingback')
+	`);
+
+	async function create_attachments(db: sqlite3.Database) {
+		await run(db, sql_create_attachments);
+	}
+
+	const sql_create_attachments = sql(`
+		create table if not exists attachments (
+			post_id int unsigned,
+			attachment_file varchar(50),
+			title varchar(255),
+			mime_type varchar(255),
+			size_in_bytes int unsigned,
+			duration_in_seconds int unsigned,
+
+			primary key (post_id, attachment_file),
+
+			foreign key (post_id)
+				references posts (post_id)
+		)
 	`);
 }

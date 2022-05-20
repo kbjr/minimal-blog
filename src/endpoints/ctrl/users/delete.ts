@@ -12,6 +12,11 @@ type Req = ReqUser & FastifyRequest<{
 
 const opts: RouteShorthandOptions = {
 	schema: {
+		tags: ['users'],
+		description: 'Deletes a user account',
+		security: [
+			{ bearer: [ ] }
+		],
 		response: {
 			204: { }
 		}
