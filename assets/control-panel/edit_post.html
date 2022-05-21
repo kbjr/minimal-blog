@@ -18,7 +18,7 @@
 		<label for="in-post-title">Post Sub-Title <small>(optional)</small></label>
 		<input type="text" id="in-post-sub-title" value="{{ labels.loading }}" disabled>
 
-		<label for="in-post-markdown">Post Body <sup>*</sup> <small>(GitHub Flavored Markdown + KaTeX)</small></label>
+		<label for="in-post-markdown">Post Body <sup>*</sup> <small>(GitHub Flavored Markdown + <a href="https://katex.org/docs/supported.html" rel="external">KaTeX</a>)</small></label>
 		<textarea id="in-post-markdown"
 			placeholder="## Headings&#10;&#10;### Sub-Headings&#10;&#10;#### etc.&#10;&#10;**Bold**&#10;_Italic_&#10;`Monospace`&#10;&#10;```js&#10;console.log('Code Blocks');&#10;```&#10;&#10;$$&#10;\text{KaTeX Block}&#10;$$"
 		>{{ labels.loading }}</textarea>
@@ -92,7 +92,7 @@ const styles = `
 	display: contents;
 }
 
-button, pre, input, textarea, select {
+button, pre, input, textarea, select, mark {
 	transition: background linear .5s;
 }
 
@@ -231,6 +231,17 @@ a.heading-anchor {
 
 :not(.katex-display) > .katex {
 	margin-inline: 0.5rem;
+}
+
+mark {
+	color: var(--theme-text-highlight);
+	background-color: var(--theme-bg-text-highlight);
+	padding: 0.2rem;
+}
+
+::selection {
+	color: var(--theme-text-selection);
+	background-color: var(--theme-bg-text-selection);
 }
 
 header {

@@ -15,6 +15,7 @@ const opts: RouteShorthandOptions = {
 				type: 'object',
 				additionalProperties: {
 					type: 'object',
+					// TODO: Refactor this to a central place
 					properties: {
 						$builtin: { type: 'boolean' },
 						sun: { type: 'string' },
@@ -30,6 +31,10 @@ const opts: RouteShorthandOptions = {
 						text_link: { type: 'string' },
 						text_link_active: { type: 'string' },
 						text_link_visited: { type: 'string' },
+						text_highlight: { type: 'string' },
+						bg_text_highlight: { type: 'string' },
+						text_selection: { type: 'string' },
+						bg_text_selection: { type: 'string' },
 						bg_button_primary: { type: 'string' },
 						bg_button_primary_hover: { type: 'string' },
 						text_button_primary: { type: 'string' },

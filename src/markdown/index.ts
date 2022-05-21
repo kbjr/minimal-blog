@@ -1,17 +1,13 @@
 
 import { marked } from 'marked';
 import { conf } from '../conf';
-import { JSDOM } from 'jsdom';
-import { highlight, languages } from 'prismjs';
+import { renderer } from './renderer';
+import { highlight } from './prism';
 import { katex_block_ext, katex_inline_ext } from './katex';
 import { footnote_list_ext, footnote_ref_ext } from './footnotes';
-// import {  } from './definition-list';
-
-import createDOMPurify = require('dompurify');
-import load_languages = require('prismjs/components/index');
-import { renderer } from './renderer';
-
-load_languages();
+import { mark_ext } from './mark';
+import { description_list_ext } from './description-list';
+import { sanitize_html } from './sanitize';
 
 marked.use({
 	extensions: [
@@ -19,6 +15,8 @@ marked.use({
 		katex_inline_ext,
 		footnote_ref_ext,
 		footnote_list_ext,
+		mark_ext,
+		description_list_ext,
 	]
 });
 
@@ -32,10 +30,7 @@ export function render_markdown_to_html(markdown: string, options: MarkdownOptio
 		baseUrl: conf.http.web_url + '/posts',
 		breaks: options.breaks || false,
 		renderer,
-		highlight(code, lang) {
-			const grammar = typeof languages[lang] === 'object' ? languages[lang] : languages.plain;
-			return highlight(code, grammar, lang);
-		}
+		highlight,
 	};
 
 	return new Promise<string>((resolve, reject) => {
@@ -49,16 +44,5 @@ export function render_markdown_to_html(markdown: string, options: MarkdownOptio
 			const safe_html = sanitize_html(unsafe_html);
 			resolve(safe_html);
 		});
-	});
-}
-
-function sanitize_html(html: string) : string {
-	const { window } = new JSDOM('');
-	const dom_purify = createDOMPurify(window as any as Window);
-	return dom_purify.sanitize(html, {
-		CUSTOM_ELEMENT_HANDLING: {
-			tagNameCheck: (tag_name) => tag_name === 'svg-icon',
-			attributeNameCheck: (attr_name) => attr_name === 'icon',
-		}
 	});
 }

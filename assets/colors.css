@@ -16,6 +16,10 @@ body {
 	--theme-text-link: {{ colors.light.text_link }};
 	--theme-text-link-active: {{ colors.light.text_link_active }};
 	--theme-text-link-visited: {{ colors.light.text_link_visited }};
+	--theme-text-highlight: {{ colors.light.text_highlight }};
+	--theme-bg-text-highlight: {{ colors.light.bg_text_highlight }};
+	--theme-text-selection: {{ colors.light.text_selection }};
+	--theme-bg-text-selection: {{ colors.light.bg_text_selection }};
 	--theme-bg-button-primary: {{ colors.light.bg_button_primary }};
 	--theme-bg-button-primary-hover: {{ colors.light.bg_button_primary_hover }};
 	--theme-text-button-primary: {{ colors.light.text_button_primary }};
@@ -62,6 +66,10 @@ body[data-color-scheme='dark'] {
 	--theme-text-link: {{ colors.dark.text_link }};
 	--theme-text-link-active: {{ colors.dark.text_link_active }};
 	--theme-text-link-visited: {{ colors.dark.text_link_visited }};
+	--theme-text-highlight: {{ colors.dark.text_highlight }};
+	--theme-bg-text-highlight: {{ colors.dark.bg_text_highlight }};
+	--theme-text-selection: {{ colors.dark.text_selection }};
+	--theme-bg-text-selection: {{ colors.dark.bg_text_selection }};
 	--theme-bg-button-primary: {{ colors.dark.bg_button_primary }};
 	--theme-bg-button-primary-hover: {{ colors.dark.bg_button_primary_hover }};
 	--theme-text-button-primary: {{ colors.dark.text_button_primary }};
@@ -109,6 +117,10 @@ body[data-color-scheme='dark'] {
 		--theme-text-link: {{ colors.dark.text_link }};
 		--theme-text-link-active: {{ colors.dark.text_link_active }};
 		--theme-text-link-visited: {{ colors.dark.text_link_visited }};
+		--theme-text-highlight: {{ colors.dark.text_highlight }};
+		--theme-bg-text-highlight: {{ colors.dark.bg_text_highlight }};
+		--theme-text-selection: {{ colors.dark.text_selection }};
+		--theme-bg-text-selection: {{ colors.dark.bg_text_selection }};
 		--theme-bg-button-primary: {{ colors.dark.bg_button_primary }};
 		--theme-bg-button-primary-hover: {{ colors.dark.bg_button_primary_hover }};
 		--theme-text-button-primary: {{ colors.dark.text_button_primary }};
@@ -154,6 +166,10 @@ body[data-color-scheme='dark'] {
 		--theme-text-light: {{ colors.light.text_light }};
 		--theme-text-link: {{ colors.light.text_link }};
 		--theme-text-link-active: {{ colors.light.text_link_active }};
+		--theme-text-highlight: {{ colors.light.text_highlight }};
+		--theme-bg-text-highlight: {{ colors.light.bg_text_highlight }};
+		--theme-text-selection: {{ colors.light.text_selection }};
+		--theme-bg-text-selection: {{ colors.light.bg_text_selection }};
 		--theme-bg-button-primary: {{ colors.light.bg_button_primary }};
 		--theme-bg-button-primary-hover: {{ colors.light.bg_button_primary_hover }};
 		--theme-text-button-primary: {{ colors.light.text_button_primary }};

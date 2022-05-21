@@ -4,6 +4,14 @@ import { renderer } from './renderer';
 
 const footnotes = Symbol('footnotes');
 
+// We're going to hang some extra data off of the lexer so we can reference it
+// later when generating links back to references
+declare module 'marked' {
+	export interface Lexer {
+		[footnotes]: Record<number, number>;
+	}
+}
+
 export interface FootnoteLinkToken extends marked.Tokens.Generic {
 	id: number;
 	inst: number;
@@ -125,7 +133,7 @@ function footnote_link_backs(id: number, count: number) {
 	}
 
 	if (count === 1) {
-		return `<a href="#cite:ref-${id}-1" title="Back to reference">^</a>`;
+		return `<sup><a href="#cite:ref-${id}-1" title="Back to reference">^</a></sup>`;
 	}
 
 	// NOTE: We're using letters for link backs; If we run out, only
@@ -139,32 +147,5 @@ function footnote_link_backs(id: number, count: number) {
 		links[i] = `<a href="#cite:ref-${id}-${i + 1}" title="Back to reference ${letter}">${letter}</a>`;
 	}
 
-	return `^ ${links.join(' ')}`;
+	return `<sup>^ ${links.join(' ')}</sup>`;
 }
-
-// export interface AbbrFootnoteToken extends marked.Tokens.Generic {
-// 	abbr: string;
-// 	text: string;
-// }
-
-// export const abbr_footnote_ext: marked.TokenizerExtension & marked.RendererExtension = {
-// 	name: 'abbr_footnote',
-// 	level: 'block',
-// 	start: (src) => src.match(/\*\[/)?.index,
-// 	tokenizer(src, tokens) {
-// 		const rule = /^\*\[\^([^\n\s]+)]:([^\n]*)/;
-// 		const match = rule.exec(src);
-
-// 		if (match) {
-// 			return {
-// 				type: 'abbr_footnote',
-// 				raw: match[0],
-// 				abbr: match[1],
-// 				text: match[2]
-// 			};
-// 		}
-// 	},
-// 	renderer(token: FootnoteLinkToken) {
-// 		return `<sup id="${}"></sup>`;
-// 	}
-// };
