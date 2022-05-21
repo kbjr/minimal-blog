@@ -15,11 +15,9 @@ const opts: RouteShorthandOptions = {
 		security: [
 			{ bearer: [ ] }
 		],
-		body: {
-			// 
-		},
+		body: { type: 'string' },
 		response: {
-			200: { }
+			200: { type: 'string' }
 		}
 	}
 };

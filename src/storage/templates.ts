@@ -83,6 +83,10 @@ const feed_context = Object.freeze({
 	get receive_pingback_enabled() { return feed.receive_pingback_enabled(); },
 	get send_webmention_enabled() { return feed.send_webmention_enabled(); },
 	get receive_webmention_enabled() { return feed.receive_webmention_enabled(); },
+	get author_name() { return settings.get('author_name'); },
+	get author_url() { return settings.get('author_url'); },
+	get author_avatar() { return settings.get('author_avatar'); },
+	get post_uri_format() { return settings.get('post_uri_format'); },
 });
 
 export class TemplateContext {

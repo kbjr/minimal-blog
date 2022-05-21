@@ -20,4 +20,5 @@ export const default_settings = obj<SettingsData>({
 	author_name: 'Unknown Author',
 	author_url: null,
 	author_avatar: null,
+	post_uri_format: 'slug',
 });

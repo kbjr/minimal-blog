@@ -225,8 +225,12 @@ a.heading-anchor {
 	--icon-size: 1rem;
 }
 
+.katex-display {
+	color: var(--theme-text-body);
+}
+
 :not(.katex-display) > .katex {
-	margin-inline: 1rem;
+	margin-inline: 0.5rem;
 }
 
 header {
@@ -294,15 +298,25 @@ customElements.define('markdown-preview',
 			const title = this.title_src.value;
 			const subtitle = this.subtitle_src.value;
 			const markdown = this.body_src.value;
+			const published = new Date();
+
+			// TODO: Is this actually laid out in optimal format?
+			const author = conf.author.name
+				? conf.author.url
+					? `<a class="p-author" href="${conf.author.url}">${conf.author.name}</a>`
+					: `<span class="p-author">${conf.author.name}</span>`
+				: conf.author.url
+					? `<a class="p-author" href="${conf.author.url}">${conf.author.url}</a>`
+					: '<span class="p-author">Unknown</span>';
 
 			try {
 				const title_html = `
 					<header>
 						<h1 class="p-name">${title}</h1>
 						${subtitle ? `<p class="subtitle">${subtitle}</p>` : ''}
-						<p class="p-author">By: Someone</p>
+						<p class="author">By: ${author}</p>
 						<p class="dates">
-							Published: <time class="dt-published">Sometime</time>
+							Published: <time class="dt-published" datetime="${published.toISOString()}">${published.toLocaleString()}</time>
 							${''/* In a real post, there might also be a modified data, which would be `dt-update` */}
 						</p>
 					</header>
@@ -346,16 +360,22 @@ function load_new_post() {
 
 	btn_toggle_publish.disabled = false;
 	span_publish_status.innerHTML = 'Post Not Published';
+
+	span_post_url_name.innerHTML = conf.post_uri_format === 'slug' ? '{post_title_slug}' : '{post_snowflake_id}';
 }
 
 function on_title_change(new_title) {
-	new_post_id = convert_title_to_uri(new_title);
-	span_post_url_name.innerHTML = new_post_id;
+	if (conf.post_uri_format === 'slug' && ! post_id) {
+		new_post_id = convert_title_to_uri(new_title);
+		span_post_url_name.innerHTML = new_post_id;
+	}
 }
 
 // TODO: More feature-complete URI generator
 function convert_title_to_uri(title) {
 	return title
+		// Remove surrounding whitespace
+		.trim()
 		// Convert all unallowed characters into spaces
 		.replace(/[^a-zA-Z0-9 :]/g, ' ')
 		// Collapse all runs of whitespace into a single hyphen

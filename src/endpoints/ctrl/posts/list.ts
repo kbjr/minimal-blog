@@ -3,6 +3,7 @@ import { ctrl } from '../../../http';
 import { store } from '../../../storage';
 import { require_auth, ReqUser } from '../../../auth';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
+import { post_res_schema } from './get.schema';
 
 type Req = ReqUser & FastifyRequest<{
 	Querystring: {
@@ -37,10 +38,7 @@ const opts: RouteShorthandOptions = {
 		response: {
 			200: {
 				type: 'array',
-				items: {
-					type: 'object',
-					additionalProperties: true,
-				},
+				items: post_res_schema,
 			}
 		}
 	}

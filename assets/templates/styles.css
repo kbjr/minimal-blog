@@ -337,8 +337,12 @@ a.heading-anchor {
 		--icon-size: 1rem;
 	}
 
+.katex-display {
+	color: var(--theme-text-body);
+}
+	
 :not(.katex-display) > .katex {
-	margin-inline: 1rem;
+	margin-inline: 0.5rem;
 }
 
 

@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/dompurify": "^2.3.3",
     "@types/jsdom": "^16.2.14",
+    "@types/json-schema": "^7.0.11",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/katex": "^0.14.0",
     "@types/marked": "^4.0.3",

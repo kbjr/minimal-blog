@@ -22,7 +22,5 @@ const opts: RouteShorthandOptions = {
 };
 
 ctrl.get('/api/snowflake', opts, async (req, res) => {
-	return {
-		snowflake: unique_id().toString()
-	};
+	return { snowflake: unique_id().toString() };
 });

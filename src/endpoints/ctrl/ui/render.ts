@@ -4,28 +4,29 @@ import { conf } from '../../../conf';
 import { dict } from '../../../util';
 import { load_control_panel_asset } from '../../../storage/assets';
 import * as mustache from 'mustache';
+import { store } from '../../../storage';
+import { TemplateContext } from '../../../storage/templates';
 
 let templates = dict<string, string>();
 
-export function clear_templates() {
+function clear_templates() {
 	templates = dict();
 }
+
+store.events.on('settings.load', clear_templates);
+store.events.on('settings.update', clear_templates);
 
 export async function render(name: string, context: Readonly<object>, partials?: Readonly<Record<string, string>>) {
 	if (! templates[name]) {
 		templates[name] = await load_control_panel_asset(name);
 	}
 
-	context = Object.assign({
-		site: {
-			url: conf.http.web_url
-			// 
-		},
+	context = Object.assign(new TemplateContext(null, null, null), context, {
+		labels: languages.en_us,
 		ctrl_panel: {
 			url: conf.http.ctrl_url
-		},
-		labels: languages.en_us
-	}, context);
+		}
+	});
 
 	return mustache.render(templates[name], context, partials);
 }

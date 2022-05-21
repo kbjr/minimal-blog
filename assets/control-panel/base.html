@@ -19,8 +19,13 @@
 		window.conf = {
 			site_url: '{{{ site.url }}}',
 			ctrl_panel_url: '{{{ ctrl_panel.url }}}',
-			token_payload: null,
 			current_page: '{{{ page.name }}}',
+			post_uri_format: '{{{ feed.post_uri_format }}}',
+			author: {
+				name: {{# feed.author_name }}'{{ feed.author_name }}' || {{/ feed.author_name }}null,
+				url: {{# feed.author_url }}'{{ feed.author_url }}' || {{/ feed.author_url }}null,
+				avatar: {{# feed.author_avatar }}'{{ feed.author_avatar }}' || {{/ feed.author_avatar }}null,
+			}
 		};
 	</script>
 

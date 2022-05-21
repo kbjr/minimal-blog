@@ -4,6 +4,7 @@ import { store } from '../../../storage';
 import { require_auth, ReqUser } from '../../../auth';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import * as http_error from '../../../http-error';
+import { settings_schema } from './schema';
 
 type Req = ReqUser & FastifyRequest<{
 	Body: {
@@ -27,19 +28,7 @@ const opts: RouteShorthandOptions = {
 		response: {
 			204: { }
 		},
-		body: {
-			type: 'object',
-			properties: {
-				language: { type: 'string' },
-				theme_light: { type: 'string' },
-				theme_dark: { type: 'string' },
-				feed_title: { type: 'string' },
-				author_name: { type: 'string' },
-				author_url: { type: 'string' },
-				author_avatar: { type: 'string' },
-			},
-			additionalProperties: false
-		}
+		body: Object.assign({ additionalProperties: false }, settings_schema)
 	}
 };
 

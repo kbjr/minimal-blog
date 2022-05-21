@@ -3,6 +3,7 @@ import { ctrl } from '../../../http';
 import { store } from '../../../storage';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { require_auth, ReqUser } from '../../../auth';
+import { settings_schema } from './schema';
 
 type Req = ReqUser & FastifyRequest<{ }>;
 
@@ -14,18 +15,7 @@ const opts: RouteShorthandOptions = {
 			{ bearer: [ ] }
 		],
 		response: {
-			200: {
-				type: 'object',
-				properties: {
-					language: { type: 'string' },
-					theme_light: { type: 'string' },
-					theme_dark: { type: 'string' },
-					feed_title: { type: 'string' },
-					author_name: { type: 'string' },
-					author_url: { type: 'string' },
-					author_avatar: { type: 'string' },
-				}
-			}
+			200: settings_schema
 		}
 	}
 };

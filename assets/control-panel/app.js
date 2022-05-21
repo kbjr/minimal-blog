@@ -53,6 +53,10 @@ app.logout = function logout() {
 	app.redirect_to('login');
 };
 
+app.get_snowflake = async function get_snowflake() {
+	return (await app.http_get('/api/snowflake')).snowflake;
+};
+
 app.http = async function http(method, path, headers = { }, body = null) {
 	return fetch(conf.ctrl_panel_url + path, {
 		method,

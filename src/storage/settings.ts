@@ -19,6 +19,7 @@ export interface SettingsData {
 	author_name: string;
 	author_url: string;
 	author_avatar: string;
+	post_uri_format: 'slug' | 'snowflake';
 }
 
 let data: Partial<SettingsData> = obj();

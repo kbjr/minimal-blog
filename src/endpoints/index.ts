@@ -71,6 +71,7 @@ export function import_endpoints() {
 	// Posts
 	require('./ctrl/posts/list');
 	// require('./ctrl/posts/get');
+	require('./ctrl/posts/create');
 	// require('./ctrl/posts/update');
 	// require('./ctrl/posts/delete');
 

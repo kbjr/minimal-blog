@@ -69,7 +69,7 @@ order by post.date_published asc
 
 export async function create_post(data: PostDataPatch) : Promise<PostData> {
 	const db = await posts_pool.acquire();
-	const now = (new Date).toISOString();
+	const published = data.is_draft ? null : (new Date).toISOString();
 
 	try {
 		const result = await run(db, sql_create_post, {
@@ -83,14 +83,13 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 			$image: data.image,
 			$banner_image: data.banner_image,
 			$is_draft: data.is_draft ? 1 : 0,
-			$date_published: now,
-			$date_updated: now,
+			$date_published: published,
 		});
 
 		return Object.assign(
 			obj({ post_id: result.lastID }), data, {
-				date_published: now,
-				date_updated: now,
+				date_published: published,
+				date_updated: null,
 			}
 		);
 	}
@@ -102,9 +101,9 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 
 const sql_create_post = sql(`
 insert into posts
-	(post_type, uri_name, title, subtitle, external_url, content_html, content_markdown, image, banner_image, is_draft, date_published, date_updated)
+	(post_type, uri_name, title, subtitle, external_url, content_html, content_markdown, image, banner_image, is_draft, date_published)
 values
-	($post_type, $uri_name, $title, $subtitle, $external_url, $content_html, $content_markdown, $image, $banner_image, $is_draft, $date_published, $date_updated)
+	($post_type, $uri_name, $title, $subtitle, $external_url, $content_html, $content_markdown, $image, $banner_image, $is_draft, $date_published)
 `);
 
 export async function update_post(data: Partial<PostDataPatch>) : Promise<void> {
