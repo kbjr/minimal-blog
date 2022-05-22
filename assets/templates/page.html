@@ -10,7 +10,7 @@
 	<link rel="self" href="{{{ page.url }}}">
 	<link rel="cannonical" href="{{{ page.url }}}">
 	<link rel="sitemap" href="{{{ site.url }}}/sitemap.xml">
-	<link rel="alternate" type="text/mfs+html" href="{{{ feed.url }}}" title="h-feed microformat">
+	<link rel="alternate" type="text/mfs+html" href="{{{ site.url }}}" title="h-feed microformat">
 	<link rel="alternate" type="application/rss+xml" href="{{{ feed.url_rss }}}" title="RSS Feed">
 	<link rel="alternate" type="application/atom+xml" href="{{{ feed.url_atom }}}" title="Atom Feed">
 	<link rel="alternate" type="application/feed+json" href="{{{ feed.url_json_feed }}}" title="JSON Feed">
@@ -42,7 +42,16 @@
 	<script src="{{{ site.url }}}/color_theme_toggle.js"></script>
 
 	<div id="root">
+		<header>
+			<h1>Feed Title</h1>
+			<color-theme-toggle></color-theme-toggle>
+		</header>
+
 		{{> page_content }}
+
+		<footer>
+			<!--  -->
+		</footer>
 	</div>
 </body>
 </html>

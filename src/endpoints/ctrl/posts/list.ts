@@ -3,7 +3,7 @@ import { ctrl } from '../../../http';
 import { store } from '../../../storage';
 import { require_auth, ReqUser } from '../../../auth';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
-import { post_res_schema } from './get.schema';
+import { post_res_schema } from './schema';
 
 type Req = ReqUser & FastifyRequest<{
 	Querystring: {
@@ -21,18 +21,21 @@ const opts: RouteShorthandOptions = {
 			{ bearer: [ ] }
 		],
 		querystring: {
-			count: {
-				type: 'integer',
-				minimum: 1,
-				maximum: 25,
-				default: 10,
-			},
-			before: {
-				type: 'string',
-				format: 'date-time',
-			},
-			tagged: {
-				type: 'string'
+			type: 'object',
+			properties: {
+				count: {
+					type: 'integer',
+					minimum: 1,
+					maximum: 25,
+					default: 10,
+				},
+				before: {
+					type: 'string',
+					format: 'date-time',
+				},
+				tagged: {
+					type: 'string'
+				}
 			}
 		},
 		response: {
@@ -50,5 +53,6 @@ ctrl.get('/api/posts', opts, async (req: Req, res) => {
 	const { count, tagged_with, before } = req.query;
 	const raw_posts = store.posts.get_posts(count, tagged_with, before);
 
+	res.status(200);
 	return raw_posts;
 });

@@ -18,9 +18,11 @@ const colors_context = Object.freeze({
 	})
 });
 
+const null_context = async () => new TemplateContext(null);
+
 // ===== Robots =====
 
-const robots_txt = rendered_template_cache('robots.txt', new TemplateContext(null), { }, {
+const robots_txt = rendered_template_cache('robots.txt', null_context, { }, {
 	settings: true,
 	colors: true,
 	templates: false
@@ -38,7 +40,7 @@ web.get('/time.js', async (req, res) => {
 	return load_asset('time.js');
 });
 
-const svg_icon_js = rendered_template_cache('svg_icon.js', new TemplateContext(null), { }, {
+const svg_icon_js = rendered_template_cache('svg_icon.js', null_context, { }, {
 	settings: true,
 	colors: true,
 	templates: true
@@ -72,7 +74,7 @@ web.get('/colors.css', async (req, res) => {
 	return colors_css();
 });
 
-const styles_css = rendered_template_cache('styles.css', new TemplateContext(null), { }, {
+const styles_css = rendered_template_cache('styles.css', null_context, { }, {
 	settings: true,
 	colors: true,
 	templates: true

@@ -19,13 +19,33 @@ export async function load() {
 	});
 
 	for (const post of posts) {
-		posts_index[post.uri_name] = post;
+		posts_index[post.post_type][post.uri_name] = post;
 	}
 
 	// 
 }
 
-export async function get_posts(count: number, tagged_with?: string, before?: string) {
+export async function get_draft_posts(count: number) {
+	const results: PostData[] = [ ];
+
+	for (const post of posts) {
+		if (post.is_draft) {
+			results.push(post);
+			
+			if (results.length === count) {
+				break;
+			}
+		}
+	}
+
+	return results;
+}
+
+export async function get_post(post_type: PostType, post_uri: string) {
+	return posts_index[post_type]?.[post_uri];
+}
+
+export async function get_posts(count: number, tagged_with?: string, before?: string, include_drafts?: boolean) {
 	let results = posts;
 
 	if (before) {
@@ -45,6 +65,10 @@ export async function get_posts(count: number, tagged_with?: string, before?: st
 		results = results.filter((post) => {
 			return post.tags.includes(tagged_with);
 		});
+	}
+
+	if (! include_drafts) {
+		results = results.filter((post) => ! post.is_draft);
 	}
 
 	return results.slice(0, count);
@@ -106,3 +130,70 @@ export interface PostDataPatch {
 // 	size_in_bytes: number;
 // 	duration_in_seconds?: number;
 // }
+
+export class Post {
+	constructor(private data: PostData) { }
+
+	get post_url() {
+		switch (this.data.post_type) {
+			case 'post': return `${conf.http.web_url}/posts/${this.data.uri_name}`;
+			case 'comment': return `${conf.http.web_url}/comments/${this.data.uri_name}`;
+		}
+	}
+
+	get post_id() {
+		return this.data.post_id;
+	}
+
+	get post_type() {
+		return this.data.post_type;
+	}
+
+	get uri_name() {
+		return this.data.uri_name;
+	}
+
+	get title() {
+		return this.data.title;
+	}
+
+	get subtitle() {
+		return this.data.subtitle;
+	}
+
+	get external_url() {
+		return this.data.external_url;
+	}
+
+	get content_html() {
+		return this.data.content_html;
+	}
+
+	get content_markdown() {
+		return this.data.content_markdown;
+	}
+
+	get image() {
+		return this.data.image;
+	}
+
+	get banner_image() {
+		return this.data.banner_image;
+	}
+
+	get is_draft() {
+		return this.data.is_draft;
+	}
+
+	get date_published() {
+		return this.data.date_published;
+	}
+
+	get date_updated() {
+		return this.data.date_updated;
+	}
+
+	get tags() {
+		return this.data.tags;
+	}
+}

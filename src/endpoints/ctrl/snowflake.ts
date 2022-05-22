@@ -1,12 +1,12 @@
 
 import { ctrl } from '../../http';
 import { RouteShorthandOptions } from 'fastify';
-import { unique_id } from '../../storage/unique-id';
+import { unique_id } from '../../snowflake';
 
 const opts: RouteShorthandOptions = {
 	schema: {
 		tags: ['meta'],
-		description: 'Status endpoint mostly for confirming that the server is up and reachable',
+		description: 'Generates and returns a new Snowflake UID',
 		response: {
 			200: {
 				type: 'object',

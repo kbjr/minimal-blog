@@ -8,6 +8,7 @@ export interface SettingsData {
 	theme_light: string;
 	theme_dark: string;
 	feed_title: string;
+	feed_description: string;
 	show_setup: boolean;
 	https_only: boolean;
 	send_pingback: boolean;
@@ -20,6 +21,7 @@ export interface SettingsData {
 	author_url: string;
 	author_avatar: string;
 	post_uri_format: 'slug' | 'snowflake';
+	copyright_notice: string;
 }
 
 let data: Partial<SettingsData> = obj();

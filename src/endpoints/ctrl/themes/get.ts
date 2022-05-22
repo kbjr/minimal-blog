@@ -10,6 +10,9 @@ const opts: RouteShorthandOptions = {
 	schema: {
 		tags: ['themes'],
 		description: 'Returns a list of all existing Color Themes',
+		security: [
+			{ bearer: [ ] }
+		],
 		response: {
 			200: {
 				type: 'object',

@@ -12,7 +12,7 @@ export const default_themes = <Record<string, ColorThemeData>> dict({
 		moon: '#85acff',
 		bg_main: '#ffffff',
 		bg_light: '#f0f0f0',
-		bg_heavy: '#e0e0e0',
+		bg_heavy: '#e9e9ed',
 		line: '#bbbbbb',
 		text_heading: '#333333',
 		text_body: '#444444',

@@ -44,6 +44,13 @@ export async function load() {
 	events.emit('templates.load');
 }
 
+export async function reset_template(name: string) {
+	log(`Resetting template ${name} to default`);
+	const content = await load_default_template(name);
+	await update_template(name, content);
+	events.emit('templates.update');
+}
+
 export function render(name: string, context: TemplateContext, partials: Record<string, string> = { }) : string {
 	log(`Rendering template ${name}`);
 	return mustache_render(templates[name], context, partials);

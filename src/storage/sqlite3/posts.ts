@@ -86,12 +86,27 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 			$date_published: published,
 		});
 
-		return Object.assign(
-			obj({ post_id: result.lastID }), data, {
-				date_published: published,
-				date_updated: null,
-			}
-		);
+		const post = obj({
+			post_id: result.lastID,
+			post_type: null,
+			uri_name: null,
+			title: null,
+			subtitle: null,
+			external_url: null,
+			content_html: null,
+			content_markdown: null,
+			image: null,
+			banner_image: null,
+			is_draft: null,
+			date_published: published,
+			date_updated: null,
+		});
+
+		if (data.tags && data.tags.length) {
+			await create_post_tags(post.uri_name, data.tags);
+		}
+
+		return Object.assign({ }, post, data);
 	}
 
 	finally {
@@ -137,15 +152,14 @@ from tags
 `);
 
 async function create_post_tags(uri_name: string, tag_names: string[]) {
-	const rows = tag_names.map((tag) => `($uri_name, ?)`).join(', ');
-	const sql = sql_create_post_tag + ' ' + rows;
 	const db = await posts_pool.acquire();
 
 	try {
-		run(db, sql, [
-			...tag_names,
-	
-		])
+		await Promise.all(
+			tag_names.map(
+				(tag_name) => run(db, sql_create_post_tag, [ uri_name, tag_name ])
+			)
+		);
 	}
 
 	finally {
@@ -157,6 +171,7 @@ const sql_create_post_tag = sql(`
 insert into tags
 	(uri_name, tag_name)
 values
+	(?, ?)
 `);
 
 const sql_delete_post_tag = sql(`

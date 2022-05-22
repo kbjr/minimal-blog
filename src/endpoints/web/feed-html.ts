@@ -4,7 +4,6 @@ import { conf } from '../../conf';
 import { store } from '../../storage';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { rendered_template_cache } from '../../cache';
-import { posts, templates } from '../../storage/store';
 
 const default_count = 10;
 
@@ -17,8 +16,13 @@ const partials = Object.freeze({
 	}
 });
 
-const default_context = new templates.TemplateContext(page_context(default_count));
-const cached_page = rendered_template_cache('page.html', default_context, partials, {
+async function get_default_context() {
+	const posts = await store.posts.get_posts(default_count, null, null, false);
+	const context = new store.templates.TemplateContext(page_context(default_count), posts.map((post) => new store.posts.Post(post)));
+	return context;
+}
+
+const cached_page = rendered_template_cache('page.html', get_default_context, partials, {
 	settings: true,
 	templates: true,
 	colors: true
@@ -55,7 +59,7 @@ web.get('/', opts, async (req: Req, res) => {
 	const count = req.query.count ? req.query.count : default_count;
 	const html = (! req.query.before && count === default_count)
 		? await cached_page()
-		: build_feed_html(count, null, req.query.before);
+		: await build_feed_html(count, null, req.query.before);
 
 	res.type('text/html; charset=utf-8');
 	res.header('content-language', store.settings.get('language'));
@@ -64,16 +68,16 @@ web.get('/', opts, async (req: Req, res) => {
 
 web.get('/tagged/:tag', opts, async (req: Req, res) => {
 	const count = req.query.count ? req.query.count : default_count;
-	const html = build_feed_html(count, req.params.tag, req.query.before);
+	const html = await build_feed_html(count, req.params.tag, req.query.before);
 
 	res.type('text/html; charset=utf-8');
 	res.header('content-language', store.settings.get('language'));
 	res.send(html);
 });
 
-function build_feed_html(count: number, tagged_with?: string, before?: string) {
-	// TODO: Get posts
-	return build_html_for_posts([ ], count, tagged_with, before);
+async function build_feed_html(count: number, tagged_with?: string, before?: string) {
+	const posts = await store.posts.get_posts(count, tagged_with, before, false);
+	return build_html_for_posts(posts, count, tagged_with, before);
 }
 
 function page_url(count: number, tagged_with?: string, before?: string) {
@@ -106,7 +110,7 @@ function page_context(count: number, tagged_with?: string, before?: string) {
 	};
 }
 
-function build_html_for_posts(posts: posts.PostData[], count: number, tagged_with?: string, before?: string) {
-	const context = new templates.TemplateContext(page_context(count, tagged_with, before), posts);
+function build_html_for_posts(posts: store.posts.PostData[], count: number, tagged_with?: string, before?: string) {
+	const context = new store.templates.TemplateContext(page_context(count, tagged_with, before), posts);
 	return store.templates.render('page.html', context, partials);
 }

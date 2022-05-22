@@ -60,6 +60,7 @@ export function import_endpoints() {
 	// Templates
 	require('./ctrl/templates/get');
 	require('./ctrl/templates/update');
+	require('./ctrl/templates/reset');
 	// require('./ctrl/templates/update-favicon');
 	
 	// Themes
@@ -70,7 +71,7 @@ export function import_endpoints() {
 	
 	// Posts
 	require('./ctrl/posts/list');
-	// require('./ctrl/posts/get');
+	require('./ctrl/posts/get');
 	require('./ctrl/posts/create');
 	// require('./ctrl/posts/update');
 	// require('./ctrl/posts/delete');

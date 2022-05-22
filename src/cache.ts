@@ -33,7 +33,7 @@ export function rendered_asset_cache(asset: string, context: object, partials: R
 	}
 }
 
-export function rendered_template_cache(template: string, context: TemplateContext, partials: Record<string, string>, triggers: ExpirationTriggers = { }) {
+export function rendered_template_cache(template: string, get_context: () => Promise<TemplateContext>, partials: Record<string, string>, triggers: ExpirationTriggers = { }) {
 	let cache: string;
 	set_invalidate_triggers(invalidate, triggers);
 
@@ -41,7 +41,8 @@ export function rendered_template_cache(template: string, context: TemplateConte
 		cache = void 0;
 	}
 
-	function render_template() {
+	async function render_template() {
+		const context = await get_context();
 		return store.templates.render(template, context, partials);
 	}
 

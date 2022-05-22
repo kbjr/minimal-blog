@@ -16,6 +16,9 @@ const opts: RouteShorthandOptions = {
 	schema: {
 		tags: ['themes'],
 		description: 'Creates a new Color Theme, optionally starting with another Theme as a base',
+		security: [
+			{ bearer: [ ] }
+		],
 		response: {
 			201: {
 				type: 'object',

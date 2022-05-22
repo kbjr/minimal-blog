@@ -9,6 +9,7 @@ export const default_settings = obj<SettingsData>({
 	theme_light: default_light,
 	theme_dark: default_dark,
 	feed_title: 'Untitled',
+	feed_description: '',
 	show_setup: true,
 	https_only: true,
 	send_pingback: false,
@@ -21,4 +22,5 @@ export const default_settings = obj<SettingsData>({
 	author_url: null,
 	author_avatar: null,
 	post_uri_format: 'slug',
+	copyright_notice: '',
 });

@@ -5,11 +5,13 @@ import { store } from '../../storage';
 import { FastifyRequest } from 'fastify';
 import { create as create_xml } from 'xmlbuilder2';
 import { custom_cache } from '../../cache';
+import { PostData } from '../../storage/posts';
 
 const default_count = 10;
-const front_page = custom_cache(async () => build_xml_for_posts([ ], default_count), {
-	feed: true
-});
+const front_page = custom_cache(async () => {
+	const posts = await store.posts.get_posts(default_count, null, null, false);
+	return build_xml_for_posts(posts, default_count);
+}, { feed: true });
 
 type Req = FastifyRequest<{
 	Querystring: {
@@ -28,24 +30,46 @@ web.get('/feed.rss.xml', async (req: Req, res) => {
 	res.send(xml);
 });
 
-function build_feed_xml(count: number, tagged_with?: string, before?: string) {
+async function build_feed_xml(count: number, tagged_with?: string, before?: string) {
 	if (! before && ! tagged_with && count === default_count) {
 		return front_page();
 	}
 
-	return '<!-- Params not yet implemented -->';
+	const posts = await store.posts.get_posts(count, tagged_with, before, false);
+	return build_xml_for_posts(posts, default_count);
 }
 
-function build_xml_for_posts(posts: any[], count: number, tagged_with?: string, before?: string) {
+function build_xml_for_posts(posts: PostData[], count: number, tagged_with?: string, before?: string) {
 	const doc = create_xml({ version: '1.0' });
 	const rss = doc.ele('rss', { version: '2.0' });
 	const channel = rss.ele('channel');
+	const author_name = store.settings.get('author_name');
+	const author_url = store.settings.get('author_url');
+	const author = author_name
+		? author_url
+			? `${author_name} (${author_url})`
+			: author_name
+		: author_url
+			? author_url
+			: null;
 
 	channel.ele('title').txt(store.settings.get('feed_title'));
 	channel.ele('link').txt(conf.http.web_url);
-	// channel.ele('description').txt('');
+
+	const desc = store.settings.get('feed_description');
+
+	if (desc) {
+		channel.ele('description').txt(desc);
+	}
+	
 	channel.ele('language').txt(store.settings.get('language'));
-	// channel.ele('copyright').txt(`Copyright ${(new Date).getFullYear()} James Brumond`);
+
+	const copyright = store.settings.get('copyright_notice');
+	
+	if (copyright) {
+		channel.ele('copyright').txt(store.settings.get('copyright_notice'));
+	}
+
 	// channel.ele('pubDate').txt(publish_date.toUTCString());
 	// channel.ele('lastBuildDate').txt(build_date.toUTCString());
 	// channel.ele('categories').txt('');
@@ -58,18 +82,26 @@ function build_xml_for_posts(posts: any[], count: number, tagged_with?: string, 
 	// channel.ele('skipHours').txt('');
 	// channel.ele('skipDays').txt('');
 
-	// posts.forEach((post) => {
-	// 	const item = channel.ele('item');
+	posts.forEach((post) => {
+		const item = channel.ele('item');
+		const post_url = `${conf.http.web_url}/posts/${post.uri_name}`;
 
-	// 	item.ele('title').txt(post.title);
-	// 	item.ele('link').txt(post.post_url);
-	// 	item.ele('description').txt(post.subtitle);
-	// 	item.ele('author').txt(post.authors[0].email);
-	// 	// item.ele('categories').txt('');
-	// 	item.ele('comments').txt(post.discussion_url);
-	// 	item.ele('pubDate').txt(utc_date(post.published));
-	// 	item.ele('guid').txt(post.post_url);
-	// });
+		item.ele('title').txt(post.title);
+		item.ele('link').txt(post_url);
+
+		if (post.subtitle) {
+			item.ele('description').txt(post.subtitle);
+		}
+		
+		if (author) {
+			item.ele('author').txt(author);
+		}
+
+		post.tags.forEach((tag) => item.ele('categories').txt(tag));
+
+		item.ele('pubDate').txt(utc_date(post.date_published));
+		item.ele('guid').txt(post_url);
+	});
 
 	return doc.end({ prettyPrint: true });
 }

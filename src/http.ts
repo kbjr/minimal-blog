@@ -6,6 +6,7 @@ import fastify, { FastifyError, FastifyLoggerOptions, FastifyReply, FastifyReque
 import formbody from '@fastify/formbody';
 import { URL } from 'url';
 import { swagger_opts } from './swagger';
+import { show_not_found } from './endpoints/web/not-found';
 
 const logging: FastifyLoggerOptions = conf.logging.level !== 'none' && {
 	level: conf.logging.level,
@@ -65,24 +66,39 @@ function noop_content_processor(req: FastifyRequest, payload: string | Buffer, d
 
 // ===== Error Handlers =====
 
-web.setErrorHandler(error_handler);
-ctrl.setErrorHandler(error_handler);
+web.setErrorHandler(error_handler(true));
+ctrl.setErrorHandler(error_handler(false));
+
+web.setNotFoundHandler((req, res) => {
+	show_not_found(req, res);
+});
 
 type ValidationError = Error & {
 	validation: object[];
 	validationContext: string;
 };
 
-function error_handler(error: Error | FastifyError | ValidationError, req: FastifyRequest, res: FastifyReply) {
-	// If hitting the XML-RPC pingback endpoint, respond with an XML-RPC formatted error
-	if (req.url === '/pingback') {
+function error_handler(is_web: boolean) {
+	type Err = Error | FastifyError | ValidationError;
+
+	function send_pingback_error(error: Err, req: FastifyRequest, res: FastifyReply) {
 		res.status(200);
 		res.type('text/xml; charset=utf-8');
 		res.send(xml_rpc_fault(-32700, error.message));
-		return;
 	}
 
-	if (error instanceof HttpError) {
+	function send_http_error_web(error: HttpError, req: FastifyRequest, res: FastifyReply) {
+		if (error.status_code === 404) {
+			show_not_found(req, res);
+			return;
+		}
+		
+		// TODO: show generic error page
+		res.status(500);
+		res.send();
+	}
+
+	function send_http_error_ctrl(error: HttpError, req: FastifyRequest, res: FastifyReply) {
 		const body = { error: error.message };
 
 		if (error.additional) {
@@ -95,35 +111,82 @@ function error_handler(error: Error | FastifyError | ValidationError, req: Fasti
 		if (error.log_message) {
 			ctrl.log.error(error.log_message);
 		}
-
-		return;
 	}
 
-	if ('statusCode' in error) {
-		res.status(error.statusCode);
-		res.send({
-			error: error.message,
-			validation: error.validation
-		});
-
-		return;
-	}
-
-	if ('validationContext' in error) {
+	function send_validation_error(error: ValidationError, req: FastifyRequest, res: FastifyReply) {
 		res.status(422);
 		res.send({
 			error: error.message,
 			validation: error.validation
 		});
-
-		return;
 	}
 
-	ctrl.log.error(error);
+	function send_fastify_error_web(error: FastifyError, req: FastifyRequest, res: FastifyReply) {
+		if (error.statusCode === 404) {
+			show_not_found(req, res);
+			return;
+		}
+		
+		// TODO: show generic error page
+		res.status(500);
+		res.send();
+	}
 
-	res.status(500);
-	res.type('application/json; charset=utf-8');
-	res.send({ error: 'unknown error' });
+	function send_fastify_error_ctrl(error: FastifyError, req: FastifyRequest, res: FastifyReply) {
+		res.status(error.statusCode);
+		res.send({
+			error: error.message,
+			validation: error.validation
+		});
+	}
+
+	return function(error: Err, req: FastifyRequest, res: FastifyReply) {
+		// If hitting the XML-RPC pingback endpoint, respond with an XML-RPC formatted error
+		if (req.url === '/pingback') {
+			send_pingback_error(error, req, res);
+		}
+
+		else if (error instanceof HttpError) {
+			if (is_web) {
+				send_http_error_web(error, req, res);
+			}
+
+			else {
+				send_http_error_ctrl(error, req, res);
+			}
+		}
+
+		else if ('validationContext' in error) {
+			send_validation_error(error, req, res);
+		}
+
+		else if ('statusCode' in error) {
+			if (is_web) {
+				send_fastify_error_web(error, req, res);
+			}
+
+			else {
+				send_fastify_error_ctrl(error, req, res);
+			}
+		}
+
+		else {
+			ctrl.log.error(error);
+	
+			res.status(500);
+	
+			if (is_web) {
+				// TODO: Better error for web
+				res.type('application/json; charset=utf-8');
+				res.send({ error: 'unknown error' });
+			}
+	
+			else {
+				res.type('application/json; charset=utf-8');
+				res.send({ error: 'unknown error' });
+			}
+		}
+	};
 }
 
 
