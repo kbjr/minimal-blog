@@ -12,7 +12,7 @@
 		- Rendering math expressions with [KaTeX](https://katex.org/)
 - Produces multiple standard feed formats:
 	- [RSS](https://www.rssboard.org/rss-specification)
-	- [Atom](https://datatracker.ietf.org/doc/html/rfc4287)
+	<!-- - [Atom](https://datatracker.ietf.org/doc/html/rfc4287) -->
 	- [JSON Feed](https://www.jsonfeed.org/)
 	- [`h-feed` Microformat](https://microformats.org/wiki/h-feed)
 - Produces standard [sitemap.xml](https://www.sitemaps.org/protocol.html)

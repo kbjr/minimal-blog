@@ -29,13 +29,10 @@ const opts: RouteShorthandOptions = {
 ctrl.post('/api/posts', opts, async (req: Req, res) => {
 	require_auth(req);
 
-	Object.assign(req.body, {
-		post_type: 'post',
-	})
-
-	const post = await store.posts.create_post(req.body);
+	const data = await store.posts.create_post(req.body);
+	const post = new store.posts.Post(data);
 
 	res.status(201);
-	res.header('location', `${conf.http.ctrl_url}/api/posts/${post.uri_name}`);
+	res.header('location', post.post_url);
 	return post;
 });

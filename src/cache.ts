@@ -9,6 +9,7 @@ export interface ExpirationTriggers {
 	colors?: boolean;
 	templates?: boolean;
 	feed?: boolean;
+	posts?: boolean;
 }
 
 export function rendered_asset_cache(asset: string, context: object, partials: Record<string, string>, triggers: ExpirationTriggers = { }) {
@@ -91,5 +92,10 @@ function set_invalidate_triggers(invalidate: () => void, triggers: ExpirationTri
 	if (triggers.feed) {
 		store.events.on('feed.load', invalidate);
 		store.events.on('feed.update', invalidate);
+	}
+
+	if (triggers.posts) {
+		store.events.on('posts.create', invalidate);
+		store.events.on('posts.update', invalidate);
 	}
 }

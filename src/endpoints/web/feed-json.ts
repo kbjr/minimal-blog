@@ -3,8 +3,8 @@ import { conf } from '../../conf';
 import { web } from '../../http';
 import { store } from '../../storage';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
-import { PostData } from '../../storage/posts';
-import { JSONFeed } from '../../json-feed';
+import { Post, PostData } from '../../storage/posts';
+import { JSONFeed, JSONFeedItem, JSONFeedItem_EventExtention, JSONFeedItem_RsvpExtention, json_feed_event_schema, json_feed_rsvp_schema, json_feed_schema } from '../../json-feed';
 
 type Req = FastifyRequest<{
 	Querystring: {
@@ -113,9 +113,11 @@ web.get('/feed.json', opts, async (req: Req, res) => {
 		avatar: store.settings.get('author_avatar'),
 	};
 
-	const posts = await store.posts.get_posts(req.query.count, req.query.tagged_with, req.query.before, false);
+	const post_data = await store.posts.get_posts(req.query.count, req.query.tagged_with, req.query.before, false);
+	const posts = post_data.map((data) => new Post(data));
+
 	const result: JSONFeed = {
-		version: 'https://jsonfeed.org/version/1.1',
+		version: json_feed_schema,
 		title: store.settings.get('feed_title'),
 		home_page_url: conf.http.web_url,
 		feed_url: `${conf.http.web_url}/feed.json`,
@@ -129,24 +131,53 @@ web.get('/feed.json', opts, async (req: Req, res) => {
 		expired: false,
 		hubs: [ ],
 		items: posts.map((post) => {
-			const url = `${conf.http.web_url}/posts/${post.uri_name}`;
-
-			return {
-				id: url,
-				url: url,
+			const item: JSONFeedItem & JSONFeedItem_EventExtention & JSONFeedItem_RsvpExtention = {
+				id: post.post_url,
+				url: post.post_url,
 				external_url: post.external_url,
 				title: post.title,
 				content_html: post.content_html,
 				content_text: post.content_markdown,
 				image: post.image,
 				banner_image: post.banner_image,
-				date_published: post.date_published,
-				date_modified: post.date_updated,
+				date_published: post.date_published_iso,
+				date_modified: post.date_updated_iso,
 				authors: [ author ],
 				tags: post.tags || [ ],
 				language: lang,
 				attachments: [ ]
 			};
+
+			switch (post.post_type) {
+				case 'post':
+					// pass
+					break;
+				
+				case 'comment':
+					// pass
+					break;
+				
+				case 'note':
+					// pass
+					break;
+				
+				case 'event':
+					item._event = {
+						$schema: json_feed_event_schema,
+						date_start: post.date_event_start_iso,
+						date_end: post.date_event_end_iso,
+					};
+					break;
+				
+				case 'rsvp':
+					item._rsvp = {
+						$schema: json_feed_rsvp_schema,
+						rsvp: post.rsvp_type,
+					};
+					break;
+			}
+
+			return item;
 		}),
 	};
 
@@ -154,7 +185,7 @@ web.get('/feed.json', opts, async (req: Req, res) => {
 	return result;
 });
 
-function next_url(query: Req['query'], posts: PostData[]) {
+function next_url(query: Req['query'], posts: Post[]) {
 	// If we didn't find enough posts for this page, assume that means
 	// there are no more and we shouldn't return a next link
 	if (posts.length < query.count) {
@@ -173,7 +204,7 @@ function next_url(query: Req['query'], posts: PostData[]) {
 	}
 
 	const oldest = posts[posts.length - 1];
-	params.push(`before=${oldest.date_published}`);
+	params.push(`before=${oldest.date_published_iso}`);
 
 	return `${base}?${params.join('&')}`;
 }

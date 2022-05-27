@@ -165,6 +165,7 @@ namespace posts_db {
 
 		try {
 			await create_post_types(db);
+			await create_rsvp_types(db);
 			await create_posts(db);
 			await create_tags(db);
 			await create_mentions(db);
@@ -189,7 +190,23 @@ namespace posts_db {
 	
 	const sql_set_post_types = sql(`
 		insert into post_types (name)
-		values ('post'), ('comment')
+		values ('post'), ('comment'), ('note'), ('event'), ('rsvp')
+	`);
+
+	async function create_rsvp_types(db: sqlite3.Database) {
+		await run(db, sql_create_rsvp_types);
+		await run(db, sql_set_rsvp_types);
+	}
+
+	const sql_create_rsvp_types = sql(`
+		create table if not exists rsvp_types (
+			name varchar(50) primary key
+		)
+	`);
+	
+	const sql_set_rsvp_types = sql(`
+		insert into rsvp_types (name)
+		values ('yes'), ('no'), ('maybe'), ('interested')
 	`);
 
 	async function create_posts(db: sqlite3.Database) {
@@ -208,14 +225,19 @@ namespace posts_db {
 			content_markdown text,
 			image varchar(1000),
 			banner_image varchar(1000),
+			is_draft tinyint,
 			date_published timestamp,
 			date_updated timestamp,
-			is_draft tinyint,
+			date_event_start timestamp,
+			date_event_end timestamp,
+			rsvp_type varchar(50),
 
 			unique (post_type, uri_name),
 
 			foreign key (post_type)
-				references post_types (name)
+				references post_types (name),
+			foreign key (rsvp_type)
+				references rsvp_types (name)
 		)
 	`);
 

@@ -9,9 +9,9 @@ export interface MarkToken extends marked.Tokens.Generic {
 export const mark_ext: marked.TokenizerExtension & marked.RendererExtension = {
 	name: 'mark',
 	level: 'inline',
-	start: (src) => src.match(/==/)?.index,
+	start: (src) => src.match(/=/)?.index,
 	tokenizer(src, tokens) {
-		const rule = /^==([^\n\s](?:[^\n]+[^\n\s])?)==/;
+		const rule = /^==([^\n\s](?:(?:[^\n=]|=(?!=))*[^\n\s])?)==/;
 		const match = rule.exec(src);
 
 		if (match) {

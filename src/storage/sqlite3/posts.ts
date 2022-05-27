@@ -64,7 +64,7 @@ left outer join tags tag
 
 const sql_get_posts__group_order_by = sql(`
 group by post.uri_name
-order by post.date_published asc
+order by post.date_published desc
 `);
 
 export async function create_post(data: PostDataPatch) : Promise<PostData> {

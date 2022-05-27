@@ -14,6 +14,7 @@ const partials = Object.freeze({
 
 async function get_context() {
 	return new store.templates.TemplateContext({
+		page_name: 'not_found',
 		get title() { return store.settings.get('feed_title'); },
 		get url() { return ''; }
 	}, [ ]);

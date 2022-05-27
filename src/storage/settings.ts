@@ -21,6 +21,7 @@ export interface SettingsData {
 	author_url: string;
 	author_avatar: string;
 	post_uri_format: 'slug' | 'snowflake';
+	event_uri_format: 'slug' | 'snowflake';
 	copyright_notice: string;
 }
 

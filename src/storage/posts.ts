@@ -1,11 +1,12 @@
 
 import { obj } from '../util';
 import { conf } from '../conf';
-import { store } from './store';
+import { events, store } from './store';
 import { render_markdown_to_html } from '../markdown';
 import { throw_422_unprocessable_entity } from '../http-error';
+import * as settings from './settings';
 
-type PostType = 'post' | 'comment';
+type PostType = 'post' | 'comment' | 'note' | 'event' | 'rsvp';
 
 // Note: `posts` is ordered with the most recent post first
 let posts: PostData[];
@@ -16,6 +17,9 @@ export async function load() {
 	posts_index = obj({
 		post: obj(),
 		comment: obj(),
+		note: obj(),
+		event: obj(),
+		rsvp: obj(),
 	});
 
 	for (const post of posts) {
@@ -84,6 +88,7 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 	const full_post = await store.create_post(data);
 	posts.unshift(full_post);
 	posts_index[data.post_type][data.uri_name] = full_post;
+	events.emit('posts.create');
 	return full_post;
 }
 
@@ -101,6 +106,9 @@ export interface PostData {
 	is_draft: boolean;
 	date_published: string;
 	date_updated: string;
+	date_event_start?: string;
+	date_event_end?: string;
+	rsvp_type?: 'yes' | 'no' | 'maybe' | 'interested';
 	tags: string[];
 }
 
@@ -115,6 +123,9 @@ export interface PostDataPatch {
 	image?: string;
 	banner_image?: string;
 	is_draft: boolean;
+	date_event_start?: string;
+	date_event_end?: string;
+	rsvp_type?: 'yes' | 'no' | 'maybe' | 'interested';
 	tags: string[];
 }
 
@@ -131,14 +142,49 @@ export interface PostDataPatch {
 // 	duration_in_seconds?: number;
 // }
 
-export class Post {
+export class Post implements Readonly<PostData> {
 	constructor(private data: PostData) { }
 
 	get post_url() {
 		switch (this.data.post_type) {
 			case 'post': return `${conf.http.web_url}/posts/${this.data.uri_name}`;
 			case 'comment': return `${conf.http.web_url}/comments/${this.data.uri_name}`;
+			case 'note': return `${conf.http.web_url}/notes/${this.data.uri_name}`;
+			case 'event': return `${conf.http.web_url}/events/${this.data.uri_name}`;
+			case 'rsvp': return `${conf.http.web_url}/rsvps/${this.data.uri_name}`;
 		}
+	}
+
+	get is_post() {
+		return this.data.post_type === 'post';
+	}
+
+	get is_comment() {
+		return this.data.post_type === 'comment';
+	}
+
+	get is_note() {
+		return this.data.post_type === 'note';
+	}
+
+	get is_event() {
+		return this.data.post_type === 'event';
+	}
+
+	get is_rsvp() {
+		return this.data.post_type === 'rsvp';
+	}
+
+	get author_name() {
+		return settings.get('author_name');
+	}
+
+	get author_url() {
+		return settings.get('author_url');
+	}
+
+	get author_avatar() {
+		return settings.get('author_avatar');
 	}
 
 	get post_id() {
@@ -185,15 +231,69 @@ export class Post {
 		return this.data.is_draft;
 	}
 
-	get date_published() {
+	get date_published_iso() {
 		return this.data.date_published;
 	}
 
-	get date_updated() {
+	get date_updated_iso() {
 		return this.data.date_updated;
 	}
 
+	get date_event_start_iso() {
+		return this.data.date_event_start;
+	}
+
+	get date_event_end_iso() {
+		return this.data.date_event_end;
+	}
+
+	get date_published() {
+		return this.date_published_utc;
+	}
+
+	get date_updated() {
+		return this.date_updated_utc;
+	}
+
+	get date_published_utc() {
+		return (new Date(this.data.date_published)).toUTCString();
+	}
+
+	get date_updated_utc() {
+		return (new Date(this.data.date_updated)).toUTCString();
+	}
+
+	get date_event_start_utc() {
+		return (new Date(this.data.date_event_start)).toUTCString();
+	}
+
+	get date_event_end_utc() {
+		return (new Date(this.data.date_event_end)).toUTCString();
+	}
+
+	get rsvp_type() {
+		return this.data.rsvp_type;
+	}
+
+	get rsvp_yes() {
+		return this.data.rsvp_type === 'yes';
+	}
+
+	get rsvp_no() {
+		return this.data.rsvp_type === 'no';
+	}
+
+	get rsvp_maybe() {
+		return this.data.rsvp_type === 'maybe';
+	}
+
+	get rsvp_interested() {
+		return this.data.rsvp_type === 'interested';
+	}
+
 	get tags() {
-		return this.data.tags;
+		// FIXME: Return real data
+		return ['raspberry-pi', 'k3s', 'kubernetes', 'manjaro-linux'];
+		// return this.data.tags;
 	}
 }

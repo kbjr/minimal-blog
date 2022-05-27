@@ -37,7 +37,7 @@ export const katex_inline_ext: marked.TokenizerExtension & marked.RendererExtens
 	level: 'inline',
 	start: (src) => src.match(/\$/)?.index,
 	tokenizer(src, tokens) {
-		const rule = /^\$([^\n\s](?:[^\n]+[^\n\s])?)\$/;
+		const rule = /^\$([^\n\s](?:[^\n]*[^\n\s])?)\$/;
 		const match = rule.exec(src);
 
 		if (match) {

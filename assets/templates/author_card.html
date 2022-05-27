@@ -1,0 +1,18 @@
+<span class="p-author h-card">
+	{{# author_name }}
+	{{# author_url }}
+	<a class="p-name u-url" href="{{{ author_url }}}">{{ author_name }}</a>
+	{{/ author_url }}
+	{{^ author_url }}
+	<span class="p-name">{{ author_name }}</span>
+	{{/ author_url }}
+	{{/ author_name }}
+	{{^ author_name }}
+	{{# author_url }}
+	<a class="u-url" href="{{{ author_url }}}">{{ author_url }}</a>
+	{{/ author_url }}
+	{{^ author_url }}
+	<em>Unknown Author</em>
+	{{/ author_url }}
+	{{/ author_name }}
+</span>

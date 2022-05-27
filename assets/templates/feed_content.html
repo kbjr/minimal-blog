@@ -1,11 +1,48 @@
-{{# posts }}
-<article>
-	<a class="u-url" href="{{{ post_url }}}">
-		<h2 class="p-name">{{ title }}</h2>
-	</a>
-</article>
-{{/ posts }}
 
-{{^ posts }}
-<p>No posts</p>
-{{/ posts }}
+<main>
+	<section class="feed-list">
+		{{# page.tagged_with }}
+		<h2>Showing posts tagged with "{{ page.tagged_with }}":</h2>
+		{{/ page.tagged_with }}
+		
+		{{^ page.tagged_with }}
+		<h2>Recent Posts:</h2>
+		{{/ page.tagged_with }}
+		
+		{{# posts }}
+		{{# is_post }}
+		{{> post_card }}
+		{{/ is_post }}
+		
+		{{# is_comment }}
+		{{> comment_card }}
+		{{/ is_comment }}
+		
+		{{# is_note }}
+		{{> note_card }}
+		{{/ is_note }}
+		
+		{{# is_event }}
+		{{> event_card }}
+		{{/ is_event }}
+		
+		{{# is_rsvp }}
+		{{> rsvp_card }}
+		{{/ is_rsvp }}
+		{{/ posts }}
+		
+		{{^ posts }}
+		<p>No posts</p>
+		{{/ posts }}
+		
+		{{# page.next_url }}
+		<p>
+			<a rel="prev" href="{{{ page.next_url }}}">See Older Posts</a>
+		</p>
+		{{/ page.next_url }}
+		
+		{{^ page.next_url }}
+		<!-- <p>No older posts.</p> -->
+		{{/ page.next_url }}
+	</section>
+</main>

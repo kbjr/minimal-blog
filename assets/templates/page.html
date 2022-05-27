@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ site.language }}" class="h-feed">
+<html lang="{{ site.language }}">
 <head>
 	<meta charset="UTF-8">
 	<title>{{ page.title }}</title>
@@ -7,12 +7,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link rel="icon" href="{{{ site.url }}}/favicon.png">
-	<link rel="self" href="{{{ page.url }}}">
-	<link rel="cannonical" href="{{{ page.url }}}">
 	<link rel="sitemap" href="{{{ site.url }}}/sitemap.xml">
-	<link rel="alternate" type="text/mfs+html" href="{{{ site.url }}}" title="h-feed microformat">
+	<link rel="self" type="text/mfs+html" href="{{{ page.url }}}">
+	<link rel="cannonical" type="text/mfs+html" href="{{{ page.url }}}">
 	<link rel="alternate" type="application/rss+xml" href="{{{ feed.url_rss }}}" title="RSS Feed">
-	<link rel="alternate" type="application/atom+xml" href="{{{ feed.url_atom }}}" title="Atom Feed">
+	<!-- <link rel="alternate" type="application/atom+xml" href="{{{ feed.url_atom }}}" title="Atom Feed"> -->
 	<link rel="alternate" type="application/feed+json" href="{{{ feed.url_json_feed }}}" title="JSON Feed">
 	{{# feed.receive_webmention_enabled }}
 	<link rel="webmention" href="{{{ feed.url_webmention }}}">
@@ -29,29 +28,58 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap">
 
 	<link rel="stylesheet" href="{{{ site.url }}}/colors.css">
+	<link rel="stylesheet" href="{{{ site.url }}}/styles.css">
 	<link rel="stylesheet" href="{{{ site.url }}}/prism.css">
 	<link rel="stylesheet" href="{{{ site.url }}}/katex/katex.css">
-	<link rel="stylesheet" href="{{{ site.url }}}/styles.css">
-
-	<script src="{{{ site.url }}}/time.js" async></script>
 	<script src="{{{ site.url }}}/svg_icon.js" async></script>
-	
-	{{> page_head }}
 </head>
 <body>
 	<script src="{{{ site.url }}}/color_theme_toggle.js"></script>
+	<color-theme-toggle></color-theme-toggle>
 
-	<div id="root">
-		<header>
-			<h1>Feed Title</h1>
-			<color-theme-toggle></color-theme-toggle>
-		</header>
+	<div id="root" class="h-feed">
+		<div id="header-sidebar">
+			<header>
+				<h1 class="p-name">
+					<a class="u-url" href="{{{ site.url }}}">{{ feed.title }}</a>
+				</h1>
 
-		{{> page_content }}
+				{{# feed.description }}
+				<p class="p-summary">{{ feed.description }}</p>
+				{{/ feed.description }}
+			</header>
 
-		<footer>
-			<!--  -->
-		</footer>
+			<aside>
+				<h2>Tags</h2>
+				<ul class="tag-list">
+					{{# feed.all_tags }}
+					<li class="p-category" data-bg-transition>
+						<a href="{{{ site.url }}}/tagged/{{ . }}">{{ . }}</a>
+					</li>
+					{{/ feed.all_tags }}
+				</ul>
+			</aside>
+		</div>
+
+		<main data-page="{{ page.page_name }}">
+			{{> page_content }}
+		</main>
 	</div>
+
+	<footer>
+		{{# feed.copyright_notice }}
+		<p>{{ feed.copyright_notice }}</p>
+		{{/ feed.copyright_notice }}
+		<p>
+			<a rel="alternate" type="application/rss+xml" href="{{{ feed.url_rss }}}" title="RSS">RSS</a> |
+			<a rel="alternate" type="application/feed+json" href="{{{ feed.url_json_feed }}}" title="JSON Feed">JSON Feed</a> |
+			<code>h-feed</code> Embedded
+			{{# feed.receive_webmention_enabled }}| WebMentions Enabled{{/ feed.receive_webmention_enabled }}
+			{{# feed.receive_pingback_enabled }}| Pingbacks Enabled{{/ feed.receive_pingback_enabled }}
+		</p>
+		<p>Minimal Blog / Version {{ site.app_version }}</p>
+	</footer>
+
+	<script src="{{{ site.url }}}/time.js" async></script>
 </body>
 </html>

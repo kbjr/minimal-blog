@@ -18,8 +18,11 @@ export function import_endpoints() {
 	
 	// HTML pages
 	require('./web/feed-html');
-	// require('./web/post-html');
-	// require('./web/comment-html');
+	require('./web/post-html');
+	require('./web/comment-html');
+	// require('./web/note-html');
+	// require('./web/event-html');
+	// require('./web/rsvp-html');
 	
 	// Interactions
 	require('./web/pingback');

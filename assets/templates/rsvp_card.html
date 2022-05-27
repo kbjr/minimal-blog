@@ -1,0 +1,25 @@
+<article class="h-entry" data-post-type="rsvp">
+	<h2>
+		{{> author_card }}
+
+		{{# rsvp_yes }}
+		<data class="p-rsvp" value="yes">is going</data> to
+		{{/ rsvp_yes }}
+		{{# rsvp_no }}
+		<data class="p-rsvp" value="no">is not going</data> to
+		{{/ rsvp_no }}
+		{{# rsvp_maybe }}
+		<data class="p-rsvp" value="maybe">might be going</data> to
+		{{/ rsvp_maybe }}
+		{{# rsvp_interested }}
+		<data class="p-rsvp" value="interested">is interested</data> in
+		{{/ rsvp_interested }}
+		
+		<span class="u-in-reply-to h-cite">
+			<cite><a href="{{{ external_url }}}" class="u-url">{{ title }}</a></cite>
+		</span>
+	</h2>
+	<main class="e-content">
+		{{{ content_html }}}
+	</main>
+</article>

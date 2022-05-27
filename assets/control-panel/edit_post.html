@@ -92,6 +92,10 @@ const styles = `
 	display: contents;
 }
 
+ul, ol {
+	padding-inline-start: 2.5rem;
+}
+
 button, pre, input, textarea, select, mark {
 	transition: background linear .5s;
 }
@@ -107,7 +111,7 @@ th {
 	color: var(--theme-text-heading);
 }
 
-code, pre {
+code, samp, pre {
 	color: var(--theme-code-normal);
 	font-family: var(--font-monospace);
 	font-size: 1.35rem;
@@ -183,11 +187,24 @@ dd p {
 
 table {
 	margin-block: 2rem;
+	border-collapse: collapse;
 }
 
 table, th, td {
 	font-size: 1.2rem;
 	line-height: 1.75;
+}
+
+tbody tr {
+	border-top: 1px var(--theme-line) solid;
+}
+
+th, td {
+	padding: 0.5rem;
+}
+
+td {
+	font-weight: 300;
 }
 
 small {
@@ -222,22 +239,6 @@ blockquote p {
 	margin: 0;
 }
 
-table {
-	border-collapse: collapse;
-}
-
-tbody tr {
-	border-top: 1px var(--theme-line) solid;
-}
-
-th, td {
-	padding: 0.5rem;
-}
-
-td {
-	font-weight: 300;
-}
-
 a.heading-anchor {
 	margin-left: 0.5rem;
 	display: inline-block;
@@ -257,7 +258,12 @@ a.heading-anchor {
 	color: var(--theme-text-body);
 }
 
+.katex-display .katex {
+	font-size: 1.8rem;
+}
+	
 :not(.katex-display) > .katex {
+	font-size: 1.2rem;
 	margin-inline: 0.5rem;
 }
 
@@ -286,16 +292,13 @@ header p {
 
 header p.subtitle {
 	margin-block: 0.5rem;
-	margin-inline-start: 2rem;
+	margin-inline-start: 1.5rem;
 }
 
 header p:not(.subtitle) {
 	color: var(--theme-text-light);
 	font-size: 0.8rem;
-	margin-inline-start: 4rem
-}
-
-header p.p-author {
+	margin-inline-start: 2rem;
 	margin-block-start: 0.5rem;
 }
 

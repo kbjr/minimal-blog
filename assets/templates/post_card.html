@@ -1,0 +1,31 @@
+<article class="h-entry" data-post-type="post">
+	<header>
+		<h2 class="p-name">
+			<a class="u-url" href="{{{ post_url }}}">{{ title }}</a>
+		</h2>
+	
+		{{# subtitle }}
+		<p class="p-summary">{{ subtitle }}</p>
+		{{/ subtitle }}
+	
+		<p>By: {{> author_card }}</p>
+	
+		{{# date_published_iso }}
+		<p>Published: <time class="dt-published" datetime="{{ date_published_iso }}">{{ date_published_utc }}</time></p>
+		{{/ date_published_iso }}
+	
+		{{# date_updated_iso }}
+		<p>Updated: <time class="dt-updated" datetime="{{ date_updated_iso }}">{{ date_updated_utc }}</time></p>
+		{{/ date_updated_iso }}
+	</header>
+
+	<footer>
+		<ul class="tag-list">
+			{{# tags }}
+			<li class="p-category" data-bg-transition>
+				<a href="{{{ site.url }}}/tagged/{{ . }}">{{ . }}</a>
+			</li>
+			{{/ tags }}
+		</ul>
+	</footer>
+</article>

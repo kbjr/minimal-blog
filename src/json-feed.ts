@@ -2,6 +2,10 @@
 // https://jsonfeed.org/version/1.1
 // application/feed+json
 
+export const json_feed_schema = 'https://jsonfeed.org/version/1.1' as const;
+export const json_feed_event_schema = 'TODO: JSON feed event extension schema' as const;
+export const json_feed_rsvp_schema = 'TODO: JSON feed rsvp extension schema' as const;
+
 export type JSONFeedCustomFields<T extends `_${string}`> = {
 	[K in T]: object;
 }
@@ -11,7 +15,7 @@ export interface JSONFeed extends JSONFeedCustomFields<`_${string}`> {
 	 * version (required, string) is the URL of the version of the format the feed uses. This should
 	 * appear at the very top, though we recognize that not all JSON generators allow for ordering.
 	 */
-	version: 'https://jsonfeed.org/version/1.1' | string;
+	version: typeof json_feed_schema | string;
 
 	/**
 	 * title (required, string) is the name of the feed, which will often correspond to the name of the
@@ -252,4 +256,33 @@ export interface JSONFeedAttachment extends JSONFeedCustomFields<`_${string}`> {
 	 * duration_in_seconds (optional, number) specifies how long it takes to listen to or watch, when played at normal speed.
 	 */
 	duration_in_seconds?: number;
+}
+
+/**
+ * Extension to support data related to Event items
+ */
+export interface JSONFeedItem_EventExtention {
+	/**  */
+	_event?: {
+		$schema: typeof json_feed_event_schema;
+		
+		/**  */
+		date_start?: string;
+		
+		/**  */
+		date_end?: string;
+	};
+}
+
+/**
+ * Extension to support data related to RSVP items
+ */
+export interface JSONFeedItem_RsvpExtention {
+	/**  */
+	_rsvp?: {
+		$schema: typeof json_feed_rsvp_schema;
+		
+		/**  */
+		rsvp: 'yes' | 'no' | 'maybe' | 'interested';
+	};
 }

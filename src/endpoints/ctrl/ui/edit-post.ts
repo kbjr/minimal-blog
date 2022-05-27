@@ -50,10 +50,6 @@ async function edit_post_endpoint(req: Req, res: FastifyReply) {
 			post_id,
 			is_new,
 		},
-		site: {
-			url: conf.http.web_url
-			// 
-		},
 		ctrl_panel: {
 			url: conf.http.ctrl_url
 		}

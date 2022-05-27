@@ -1,7 +1,42 @@
-<article>
+{{# post }}
+<article class="h-entry" data-post-type="post">
 	<header>
-		<h2 class="p-name">
-			<!--  -->
-		</h2>
+		<h1 class="p-name">
+			{{ title }}
+			<a href="{{{ post_url }}}" class="u-url heading-anchor">
+				<svg-icon aria-hidden="true" icon="link"></svg-icon>
+				<span style="display: none">Section titled Manjaro Image</span>
+			</a>
+		</h1>
+		
+		{{# subtitle }}
+		<p class="p-summary">{{ subtitle }}</p>
+		{{/ subtitle }}
+	
+		<p class="author">By: {{> author_card }}</p>
+		<p class="dates">
+			Published: <time class="dt-published" datetime="{{ date_published_iso }}">{{ date_published_utc }}</time>
+			{{# date_updated_iso }}
+			<br>
+			Updated: <time class="dt-updated" datetime="{{ date_updated_iso }}">{{ date_updated_utc }}</time>
+			{{/ date_updated_iso }}
+		</p>
+
+		<ul class="tag-list">
+			{{# tags }}
+			<li class="p-category" data-bg-transition>
+				<a href="{{{ site.url }}}/tagged/{{ . }}">{{ . }}</a>
+			</li>
+			{{/ tags }}
+		</ul>
 	</header>
+
+	<main class="e-content">
+		{{{ content_html }}}
+	</main>
+
+	<footer>
+		<!-- TODO: Mentions -->
+	</footer>
 </article>
+{{/ post }}

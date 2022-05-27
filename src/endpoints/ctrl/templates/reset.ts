@@ -26,13 +26,22 @@ const opts: RouteShorthandOptions = {
 
 const resetable_templates = new Set([
 	'page.html',
-	'feed_head.html',
 	'feed_content.html',
-	'post_head.html',
+	'post_card.html',
 	'post_content.html',
+	'comment_card.html',
+	'comment_content.html',
+	'note_card.html',
+	'note_content.html',
+	'event_card.html',
+	'event_content.html',
+	'rsvp_card.html',
+	'rsvp_content.html',
 	'not_found.html',
+	'author_card.html',
 	'styles.css',
 	'robots.txt',
+	'svg_icon.js',
 ]);
 
 ctrl.post('/api/templates/:template_name/reset', opts, async (req: Req, res) => {

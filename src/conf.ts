@@ -3,6 +3,9 @@ import { Loggers } from './debug';
 import { resolve as resolve_path } from 'path';
 
 export namespace conf {
+	/** The current version of the blog software; Should stay in sync with package.json */
+	export const app_version = '0.1.0-alpha.1';
+
 	/** Configuration for the HTTP server */
 	export namespace http {
 		/** The port the main web HTTP server will listen on */

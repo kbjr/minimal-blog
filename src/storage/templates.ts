@@ -4,7 +4,7 @@ import { debug_logger } from '../debug';
 import { load_default_template } from './assets';
 import { render as mustache_render, parse } from 'mustache';
 import { settings, colors, feed, store, events } from './store';
-import { PostData } from './posts';
+import { Post } from './posts';
 
 const log = debug_logger('asset_files', `[asset_files]: `);
 
@@ -13,11 +13,19 @@ let templates: Partial<Templates>
 
 const editable_ui_templates = [
 	'page.html',
-	'feed_head.html',
 	'feed_content.html',
-	'post_head.html',
+	'post_card.html',
 	'post_content.html',
+	'comment_card.html',
+	'comment_content.html',
+	'note_card.html',
+	'note_content.html',
+	'event_card.html',
+	'event_content.html',
+	'rsvp_card.html',
+	'rsvp_content.html',
 	'not_found.html',
+	'author_card.html',
 	'styles.css',
 	'robots.txt',
 	'svg_icon.js',
@@ -48,7 +56,6 @@ export async function reset_template(name: string) {
 	log(`Resetting template ${name} to default`);
 	const content = await load_default_template(name);
 	await update_template(name, content);
-	events.emit('templates.update');
 }
 
 export function render(name: string, context: TemplateContext, partials: Record<string, string> = { }) : string {
@@ -68,9 +75,36 @@ export function update_template(name: string, content: string) {
 	return store.set_template(name, content);
 }
 
+export function page_partials(page_content: string) {
+	return Object.freeze({
+		get page_content() {
+			return get_template(page_content);
+		},
+		get author_card() {
+			return get_template('author_card.html');
+		},
+		get post_card() {
+			return get_template('post_card.html');
+		},
+		get comment_card() {
+			return get_template('comment_card.html');
+		},
+		get note_card() {
+			return get_template('note_card.html');
+		},
+		get event_card() {
+			return get_template('event_card.html');
+		},
+		get rsvp_card() {
+			return get_template('rsvp_card.html');
+		},
+	});
+}
+
 const site_context = Object.freeze({
 	get url() { return conf.http.web_url; },
 	get language() { return settings.get('language'); },
+	get app_version() { return conf.app_version; },
 });
 
 const colors_context = Object.freeze({
@@ -90,10 +124,16 @@ const feed_context = Object.freeze({
 	get receive_pingback_enabled() { return feed.receive_pingback_enabled(); },
 	get send_webmention_enabled() { return feed.send_webmention_enabled(); },
 	get receive_webmention_enabled() { return feed.receive_webmention_enabled(); },
+	get title() { return settings.get('feed_title'); },
+	get description() { return settings.get('feed_description'); },
 	get author_name() { return settings.get('author_name'); },
 	get author_url() { return settings.get('author_url'); },
 	get author_avatar() { return settings.get('author_avatar'); },
+	get copyright_notice() { return settings.get('copyright_notice'); },
 	get post_uri_format() { return settings.get('post_uri_format'); },
+	get event_uri_format() { return settings.get('event_uri_format'); },
+	// FIXME: Pull real data from storage
+	get all_tags() { return ['raspberry-pi', 'k3s', 'kubernetes', 'manjaro-linux']; },
 });
 
 export class TemplateContext {
@@ -103,12 +143,13 @@ export class TemplateContext {
 
 	constructor(
 		public readonly page: Readonly<PageContext>,
-		public readonly posts?: PostData[],
-		public readonly post?: PostData
+		public readonly posts?: Post[],
+		public readonly post?: Post
 	) { }
 }
 
 export interface PageContext {
+	page_name: string;
 	url: string;
 	title: string;
 }

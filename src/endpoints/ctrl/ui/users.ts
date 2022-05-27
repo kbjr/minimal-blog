@@ -29,10 +29,6 @@ ctrl.get('/users', opts, async (req, res) => {
 			title: current_lang.pages.users.title,
 			require_auth: true
 		},
-		site: {
-			url: conf.http.web_url
-			// 
-		},
 		ctrl_panel: {
 			url: conf.http.ctrl_url
 		}

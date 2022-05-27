@@ -4,6 +4,10 @@ import type { JSONSchema6 } from 'json-schema';
 export const post_create_req_schema: JSONSchema6 = {
 	type: 'object',
 	properties: {
+		post_type: {
+			type: 'string',
+			enum: ['post', 'comment', 'note', 'event', 'rsvp']
+		},
 		uri_name: { type: 'string' },
 		title: { type: 'string' },
 		subtitle: { type: 'string' },
@@ -17,7 +21,7 @@ export const post_create_req_schema: JSONSchema6 = {
 			items: { type: 'string' },
 		},
 	},
-	required: [ 'uri_name', 'content_markdown' ],
+	required: [ 'post_type', 'uri_name', 'content_markdown' ],
 	additionalProperties: false,
 };
 
@@ -26,7 +30,7 @@ export const post_res_schema: JSONSchema6 = {
 	properties: {
 		post_type: {
 			type: 'string',
-			enum: ['post', 'comment']
+			enum: ['post', 'comment', 'note', 'event', 'rsvp']
 		},
 		uri_name: { type: 'string' },
 		title: { type: 'string' },

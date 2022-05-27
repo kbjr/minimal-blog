@@ -1,7 +1,7 @@
 {
-  "name": "@k/blog",
+  "name": "@k/minimal-blog",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0-alpha.1",
   "description": "",
   "main": "build/start.js",
   "scripts": {

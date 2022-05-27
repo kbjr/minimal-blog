@@ -2,7 +2,6 @@
 import { marked } from 'marked';
 import { conf } from '../conf';
 import { renderer } from './renderer';
-import { highlight } from './prism';
 import { katex_block_ext, katex_inline_ext } from './katex';
 import { footnote_list_ext, footnote_ref_ext } from './footnotes';
 import { mark_ext } from './mark';
@@ -30,7 +29,6 @@ export function render_markdown_to_html(markdown: string, options: MarkdownOptio
 		baseUrl: conf.http.web_url + '/posts',
 		breaks: options.breaks || false,
 		renderer,
-		highlight,
 	};
 
 	return new Promise<string>((resolve, reject) => {

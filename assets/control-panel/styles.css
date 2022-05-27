@@ -231,16 +231,6 @@ header p {
 	font-size: 1rem;
 }
 
-footer {
-	margin: 4rem 0 1rem;
-}
-
-footer p {
-	margin: 1rem;
-	text-align: center;
-	font-size: 0.8rem;
-}
-
 blockquote {
 	margin-block: 2rem;
 	margin-inline: 1rem;
@@ -269,6 +259,20 @@ mark {
 	margin: 4rem;
 	color: var(--theme-text-light);
 	font-style: italic;
+}
+
+
+
+/* ===== Footer ===== */
+
+footer {
+	margin: 4rem 0 1rem;
+}
+
+footer p {
+	margin: 1rem;
+	text-align: center;
+	font-size: 0.8rem;
 }
 
 
@@ -529,7 +533,7 @@ table {
 		}
 
 	#page-edit-post #in-post-markdown {
-		height: 100vh;
+		height: 50vh;
 		min-height: 35rem;
 	}
 
