@@ -11,11 +11,11 @@
 		<p>By: {{> author_card }}</p>
 	
 		{{# date_published_iso }}
-		<p>Published: <time class="dt-published" datetime="{{ date_published_iso }}">{{ date_published_utc }}</time></p>
+		<p class="date published">Published: <time class="dt-published" datetime="{{ date_published_iso }}">{{ date_published_utc }}</time></p>
 		{{/ date_published_iso }}
 	
 		{{# date_updated_iso }}
-		<p>Updated: <time class="dt-updated" datetime="{{ date_updated_iso }}">{{ date_updated_utc }}</time></p>
+		<p class="date updated">Updated: <time class="dt-updated" datetime="{{ date_updated_iso }}">{{ date_updated_utc }}</time></p>
 		{{/ date_updated_iso }}
 	</header>
 

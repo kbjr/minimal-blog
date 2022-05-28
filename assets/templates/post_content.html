@@ -14,13 +14,14 @@
 		{{/ subtitle }}
 	
 		<p class="author">By: {{> author_card }}</p>
-		<p class="dates">
-			Published: <time class="dt-published" datetime="{{ date_published_iso }}">{{ date_published_utc }}</time>
-			{{# date_updated_iso }}
-			<br>
-			Updated: <time class="dt-updated" datetime="{{ date_updated_iso }}">{{ date_updated_utc }}</time>
-			{{/ date_updated_iso }}
-		</p>
+	
+		{{# date_published_iso }}
+		<p class="date published">Published: <time class="dt-published" datetime="{{ date_published_iso }}">{{ date_published_utc }}</time></p>
+		{{/ date_published_iso }}
+	
+		{{# date_updated_iso }}
+		<p class="date updated">Updated: <time class="dt-updated" datetime="{{ date_updated_iso }}">{{ date_updated_utc }}</time></p>
+		{{/ date_updated_iso }}
 
 		<ul class="tag-list">
 			{{# tags }}

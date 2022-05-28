@@ -1,5 +1,29 @@
 <article class="h-entry" data-post-type="note">
+	<header>
+		<h3>{{> author_card }} Posted a Note:</h3>
+	</header>
+
 	<main class="e-content">
 		{{{ content_html }}}
 	</main>
+
+	<footer>
+		<ul class="tag-list">
+			{{# tags }}
+			<li class="p-category" data-bg-transition>
+				<a href="{{{ site.url }}}/tagged/{{ . }}">{{ . }}</a>
+			</li>
+			{{/ tags }}
+		</ul>
+		<p>
+			<a class="u-url" href="{{{ post_url }}}">Permalink</a>
+			{{# date_published_iso }}
+			| <time class="dt-published" datetime="{{ date_published_iso }}">{{ date_published_utc }}</time>
+			{{/ date_published_iso }}
+	
+			{{# date_updated_iso }}
+			| Updated: <time class="dt-updated" datetime="{{ date_updated_iso }}">{{ date_updated_utc }}</time>
+			{{/ date_updated_iso }}
+		</p>
+	</footer>
 </article>

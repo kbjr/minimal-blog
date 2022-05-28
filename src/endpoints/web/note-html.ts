@@ -6,7 +6,7 @@ import { throw_404_not_found } from '../../http-error';
 import { rendered_template_cache } from '../../cache';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 
-const partials = store.templates.page_partials('comment_content.html');
+const partials = store.templates.page_partials('note_content.html');
 const cached_posts = dict<string, () => Promise<string>>();
 
 type Req = FastifyRequest<{
@@ -26,7 +26,7 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
-web.get('/comments/:post_uri_name', opts, async (req: Req, res) => {
+web.get('/notes/:post_uri_name', opts, async (req: Req, res) => {
 	const html = await get_post_html(req.params.post_uri_name);
 
 	res.type('text/html; charset=utf-8');
@@ -36,10 +36,10 @@ web.get('/comments/:post_uri_name', opts, async (req: Req, res) => {
 
 async function get_post_html(uri_name: string) {
 	if (! cached_posts[uri_name]) {
-		const data = await store.posts.get_post('comment', uri_name);
+		const data = await store.posts.get_post('note', uri_name);
 
 		if (! data) {
-			throw_404_not_found('Comment not found');
+			throw_404_not_found('Note not found');
 		}
 
 		cached_posts[uri_name] = rendered_template_cache('page.html', get_context(uri_name), partials, {
@@ -54,10 +54,10 @@ async function get_post_html(uri_name: string) {
 
 function get_context(uri_name: string) {
 	return async function() {
-		const data = await store.posts.get_post('comment', uri_name);
+		const data = await store.posts.get_post('note', uri_name);
 		const post = new store.posts.Post(data);
 		const page = {
-			page_name: 'comment',
+			page_name: 'note',
 			get title() {
 				return store.settings.get('feed_title');
 			},

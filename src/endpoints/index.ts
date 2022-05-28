@@ -20,7 +20,7 @@ export function import_endpoints() {
 	require('./web/feed-html');
 	require('./web/post-html');
 	require('./web/comment-html');
-	// require('./web/note-html');
+	require('./web/note-html');
 	// require('./web/event-html');
 	// require('./web/rsvp-html');
 	
