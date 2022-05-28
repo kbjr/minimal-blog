@@ -5,6 +5,7 @@
 	<title>{{ page.title }}</title>
 	<meta name="color-scheme" content="dark light">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="{{ page.description }}">
 
 	<link rel="icon" href="{{{ site.url }}}/favicon.png">
 	<link rel="sitemap" href="{{{ site.url }}}/sitemap.xml">
@@ -54,14 +55,14 @@
 				<ul class="tag-list">
 					{{# feed.all_tags }}
 					<li class="p-category" data-bg-transition>
-						<a href="{{{ site.url }}}/tagged/{{ . }}">{{ . }}</a>
+						<a href="{{{ tag_url }}}">{{ tag_name }}</a> (x{{ tag_count }})
 					</li>
 					{{/ feed.all_tags }}
 				</ul>
 			</aside>
 		</div>
 
-		<main data-page="{{ page.page_name }}">
+		<main role="main" data-page="{{ page.page_name }}">
 			{{> page_content }}
 		</main>
 	</div>

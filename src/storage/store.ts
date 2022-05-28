@@ -122,7 +122,7 @@ export interface Store {
 	move_post(old_uri_name: string, new_uri_name: string) : Promise<void>;
 
 	/**  */
-	get_all_distinct_tags() : Promise<string[]>;
+	list_all_tags() : Promise<posts.TagData[]>;
 
 	// ===== Interactions =====
 

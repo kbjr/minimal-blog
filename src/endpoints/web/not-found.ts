@@ -16,6 +16,7 @@ async function get_context() {
 	return new store.templates.TemplateContext({
 		page_name: 'not_found',
 		get title() { return store.settings.get('feed_title'); },
+		get description() { return store.settings.get('feed_description'); },
 		get url() { return ''; }
 	}, [ ]);
 }

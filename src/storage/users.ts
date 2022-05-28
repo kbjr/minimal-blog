@@ -91,7 +91,6 @@ export async function update_password(name: string, new_password: string) {
 
 function check_password_complexity(password: string) {
 	const password_complexity = calculate_password_complexity(password);
-	console.log(password_complexity);
 
 	if (password_complexity.score < conf.auth.minimum_password_complexity) {
 		const error = 'Password complexity too low; Try adding more length, and a wider mix of different types of characters';

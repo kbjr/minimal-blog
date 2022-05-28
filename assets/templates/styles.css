@@ -179,6 +179,10 @@ section.feed-list article[data-post-type='comment'] footer p {
 
 /* ===== Post View ===== */
 
+#root > main {
+	flex: 1 1 auto;
+}
+
 main[data-page='post'] article header h1 {
 	margin-block-start: 2rem;
 }
@@ -277,6 +281,20 @@ p {
 	margin-inline: 0;
 	font-size: 1.2rem;
 	line-height: 1.75;
+}
+
+p[role='note'] {
+	font-size: 1rem;
+	color: var(--theme-text-light);
+	margin-inline-start: 0.25rem;
+	padding-inline-start: 0.75rem;
+	border-inline-start: 0.25rem var(--theme-line) solid;
+}
+
+p[role='note']:before {
+	content: 'Note: ';
+	color: var(--theme-text-heading);
+	font-weight: 700;
 }
 
 li {
@@ -428,6 +446,8 @@ mark {
 		position: static;
 		padding-block: 0 2rem;
 		width: 100%;
+		flex: 0 0 auto;
+		border-block-end: 0.125rem var(--theme-line) solid;
 	}
 
 	p {

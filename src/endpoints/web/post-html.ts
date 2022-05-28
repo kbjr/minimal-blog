@@ -63,6 +63,9 @@ function get_context(uri_name: string) {
 			},
 			get url() {
 				return post.post_url;
+			},
+			get description() {
+				return post.subtitle;
 			}
 		};
 

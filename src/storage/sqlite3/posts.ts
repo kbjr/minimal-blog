@@ -1,6 +1,6 @@
 
 import { obj } from '../../util';
-import { PostData, PostDataPatch } from '../posts';
+import { PostData, PostDataPatch, TagData } from '../posts';
 import { run, get_one, get_all, sql, posts_pool } from './db';
 
 type RawPostRecord = Omit<PostData, 'tags'> & {
@@ -37,7 +37,7 @@ export async function get_post(uri_name: string) : Promise<PostData> {
 
 function split_tags(record: RawPostRecord) {
 	const mapped: PostData = record as any;
-	mapped.tags = record.tags ? record.tags.split('\x31') : [ ];
+	mapped.tags = record.tags ? record.tags.split('\x1F') : [ ];
 	return mapped;
 }
 
@@ -103,7 +103,7 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 		});
 
 		if (data.tags && data.tags.length) {
-			await create_post_tags(post.uri_name, data.tags);
+			await create_post_tags(result.lastID, data.tags);
 		}
 
 		return Object.assign({ }, post, data);
@@ -137,8 +137,7 @@ export async function list_all_tags() {
 	const db = await posts_pool.acquire();
 
 	try {
-		const rows = await get_all<{ tag_name: string }>(db, sql_list_all_tags);
-		return rows.map((row) => row.tag_name);
+		return await get_all<TagData>(db, sql_list_all_tags);
 	}
 
 	finally {
@@ -147,17 +146,18 @@ export async function list_all_tags() {
 }
 
 const sql_list_all_tags = sql(`
-select distinct tag_name
+select tag_name, count(post_id) as tag_count
 from tags
+group by tag_name
 `);
 
-async function create_post_tags(uri_name: string, tag_names: string[]) {
+async function create_post_tags(post_id: number, tag_names: string[]) {
 	const db = await posts_pool.acquire();
 
 	try {
 		await Promise.all(
 			tag_names.map(
-				(tag_name) => run(db, sql_create_post_tag, [ uri_name, tag_name ])
+				(tag_name) => run(db, sql_create_post_tag, [ tag_name, post_id ])
 			)
 		);
 	}
@@ -169,7 +169,7 @@ async function create_post_tags(uri_name: string, tag_names: string[]) {
 
 const sql_create_post_tag = sql(`
 insert into tags
-	(uri_name, tag_name)
+	(tag_name, post_id)
 values
 	(?, ?)
 `);

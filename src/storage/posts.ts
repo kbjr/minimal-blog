@@ -11,9 +11,12 @@ type PostType = 'post' | 'comment' | 'note' | 'event' | 'rsvp';
 // Note: `posts` is ordered with the most recent post first
 let posts: PostData[];
 let posts_index: Record<PostType, Record<string, PostData>>;
+let tags: Tag[];
+let tags_index: Record<string, Tag>;
 
 export async function load() {
 	posts = await store.get_all_posts();
+	tags = (await store.list_all_tags()).map((data) => new Tag(data)).sort(sort_tags);
 	posts_index = obj({
 		post: obj(),
 		comment: obj(),
@@ -21,9 +24,14 @@ export async function load() {
 		event: obj(),
 		rsvp: obj(),
 	});
+	tags_index = obj();
 
 	for (const post of posts) {
 		posts_index[post.post_type][post.uri_name] = post;
+	}
+
+	for (const tag of tags) {
+		tags_index[tag.tag_name] = tag;
 	}
 
 	// 
@@ -88,8 +96,35 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 	const full_post = await store.create_post(data);
 	posts.unshift(full_post);
 	posts_index[data.post_type][data.uri_name] = full_post;
+	add_tags(full_post.tags);
 	events.emit('posts.create');
 	return full_post;
+}
+
+export function list_tags() {
+	return tags.slice();
+}
+
+function add_tags(new_tags: string[]) {
+	for (const tag of new_tags) {
+		if (! tags_index[tag]) {
+			const new_tag = new Tag({
+				tag_name: tag,
+				tag_count: 1
+			});
+
+			tags.push(new_tag);
+			tags.sort(sort_tags);
+			tags_index[tag] = new_tag;
+			continue;
+		}
+
+		tags_index[tag].add_ref();
+	}
+}
+
+function sort_tags(tag_a: Tag, tag_b: Tag) {
+	return tag_a.tag_name.localeCompare(tag_b.tag_name);
 }
 
 export interface PostData {
@@ -129,6 +164,11 @@ export interface PostDataPatch {
 	tags: string[];
 }
 
+export interface TagData {
+	tag_name: string;
+	tag_count: number;
+}
+
 // export interface FullPostData extends PostData {
 // 	attachments: AttachmentData[];
 // }
@@ -141,6 +181,30 @@ export interface PostDataPatch {
 // 	size_in_bytes: number;
 // 	duration_in_seconds?: number;
 // }
+
+export class Tag implements Readonly<TagData> {
+	constructor(private data: TagData) { }
+
+	public get tag_name() {
+		return this.data.tag_name;
+	}
+
+	public get tag_count() {
+		return this.data.tag_count;
+	}
+
+	public get tag_url() {
+		return `${conf.http.web_url}/tagged/${this.tag_name}`;
+	}
+
+	public add_ref() {
+		this.data.tag_count++;
+	}
+
+	public drop_ref() {
+		this.data.tag_count--;
+	}
+}
 
 export class Post implements Readonly<PostData> {
 	constructor(private data: PostData) { }
@@ -292,8 +356,7 @@ export class Post implements Readonly<PostData> {
 	}
 
 	get tags() {
-		// FIXME: Return real data
-		return ['raspberry-pi', 'k3s', 'kubernetes', 'manjaro-linux'];
-		// return this.data.tags;
+		// TODO: Move this sort() somewhere more efficient
+		return this.data.tags.sort().slice();
 	}
 }

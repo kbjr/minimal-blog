@@ -3,7 +3,7 @@ import { conf } from '../conf';
 import { debug_logger } from '../debug';
 import { load_default_template } from './assets';
 import { render as mustache_render, parse } from 'mustache';
-import { settings, colors, feed, store, events } from './store';
+import { settings, colors, feed, store, events, posts } from './store';
 import { Post } from './posts';
 
 const log = debug_logger('asset_files', `[asset_files]: `);
@@ -132,8 +132,7 @@ const feed_context = Object.freeze({
 	get copyright_notice() { return settings.get('copyright_notice'); },
 	get post_uri_format() { return settings.get('post_uri_format'); },
 	get event_uri_format() { return settings.get('event_uri_format'); },
-	// FIXME: Pull real data from storage
-	get all_tags() { return ['raspberry-pi', 'k3s', 'kubernetes', 'manjaro-linux']; },
+	get all_tags() { return posts.list_tags(); },
 });
 
 export class TemplateContext {
@@ -152,4 +151,5 @@ export interface PageContext {
 	page_name: string;
 	url: string;
 	title: string;
+	description: string;
 }

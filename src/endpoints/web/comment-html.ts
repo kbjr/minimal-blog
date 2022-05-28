@@ -59,11 +59,13 @@ function get_context(uri_name: string) {
 		const page = {
 			page_name: 'comment',
 			get title() {
-				// TODO: More flexibility here
 				return store.settings.get('feed_title');
 			},
 			get url() {
 				return post.post_url;
+			},
+			get description() {
+				return store.settings.get('feed_description');
 			}
 		};
 

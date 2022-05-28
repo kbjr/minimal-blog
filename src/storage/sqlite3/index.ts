@@ -36,7 +36,7 @@ export const store_sqlite3 = obj_frozen<Store>({
 	update_post: posts.update_post,
 	delete_post: posts.delete_post,
 	move_post: posts.move_post,
-	get_all_distinct_tags: posts.list_all_tags,
+	list_all_tags: posts.list_all_tags,
 
 	// TODO: Interactions
 

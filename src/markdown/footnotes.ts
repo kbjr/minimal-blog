@@ -95,7 +95,7 @@ export const footnote_list_ext: marked.TokenizerExtension & marked.RendererExten
 	},
 	renderer(token: FootnoteListToken) {
 		const items = token.items.map((item) => (`
-			<li value="${item.id}" id="cite:note-${item.id}">
+			<li role="doc-footnote" value="${item.id}" id="cite:note-${item.id}">
 				${footnote_link_backs(item.id, item.inst_count())}
 				${this.parser.parseInline(item.tokens, renderer)}
 			</li>

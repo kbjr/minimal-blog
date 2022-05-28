@@ -127,6 +127,9 @@ function page_context(count: number, tagged_with: string, before: string, posts:
 		get url() {
 			return page_url(count);
 		},
+		get description() {
+			return store.settings.get('feed_description');
+		},
 		count,
 		tagged_with,
 		before_iso: before,

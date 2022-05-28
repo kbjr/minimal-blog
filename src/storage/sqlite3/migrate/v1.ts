@@ -213,9 +213,12 @@ namespace posts_db {
 		await run(db, sql_create_posts);
 	}
 
+	// Note: `post_id` here must actually be typed "integer" (not "int" like is done
+	// in other places), because otherwise sqlite won't recognize it as being a rowid
+	// column and it won't get auto-populated
 	const sql_create_posts = sql(`
 		create table if not exists posts (
-			post_id int unsigned auto_increment primary key,
+			post_id integer primary key,
 			post_type varchar(50),
 			uri_name varchar(1000),
 			title varchar(255),
