@@ -33,6 +33,7 @@
     "@fastify/formbody": "^6.0.0",
     "@fastify/swagger": "^6.0.1",
     "argon2": "^0.28.5",
+    "bytefield-svg": "^1.6.1",
     "dompurify": "^2.3.6",
     "fast-xml-parser": "^4.0.7",
     "fastify": "^3.28.0",
@@ -42,8 +43,11 @@
     "katex": "^0.15.3",
     "marked": "^4.0.15",
     "mustache": "^4.2.0",
+    "nomnoml": "^1.5.1",
+    "pikchr": "^0.0.5",
     "prismjs": "^1.28.0",
     "sqlite3": "^5.0.6",
+    "vega": "^5.22.1",
     "xmlbuilder2": "^3.0.2"
   }
 }

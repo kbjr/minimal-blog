@@ -16,6 +16,11 @@
 	- Also includes support for:
 		- Code-block syntax highlighting with [Prism](https://prismjs.com/) for [more than 200 languages](https://prismjs.com/#supported-languages)
 		- Rendering math expressions with [KaTeX](https://katex.org/)
+    - Rendering diagrams with [nomnoml](https://www.nomnoml.com/)
+    - Rendering bytefield diagrams with [bytefield-svg](https://bytefield-svg.deepsymmetry.org/bytefield-svg)
+    <!-- - Rendering graphs and charts with [Vega](https://vega.github.io/vega) -->
+    <!-- - Rendering waveform diagrams with [wavedrom](https://www.npmjs.com/package/wavedrom) -->
+    - Rendering diagrams with [Pikchr](https://pikchr.org/home/doc/trunk/homepage.md)
     - A handful of additional extensions, including highlights/marks, note blocks, description lists, and footnotes
 - Produces multiple standard feed formats:
 	- [RSS](https://www.rssboard.org/rss-specification)

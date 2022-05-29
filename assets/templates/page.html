@@ -27,11 +27,15 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap">
+	<!-- FIXME: For some reason, the katex fonts were invalid when trying to serve them from
+	     the installed library version; Ideally, these files would be self-served. See also
+	     the markdown preview which includes this file itself separately -->
+	<link rel="preconnect" href="https://cdn.jsdelivr.net">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
 
 	<link rel="stylesheet" href="{{{ site.url }}}/colors.css">
 	<link rel="stylesheet" href="{{{ site.url }}}/styles.css">
 	<link rel="stylesheet" href="{{{ site.url }}}/prism.css">
-	<link rel="stylesheet" href="{{{ site.url }}}/katex/katex.css">
 	<script src="{{{ site.url }}}/svg_icon.js" async></script>
 </head>
 <body>
@@ -55,7 +59,8 @@
 				<ul class="tag-list">
 					{{# feed.all_tags }}
 					<li class="p-category" data-bg-transition>
-						<a href="{{{ tag_url }}}">{{ tag_name }}</a> (x{{ tag_count }})
+						<a href="{{{ tag_url }}}">{{ tag_name }}</a>
+						{{# feed.show_tag_counts }}(x{{ tag_count }}){{/ feed.show_tag_counts }}
 					</li>
 					{{/ feed.all_tags }}
 				</ul>

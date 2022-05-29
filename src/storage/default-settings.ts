@@ -24,4 +24,5 @@ export const default_settings = obj<SettingsData>({
 	post_uri_format: 'slug',
 	event_uri_format: 'slug',
 	copyright_notice: '',
+	show_tag_counts: false,
 });

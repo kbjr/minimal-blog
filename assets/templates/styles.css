@@ -527,6 +527,58 @@ a.heading-anchor {
 		--icon-size: 1rem;
 	}
 
+mark {
+	color: var(--theme-text-highlight);
+	background-color: var(--theme-bg-text-highlight);
+	padding: 0.2rem;
+}
+
+::selection {
+	color: var(--theme-text-selection);
+	background-color: var(--theme-bg-text-selection);
+}
+
+
+
+/* ===== Rendered Blocks ===== */
+
+/* === General === */
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield) {
+	margin-block: 2rem;
+}
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex) svg {
+	display: block;
+	margin-inline: auto;
+}
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='small'] svg {
+	max-width: 30rem;
+	max-height: 20rem;
+}
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='medium'] svg {
+	max-width: 40rem;
+	max-height: 30rem;
+}
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='large'] svg {
+	max-width: 50rem;
+	max-height: 40rem;
+}
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield) svg text {
+	fill: var(--theme-text-body);
+}
+
+/* :is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield) svg text:not([font-family~='Times']):not([font-family~='Courier']) { */
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield) svg text:not([font-family~='Courier']) {
+	font-family: var(--font-open-sans);
+}
+
+/* === KaTeX === */
+
 .katex-display {
 	color: var(--theme-text-body);
 }
@@ -540,15 +592,49 @@ a.heading-anchor {
 	margin-inline: 0.5rem;
 }
 
-mark {
-	color: var(--theme-text-highlight);
-	background-color: var(--theme-bg-text-highlight);
-	padding: 0.2rem;
+/* === nomnoml === */
+
+.rendered-nomnoml svg g[fill='#eee8d5'] {
+	fill: var(--theme-bg-light);
+	transition: fill linear .5s;
 }
 
-::selection {
-	color: var(--theme-text-selection);
-	background-color: var(--theme-bg-text-selection);
+.rendered-nomnoml svg g[stroke='#33322E'] {
+	stroke: var(--theme-text-body);
+}
+
+.rendered-nomnoml svg g[fill='#33322E'] {
+	fill: var(--theme-text-body);
+}
+
+/* .rendered-nomnoml svg */
+
+/* === Pikchr */
+
+/* boxes */
+.rendered-pikchr svg path[style*='fill:none;'] {
+	fill: var(--theme-bg-light) !important;
+	transition: fill linear .5s;
+}
+
+/* lines and boxes */
+.rendered-pikchr svg path[style*='stroke:rgb(0,0,0);'] {
+	stroke: var(--theme-text-body) !important;
+}
+
+/* arrow heads */
+.rendered-pikchr svg polygon[style='fill:rgb(0,0,0)'] {
+	fill: var(--theme-text-body) !important;
+}
+
+/* === Bytefield === */
+
+.rendered-bytefield svg text[font-family~='Courier'] {
+	font-family: var(--font-monospace);
+}
+
+.rendered-bytefield svg line[stroke='#000000'] {
+	stroke: var(--theme-text-body);
 }
 
 

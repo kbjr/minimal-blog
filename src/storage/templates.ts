@@ -133,6 +133,7 @@ const feed_context = Object.freeze({
 	get post_uri_format() { return settings.get('post_uri_format'); },
 	get event_uri_format() { return settings.get('event_uri_format'); },
 	get all_tags() { return posts.list_tags(); },
+	get show_tag_counts() { return settings.get('show_tag_counts'); },
 });
 
 export class TemplateContext {

@@ -23,6 +23,7 @@ export interface SettingsData {
 	post_uri_format: 'slug' | 'snowflake';
 	event_uri_format: 'slug' | 'snowflake';
 	copyright_notice: string;
+	show_tag_counts: boolean;
 }
 
 let data: Partial<SettingsData> = obj();
