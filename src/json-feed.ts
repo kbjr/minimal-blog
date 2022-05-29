@@ -1,10 +1,12 @@
 
+import type { JSONSchema6 } from 'json-schema';
+
 // https://jsonfeed.org/version/1.1
 // application/feed+json
 
-export const json_feed_schema = 'https://jsonfeed.org/version/1.1' as const;
-export const json_feed_event_schema = 'TODO: JSON feed event extension schema' as const;
-export const json_feed_rsvp_schema = 'TODO: JSON feed rsvp extension schema' as const;
+export const json_feed_schema_url = 'https://jsonfeed.org/version/1.1' as const;
+export const json_feed_event_schema_url = 'TODO: JSON feed event extension schema' as const;
+export const json_feed_rsvp_schema_url = 'TODO: JSON feed rsvp extension schema' as const;
 
 export type JSONFeedCustomFields<T extends `_${string}`> = {
 	[K in T]: object;
@@ -15,7 +17,7 @@ export interface JSONFeed extends JSONFeedCustomFields<`_${string}`> {
 	 * version (required, string) is the URL of the version of the format the feed uses. This should
 	 * appear at the very top, though we recognize that not all JSON generators allow for ordering.
 	 */
-	version: typeof json_feed_schema | string;
+	version: typeof json_feed_schema_url | string;
 
 	/**
 	 * title (required, string) is the name of the feed, which will often correspond to the name of the
@@ -264,7 +266,7 @@ export interface JSONFeedAttachment extends JSONFeedCustomFields<`_${string}`> {
 export interface JSONFeedItem_EventExtention {
 	/**  */
 	_event?: {
-		$schema: typeof json_feed_event_schema;
+		$schema: typeof json_feed_event_schema_url;
 		
 		/**  */
 		date_start?: string;
@@ -280,9 +282,73 @@ export interface JSONFeedItem_EventExtention {
 export interface JSONFeedItem_RsvpExtention {
 	/**  */
 	_rsvp?: {
-		$schema: typeof json_feed_rsvp_schema;
+		$schema: typeof json_feed_rsvp_schema_url;
 		
 		/**  */
 		rsvp: 'yes' | 'no' | 'maybe' | 'interested';
 	};
 }
+
+export const json_feed_schema: JSONSchema6 = {
+	type: 'object',
+	properties: {
+		version: { type: 'string' },
+		title: { type: 'string' },
+		home_page_url: { type: 'string' },
+		feed_url: { type: 'string' },
+		description: { type: 'string' },
+		user_comment: { type: 'string' },
+		next_url: { type: 'string' },
+		icon: { type: 'string' },
+		favicon: { type: 'string' },
+		authors: {
+			type: 'array',
+			items: {
+				type: 'object',
+				properties: {
+					name: { type: 'string' },
+					url: { type: 'string' },
+					avatar: { type: 'string' },
+				}
+			}
+		},
+		language: { type: 'string' },
+		expired: { type: 'boolean' },
+		hubs: { type: 'array' },
+		items: {
+			type: 'array',
+			items: {
+				type: 'object',
+				properties: {
+					id: { type: 'string', format: 'uri' },
+					url: { type: 'string', format: 'uri' },
+					external_url: { type: 'string', format: 'uri' },
+					title: { type: 'string' },
+					content_html: { type: 'string' },
+					content_text: { type: 'string' },
+					image: { type: 'string', format: 'uri' },
+					banner_image: { type: 'string', format: 'uri' },
+					date_published: { type: 'string', format: 'date-time' },
+					date_modified: { type: 'string', format: 'date-time' },
+					authors: {
+						type: 'array',
+						items: {
+							type: 'object',
+							properties: {
+								name: { type: 'string' },
+								url: { type: 'string' },
+								avatar: { type: 'string' },
+							}
+						}
+					},
+					tags: {
+						type: 'array',
+						items: { type: 'string' }
+					},
+					language: { type: 'string' },
+					attachments: { type: 'array' },
+				}
+			}
+		},
+	}
+};

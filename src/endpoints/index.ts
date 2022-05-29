@@ -12,8 +12,9 @@ export function import_endpoints() {
 	// require('./web/favicon');
 	
 	// Various feed formats
-	require('./web/feed-atom');
+	// require('./web/feed-atom');
 	require('./web/feed-json');
+	require('./web/feed-jf2');
 	require('./web/feed-rss');
 	
 	// HTML pages
@@ -21,8 +22,8 @@ export function import_endpoints() {
 	require('./web/post-html');
 	require('./web/comment-html');
 	require('./web/note-html');
-	// require('./web/event-html');
-	// require('./web/rsvp-html');
+	require('./web/event-html');
+	require('./web/rsvp-html');
 	
 	// Interactions
 	require('./web/pingback');
@@ -81,6 +82,9 @@ export function import_endpoints() {
 
 	// Interactions
 	// TODO: Interactions
+
+	// Syndications
+	// TODO: Syndications
 	
 	// Tags
 	// require('./ctrl/tags/list');

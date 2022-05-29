@@ -9,7 +9,7 @@ import { PostData } from '../../storage/posts';
 
 const default_count = 10;
 const front_page = custom_cache(async () => {
-	const posts = await store.posts.get_posts(default_count, null, null, false);
+	const posts = await store.posts.get_posts(default_count, null, null, null, false);
 	return build_xml_for_posts(posts, default_count);
 }, { feed: true });
 
@@ -35,11 +35,11 @@ async function build_feed_xml(count: number, tagged_with?: string, before?: stri
 		return front_page();
 	}
 
-	const posts = await store.posts.get_posts(count, tagged_with, before, false);
+	const posts = await store.posts.get_posts(count, tagged_with, before, null, false);
 	return build_xml_for_posts(posts, default_count);
 }
 
-function build_xml_for_posts(posts: PostData[], count: number, tagged_with?: string, before?: string) {
+function build_xml_for_posts(post_data: PostData[], count: number, tagged_with?: string, before?: string) {
 	const doc = create_xml({ version: '1.0' });
 	const rss = doc.ele('rss', { version: '2.0' });
 	const channel = rss.ele('channel');
@@ -82,12 +82,12 @@ function build_xml_for_posts(posts: PostData[], count: number, tagged_with?: str
 	// channel.ele('skipHours').txt('');
 	// channel.ele('skipDays').txt('');
 
-	posts.forEach((post) => {
+	for (const data of post_data) {
 		const item = channel.ele('item');
-		const post_url = `${conf.http.web_url}/posts/${post.uri_name}`;
+		const post = new store.posts.Post(data);
 
 		item.ele('title').txt(post.title);
-		item.ele('link').txt(post_url);
+		item.ele('link').txt(post.post_url);
 
 		if (post.subtitle) {
 			item.ele('description').txt(post.subtitle);
@@ -99,14 +99,9 @@ function build_xml_for_posts(posts: PostData[], count: number, tagged_with?: str
 
 		post.tags.forEach((tag) => item.ele('categories').txt(tag));
 
-		item.ele('pubDate').txt(utc_date(post.date_published));
-		item.ele('guid').txt(post_url);
-	});
+		item.ele('pubDate').txt(post.date_published_utc);
+		item.ele('guid').txt(post.post_url);
+	}
 
 	return doc.end({ prettyPrint: true });
-}
-
-function utc_date(date_str: string) {
-	const date = new Date(Date.parse(date_str));
-	return date.toUTCString();
 }

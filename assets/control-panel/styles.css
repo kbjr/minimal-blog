@@ -319,24 +319,9 @@ textarea {
 	}
 
 textarea {
-	font-size: 1.4rem;
 	line-height: 1.7rem;
 	font-family: var(--font-monospace);
 }
-
-	textarea.ruled {
-		background: linear-gradient(to bottom,
-			var(--theme-bg-input) 0,
-			var(--theme-bg-input) 1.4rem,
-			var(--theme-line) 1.4rem,
-			var(--theme-line) 1.5rem,
-			var(--theme-bg-input) 1.5rem
-		);
-		background-attachment: local;
-		background-repeat: repeat;
-		background-size: auto 1.7rem;
-		background-position: 0 0.6rem;
-	}
 
 ::-webkit-input-placeholder {
 	color: var(--theme-text-light);

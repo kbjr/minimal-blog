@@ -14,7 +14,7 @@ type Req = ReqUser & FastifyRequest<{
 const opts: RouteShorthandOptions = {
 	schema: {
 		tags: ['templates'],
-		description: 'Updates the contents of the specified template',
+		description: 'Resets the contents of the specified template back to the default',
 		security: [
 			{ bearer: [ ] }
 		],
@@ -44,7 +44,7 @@ const resetable_templates = new Set([
 	'svg_icon.js',
 ]);
 
-ctrl.post('/api/templates/:template_name/reset', opts, async (req: Req, res) => {
+ctrl.delete('/api/templates/:template_name', opts, async (req: Req, res) => {
 	require_auth(req);
 
 	const name = req.params.template_name;

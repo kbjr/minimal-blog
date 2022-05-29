@@ -1,5 +1,7 @@
 
-export const settings_schema = {
+import type { JSONSchema6 } from 'json-schema';
+
+export const settings_schema: JSONSchema6 = {
 	type: 'object',
 	properties: {
 		language: { type: 'string' },

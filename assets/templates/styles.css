@@ -151,7 +151,6 @@ section.feed-list article[data-post-type='post'] header p {
 
 section.feed-list article[data-post-type='post'] header p.p-summary {
 	font-weight: 700;
-	font-style: italic;
 	color: var(--theme-text-light);
 }
 
@@ -176,7 +175,6 @@ section.feed-list article[data-post-type='comment'] main :is(p, pre, blockquote)
 section.feed-list article[data-post-type='comment'] footer p {
 	font-size: 0.8rem;
 	margin-block: 0.5rem;
-	margin-inline-start: 0.5rem;
 }
 
 section.feed-list article[data-post-type='note'] header h3 {
@@ -195,7 +193,36 @@ section.feed-list article[data-post-type='note'] main :is(p, pre, blockquote) {
 section.feed-list article[data-post-type='note'] footer p {
 	font-size: 0.8rem;
 	margin-block: 0.5rem;
-	margin-inline-start: 0.5rem;
+}
+
+section.feed-list article[data-post-type='event'] header h3 {
+	font-size: 1rem;
+	margin-block: 0rem 0.5rem;
+}
+
+section.feed-list article[data-post-type='event'] header h3 a.event-link {
+	font-size: 1.5rem;
+}
+
+section.feed-list article[data-post-type='event'] header p {
+	margin-block: 0.25rem;
+	margin-inline: 0;
+	font-size: 1rem;
+}
+
+section.feed-list article[data-post-type='event'] header p.p-summary {
+	font-weight: 700;
+	color: var(--theme-text-light);
+}
+
+section.feed-list article[data-post-type='event'] header p.date.start,
+section.feed-list article[data-post-type='event'] header p.date.end {
+	font-size: 0.8rem;
+}
+
+section.feed-list article[data-post-type='event'] footer p {
+	font-size: 0.8rem;
+	margin-block: 0.5rem;
 }
 
 
@@ -230,7 +257,6 @@ main[data-page='post'] article header p.author {
 main[data-page='post'] article header p.p-summary {
 	font-size: 1rem;
 	font-weight: 700;
-	font-style: italic;
 	color: var(--theme-text-light);
 }
 
@@ -266,6 +292,50 @@ main[data-page='note'] article main.e-content {
 }
 
 main[data-page='note'] article footer p {
+	font-size: 0.8rem;
+	margin: 1rem 0;
+}
+
+main[data-page='event'] article {
+	max-width: 80rem;
+	margin-inline: auto;
+}
+
+main[data-page='event'] article header h2 {
+	margin-block-start: 2rem;
+}
+
+main[data-page='event'] article header h2 span.p-name {
+	font-size: 2rem;
+	font-weight: 300;
+}
+
+main[data-page='event'] article header p {
+	margin-block: 0.25rem;
+	margin-inline: 1rem;
+	font-size: 1rem;
+}
+
+main[data-page='event'] article header p.date.updated,
+main[data-page='event'] article header p.date.published {
+	font-size: 0.8rem;
+}
+
+main[data-page='event'] article header p.author {
+	/*  */
+}
+
+main[data-page='event'] article header p.p-summary {
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--theme-text-light);
+}
+
+main[data-page='event'] article main.e-content {
+	padding-block: 1rem;
+}
+
+main[data-page='event'] article footer p {
 	font-size: 0.8rem;
 	margin: 1rem 0;
 }
@@ -503,7 +573,7 @@ mark {
 		border-block-end: 0.125rem var(--theme-line) solid;
 	}
 
-	p {
+	p, li {
 		font-size: 1rem;
 	}
 

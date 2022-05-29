@@ -45,7 +45,9 @@ async function get_post_html(uri_name: string) {
 		cached_posts[uri_name] = rendered_template_cache('page.html', get_context(uri_name), partials, {
 			settings: true,
 			templates: true,
-			colors: true
+			colors: true,
+			feed: true,
+			posts: true,
 		});
 	}
 

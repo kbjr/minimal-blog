@@ -6,21 +6,34 @@
 - Control panel API / UI for managing the site
 	- Served on a separate port from the main web UI so you don't have to expose it to the internet if you don't want to
 	- Can enable a Swagger documentation page for control panel API at `/api/docs`
+- Publish several different kinds of content, including:
+  - Posts (normal, structured article / blog post format)
+  - Comments
+  - Notes (unstructured blobs, more like micro-blogging)
+  - Events
+  - RSVPs
 - Write posts using [GitHub Flavored Markdown](https://github.github.com/gfm/)
 	- Also includes support for:
 		- Code-block syntax highlighting with [Prism](https://prismjs.com/) for [more than 200 languages](https://prismjs.com/#supported-languages)
 		- Rendering math expressions with [KaTeX](https://katex.org/)
+    - A handful of additional extensions, including highlights/marks, note blocks, description lists, and footnotes
 - Produces multiple standard feed formats:
 	- [RSS](https://www.rssboard.org/rss-specification)
 	<!-- - [Atom](https://datatracker.ietf.org/doc/html/rfc4287) -->
 	- [JSON Feed](https://www.jsonfeed.org/)
+	- [JF2 Feed](https://jf2.spec.indieweb.org/)
 	- [`h-feed` Microformat](https://microformats.org/wiki/h-feed)
 - Produces standard [sitemap.xml](https://www.sitemaps.org/protocol.html)
-- Can both send and receive interactions in multiple standard formats (with moderation / spam blocking features):
+- Light / dark mode toggle (defaulting to system preference)
+- Easily edit and swap between color themes in the control panel
+
+### Roadmap Features
+
+- Automatic syndication to multiple 3rd parties
+- Update diagram rendering to include railroad diagrams and [mermaid](https://mermaid-js.github.io/mermaid/#/)-like flow charts
+- Send and receive interactions in multiple standard formats (with moderation / spam blocking features):
 	- [Pingbacks](https://www.hixie.ch/specs/pingback/pingback)
 	- [WebMentions](https://www.w3.org/TR/webmention) (with support for [vouches](https://indieweb.org/Vouch))
-- Light / dark mode toggle (defaulting to system preference)
-- Easy to manage color themes in control panel
 
 ## Building from source
 
@@ -28,7 +41,7 @@
 
 The [start.sh](./start.sh) file contains all of the environment variables to configure the server.
 
-The default configuration will create a `./data` directory in the project to store the sqlite database files for app storage. To reset the server settings (and to reload `./assets` files from disk), delete the `./data/settings.db` file.
+The default configuration will create a `./data` directory in the project to store the sqlite database files for app storage.
 
 ```bash
 # Install dependencies

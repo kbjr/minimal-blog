@@ -3,8 +3,11 @@ import { conf } from '../../conf';
 import { web } from '../../http';
 import { store } from '../../storage';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
-import { Post, PostData } from '../../storage/posts';
-import { JSONFeed, JSONFeedItem, JSONFeedItem_EventExtention, JSONFeedItem_RsvpExtention, json_feed_event_schema, json_feed_rsvp_schema, json_feed_schema } from '../../json-feed';
+import {
+	JSONFeed, JSONFeedItem, JSONFeedItem_EventExtention, JSONFeedItem_RsvpExtention,
+	json_feed_event_schema_url, json_feed_rsvp_schema_url, json_feed_schema_url,
+	json_feed_schema
+} from '../../json-feed';
 
 type Req = FastifyRequest<{
 	Querystring: {
@@ -35,69 +38,7 @@ const opts: RouteShorthandOptions = {
 			}
 		},
 		response: {
-			200: {
-				type: 'object',
-				properties: {
-					version: { type: 'string' },
-					title: { type: 'string' },
-					home_page_url: { type: 'string' },
-					feed_url: { type: 'string' },
-					description: { type: 'string' },
-					user_comment: { type: 'string' },
-					next_url: { type: 'string' },
-					icon: { type: 'string' },
-					favicon: { type: 'string' },
-					authors: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								name: { type: 'string' },
-								url: { type: 'string' },
-								avatar: { type: 'string' },
-							}
-						}
-					},
-					language: { type: 'string' },
-					expired: { type: 'boolean' },
-					hubs: { type: 'array' },
-					items: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								id: { type: 'string', format: 'uri' },
-								url: { type: 'string', format: 'uri' },
-								external_url: { type: 'string', format: 'uri' },
-								title: { type: 'string' },
-								content_html: { type: 'string' },
-								content_text: { type: 'string' },
-								image: { type: 'string', format: 'uri' },
-								banner_image: { type: 'string', format: 'uri' },
-								date_published: { type: 'string', format: 'date-time' },
-								date_modified: { type: 'string', format: 'date-time' },
-								authors: {
-									type: 'array',
-									items: {
-										type: 'object',
-										properties: {
-											name: { type: 'string' },
-											url: { type: 'string' },
-											avatar: { type: 'string' },
-										}
-									}
-								},
-								tags: {
-									type: 'array',
-									items: { type: 'string' }
-								},
-								language: { type: 'string' },
-								attachments: { type: 'array' },
-							}
-						}
-					},
-				}
-			}
+			200: json_feed_schema
 		}
 	}
 };
@@ -113,11 +54,11 @@ web.get('/feed.json', opts, async (req: Req, res) => {
 		avatar: store.settings.get('author_avatar'),
 	};
 
-	const post_data = await store.posts.get_posts(req.query.count, req.query.tagged_with, req.query.before, false);
-	const posts = post_data.map((data) => new Post(data));
+	const post_data = await store.posts.get_posts(req.query.count, req.query.tagged_with, req.query.before, null, false);
+	const posts = post_data.map((data) => new store.posts.Post(data));
 
 	const result: JSONFeed = {
-		version: json_feed_schema,
+		version: json_feed_schema_url,
 		title: store.settings.get('feed_title'),
 		home_page_url: conf.http.web_url,
 		feed_url: `${conf.http.web_url}/feed.json`,
@@ -163,7 +104,7 @@ web.get('/feed.json', opts, async (req: Req, res) => {
 				
 				case 'event':
 					item._event = {
-						$schema: json_feed_event_schema,
+						$schema: json_feed_event_schema_url,
 						date_start: post.date_event_start_iso,
 						date_end: post.date_event_end_iso,
 					};
@@ -171,7 +112,7 @@ web.get('/feed.json', opts, async (req: Req, res) => {
 				
 				case 'rsvp':
 					item._rsvp = {
-						$schema: json_feed_rsvp_schema,
+						$schema: json_feed_rsvp_schema_url,
 						rsvp: post.rsvp_type,
 					};
 					break;
@@ -185,7 +126,7 @@ web.get('/feed.json', opts, async (req: Req, res) => {
 	return result;
 });
 
-function next_url(query: Req['query'], posts: Post[]) {
+function next_url(query: Req['query'], posts: store.posts.Post[]) {
 	// If we didn't find enough posts for this page, assume that means
 	// there are no more and we shouldn't return a next link
 	if (posts.length < query.count) {

@@ -276,12 +276,14 @@ namespace posts_db {
 			post_id int unsigned,
 			source_url varchar(1000),
 			vouch_url varchar(1000),
+			snowflake varchar(50),
 			needs_moderation tinyint,
 			mention_type varchar(50),
 			received_time timestamp,
 			verified tinyint,
 
 			primary key (post_id, source_url),
+			unique (snowflake),
 
 			foreign key (post_id)
 				references posts (post_id)

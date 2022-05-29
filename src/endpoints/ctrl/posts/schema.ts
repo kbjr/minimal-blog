@@ -1,25 +1,22 @@
 
 import type { JSONSchema6 } from 'json-schema';
+import { arr, str, str_enum } from '../../../json-schema';
 
 export const post_create_req_schema: JSONSchema6 = {
 	type: 'object',
 	properties: {
-		post_type: {
-			type: 'string',
-			enum: ['post', 'comment', 'note', 'event', 'rsvp']
-		},
-		uri_name: { type: 'string' },
-		title: { type: 'string' },
-		subtitle: { type: 'string' },
-		external_url: { type: 'string' },
-		content_markdown: { type: 'string' },
-		image: { type: 'string' },
-		banner_image: { type: 'string' },
+		post_type: str_enum(['post', 'comment', 'note', 'event', 'rsvp']),
+		uri_name: str(),
+		title: str(),
+		subtitle: str(),
+		external_url: str(),
+		content_markdown: str(),
+		image: str(),
+		banner_image: str(),
 		is_draft: { type: 'boolean', default: true },
-		tags: {
-			type: 'array',
-			items: { type: 'string' },
-		},
+		date_event_start: str('date-time'),
+		date_event_end: str('date-time'),
+		tags: arr(str()),
 	},
 	required: [ 'post_type', 'uri_name', 'content_markdown' ],
 	additionalProperties: false,
@@ -28,41 +25,36 @@ export const post_create_req_schema: JSONSchema6 = {
 export const post_res_schema: JSONSchema6 = {
 	type: 'object',
 	properties: {
-		post_type: {
-			type: 'string',
-			enum: ['post', 'comment', 'note', 'event', 'rsvp']
-		},
-		uri_name: { type: 'string' },
-		title: { type: 'string' },
-		subtitle: { type: 'string' },
-		external_url: { type: 'string' },
-		content_html: { type: 'string' },
-		content_markdown: { type: 'string' },
-		image: { type: 'string' },
-		banner_image: { type: 'string' },
+		post_type: str_enum(['post', 'comment', 'note', 'event', 'rsvp']),
+		uri_name: str(),
+		title: str(),
+		subtitle: str(),
+		external_url: str(),
+		content_html: str(),
+		content_markdown: str(),
+		image: str(),
+		banner_image: str(),
 		is_draft: { type: 'boolean' },
-		date_published: { type: 'string', format: 'date-time' },
-		date_updated: { type: 'string', format: 'date-time' },
-		tags: {
-			type: 'array',
-			items: { type: 'string' },
-		},
+		date_published: str('date-time'),
+		date_updated: str('date-time'),
+		date_event_start: str('date-time'),
+		date_event_end: str('date-time'),
+		tags: arr(str()),
 	}
 };
 
 export const post_update_req_schema: JSONSchema6 = {
 	type: 'object',
 	properties: {
-		title: { type: 'string' },
-		subtitle: { type: 'string' },
-		external_url: { type: 'string' },
-		content_markdown: { type: 'string' },
-		image: { type: 'string' },
-		banner_image: { type: 'string' },
+		title: str(),
+		subtitle: str(),
+		external_url: str(),
+		content_markdown: str(),
+		image: str(),
+		banner_image: str(),
 		is_draft: { type: 'boolean' },
-		tags: {
-			type: 'array',
-			items: { type: 'string' },
-		},
+		date_event_start: str('date-time'),
+		date_event_end: str('date-time'),
+		tags: arr(str()),
 	}
 };

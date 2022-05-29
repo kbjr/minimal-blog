@@ -6,7 +6,8 @@ import { render_markdown_to_html } from '../markdown';
 import { throw_422_unprocessable_entity } from '../http-error';
 import * as settings from './settings';
 
-type PostType = 'post' | 'comment' | 'note' | 'event' | 'rsvp';
+export type PostType = 'post' | 'comment' | 'note' | 'event' | 'rsvp';
+// | 'share' | 'like/reaction' | 'media-album'
 
 // Note: `posts` is ordered with the most recent post first
 let posts: PostData[];
@@ -57,7 +58,7 @@ export async function get_post(post_type: PostType, post_uri: string) {
 	return posts_index[post_type]?.[post_uri];
 }
 
-export async function get_posts(count: number, tagged_with?: string, before?: string, include_drafts?: boolean) {
+export async function get_posts(count: number, tagged_with?: string, before?: string, post_type?: PostType, include_drafts?: boolean) {
 	let results = posts;
 
 	if (before) {
@@ -76,6 +77,12 @@ export async function get_posts(count: number, tagged_with?: string, before?: st
 	if (tagged_with) {
 		results = results.filter((post) => {
 			return post.tags.includes(tagged_with);
+		});
+	}
+
+	if (post_type) {
+		results = results.filter((post) => {
+			return post.post_type === post_type;
 		});
 	}
 
@@ -183,6 +190,8 @@ export interface TagData {
 // }
 
 export class Tag implements Readonly<TagData> {
+	private last_mod = Date.now();
+
 	constructor(private data: TagData) { }
 
 	public get tag_name() {
@@ -197,12 +206,18 @@ export class Tag implements Readonly<TagData> {
 		return `${conf.http.web_url}/tagged/${this.tag_name}`;
 	}
 
+	public get tag_last_modified_iso() {
+		return (new Date(this.last_mod)).toISOString();
+	}
+
 	public add_ref() {
 		this.data.tag_count++;
+		this.last_mod = Date.now();
 	}
 
 	public drop_ref() {
 		this.data.tag_count--;
+		this.last_mod = Date.now();
 	}
 }
 

@@ -8,6 +8,7 @@ import { mark_ext } from './mark';
 import { description_list_ext } from './description-list';
 import { sanitize_html } from './sanitize';
 import { note_ext } from './note';
+import { rendered_block_ext } from './rendered-block';
 
 marked.use({
 	extensions: [
@@ -18,6 +19,7 @@ marked.use({
 		mark_ext,
 		description_list_ext,
 		note_ext,
+		rendered_block_ext,
 	]
 });
 

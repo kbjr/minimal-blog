@@ -54,7 +54,7 @@ export async function load() {
 
 export async function reset_template(name: string) {
 	log(`Resetting template ${name} to default`);
-	const content = await load_default_template(name);
+	const content = await load_default_template(name, true);
 	await update_template(name, content);
 }
 

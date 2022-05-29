@@ -12,7 +12,7 @@ export const katex_block_ext: marked.TokenizerExtension & marked.RendererExtensi
 	level: 'block',
 	start: (src) => src.match(/\$\$/)?.index,
 	tokenizer(src, tokens) {
-		const rule = /^\$\$([\s\S]+?)\$\$/;
+		const rule = /^\$\$((?:[^\$]|\$(?!\$))+)\$\$/;
 		const match = rule.exec(src);
 
 		if (match) {
