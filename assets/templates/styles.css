@@ -23,7 +23,7 @@ body {
 }
 
 body[data-color-transition-enabled],
-body[data-color-transition-enabled] :is(button, pre, input, textarea, select, mark, [data-bg-transition]) {
+body[data-color-transition-enabled] :is(button, pre, input, textarea, select, mark, dd, [data-bg-transition]) {
 	transition: background linear .5s;
 }
 
@@ -535,8 +535,27 @@ mark {
 }
 
 ::selection {
-	color: var(--theme-text-selection);
-	background-color: var(--theme-bg-text-selection);
+	fill: var(--theme-text-selection) !important;
+	color: var(--theme-text-selection) !important;
+	background-color: var(--theme-bg-text-selection) !important;
+}
+
+figure {
+	margin-block: 2rem;
+    margin-inline: 2rem;
+    padding-bottom: 1.5rem;
+}
+
+figure > :not(figcaption) {
+	margin-block-end: 3rem;
+}
+
+figcaption {
+	font-family: var(--font-open-sans);
+	text-align: center;
+	font-size: 1rem;
+	margin-block-start: -1.5rem;
+	color: var(--theme-text-light);
 }
 
 
@@ -545,26 +564,26 @@ mark {
 
 /* === General === */
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex) {
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex, .rendered-railroad) {
 	margin-block: 2rem;
 }
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex) svg {
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex, .rendered-railroad) svg {
 	display: block;
 	margin-inline: auto;
 }
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='small'] svg {
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex, .rendered-railroad)[data-flags~='small'] svg {
 	max-width: 30rem;
 	max-height: 20rem;
 }
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='medium'] svg {
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex, .rendered-railroad)[data-flags~='medium'] svg {
 	max-width: 40rem;
 	max-height: 40rem;
 }
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='large'] svg {
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex, .rendered-railroad)[data-flags~='large'] svg {
 	max-width: 60rem;
 	max-height: 60rem;
 }
@@ -649,6 +668,68 @@ mark {
 
 .rendered-bytefield svg line[stroke='#000000'] {
 	stroke: var(--theme-text-body);
+}
+
+/* === Railroad === */
+
+.rendered-railroad svg {
+	/* background-color: hsl(30,20%,95%); */
+}
+
+.rendered-railroad svg path {
+	stroke-width: 3;
+	stroke: var(--theme-text-highlight);
+}
+
+.rendered-railroad svg text {
+	font: bold 0.8rem var(--font-monospace);
+	text-anchor: middle;
+	white-space: pre;
+	fill: var(--theme-text-highlight);
+	font-weight: 300;
+}
+
+.rendered-railroad svg text.diagram-text {
+	font-size: 0.75rem;
+}
+
+.rendered-railroad svg text.diagram-arrow {
+	font-size: 1rem;
+}
+
+.rendered-railroad svg text.label {
+	text-anchor: start;
+}
+
+.rendered-railroad svg text.comment {
+	font: italic 0.75rem var(--font-monospace);
+}
+
+.rendered-railroad svg g.non-terminal text {
+	/*font-style: italic;*/
+}
+
+.rendered-railroad svg rect {
+	stroke-width: 3;
+	stroke: var(--theme-text-highlight);
+	fill: var(--theme-bg-text-highlight);
+}
+
+.rendered-railroad svg rect.group-box {
+	stroke: var(--theme-line);
+	stroke-dasharray: 10 5;
+	fill: none;
+}
+
+.rendered-railroad svg path.diagram-text {
+	stroke-width: 3;
+	stroke: var(--theme-text-highlight);
+	fill: var(--theme-bg-main);
+	cursor: help;
+}
+
+.rendered-railroad svg g.diagram-text:hover path.diagram-text {
+	fill: var(--theme-bg-light);
 }
 
 

@@ -21,6 +21,7 @@
     <!-- - Rendering graphs and charts with [Vega](https://vega.github.io/vega) -->
     <!-- - Rendering waveform diagrams with [wavedrom](https://www.npmjs.com/package/wavedrom) -->
     - Rendering diagrams with [Pikchr](https://pikchr.org/home/doc/trunk/homepage.md)
+    - Rendering railroad diagrams with [@prantlf/railroad-diagrams](https://github.com/prantlf/railroad-diagrams)
     - A handful of additional extensions, including highlights/marks, note blocks, description lists, and footnotes
 - Produces multiple standard feed formats:
 	- [RSS](https://www.rssboard.org/rss-specification)

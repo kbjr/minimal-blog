@@ -71,7 +71,7 @@ export const default_themes = <Record<string, ColorThemeData>> dict({
 		text_link_active: '#86a7f0',
 		text_link_visited: '#86a7f0',
 		text_highlight: '#ffffff',
-		bg_text_highlight: '#689566',
+		bg_text_highlight: '#3da069',
 		text_selection: '#660bad',
 		bg_text_selection: '#ebe9f0',
 		bg_button_primary: '#465568',
