@@ -302,6 +302,117 @@ header p:not(.subtitle) {
 	margin-block-start: 0.5rem;
 }
 
+
+/* ===== Rendered Blocks ===== */
+
+/* === General === */
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex) {
+	margin-block: 2rem;
+}
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex) svg {
+	display: block;
+	margin-inline: auto;
+}
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='small'] svg {
+	max-width: 30rem;
+	max-height: 20rem;
+}
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='medium'] svg {
+	max-width: 40rem;
+	max-height: 40rem;
+}
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='large'] svg {
+	max-width: 60rem;
+	max-height: 60rem;
+}
+
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield) svg text {
+	fill: var(--theme-text-body);
+}
+
+/* :is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield) svg text:not([font-family~='Times']):not([font-family~='Courier']) { */
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield) svg text:not([font-family~='Courier']) {
+	font-family: var(--font-open-sans);
+}
+
+/* === KaTeX === */
+
+.katex-display {
+	color: var(--theme-text-body);
+}
+
+.katex-display .katex {
+	font-size: 1.8rem;
+}
+
+:not(.katex-display) > .katex {
+	font-size: inherit;
+	margin-inline: 0.5rem;
+}
+
+/* === nomnoml === */
+
+.rendered-nomnoml svg g[fill='#eee8d5'] {
+	fill: var(--theme-bg-light);
+	transition: fill linear .5s;
+}
+
+.rendered-nomnoml svg g[stroke='#33322E'] {
+	stroke: var(--theme-text-body);
+}
+
+.rendered-nomnoml svg g[fill='#33322E'] {
+	fill: var(--theme-text-body);
+	transition: fill linear .5s;
+}
+
+.rendered-nomnoml svg g[fill='#fdf6e3'] {
+	fill: var(--theme-bg-heavy);
+	transition: fill linear .5s;
+}
+
+.rendered-nomnoml svg g[font-family='monospace'] text {
+	font-family: var(--font-monospace);
+}
+
+.rendered-nomnoml svg g[font-family='cursive'] text {
+	font-family: var(--font-cursive);
+}
+
+/* === Pikchr */
+
+/* boxes */
+.rendered-pikchr svg path[style*='fill:none;'] {
+	fill: var(--theme-bg-light) !important;
+	transition: fill linear .5s;
+}
+
+/* lines and boxes */
+.rendered-pikchr svg path[style*='stroke:rgb(0,0,0);'] {
+	stroke: var(--theme-text-body) !important;
+}
+
+/* arrow heads */
+.rendered-pikchr svg polygon[style='fill:rgb(0,0,0)'] {
+	fill: var(--theme-text-body) !important;
+	transition: fill linear .5s;
+}
+
+/* === Bytefield === */
+
+.rendered-bytefield svg text[font-family~='Courier'] {
+	font-family: var(--font-monospace);
+}
+
+.rendered-bytefield svg line[stroke='#000000'] {
+	stroke: var(--theme-text-body);
+}
+
 `;
 
 const template = `

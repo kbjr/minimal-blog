@@ -3,6 +3,7 @@
 	font-size: 16px;
 	--font-open-sans: 'Open Sans', sans-serif;
 	--font-monospace: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	--font-cursive: cursive;
 }
 
 * {
@@ -544,7 +545,7 @@ mark {
 
 /* === General === */
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield) {
+:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex) {
 	margin-block: 2rem;
 }
 
@@ -560,12 +561,12 @@ mark {
 
 :is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='medium'] svg {
 	max-width: 40rem;
-	max-height: 30rem;
+	max-height: 40rem;
 }
 
 :is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex)[data-flags~='large'] svg {
-	max-width: 50rem;
-	max-height: 40rem;
+	max-width: 60rem;
+	max-height: 60rem;
 }
 
 :is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield) svg text {
@@ -605,9 +606,21 @@ mark {
 
 .rendered-nomnoml svg g[fill='#33322E'] {
 	fill: var(--theme-text-body);
+	transition: fill linear .5s;
 }
 
-/* .rendered-nomnoml svg */
+.rendered-nomnoml svg g[fill='#fdf6e3'] {
+	fill: var(--theme-bg-heavy);
+	transition: fill linear .5s;
+}
+
+.rendered-nomnoml svg g[font-family='monospace'] text {
+	font-family: var(--font-monospace);
+}
+
+.rendered-nomnoml svg g[font-family='cursive'] text {
+	font-family: var(--font-cursive);
+}
 
 /* === Pikchr */
 
@@ -625,6 +638,7 @@ mark {
 /* arrow heads */
 .rendered-pikchr svg polygon[style='fill:rgb(0,0,0)'] {
 	fill: var(--theme-text-body) !important;
+	transition: fill linear .5s;
 }
 
 /* === Bytefield === */

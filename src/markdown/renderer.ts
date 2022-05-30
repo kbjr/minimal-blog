@@ -52,7 +52,7 @@ renderer.code = function(code: string, infostring: string, is_escaped: boolean) 
 			
 			case 'nomnoml': {
 				const svg = render_nomnoml(code);
-				const svg_no_dimensions = remove_svg_dimensions(svg);
+				const svg_no_dimensions = strip_svg(svg);
 				return `<div class="rendered-nomnoml" data-flags="${flags}">${svg_no_dimensions}</div>`;
 			};
 
@@ -75,7 +75,7 @@ renderer.code = function(code: string, infostring: string, is_escaped: boolean) 
 
 			case 'bytefield': {
 				const svg = render_bytefield(code);
-				const svg_no_dimensions = remove_svg_dimensions(svg);
+				const svg_no_dimensions = strip_svg(svg);
 				return `<div class="rendered-bytefield" data-flags="${flags}">${svg_no_dimensions}</div>`;
 			};
 
@@ -112,11 +112,14 @@ function escape(str: string, is_escaped: boolean) {
 	return is_escaped ? str : str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
-const svg_dimensions = /^(?:<\?xml version="1\.0" encoding="UTF-8"\?>)?<svg[^>]* (height="[\d\.]+"\s+width="[\d\.]+"|width="[\d\.]+"\s+height="[\d\.]+")/;
+const svg_header = /^<\?xml version="1\.0" encoding="UTF-8"\?>/;
+const svg_dimensions = /^<svg[^>]* (height="[\d\.]+"\s+width="[\d\.]+"|width="[\d\.]+"\s+height="[\d\.]+")/;
 
-// Removes fixed dimension attributes from SVGs so we can scale them with CSS
-function remove_svg_dimensions(svg: string) {
-	return svg.replace(svg_dimensions, (match, dimensions) => {
-		return match.slice(0, -dimensions.length);
-	});
+// Removes fixed dimension attributes and meta-declaration from SVGs so we can scale them with CSS
+function strip_svg(svg: string) {
+	return svg
+		.replace(svg_header, '')
+		.replace(svg_dimensions, (match, dimensions) => {
+			return match.slice(0, -dimensions.length);
+		});
 }
