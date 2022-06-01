@@ -23,6 +23,7 @@ const cached_page = rendered_template_cache('page.html', get_default_context, pa
 	colors: true,
 	feed: true,
 	posts: true,
+	links: true,
 });
 
 type Req = FastifyRequest<{

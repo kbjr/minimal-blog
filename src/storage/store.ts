@@ -7,6 +7,7 @@ import * as settings from './settings';
 import * as colors from './colors';
 import * as templates from './templates';
 import * as posts from './posts';
+import * as links from './links';
 
 export let store: Store;
 export const events = new EventEmitter();
@@ -17,6 +18,7 @@ export * as settings from './settings';
 export * as colors from './colors';
 export * as templates from './templates';
 export * as posts from './posts';
+export * as links from './links';
 
 
 
@@ -42,6 +44,7 @@ export async function setup(no_update = false) {
 	await colors.load();
 	await templates.load();
 	await posts.load();
+	await links.load();
 
 	events.emit('ready');
 }
@@ -100,6 +103,14 @@ export interface Store {
 
 	/**  */
 	set_template(name: string, content: string) : Promise<void>;
+
+	// ===== Links =====
+
+	/**  */
+	get_links() : Promise<links.LinkData[]>;
+
+	/**  */
+	set_links(new_links: links.LinkData[]): Promise<void>;
 
 	// ===== Posts =====
 

@@ -43,6 +43,7 @@
     "jsonwebtoken": "^8.5.1",
     "katex": "^0.15.3",
     "marked": "^4.0.15",
+    "microformats-parser": "^1.4.1",
     "mustache": "^4.2.0",
     "nomnoml": "^1.5.1",
     "pikchr": "^0.0.5",

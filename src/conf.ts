@@ -147,11 +147,12 @@ export namespace conf {
 
 		/** Controls which additional debug loggers are enabled */
 		export const debug_loggers = Object.freeze<Partial<Loggers>>({
-			sqlite: true,
-			sqlite_sql: true,
+			sqlite: false,
+			sqlite_sql: false,
 			asset_files: false,
 			cache: false,
 			auth: false,
+			outbound_http: true,
 		});
 	}
 }

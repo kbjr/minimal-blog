@@ -105,6 +105,10 @@
 				return [ 'icon' ];
 			}
 	
+			static get icons() {
+				return Object.keys(icons);
+			}
+	
 			constructor() {
 				super();
 				this.attachShadow({ mode: 'open' });

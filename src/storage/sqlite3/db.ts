@@ -1,21 +1,22 @@
 
 import * as sqlite3 from 'sqlite3';
 import { promises as fs } from 'fs';
-import { debug_logger, log_error } from '../../debug';
+import { logger } from '../../debug';
 import { createPool, Factory, Pool } from 'generic-pool';
 import { conf } from '../../conf';
 
 let next_conn_id = 1;
 let next_query_id = 1;
 
-const log = debug_logger('sqlite', '[sqlite]: ');
-const log_sql = debug_logger('sqlite_sql', '[sqlite]: ');
+const sqlite_log = logger('sqlite');
+const sqlite_log_sql = logger('sqlite_sql');
 const db_info = new WeakMap<sqlite3.Database, DBInfo>();
 
 interface DBInfo {
 	file: string;
 	mode: number;
 	connection_id: number;
+	query_id?: number;
 }
 
 const posts_db_factory = db_factory(
@@ -68,7 +69,9 @@ function open(file: string, mode: number) {
 		mode,
 	};
 
-	log('Opening database connection...', info);
+	const log = sqlite_log.child(info);
+
+	log.info('opening database connection...');
 
 	return new Promise<sqlite3.Database>((resolve, reject) => {
 		const db = new sqlite3.Database(file, mode, async (error) => {
@@ -78,18 +81,18 @@ function open(file: string, mode: number) {
 
 			db_info.set(db, info);
 
-			log('Database open', info);
-			log('Confirming file permissions = 0600', info);
+			log.debug('database open');
+			log.debug('confirming file permissions = 0600');
 			
 			// Ensure the file is not accessible to anyone but the server user
 			await fs.chmod(file, 0o600);
 
-			log('Enabling foreign keys');
+			log.debug('enabling foreign keys');
 
 			// Enable foreign keys
 			await run(db, 'PRAGMA foreign_keys = ON');
 
-			log('Ready', info);
+			log.info('ready');
 			resolve(db);
 		});
 	});
@@ -97,8 +100,9 @@ function open(file: string, mode: number) {
 
 function close(db: sqlite3.Database) {
 	const info = db_info.get(db);
+	const log = sqlite_log.child(info as any);
 
-	log('Closing database connection...', info);
+	log.info('closing database connection...');
 
 	return new Promise<void>((resolve, reject) => {
 		db.close((error) => {
@@ -106,7 +110,7 @@ function close(db: sqlite3.Database) {
 				return reject(error);
 			}
 
-			log('Closed', info);
+			log.info('closed', info);
 			resolve();
 		});
 	});
@@ -118,14 +122,16 @@ export function sql(query: string) {
 
 export function run(db: sqlite3.Database, query: string, params: any[] | object = [ ]) {
 	const query_id = next_query_id++;
+	const info = Object.assign({ query_id }, db_info.get(db));
+	const log = sqlite_log.child(info as any);
+	const log_sql = sqlite_log_sql.child(info as any);
 
 	return new Promise<sqlite3.RunResult>((resolve, reject) => {
-		log_sql(`run #${query_id} (${query})`, db_info.get(db));
+		log_sql.info(`run: ${query}`);
 
 		db.run(query, params, function(error) {
 			if (error) {
-				log(`run #${query_id} failed`, db_info.get(db));
-				log_error('sqlite', error.stack);
+				log.error('run failed: ' + error.stack);
 				return reject(error);
 			}
 
@@ -136,14 +142,16 @@ export function run(db: sqlite3.Database, query: string, params: any[] | object 
 
 export function get_one<T>(db: sqlite3.Database, query: string, params: any[] | object = [ ]) {
 	const query_id = next_query_id++;
+	const info = Object.assign({ query_id }, db_info.get(db));
+	const log = sqlite_log.child(info as any);
+	const log_sql = sqlite_log_sql.child(info as any);
 	
 	return new Promise<T>((resolve, reject) => {
-		log_sql(`get_one #${query_id} (${query})`, db_info.get(db));
+		log_sql.info(`get_one: ${query}`);
 
 		db.get(query, params, function(error, row) {
 			if (error) {
-				log(`get_one #${query_id} failed`, db_info.get(db));
-				log_error('sqlite', error.stack);
+				log.error('get_one failed: ' + error.stack);
 				return reject(error);
 			}
 
@@ -154,14 +162,16 @@ export function get_one<T>(db: sqlite3.Database, query: string, params: any[] | 
 
 export function get_all<T>(db: sqlite3.Database, query: string, params: any[] | object = [ ]) {
 	const query_id = next_query_id++;
+	const info = Object.assign({ query_id }, db_info.get(db));
+	const log = sqlite_log.child(info as any);
+	const log_sql = sqlite_log_sql.child(info as any);
 	
 	return new Promise<T[]>((resolve, reject) => {
-		log_sql(`get_all #${query_id} (${query})`, db_info.get(db));
+		log_sql.info(`get_all: ${query}`);
 
 		db.all(query, params, function(error, rows) {
 			if (error) {
-				log(`run #${query_id} failed`, db_info.get(db));
-				log_error('sqlite', error.stack);
+				log.error('get_all failed: ' + error.stack);
 				return reject(error);
 			}
 

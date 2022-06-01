@@ -85,6 +85,27 @@ color-theme-toggle {
 	margin-block-start: 2rem;
 }
 
+ul.link-list {
+	list-style: none;
+	padding-inline-start: 0;
+}
+
+ul.link-list li {
+	display: flex;
+	font-size: 0.8rem;
+	margin-block: 1rem;
+	align-items: center;
+	--icon-size: 1.5rem;
+}
+
+ul.link-list svg-icon {
+	margin-inline-end: 0.5rem;
+}
+
+ul.link-list a {
+	/*  */
+}
+
 
 
 
@@ -139,6 +160,8 @@ section.feed-list article {
 	margin-block-end: 6rem;
 }
 
+/* === Posts === */
+
 section.feed-list article[data-post-type='post'] header h3 {
 	font-size: 1.5rem;
 	margin-block: 0 0.5rem;
@@ -160,6 +183,8 @@ section.feed-list article[data-post-type='post'] header p.date.updated {
 	font-size: 0.8rem;
 }
 
+/* === Comments === */
+
 section.feed-list article[data-post-type='comment'] header h3 {
 	font-size: 1rem;
 	margin-block: 0rem 0.5rem;
@@ -178,6 +203,8 @@ section.feed-list article[data-post-type='comment'] footer p {
 	margin-block: 0.5rem;
 }
 
+/* === Notes === */
+
 section.feed-list article[data-post-type='note'] header h3 {
 	font-size: 1rem;
 	margin-block: 0rem 0.5rem;
@@ -195,6 +222,8 @@ section.feed-list article[data-post-type='note'] footer p {
 	font-size: 0.8rem;
 	margin-block: 0.5rem;
 }
+
+/* === Events === */
 
 section.feed-list article[data-post-type='event'] header h3 {
 	font-size: 1rem;
@@ -226,6 +255,48 @@ section.feed-list article[data-post-type='event'] footer p {
 	margin-block: 0.5rem;
 }
 
+/* === RSVPs === */
+
+section.feed-list article[data-post-type='rsvp'] header h3 {
+	font-size: 1rem;
+	margin-block: 0rem 0.5rem;
+}
+
+section.feed-list article[data-post-type='rsvp'] header h3 .u-in-reply-to a {
+	font-size: 1.5rem;
+}
+
+section.feed-list article[data-post-type='rsvp'] header p {
+	margin-block: 0.25rem;
+	margin-inline: 0;
+	font-size: 1rem;
+}
+
+section.feed-list article[data-post-type='rsvp'] header p.p-summary {
+	font-weight: 700;
+	color: var(--theme-text-light);
+}
+
+section.feed-list article[data-post-type='rsvp'] header p.date.start,
+section.feed-list article[data-post-type='rsvp'] header p.date.end {
+	font-size: 0.8rem;
+}
+
+section.feed-list article[data-post-type='rsvp'] footer p {
+	font-size: 0.8rem;
+	margin-block: 0.5rem;
+}
+
+/* === Embeded External Posts === */
+
+section.feed-list blockquote.external-embed article {
+	margin-block-end: 0;
+}
+
+section.feed-list blockquote.external-embed h2.p-name {
+	margin-block-start: 0;
+}
+
 
 
 
@@ -235,6 +306,8 @@ section.feed-list article[data-post-type='event'] footer p {
 #root > main {
 	flex: 1 1 auto;
 }
+
+/* === Posts === */
 
 main[data-page='post'] article header h1 {
 	margin-block-start: 2rem;
@@ -261,6 +334,8 @@ main[data-page='post'] article header p.p-summary {
 	color: var(--theme-text-light);
 }
 
+/* === Comments === */
+
 main[data-page='comment'] article {
 	max-width: 80rem;
 	margin-inline: auto;
@@ -279,6 +354,8 @@ main[data-page='comment'] article footer p {
 	margin: 1rem 0;
 }
 
+/* === Notes === */
+
 main[data-page='note'] article {
 	max-width: 80rem;
 	margin-inline: auto;
@@ -296,6 +373,8 @@ main[data-page='note'] article footer p {
 	font-size: 0.8rem;
 	margin: 1rem 0;
 }
+
+/* === Events === */
 
 main[data-page='event'] article {
 	max-width: 80rem;
@@ -337,6 +416,52 @@ main[data-page='event'] article main.e-content {
 }
 
 main[data-page='event'] article footer p {
+	font-size: 0.8rem;
+	margin: 1rem 0;
+}
+
+/* === RSVPs === */
+
+main[data-page='rsvp'] article {
+	max-width: 80rem;
+	margin-inline: auto;
+}
+
+main[data-page='rsvp'] article header h2 {
+	margin-block-start: 2rem;
+}
+
+main[data-page='rsvp'] article header h2 span.u-in-reply-to a.p-name {
+	font-size: 2rem;
+	font-weight: 300;
+}
+
+main[data-page='rsvp'] article header p {
+	margin-block: 0.25rem;
+	margin-inline: 1rem;
+	font-size: 1rem;
+}
+
+main[data-page='rsvp'] article header p.date.updated,
+main[data-page='rsvp'] article header p.date.published {
+	font-size: 0.8rem;
+}
+
+main[data-page='rsvp'] article header p.author {
+	/*  */
+}
+
+main[data-page='rsvp'] article header p.p-summary {
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--theme-text-light);
+}
+
+main[data-page='rsvp'] article main.e-content {
+	padding-block: 1rem;
+}
+
+main[data-page='rsvp'] article footer p {
 	font-size: 0.8rem;
 	margin: 1rem 0;
 }
@@ -564,26 +689,44 @@ figcaption {
 
 /* === General === */
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex, .rendered-railroad) {
+[class*=' rendered-'], [class^='rendered-'] {
 	margin-block: 2rem;
 }
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex, .rendered-railroad) svg {
+:is([class*=' rendered-'], [class^='rendered-']) svg {
 	display: block;
 	margin-inline: auto;
 }
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex, .rendered-railroad)[data-flags~='small'] svg {
+:is([class*=' rendered-'], [class^='rendered-']).big {
+	background: var(--theme-bg-main);
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 1000;
+	display: flex;
+	border: 0.25rem var(--theme-line) solid;
+	margin: 3rem;
+}
+
+:is([class*=' rendered-'], [class^='rendered-']).big svg {
+	max-width: none !important;
+	max-height: none !important;
+}
+
+:is([class*=' rendered-'], [class^='rendered-'])[data-flags~='small'] svg {
 	max-width: 30rem;
 	max-height: 20rem;
 }
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex, .rendered-railroad)[data-flags~='medium'] svg {
+:is([class*=' rendered-'], [class^='rendered-'])[data-flags~='medium'] svg {
 	max-width: 40rem;
 	max-height: 40rem;
 }
 
-:is(.rendered-pikchr, .rendered-nomnoml, .rendered-bytefield, .rendered-katex, .rendered-railroad)[data-flags~='large'] svg {
+:is([class*=' rendered-'], [class^='rendered-'])[data-flags~='large'] svg {
 	max-width: 60rem;
 	max-height: 60rem;
 }
@@ -670,6 +813,14 @@ figcaption {
 	stroke: var(--theme-text-body);
 }
 
+.rendered-bytefield svg line[stroke-width='1'] {
+	stroke-width: 1.5;
+}
+
+.rendered-bytefield svg line[stroke-darharray='1,1'] {
+	stroke-dasharray: 1.5, 1.5;
+}
+
 /* === Railroad === */
 
 .rendered-railroad svg {
@@ -678,14 +829,14 @@ figcaption {
 
 .rendered-railroad svg path {
 	stroke-width: 3;
-	stroke: var(--theme-text-highlight);
+	stroke: var(--theme-text-body);
 }
 
 .rendered-railroad svg text {
-	font: bold 0.8rem var(--font-monospace);
+	font: bold 0.8rem var(--font-cursive);
 	text-anchor: middle;
 	white-space: pre;
-	fill: var(--theme-text-highlight);
+	fill: var(--theme-text-body);
 	font-weight: 300;
 }
 
@@ -702,7 +853,7 @@ figcaption {
 }
 
 .rendered-railroad svg text.comment {
-	font: italic 0.75rem var(--font-monospace);
+	font: italic 0.75rem var(--font-cursive);
 }
 
 .rendered-railroad svg g.non-terminal text {
@@ -711,8 +862,9 @@ figcaption {
 
 .rendered-railroad svg rect {
 	stroke-width: 3;
-	stroke: var(--theme-text-highlight);
-	fill: var(--theme-bg-text-highlight);
+	stroke: var(--theme-text-body);
+	fill: var(--theme-bg-light);
+	transition: fill linear .5s;
 }
 
 .rendered-railroad svg rect.group-box {
@@ -723,13 +875,13 @@ figcaption {
 
 .rendered-railroad svg path.diagram-text {
 	stroke-width: 3;
-	stroke: var(--theme-text-highlight);
+	stroke: var(--theme-text-body);
 	fill: var(--theme-bg-main);
 	cursor: help;
 }
 
 .rendered-railroad svg g.diagram-text:hover path.diagram-text {
-	fill: var(--theme-bg-light);
+	fill: var(--theme-bg-heavy);
 }
 
 

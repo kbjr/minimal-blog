@@ -1,6 +1,6 @@
 
 import { build_v1 } from './v1';
-import { log_info } from '../../../debug';
+import { logger } from '../../../debug';
 import { create_backup } from '../backup';
 import { list_tables, get_one, settings_pool, sql } from '../db';
 // import { migrate_v1_to_v2 } from './v1-to-v2';
@@ -11,16 +11,18 @@ interface Migration {
 	(): Promise<void>;
 }
 
+const log = logger('sqlite').child({ system: 'migrate' });
+
 /**
  * Ensures that the database files exist and are updated to their latest schema versions
  */
 export async function bring_db_schema_up_to_date(no_update = false) {
-	log_info('sqlite', `[sqlite]: Checking for any needed DB updates...`);
+	log.info(`checking for any needed db updates...`);
 	
 	let db_version = await get_current_version();
 
 	if (db_version === supported_db_version) {
-		log_info('sqlite', `[sqlite]: DB already up to date`);
+		log.info(`db already up to date`);
 		return;
 	}
 
@@ -34,16 +36,16 @@ export async function bring_db_schema_up_to_date(no_update = false) {
 		process.exit(1);
 	}
 	
-	log_info('sqlite', `[sqlite]: DB needs updates`, { db_version, new_version: supported_db_version });
+	log.info(`db needs updates`, { db_version, new_version: supported_db_version });
 
 	if (db_version > 0) {
-		// Create a backup of the existing DB before migrating
-		log_info('sqlite', `[sqlite]: Creating backups before attempting updates...`);
+		// Create a backup of the existing db before migrating
+		log.info(`creating backups before attempting updates...`);
 		await create_backup();
 	}
 
 	while (db_version < supported_db_version) {
-		log_info('sqlite', `[sqlite]: Performing update from v${db_version} to v${db_version + 1}...`);
+		log.info(`performing update from v${db_version} to v${db_version + 1}...`);
 		await migrations[db_version]();
 		db_version++;
 	}

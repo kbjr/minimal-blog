@@ -16,6 +16,7 @@ export const post_create_req_schema: JSONSchema6 = {
 		is_draft: { type: 'boolean', default: true },
 		date_event_start: str('date-time'),
 		date_event_end: str('date-time'),
+		rsvp_type: str_enum(['yes', 'no', 'maybe', 'interested']),
 		tags: arr(str()),
 	},
 	required: [ 'post_type', 'uri_name', 'content_markdown' ],
@@ -39,6 +40,7 @@ export const post_res_schema: JSONSchema6 = {
 		date_updated: str('date-time'),
 		date_event_start: str('date-time'),
 		date_event_end: str('date-time'),
+		rsvp_type: str_enum(['yes', 'no', 'maybe', 'interested']),
 		tags: arr(str()),
 	}
 };
@@ -55,6 +57,7 @@ export const post_update_req_schema: JSONSchema6 = {
 		is_draft: { type: 'boolean' },
 		date_event_start: str('date-time'),
 		date_event_end: str('date-time'),
+		rsvp_type: str_enum(['yes', 'no', 'maybe', 'interested']),
 		tags: arr(str()),
 	}
 };

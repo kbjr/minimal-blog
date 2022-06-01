@@ -1,13 +1,15 @@
 
 import * as sqlite3 from 'sqlite3';
 // import { conf } from '../../../conf';
-import { log_debug } from '../../../debug';
+import { logger } from '../../../debug';
 // import { promises as fs } from 'fs';
 import { default_settings } from '../../default-settings';
 import { run, sql, settings_pool, posts_pool } from '../db';
 
+const log = logger('sqlite').child({ system: 'migrate' });
+
 export async function build_v1() {
-	log_debug('sqlite', `[sqlite]: Building initial v1 database...`);
+	log.debug(`building initial v1 database...`);
 	
 	await Promise.all([
 		settings_db.build(),
@@ -15,7 +17,7 @@ export async function build_v1() {
 		// fs.mkdir(conf.data.sqlite3.attachments_path, 0o0700),
 	]);
 
-	log_debug('sqlite', `[sqlite]: Finished building v1 database`);
+	log.debug(`finished building v1 database`);
 }
 
 
@@ -32,6 +34,7 @@ namespace settings_db {
 			await create_colors(db);
 			await create_users(db);
 			await create_mention_rules(db);
+			await create_links(db);
 		}
 
 		finally {
@@ -152,6 +155,19 @@ namespace settings_db {
 	const sql_set_rule_types = sql(`
 		insert into rule_types (name)
 		values ('block'), ('review'), ('allow'), ('trust')
+	`);
+
+	async function create_links(db: sqlite3.Database) {
+		await run(db, sql_create_links);
+	}
+
+	const sql_create_links = sql(`
+		create table if not exists links (
+			link_url varchar(2000) primary key,
+			label varchar(50),
+			icon varchar(50),
+			sort_order int
+		)
 	`);
 }
 

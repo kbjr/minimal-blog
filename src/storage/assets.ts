@@ -3,7 +3,7 @@ import { conf } from '../conf';
 import { dict } from '../util';
 import { promises as fs } from 'fs';
 import { resolve as resolve_path } from 'path';
-import { log_debug } from '../debug';
+import { logger } from '../debug';
 
 let cache = dict<string, string>();
 
@@ -12,11 +12,13 @@ export function clear_cache() {
 }
 
 export async function load_asset(file_name: string, skip_cache = false) {
+	const log = logger('asset_files');
+
 	if (cache[file_name] && ! skip_cache) {
 		return cache[file_name];
 	}
 
-	log_debug('asset_files', `[asset_files]: Loading asset file ${file_name} from disk`);
+	log.debug(`loading asset file ${file_name} from disk`);
 	const path = resolve_path(conf.assets.path, file_name);
 	const contents = await fs.readFile(path, 'utf8');
 

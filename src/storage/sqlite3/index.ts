@@ -4,6 +4,7 @@ import * as settings from './settings';
 import * as color_themes from './color-themes';
 import * as templates from './templates';
 import * as posts from './posts';
+import * as links from './links';
 import { Store } from '../store';
 import { bring_db_schema_up_to_date } from './migrate';
 import { create_backup } from './backup';
@@ -29,6 +30,9 @@ export const store_sqlite3 = obj_frozen<Store>({
 
 	get_all_templates: templates.get_all_templates,
 	set_template: templates.set_template,
+
+	get_links: links.get_links,
+	set_links: links.set_links,
 
 	get_all_posts: posts.get_all_posts,
 	get_post: posts.get_post,

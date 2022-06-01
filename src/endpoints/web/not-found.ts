@@ -26,7 +26,8 @@ export async function show_not_found(req: FastifyRequest, res: FastifyReply) {
 		cache = rendered_template_cache('page.html', get_context, partials, {
 			settings: true,
 			templates: true,
-			colors: true
+			colors: true,
+			links: true,
 		});
 	}
 

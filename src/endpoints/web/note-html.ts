@@ -48,6 +48,7 @@ async function get_post_html(uri_name: string) {
 			colors: true,
 			feed: true,
 			posts: true,
+			links: true,
 		});
 	}
 

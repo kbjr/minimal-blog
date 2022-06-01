@@ -64,6 +64,18 @@
 					</li>
 					{{/ feed.all_tags }}
 				</ul>
+
+				{{# feed.links.length }}
+				<h2>Links</h2>
+				<ul class="link-list">
+					{{# feed.links }}
+					<li>
+						<svg-icon icon="{{ icon }}"></svg-icon>
+						<a href="{{{ link_url }}}">{{ label }}</a>
+					</li>
+					{{/ feed.links }}
+				</ul>
+				{{/ feed.links.length }}
 			</aside>
 		</div>
 

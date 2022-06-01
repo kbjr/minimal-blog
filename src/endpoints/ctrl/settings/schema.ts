@@ -1,37 +1,27 @@
 
 import type { JSONSchema6 } from 'json-schema';
+import { bool, str, str_enum } from '../../../json-schema';
 
 export const settings_schema: JSONSchema6 = {
 	type: 'object',
 	properties: {
-		language: { type: 'string' },
-		theme_light: { type: 'string' },
-		theme_dark: { type: 'string' },
-		feed_title: { type: 'string' },
-		feed_description: { type: 'string' },
-		author_name: { type: 'string' },
-		author_url: { type: 'string', format: 'url' },
-		author_avatar: { type: 'string' },
-		copyright_notice: { type: 'string' },
-		send_pingback: { type: 'boolean' },
-		receive_pingback: { type: 'boolean' },
-		send_webmention: { type: 'boolean' },
-		receive_webmention: { type: 'boolean' },
-		default_pingback: {
-			type: 'string',
-			enum: ['allow', 'block', 'review']
-		},
-		default_webmention: {
-			type: 'string',
-			enum: ['allow', 'block', 'review']
-		},
-		post_uri_format: {
-			type: 'string',
-			enum: ['slug', 'snowflake']
-		},
-		event_uri_format: {
-			type: 'string',
-			enum: ['slug', 'snowflake']
-		}
+		language: str(),
+		theme_light: str(),
+		theme_dark: str(),
+		feed_title: str(),
+		feed_description: str(),
+		author_name: str(),
+		author_url: str('uri'),
+		author_avatar: str(),
+		copyright_notice: str(),
+		send_pingback: bool(),
+		receive_pingback: bool(),
+		send_webmention: bool(),
+		receive_webmention: bool(),
+		https_only: bool(),
+		default_pingback: str_enum(['allow', 'block', 'review']),
+		default_webmention: str_enum(['allow', 'block', 'review']),
+		post_uri_format: str_enum(['slug', 'snowflake']),
+		event_uri_format: str_enum(['slug', 'snowflake']),
 	}
 };

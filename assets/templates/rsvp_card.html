@@ -1,25 +1,64 @@
 <article class="h-entry" data-post-type="rsvp">
-	<h2>
-		{{> author_card }}
+	<header>
+		<h3>
+			{{> author_card }}
+	
+			{{# rsvp_yes }}
+			<data class="p-rsvp" value="yes">Is Going</data> to an Event:
+			{{/ rsvp_yes }}
+			{{# rsvp_no }}
+			<data class="p-rsvp" value="no">Is Not Going</data> to an Event:
+			{{/ rsvp_no }}
+			{{# rsvp_maybe }}
+			<data class="p-rsvp" value="maybe">Might Be Going</data> to an Event:
+			{{/ rsvp_maybe }}
+			{{# rsvp_interested }}
+			<data class="p-rsvp" value="interested">Is Interested</data> in an Event:
+			{{/ rsvp_interested }}
+		</h3>
 
-		{{# rsvp_yes }}
-		<data class="p-rsvp" value="yes">is going</data> to
-		{{/ rsvp_yes }}
-		{{# rsvp_no }}
-		<data class="p-rsvp" value="no">is not going</data> to
-		{{/ rsvp_no }}
-		{{# rsvp_maybe }}
-		<data class="p-rsvp" value="maybe">might be going</data> to
-		{{/ rsvp_maybe }}
-		{{# rsvp_interested }}
-		<data class="p-rsvp" value="interested">is interested</data> in
-		{{/ rsvp_interested }}
+		<blockquote class="external-embed">
+			<article class="h-event u-in-reply-to">
+				<h2 class="p-name">
+					<a href="{{{ external_url }}}" class="u-url">{{ title }}</a>
+				</h2>
+
+				{{# subtitle }}
+				<p class="p-summary">{{ subtitle }}</p>
+				{{/ subtitle }}
 		
-		<span class="u-in-reply-to h-cite">
-			<cite><a href="{{{ external_url }}}" class="u-url">{{ title }}</a></cite>
-		</span>
-	</h2>
-	<main class="e-content">
-		{{{ content_html }}}
+				{{# date_event_start_iso }}
+				<p class="start date">Starts: <time datetime="{{ date_event_start_iso }}" class="dt-start">{{ date_event_start_utc }}</time></p>
+				{{/ date_event_start_iso }}
+		
+				{{# date_event_end_iso }}
+				<p class="end date">Ends: <time datetime="{{ date_event_end_iso }}" class="dt-end">{{ date_event_end_utc }}</time></p>
+				{{/ date_event_end_iso }}
+			</article>
+		</blockquote>
+	</header>
+
+	<main>
+		{{{ html_content }}}
 	</main>
+
+	<footer>
+		<ul class="tag-list">
+			{{# tags }}
+			<li class="p-category" data-bg-transition>
+				<a href="{{{ site.url }}}/tagged/{{ . }}">{{ . }}</a>
+			</li>
+			{{/ tags }}
+		</ul>
+		<p>
+			<a class="u-url" href="{{{ post_url }}}">Permalink</a>
+			{{# date_published_iso }}
+			| <time class="dt-published" datetime="{{ date_published_iso }}">{{ date_published_utc }}</time>
+			{{/ date_published_iso }}
+	
+			{{# date_updated_iso }}
+			| Updated: <time class="dt-updated" datetime="{{ date_updated_iso }}">{{ date_updated_utc }}</time>
+			{{/ date_updated_iso }}
+		</p>
+	</footer>
 </article>

@@ -33,6 +33,7 @@ export function import_endpoints() {
 	
 	require('./ctrl/status');
 	require('./ctrl/robots');
+	require('./ctrl/microformats');
 	require('./ctrl/preview-markdown');
 	require('./ctrl/token/get');
 	require('./ctrl/token/validate');
@@ -60,6 +61,10 @@ export function import_endpoints() {
 	// Settings
 	require('./ctrl/settings/get');
 	require('./ctrl/settings/update');
+	
+	// Links
+	require('./ctrl/links/get');
+	require('./ctrl/links/update');
 	
 	// Templates
 	require('./ctrl/templates/get');

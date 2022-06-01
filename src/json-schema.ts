@@ -10,6 +10,10 @@ export const str = <T extends string>(format?: T) => ({
 	type: 'string' as const, format
 });
 
+export const bool = () => ({
+	type: 'boolean' as const
+});
+
 export const str_enum = (values: string[]) => ({
 	type: 'string' as const, enum: values
 });

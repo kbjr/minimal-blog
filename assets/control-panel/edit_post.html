@@ -432,6 +432,14 @@ figcaption {
 	stroke: var(--theme-text-body);
 }
 
+.rendered-bytefield svg line[stroke-width='1'] {
+	stroke-width: 1.5;
+}
+
+.rendered-bytefield svg line[stroke-darharray='1,1'] {
+	stroke-dasharray: 1.5, 1.5;
+}
+
 /* === Railroad === */
 
 .rendered-railroad svg {
@@ -440,14 +448,14 @@ figcaption {
 
 .rendered-railroad svg path {
 	stroke-width: 3;
-	stroke: var(--theme-text-highlight);
+	stroke: var(--theme-text-body);
 }
 
 .rendered-railroad svg text {
-	font: bold 0.8rem var(--font-monospace);
+	font: bold 0.8rem var(--font-cursive);
 	text-anchor: middle;
 	white-space: pre;
-	fill: var(--theme-text-highlight);
+	fill: var(--theme-text-body);
 	font-weight: 300;
 }
 
@@ -464,7 +472,7 @@ figcaption {
 }
 
 .rendered-railroad svg text.comment {
-	font: italic 0.75rem var(--font-monospace);
+	font: italic 0.75rem var(--font-cursive);
 }
 
 .rendered-railroad svg g.non-terminal text {
@@ -473,8 +481,9 @@ figcaption {
 
 .rendered-railroad svg rect {
 	stroke-width: 3;
-	stroke: var(--theme-text-highlight);
-	fill: var(--theme-bg-text-highlight);
+	stroke: var(--theme-text-body);
+	fill: var(--theme-bg-light);
+	transition: fill linear .5s;
 }
 
 .rendered-railroad svg rect.group-box {
@@ -485,13 +494,13 @@ figcaption {
 
 .rendered-railroad svg path.diagram-text {
 	stroke-width: 3;
-	stroke: var(--theme-text-highlight);
+	stroke: var(--theme-text-body);
 	fill: var(--theme-bg-main);
 	cursor: help;
 }
 
 .rendered-railroad svg g.diagram-text:hover path.diagram-text {
-	fill: var(--theme-bg-light);
+	fill: var(--theme-bg-heavy);
 }
 
 `;

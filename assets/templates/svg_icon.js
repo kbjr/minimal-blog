@@ -1,5 +1,7 @@
 (() => {
 	const icons = {
+		// These icons are MIT licensed
+		// see: https://github.com/feathericons/feather/blob/master/LICENSE
 		'github': '<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>',
 		'linkedin': `
 			<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
@@ -31,6 +33,21 @@
 			<polyline points="15 3 21 3 21 9"></polyline>
 			<line x1="10" y1="14" x2="21" y2="3"></line>
 		`,
+		'rss': `
+			<path d="M4 11a9 9 0 0 1 9 9"></path>
+			<path d="M4 4a16 16 0 0 1 16 16"></path>
+			<circle cx="5" cy="19" r="1"></circle>
+		`,
+		'user': `
+			<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+			<circle cx="12" cy="7" r="4"></circle>
+		`,
+		'users': `
+			<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+			<circle cx="9" cy="7" r="4"></circle>
+			<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+			<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+		`,
 	};
 
 	const template = `
@@ -56,6 +73,10 @@
 		class Icon extends HTMLElement {
 			static get observedAttributes() {
 				return [ 'icon' ];
+			}
+
+			static get icons() {
+				return Object.keys(icons);
 			}
 	
 			constructor() {

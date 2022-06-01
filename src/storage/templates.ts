@@ -1,12 +1,12 @@
 
 import { conf } from '../conf';
-import { debug_logger } from '../debug';
+import { logger } from '../debug';
 import { load_default_template } from './assets';
 import { render as mustache_render, parse } from 'mustache';
-import { settings, colors, feed, store, events, posts } from './store';
+import { settings, colors, feed, store, events, posts, links } from './store';
 import { Post } from './posts';
 
-const log = debug_logger('asset_files', `[asset_files]: `);
+const log = logger('asset_files');
 
 export type Templates = Record<string, string>;
 let templates: Partial<Templates>
@@ -32,18 +32,18 @@ const editable_ui_templates = [
 ];
 
 export async function load() {
-	log('Loading all templates from storage');
+	log.info('loading all templates from storage');
 
 	templates = await store.get_all_templates();
 
 	for (const [name, template] of Object.entries(templates)) {
-		log(`Pre-parsing template ${name} with moustache`);
+		log.info(`pre-parsing template ${name} with moustache`);
 		parse(template);
 	}
 
 	for (const name of editable_ui_templates) {
 		if (templates[name] == null) {
-			log(`Template ${name} not found in storage; Loading default from disk`);
+			log.info(`template ${name} not found in storage; Loading default from disk`);
 			const content = await load_default_template(name);
 			await update_template(name, content);
 		}
@@ -53,13 +53,13 @@ export async function load() {
 }
 
 export async function reset_template(name: string) {
-	log(`Resetting template ${name} to default`);
+	log.info(`resetting template ${name} to default`);
 	const content = await load_default_template(name, true);
 	await update_template(name, content);
 }
 
 export function render(name: string, context: TemplateContext, partials: Record<string, string> = { }) : string {
-	log(`Rendering template ${name}`);
+	log.info(`rendering template ${name}`);
 	return mustache_render(templates[name], context, partials);
 }
 
@@ -68,7 +68,7 @@ export function get_template(name: string) {
 }
 
 export function update_template(name: string, content: string) {
-	log(`Updating template ${name}`);
+	log.info(`updating template ${name}`);
 	templates[name] = content;
 	parse(content);
 	events.emit('templates.update', name);
@@ -134,6 +134,7 @@ const feed_context = Object.freeze({
 	get event_uri_format() { return settings.get('event_uri_format'); },
 	get all_tags() { return posts.list_tags(); },
 	get show_tag_counts() { return settings.get('show_tag_counts'); },
+	get links() { return links.get_links(); }
 });
 
 export class TemplateContext {

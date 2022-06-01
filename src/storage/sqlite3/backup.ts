@@ -1,7 +1,9 @@
 
 import { conf } from '../../conf';
-import { log_debug } from '../../debug';
+import { logger } from '../../debug';
 import { promises as fs, constants } from 'fs';
+
+const log = logger('sqlite');
 
 export async function create_backup() {
 	const timestamp_suffix = (new Date).toISOString().replace(/[-:T]/g, '.').slice(0, -1);
@@ -12,7 +14,7 @@ export async function create_backup() {
 	]);
 
 	async function backup_file(file: string) {
-		log_debug('sqlite', `[sqlite://${file}]: Generating backup ${file}.bak.${timestamp_suffix}`);
+		log.debug(`generating backup ${file}.bak.${timestamp_suffix}`);
 		const new_file = `${file}.bak.${timestamp_suffix}`;
 		await fs.copyFile(file, new_file, constants.COPYFILE_EXCL);
 	}
