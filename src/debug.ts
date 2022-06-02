@@ -11,6 +11,7 @@ export interface Loggers {
 	asset_files: boolean;
 	cache: boolean;
 	auth: boolean;
+	search: boolean;
 	outbound_http: boolean;
 }
 

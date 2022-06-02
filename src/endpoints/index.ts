@@ -7,6 +7,9 @@ export function import_endpoints() {
 	// Sitemap
 	require('./web/sitemap');
 	
+	// OpenSearch
+	require('./web/opensearch');
+	
 	// Asset files (CSS/JS/Images)
 	require('./web/assets');
 	// require('./web/favicon');

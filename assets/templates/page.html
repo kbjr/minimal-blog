@@ -8,6 +8,9 @@
 	<meta name="description" content="{{ page.description }}">
 
 	<link rel="icon" href="{{{ site.url }}}/favicon.png">
+	{{# feed.search_enabled }}
+	<link rel="search" href="{{{ site.url }}}/opensearch.xml" type="application/opensearchdescription+xml" title="Content Search">
+	{{/ feed.search_enabled }}
 	<link rel="sitemap" href="{{{ site.url }}}/sitemap.xml">
 	<link rel="self" type="text/mfs+html" href="{{{ page.url }}}">
 	<link rel="cannonical" type="text/mfs+html" href="{{{ page.url }}}">
@@ -38,11 +41,11 @@
 	<link rel="stylesheet" href="{{{ site.url }}}/prism.css">
 	<script src="{{{ site.url }}}/svg_icon.js" async></script>
 </head>
-<body>
+<body class="h-feed">
 	<script src="{{{ site.url }}}/color_theme_toggle.js"></script>
 	<color-theme-toggle></color-theme-toggle>
 
-	<div id="root" class="h-feed">
+	<div id="root">
 		<div id="header-sidebar">
 			<header>
 				<h1 class="p-name">
@@ -55,6 +58,16 @@
 			</header>
 
 			<aside>
+				{{# feed.search_enabled }}
+				<h2 id="search-heading">Search</h2>
+				<form action="{{{ site.url }}}/search" method="get" class="search">
+					<input type="text" name="query" aria-labelledby="search-heading" role="search">
+					<button type="submit" class="icon-only" title="Search">
+						<svg-icon icon="search"></svg-icon>
+					</button>
+				</form>
+				{{/ feed.search_enabled }}
+
 				<h2>Tags</h2>
 				<ul class="tag-list">
 					{{# feed.all_tags }}

@@ -48,6 +48,10 @@
 			<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
 			<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
 		`,
+		'search': `
+			<circle cx="11" cy="11" r="8"></circle>
+			<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+		`,
 	};
 
 	const template = `

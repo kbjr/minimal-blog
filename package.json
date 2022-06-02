@@ -44,6 +44,7 @@
     "katex": "^0.15.3",
     "marked": "^4.0.15",
     "microformats-parser": "^1.4.1",
+    "minisearch": "^5.0.0-beta2",
     "mustache": "^4.2.0",
     "nomnoml": "^1.5.1",
     "pikchr": "^0.0.5",

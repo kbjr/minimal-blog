@@ -62,6 +62,9 @@ export namespace conf {
 		/** The persistent storage mechanism to use for blog data */
 		export const storage_type = cast_str<StorageType>(process.env.DATA_STORAGE_TYPE, StorageType.sqlite3);
 
+		/** Should OpenSearch and the `/search` endpoint be enabled */
+		export const enable_search = cast_bool(process.env.DATA_ENABLE_SEARCH, true);
+
 		/** Configuration for the sqlite3 storage implementation */
 		export namespace sqlite3 {
 			/** Path to the data storage directory */
@@ -152,6 +155,7 @@ export namespace conf {
 			asset_files: false,
 			cache: false,
 			auth: false,
+			search: true,
 			outbound_http: true,
 		});
 	}

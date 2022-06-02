@@ -124,6 +124,7 @@ const feed_context = Object.freeze({
 	get receive_pingback_enabled() { return feed.receive_pingback_enabled(); },
 	get send_webmention_enabled() { return feed.send_webmention_enabled(); },
 	get receive_webmention_enabled() { return feed.receive_webmention_enabled(); },
+	get search_enabled() { return conf.data.enable_search; },
 	get title() { return settings.get('feed_title'); },
 	get description() { return settings.get('feed_description'); },
 	get author_name() { return settings.get('author_name'); },

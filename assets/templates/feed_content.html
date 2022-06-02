@@ -1,44 +1,48 @@
 
-<main>
-	<section class="feed-list">
-		{{# page.tagged_with }}
-		<h2>Showing posts tagged with "{{ page.tagged_with }}":</h2>
-		{{/ page.tagged_with }}
-		
-		{{^ page.tagged_with }}
-		{{# page.post_type }}
-		{{# page.is_posts }}<h2>Recent Posts:</h2>{{/ page.is_posts }}
-		{{# page.is_comments }}<h2>Recent Comments:</h2>{{/ page.is_comments }}
-		{{# page.is_notes }}<h2>Recent Notes:</h2>{{/ page.is_notes }}
-		{{# page.is_events }}<h2>Recent Events:</h2>{{/ page.is_events }}
-		{{# page.is_rsvps }}<h2>Recent RSVPs:</h2>{{/ page.is_rsvps }}
-		{{/ page.post_type }}
+<section class="feed-list">
+	{{# page.is_search }}
+	<h2>Showing {{ posts.length }} posts matching '{{ page.search_query }}':</h2>
+	{{/ page.is_search }}
 
-		{{^ page.post_type }}
-		<h2>Recent Posts:</h2>
-		{{/ page.post_type }}
-		{{/ page.tagged_with }}
-		
-		{{# posts }}
-		{{# is_post }}{{> post_card }}{{/ is_post }}
-		{{# is_comment }}{{> comment_card }}{{/ is_comment }}
-		{{# is_note }}{{> note_card }}{{/ is_note }}
-		{{# is_event }}{{> event_card }}{{/ is_event }}
-		{{# is_rsvp }}{{> rsvp_card }}{{/ is_rsvp }}
-		{{/ posts }}
-		
-		{{^ posts }}
-		<p>Nothing to see here</p>
-		{{/ posts }}
-		
-		{{# page.next_url }}
-		<p>
-			<a rel="prev" href="{{{ page.next_url }}}">See Older Posts</a>
-		</p>
-		{{/ page.next_url }}
-		
-		{{^ page.next_url }}
-		<!-- <p>No older posts.</p> -->
-		{{/ page.next_url }}
-	</section>
-</main>
+	{{^ page.is_search }}
+	{{# page.tagged_with }}
+	<h2>Showing posts tagged with "{{ page.tagged_with }}":</h2>
+	{{/ page.tagged_with }}
+	
+	{{^ page.tagged_with }}
+	{{# page.post_type }}
+	{{# page.is_posts }}<h2>Recent Posts:</h2>{{/ page.is_posts }}
+	{{# page.is_comments }}<h2>Recent Comments:</h2>{{/ page.is_comments }}
+	{{# page.is_notes }}<h2>Recent Notes:</h2>{{/ page.is_notes }}
+	{{# page.is_events }}<h2>Recent Events:</h2>{{/ page.is_events }}
+	{{# page.is_rsvps }}<h2>Recent RSVPs:</h2>{{/ page.is_rsvps }}
+	{{/ page.post_type }}
+
+	{{^ page.post_type }}
+	<h2>Recent Posts:</h2>
+	{{/ page.post_type }}
+	{{/ page.tagged_with }}
+	{{/ page.is_search }}
+	
+	{{# posts }}
+	{{# is_post }}{{> post_card }}{{/ is_post }}
+	{{# is_comment }}{{> comment_card }}{{/ is_comment }}
+	{{# is_note }}{{> note_card }}{{/ is_note }}
+	{{# is_event }}{{> event_card }}{{/ is_event }}
+	{{# is_rsvp }}{{> rsvp_card }}{{/ is_rsvp }}
+	{{/ posts }}
+	
+	{{^ posts }}
+	<p>Nothing to see here</p>
+	{{/ posts }}
+	
+	{{# page.next_url }}
+	<p>
+		<a rel="prev" href="{{{ page.next_url }}}">See Older Posts</a>
+	</p>
+	{{/ page.next_url }}
+	
+	{{^ page.next_url }}
+	<!-- <p>No older posts.</p> -->
+	{{/ page.next_url }}
+</section>

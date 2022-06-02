@@ -5,10 +5,10 @@
 	- No database needed, just a volume for file storage
 - Control panel API / UI for managing the site
 	- Served on a separate port from the main web UI so you don't have to expose it to the internet if you don't want to
-	- Can enable a Swagger documentation page for control panel API at `/api/docs`
+	- Can enable a [Swagger](https://swagger.io/) documentation page for control panel API at `/api/docs`
 - Publish several different kinds of content, including:
   - Posts (normal, structured article / blog post format)
-  - Comments
+  - Comments ( / replies / responses / reactions to some referenced content)
   - Notes (unstructured blobs, more like micro-blogging)
   - Events
   - RSVPs
@@ -25,18 +25,18 @@
     - A handful of additional extensions, including highlights/marks, note blocks, description lists, and footnotes
 - Produces multiple standard feed formats:
 	- [RSS](https://www.rssboard.org/rss-specification)
-	<!-- - [Atom](https://datatracker.ietf.org/doc/html/rfc4287) -->
 	- [JSON Feed](https://www.jsonfeed.org/)
-	- [JF2 Feed](https://jf2.spec.indieweb.org/)
 	- [`h-feed` Microformat](https://microformats.org/wiki/h-feed)
+	- [JF2 Feed](https://jf2.spec.indieweb.org/)
 - Produces standard [sitemap.xml](https://www.sitemaps.org/protocol.html)
 - Light / dark mode toggle (defaulting to system preference)
 - Easily edit and swap between color themes in the control panel
+- Full-text search on content powered by [minisearch](https://github.com/lucaong/minisearch)
+  - `<link>` for [OpenSearch](https://github.com/dewitt/opensearch/blob/master/opensearch-1-1-draft-6.md) discovery
 
 ### Roadmap Features
 
 - Automatic syndication to multiple 3rd parties
-- Update diagram rendering to include railroad diagrams and [mermaid](https://mermaid-js.github.io/mermaid/#/)-like flow charts
 - Send and receive interactions in multiple standard formats (with moderation / spam blocking features):
 	- [Pingbacks](https://www.hixie.ch/specs/pingback/pingback)
 	- [WebMentions](https://www.w3.org/TR/webmention) (with support for [vouches](https://indieweb.org/Vouch))

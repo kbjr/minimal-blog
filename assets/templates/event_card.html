@@ -38,5 +38,14 @@
 			| Updated: <time class="dt-updated" datetime="{{ date_updated_iso }}">{{ date_updated_utc }}</time>
 			{{/ date_updated_iso }}
 		</p>
+
+		{{# page.is_search }}
+		<div class="search-meta" role="note">
+			Search Score: <span class="score">{{ search_score }}</span>
+			Matched Terms: <ul class="terms">
+				{{# search_terms }}<li>{{ . }}</li>{{/ search_terms }}
+			</ul>
+		</div>
+		{{/ page.is_search }}
 	</footer>
 </article>

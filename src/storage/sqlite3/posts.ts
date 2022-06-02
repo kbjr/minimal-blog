@@ -58,6 +58,7 @@ select
 	post.date_updated                    as date_updated,
 	post.date_event_start                as date_event_start,
 	post.date_event_end                  as date_event_end,
+	post.rsvp_type                       as rsvp_type,
 	group_concat(tag.tag_name, char(31)) as tags
 from posts post
 left outer join tags tag
@@ -88,6 +89,7 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 			$date_published: published,
 			$date_event_start: data.post_type === 'event' ? data.date_event_start : null,
 			$date_event_end: data.post_type === 'event' ? data.date_event_end : null,
+			$rsvp_type: data.post_type === 'rsvp' ? data.rsvp_type : null,
 		});
 
 		const post = obj({
@@ -106,6 +108,7 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 			date_updated: null,
 			date_event_start: null,
 			date_event_end: null,
+			rsvp_type: null,
 		});
 
 		if (data.tags && data.tags.length) {
@@ -122,9 +125,9 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 
 const sql_create_post = sql(`
 insert into posts
-	(post_type, uri_name, title, subtitle, external_url, content_html, content_markdown, image, banner_image, is_draft, date_published, date_event_start, date_event_end)
+	(post_type, uri_name, title, subtitle, external_url, content_html, content_markdown, image, banner_image, is_draft, date_published, date_event_start, date_event_end, rsvp_type)
 values
-	($post_type, $uri_name, $title, $subtitle, $external_url, $content_html, $content_markdown, $image, $banner_image, $is_draft, $date_published, $date_event_start, $date_event_end)
+	($post_type, $uri_name, $title, $subtitle, $external_url, $content_html, $content_markdown, $image, $banner_image, $is_draft, $date_published, $date_event_start, $date_event_end, $rsvp_type)
 `);
 
 export async function update_post(data: Partial<PostDataPatch>) : Promise<void> {

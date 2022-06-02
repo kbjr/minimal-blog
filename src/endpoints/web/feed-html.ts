@@ -5,6 +5,7 @@ import { store } from '../../storage';
 import { rendered_template_cache } from '../../cache';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { posts } from '../../storage/store';
+import { str } from '../../json-schema';
 
 const default_count = 10;
 
@@ -13,7 +14,8 @@ const partials = store.templates.page_partials('feed_content.html');
 async function get_default_context() {
 	const data = await store.posts.get_posts(default_count, null, null, null, false);
 	const posts = data.map((post) => new store.posts.Post(post));
-	const context = new store.templates.TemplateContext(page_context(default_count, null, null, null, posts), posts);
+	const page = page_context(default_count, null, null, null, null, posts);
+	const context = new store.templates.TemplateContext(page, posts);
 	return context;
 }
 
@@ -31,6 +33,7 @@ type Req = FastifyRequest<{
 		tag?: string;
 	};
 	Querystring: {
+		query?: string;
 		count?: number;
 		before?: string;
 	};
@@ -39,16 +42,14 @@ type Req = FastifyRequest<{
 const opts: RouteShorthandOptions = {
 	schema: {
 		querystring: {
+			query: str(),
 			count: {
 				type: 'integer',
 				minimum: 1,
 				maximum: 25,
 				default: default_count,
 			},
-			before: {
-				type: 'string',
-				format: 'date-time',
-			},
+			before: str('date-time'),
 		}
 	}
 };
@@ -118,9 +119,32 @@ web.get('/rsvps', opts, async (req: Req, res) => {
 	res.send(html);
 });
 
+if (conf.data.enable_search) {
+	type Req = FastifyRequest<{
+		Querystring: {
+			query: string;
+		};
+	}>;
+	
+	web.get('/search', opts, async (req: Req, res) => {
+		const html = await build_search_html(req.query.query);
+	
+		res.type('text/html; charset=utf-8');
+		res.header('content-language', store.settings.get('language'));
+		res.send(html);
+	});
+}
+
 async function build_feed_html(count: number, tagged_with?: string, before?: string, post_type?: posts.PostType) {
-	const posts = await store.posts.get_posts(count, tagged_with, before, post_type, false);
-	return build_html_for_posts(posts.map((post) => new store.posts.Post(post)), count, tagged_with, before, post_type);
+	const data = await store.posts.get_posts(count, tagged_with, before, post_type, false);
+	const posts = data.map((post) => new store.posts.Post(post));
+	return build_html_for_posts(posts, null, count, tagged_with, before, post_type);
+}
+
+async function build_search_html(query: string) {
+	const data = await store.posts.search_posts(query);
+	const posts = data.map((post) => new store.posts.Post(post));
+	return build_html_for_posts(posts, query, posts.length, null, null, null);
 }
 
 function page_url(count: number, tagged_with?: string, before?: string, post_type?: posts.PostType) {
@@ -160,7 +184,7 @@ function next_url(count: number, tagged_with: string, post_type: posts.PostType,
 	const qs_params: string[] = [ ];
 
 	if (tagged_with) {
-		base += `/tagged/${tagged_with}`;
+		base += `/tagged/${encodeURIComponent(tagged_with)}`;
 	}
 
 	else if (post_type) {
@@ -177,7 +201,7 @@ function next_url(count: number, tagged_with: string, post_type: posts.PostType,
 	return `${base}?${qs_params.join('&')}`;
 }
 
-function page_context(count: number, tagged_with: string, before: string, post_type: posts.PostType, posts: store.posts.Post[]) {
+function page_context(count: number, query: string, tagged_with: string, before: string, post_type: posts.PostType, posts: store.posts.Post[]) {
 	return {
 		page_name: 'feed',
 		get title() {
@@ -197,7 +221,13 @@ function page_context(count: number, tagged_with: string, before: string, post_t
 			return (new Date(before)).toUTCString();
 		},
 		get next_url() {
-			return next_url(count, tagged_with, post_type, posts);
+			return query ? null : next_url(count, tagged_with, post_type, posts);
+		},
+		get is_search() {
+			return !! query;
+		},
+		get search_query() {
+			return query;
 		},
 		get is_posts() {
 			return post_type === 'post';
@@ -217,7 +247,8 @@ function page_context(count: number, tagged_with: string, before: string, post_t
 	};
 }
 
-function build_html_for_posts(posts: store.posts.Post[], count: number, tagged_with?: string, before?: string, post_type?: posts.PostType) {
-	const context = new store.templates.TemplateContext(page_context(count, tagged_with, before, post_type, posts), posts);
+function build_html_for_posts(posts: store.posts.Post[], query: string, count: number, tagged_with?: string, before?: string, post_type?: posts.PostType) {
+	const page = page_context(count, query, tagged_with, before, post_type, posts);
+	const context = new store.templates.TemplateContext(page, posts);
 	return store.templates.render('page.html', context, partials);
 }

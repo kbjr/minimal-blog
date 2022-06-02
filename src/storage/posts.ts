@@ -5,6 +5,14 @@ import { events, store } from './store';
 import { render_markdown_to_html } from '../markdown';
 import { throw_422_unprocessable_entity } from '../http-error';
 import * as settings from './settings';
+import Minisearch = require('minisearch');
+import type MiniSearch from 'minisearch';
+import type { Options as MiniSearchOption } from 'minisearch';
+import { logger } from '../debug';
+import { JSDOM } from 'jsdom';
+
+const log_search = logger('search');
+const max_search_results = 50;
 
 export type PostType = 'post' | 'comment' | 'note' | 'event' | 'rsvp';
 // | 'share' | 'like/reaction' | 'media-album'
@@ -12,8 +20,41 @@ export type PostType = 'post' | 'comment' | 'note' | 'event' | 'rsvp';
 // Note: `posts` is ordered with the most recent post first
 let posts: PostData[];
 let posts_index: Record<PostType, Record<string, PostData>>;
+
 let tags: Tag[];
 let tags_index: Record<string, Tag>;
+
+const search_opts: MiniSearchOption = {
+	idField: 'post_id',
+	fields: ['title', 'subtitle', 'content', 'tags', 'post_type'],
+	storeFields: ['post_type', 'uri_name'],
+	searchOptions: {
+		boost: {
+			tags: 2,
+			title: 2,
+			subtitle: 1.5,
+		}
+	},
+	extractField(doc: PostData, field) {
+		switch (field) {
+			case 'content': {
+				const { window } = new JSDOM('');
+				window.document.body.innerHTML = doc.content_html;
+				return window.document.body.textContent;
+			};
+
+			case 'tags': {
+				return doc.tags.join(' ');
+			};
+		}
+
+		return doc[field];
+	},
+};
+
+let next_search_id = 1;
+// @ts-ignore: type definition doesn't match reality of what's exported
+const search_index: MiniSearch = new Minisearch(search_opts);
 
 export async function load() {
 	posts = await store.get_all_posts();
@@ -35,7 +76,15 @@ export async function load() {
 		tags_index[tag.tag_name] = tag;
 	}
 
-	// 
+	rebuild_search_index();
+}
+
+function rebuild_search_index() {
+	const now = Date.now();
+	log_search.info('Rebuilding index...');
+	search_index.removeAll();
+	search_index.addAll(posts);
+	log_search.info(`Finished rebuilding index. (~${Date.now() - now}ms)`);
 }
 
 export async function get_draft_posts(count: number) {
@@ -93,6 +142,31 @@ export async function get_posts(count: number, tagged_with?: string, before?: st
 	return results.slice(0, count);
 }
 
+export interface SearchMeta {
+	search_score: number;
+	search_terms: string[];
+	search_match: Record<string, string[]>;
+}
+
+export async function search_posts(query: string) {
+	const now = Date.now();
+	const log = log_search.child({ search_id: next_search_id++, query });
+	log.debug('Starting search...');
+
+	const results = search_index.search(query, { });
+
+	log.info(`Finished search, found ${results.length} matches. (~${Date.now() - now}ms)`);
+
+	return results.slice(0, max_search_results).map((result) => {
+		const data: PostData = posts_index[result.post_type][result.uri_name];
+		return Object.assign({
+			search_score: result.score,
+			search_terms: result.terms,
+			search_match: result.match,
+		}, data);
+	});
+}
+
 export async function create_post(data: PostDataPatch) : Promise<PostData> {
 	data.content_html = await render_markdown_to_html(data.content_markdown, { });
 	
@@ -104,6 +178,7 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 	posts.unshift(full_post);
 	posts_index[data.post_type][data.uri_name] = full_post;
 	add_tags(full_post.tags);
+	search_index.add(full_post);
 	events.emit('posts.create');
 	return full_post;
 }
@@ -222,7 +297,7 @@ export class Tag implements Readonly<TagData> {
 }
 
 export class Post implements Readonly<PostData> {
-	constructor(private data: PostData) { }
+	constructor(private data: PostData & Partial<SearchMeta>) { }
 
 	get post_url() {
 		switch (this.data.post_type) {
@@ -373,5 +448,17 @@ export class Post implements Readonly<PostData> {
 	get tags() {
 		// TODO: Move this sort() somewhere more efficient
 		return this.data.tags.sort().slice();
+	}
+
+	get search_score() {
+		return this.data.search_score.toFixed(2);
+	}
+
+	get search_match() {
+		return this.data.search_match;
+	}
+
+	get search_terms() {
+		return this.data.search_terms;
 	}
 }
