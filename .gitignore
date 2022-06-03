@@ -2,4 +2,3 @@ node_modules
 data
 build
 features.md
-endpoints.http
