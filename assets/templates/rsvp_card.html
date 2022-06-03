@@ -20,7 +20,7 @@
 		<blockquote class="external-embed">
 			<article class="h-event u-in-reply-to">
 				<h2 class="p-name">
-					<a href="{{{ external_url }}}" class="u-url">{{ title }}</a>
+					<a href="{{{ external_url }}}" class="u-url" rel="external">{{ title }}</a>
 				</h2>
 
 				{{# subtitle }}
@@ -46,7 +46,7 @@
 		<ul class="tag-list">
 			{{# tags }}
 			<li class="p-category" data-bg-transition>
-				<a href="{{{ site.url }}}/tagged/{{ . }}">{{ . }}</a>
+				<a rel="tag" href="{{{ site.url }}}/tagged/{{ . }}">{{ . }}</a>
 			</li>
 			{{/ tags }}
 		</ul>

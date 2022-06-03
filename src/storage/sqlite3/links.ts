@@ -15,7 +15,7 @@ export async function get_links() {
 }
 
 const sql_get_links = sql(`
-select link_url, label, icon
+select link_url, label, icon, rel
 from links
 order by sort_order asc
 `);
@@ -35,7 +35,8 @@ export async function set_links(new_links: LinkData[]) {
 				$link_url: link.link_url,
 				$label: link.label,
 				$icon: link.icon,
-				$sort_order: i + 1
+				$sort_order: i + 1,
+				$rel: link.rel,
 			});
 		}
 	}
@@ -51,7 +52,7 @@ delete from links
 
 const sql_set_link = sql(`
 insert into links
-	(link_url, label, icon, sort_order)
+	(link_url, label, icon, sort_order, rel)
 values
-	($link_url, $label, $icon, $sort_order)
+	($link_url, $label, $icon, $sort_order, $rel)
 `);

@@ -1,4 +1,6 @@
 
+**NOTICE: This project is still in very early alpha development.**
+
 ## Features
 
 - Entire application runs in a single container
@@ -23,11 +25,12 @@
     - Rendering diagrams with [Pikchr](https://pikchr.org/home/doc/trunk/homepage.md)
     - Rendering railroad diagrams with [@prantlf/railroad-diagrams](https://github.com/prantlf/railroad-diagrams)
     - A handful of additional extensions, including highlights/marks, note blocks, description lists, and footnotes
-- Produces multiple standard feed formats:
+- Produces multiple standard feed / metadata formats by default:
 	- [RSS](https://www.rssboard.org/rss-specification)
 	- [JSON Feed](https://www.jsonfeed.org/)
 	- [`h-feed` Microformat](https://microformats.org/wiki/h-feed)
 	- [JF2 Feed](https://jf2.spec.indieweb.org/)
+  - [Open Graph protocol](https://ogp.me/)
 - Produces standard [sitemap.xml](https://www.sitemaps.org/protocol.html)
 - Light / dark mode toggle (defaulting to system preference)
 - Easily edit and swap between color themes in the control panel
@@ -63,9 +66,9 @@ $ npm start
 ### To build a docker image
 
 ```bash
-# Build for linux/arm64 platform (tagged as "blog:arm64")
+# Build for linux/arm64 platform (tagged as "minimal-blog:arm64")
 $ npm run docker:arm64
 
-# Build for linux/amd64 platform (tagged as "blog:amd64")
+# Build for linux/amd64 platform (tagged as "minimal-blog:amd64")
 $ npm run docker:amd64
 ```

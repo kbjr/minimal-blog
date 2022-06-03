@@ -22,7 +22,7 @@ export const swagger_opts = {
 	routePrefix: '/api/docs',
 	openapi: {
 		info: {
-			title: 'Blog Control API',
+			title: 'Minimal Blog: Control API',
 			description: '',
 			version: '0.1.0'
 		},
@@ -37,6 +37,7 @@ export const swagger_opts = {
 			{ name: 'posts', description: 'Endpoints to read and write Post information' },
 			{ name: 'templates', description: 'Endpoints for managing page Templates' },
 			{ name: 'themes', description: 'Endpoints for managing Color Themes' },
+			{ name: 'links', description: 'Endpoints for managing sidebar links' },
 			{ name: 'interactions', description: 'Endpoints for managing Interactions like Pingbacks and WebMentions' },
 		],
 		consumes: [

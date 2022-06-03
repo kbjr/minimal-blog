@@ -6,7 +6,7 @@ import { throw_404_not_found } from '../../http-error';
 import { rendered_template_cache } from '../../cache';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 
-const partials = store.templates.page_partials('post_content.html');
+const partials = store.templates.page_partials('post_content.html', 'post_meta.html');
 const cached_posts = dict<string, () => Promise<string>>();
 
 type Req = FastifyRequest<{

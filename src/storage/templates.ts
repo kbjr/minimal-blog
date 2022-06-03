@@ -14,16 +14,22 @@ let templates: Partial<Templates>
 const editable_ui_templates = [
 	'page.html',
 	'feed_content.html',
+	'feed_meta.html',
 	'post_card.html',
 	'post_content.html',
+	'post_meta.html',
 	'comment_card.html',
 	'comment_content.html',
+	'comment_meta.html',
 	'note_card.html',
 	'note_content.html',
+	'note_meta.html',
 	'event_card.html',
 	'event_content.html',
+	'event_meta.html',
 	'rsvp_card.html',
 	'rsvp_content.html',
+	'rsvp_meta.html',
 	'not_found.html',
 	'author_card.html',
 	'styles.css',
@@ -75,10 +81,13 @@ export function update_template(name: string, content: string) {
 	return store.set_template(name, content);
 }
 
-export function page_partials(page_content: string) {
+export function page_partials(page_content: string, page_meta: string) {
 	return Object.freeze({
 		get page_content() {
 			return get_template(page_content);
+		},
+		get page_specific_meta_tags() {
+			return get_template(page_meta);
 		},
 		get author_card() {
 			return get_template('author_card.html');

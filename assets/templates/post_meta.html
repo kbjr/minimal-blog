@@ -1,0 +1,11 @@
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{{ post.post_url }}}">
+<meta property="og:title" content="{{ post.title }}">
+<meta property="og:site_name" content="{{ feed.title }}">
+{{# post.subtitle }}
+<meta property="og:description" content="{{ post.subtitle }}">
+{{/ post.subtitle }}
+{{# post.author_url }}
+<meta property="og:article:author" content="{{ post.author_url }}">
+{{/ post.author_url }}

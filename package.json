@@ -7,8 +7,8 @@
   "scripts": {
     "start": "./start.sh",
     "build": "tsc -b tsconfig.json",
-    "docker:arm64": "docker build . -t blog:arm64 --platform linux/arm64",
-    "docker:amd64": "docker build . -t blog:amd64 --platform linux/amd64"
+    "docker:arm64": "docker build . -t minimal-blog:arm64 --platform linux/arm64",
+    "docker:amd64": "docker build . -t minimal-blog:amd64 --platform linux/amd64"
   },
   "keywords": [],
   "author": "James Brumond <james@jbrumond.me>",

@@ -112,13 +112,13 @@ export namespace conf {
 		/** Minimum password complexity required for all users */
 		export const minimum_password_complexity = 125;
 
-		/**
-		 * Path to key file to use for signing JWTs. If not supplied, the server will use HMAC token signing
-		 * using a randomly generated secret (regenerated uniquely at each server start).
-		 */
+		/** Path to key file to use for signing JWTs. */
 		export const signing_key_file = cast_str<string>(process.env.AUTH_SIGNING_KEY, null);
 
-		/** Secret size (in bytes) to generate for HMAC token signing */
+		/** Base-64 HMAC secret to use when signing tokens. */
+		export const hmac_secret = cast_str<string>(process.env.AUTH_HMAC_SECRET, null);
+
+		/** Secret size (in bytes) to auto-generate for HMAC token signing (if no other signing method is provided) */
 		export const hmac_secret_size = 128;
 
 		/** Configuration for the argon2 hasher used for hashing user passwords for storage */

@@ -9,7 +9,7 @@ import { str } from '../../json-schema';
 
 const default_count = 10;
 
-const partials = store.templates.page_partials('feed_content.html');
+const partials = store.templates.page_partials('feed_content.html', 'feed_meta.html');
 
 async function get_default_context() {
 	const data = await store.posts.get_posts(default_count, null, null, null, false);
@@ -204,11 +204,14 @@ function next_url(count: number, tagged_with: string, post_type: posts.PostType,
 function page_context(count: number, query: string, tagged_with: string, before: string, post_type: posts.PostType, posts: store.posts.Post[]) {
 	return {
 		page_name: 'feed',
+		get is_feed() {
+			return true;
+		},
 		get title() {
 			return store.settings.get('feed_title');
 		},
 		get url() {
-			return page_url(count);
+			return page_url(count, tagged_with, before, post_type);
 		},
 		get description() {
 			return store.settings.get('feed_description');

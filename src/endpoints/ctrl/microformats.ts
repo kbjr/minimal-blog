@@ -1,7 +1,8 @@
 
 import { ctrl } from '../../http';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
-import { read_url_as_microformats } from '../../external-posts/microformats';
+import { read_url_as_post } from '../../external-posts/parse';
+import { read_as_event } from '../../external-posts';
 
 type Req = FastifyRequest<{
 	Body: string;
@@ -20,7 +21,15 @@ const opts: RouteShorthandOptions = {
 
 ctrl.post('/api/microformats', opts, async (req: Req, res) => {
 	const url = req.body.trim();
-	const result = await read_url_as_microformats(url, true);
+	const result = await read_url_as_post(url, true);
+
+	res.status(200);
+	return result;
+});
+
+ctrl.post('/api/microformats/event', opts, async (req: Req, res) => {
+	const url = req.body.trim();
+	const result = await read_as_event(url, true);
 
 	res.status(200);
 	return result;

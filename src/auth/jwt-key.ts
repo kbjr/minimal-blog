@@ -7,8 +7,9 @@ import { logger } from '../debug';
 
 const log = logger('auth').child({ system: 'jwt' });
 
-const secret = conf.auth.signing_key_file
-	? readFileSync(conf.auth.signing_key_file)
+const secret
+	= conf.auth.signing_key_file ? readFileSync(conf.auth.signing_key_file)
+	: conf.auth.hmac_secret ? Buffer.from(conf.auth.hmac_secret, 'base64')
 	: randomBytes(conf.auth.hmac_secret_size);
 
 export interface Roles {

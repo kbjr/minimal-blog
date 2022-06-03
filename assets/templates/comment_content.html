@@ -5,7 +5,7 @@
 			{{> author_card }}
 			Commented On:<br>
 			<span class="u-in-reply-to h-cite">
-				<cite><a href="{{{ external_url }}}" class="u-url">{{ external_url }}</a></cite>
+				<cite><a href="{{{ external_url }}}" class="u-url" rel="external">{{ external_url }}</a></cite>
 			</span>
 		</h2>
 	</header>
@@ -18,7 +18,7 @@
 		<ul class="tag-list">
 			{{# tags }}
 			<li class="p-category" data-bg-transition>
-				<a href="{{{ site.url }}}/tagged/{{ . }}">{{ . }}</a>
+				<a rel="tag" href="{{{ site.url }}}/tagged/{{ . }}">{{ . }}</a>
 			</li>
 			{{/ tags }}
 		</ul>

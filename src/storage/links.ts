@@ -22,4 +22,5 @@ export interface LinkData {
 	link_url: string;
 	label: string;
 	icon: string;
+	rel?: string;
 }

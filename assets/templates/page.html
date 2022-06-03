@@ -7,6 +7,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="{{ page.description }}">
 
+	{{> page_specific_meta_tags }}
+
 	<link rel="icon" href="{{{ site.url }}}/favicon.png">
 	{{# feed.search_enabled }}
 	<link rel="search" href="{{{ site.url }}}/opensearch.xml" type="application/opensearchdescription+xml" title="Content Search">
@@ -41,7 +43,7 @@
 	<link rel="stylesheet" href="{{{ site.url }}}/prism.css">
 	<script src="{{{ site.url }}}/svg_icon.js" async></script>
 </head>
-<body class="h-feed">
+<body class="{{# page.is_feed }}h-feed{{/ page.is_feed }}">
 	<script src="{{{ site.url }}}/color_theme_toggle.js"></script>
 	<color-theme-toggle></color-theme-toggle>
 
@@ -84,7 +86,7 @@
 					{{# feed.links }}
 					<li>
 						<svg-icon icon="{{ icon }}"></svg-icon>
-						<a href="{{{ link_url }}}">{{ label }}</a>
+						<a href="{{{ link_url }}}" rel="{{ rel }}">{{ label }}</a>
 					</li>
 					{{/ feed.links }}
 				</ul>

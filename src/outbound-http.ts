@@ -2,7 +2,7 @@
 import { URL } from 'url';
 import { logger } from './debug';
 import { store } from './storage';
-import { request as http_request, ClientRequest, IncomingMessage, OutgoingHttpHeaders } from 'http';
+import { request as http_request, ClientRequest, IncomingMessage, OutgoingHttpHeaders, IncomingHttpHeaders } from 'http';
 import { request as https_request } from 'https';
 
 const http_log = logger('outbound_http');
@@ -16,6 +16,7 @@ export interface HttpResult {
 	res: IncomingMessage;
 	status: number;
 	body: string;
+	headers: IncomingHttpHeaders;
 }
 
 export function http_get(url_str: string, headers?: OutgoingHttpHeaders) {
@@ -67,6 +68,7 @@ export async function http_req(method: string, url_str: string, headers?: Outgoi
 		res: null,
 		status: null,
 		body: null,
+		headers: null,
 	};
 
 	const port = url.port ? parseInt(url.port, 10) : (url.protocol === 'https:' ? 443 : 80);
@@ -103,6 +105,7 @@ export async function http_req(method: string, url_str: string, headers?: Outgoi
 
 			res.on('end', () => {
 				result.body = data;
+				result.headers = res.headers;
 				resolve(result);
 			});
 		});

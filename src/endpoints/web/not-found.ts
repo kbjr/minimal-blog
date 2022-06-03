@@ -6,7 +6,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 let cache: () => Promise<string>;
 
 const partials = Object.freeze({
-	get page_head() { return ''; },
+	get page_specific_meta_tags() { return ''; },
 	get page_content() {
 		return store.templates.get_template('not_found.html');
 	}

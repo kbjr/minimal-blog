@@ -10,6 +10,7 @@ export const links_schema: JSONSchema6 = {
 			link_url: str('uri'),
 			label: str(),
 			icon: str(),
+			rel: str(),
 		},
 		required: ['link_url', 'label', 'icon']
 	}
