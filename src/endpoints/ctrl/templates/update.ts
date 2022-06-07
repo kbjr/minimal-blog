@@ -40,6 +40,8 @@ const putable_templates = new Set([
 	'rsvp_content.html',
 	'not_found.html',
 	'author_card.html',
+	'mention_card.html',
+	'mention_thread.html',
 	'styles.css',
 	'robots.txt',
 	'svg_icon.js',

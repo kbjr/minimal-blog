@@ -1,6 +1,7 @@
 
 import { JSDOM } from 'jsdom';
 import { conf } from '../conf';
+import { sanitize_html } from '../html-sanitize';
 import { MicroformatProperty } from './parse';
 
 export function mf2_extract_str(prop: MicroformatProperty[]) {
@@ -37,6 +38,22 @@ export function mf2_extract_date(prop: MicroformatProperty[]) {
 	return null;
 }
 
+export function mf2_extract_html(prop: MicroformatProperty[]) {
+	if (! prop || ! prop.length) {
+		return null;
+	}
+
+	const prop0 = prop[0];
+
+	if (typeof prop0 === 'string') {
+		return prop0;
+	}
+
+	if ('html' in prop0) {
+		return sanitize_html(prop0.html);
+	}
+}
+
 export function html_to_dom(url: string, html: string) {
 	const { window } = new JSDOM(html, { url });
 	return window;
@@ -44,14 +61,6 @@ export function html_to_dom(url: string, html: string) {
 
 export function take_first(raw: string | string[]) {
 	return Array.isArray(raw) ? raw[0] : raw;
-}
-
-export function url_is_local(url: string) : url is `${typeof conf.http.web_url}${'' | `/${string}`}` {
-	return url === conf.http.web_url || url.startsWith(conf.http.web_url + '/');
-}
-
-export function url_to_local_path(url: string) : string {
-	return url.slice(conf.http.web_url.length);
 }
 
 export function as_date(date_str: string) {

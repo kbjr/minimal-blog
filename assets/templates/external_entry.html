@@ -2,7 +2,7 @@
 	<article class="h-entry u-in-reply-to">
 		<header>
 			<h1 class="p-name">
-				<a href="{{{ url }}}" class="u-url" rel="external">{{ title }}</a>
+				<a href="{{{ url }}}" class="u-url" rel="{{^ is_local }}external{{/ is_local }}">{{ title }}</a>
 			</h1>
 	
 			{{# subtitle }}

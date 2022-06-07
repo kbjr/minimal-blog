@@ -8,6 +8,7 @@ import * as colors from './colors';
 import * as templates from './templates';
 import * as posts from './posts';
 import * as links from './links';
+import * as mentions from './mentions';
 
 export let store: Store;
 export const events = new EventEmitter();
@@ -21,6 +22,7 @@ export * as colors from './colors';
 export * as templates from './templates';
 export * as posts from './posts';
 export * as links from './links';
+export * as mentions from './mentions';
 
 
 
@@ -45,8 +47,9 @@ export async function setup(no_update = false) {
 	await settings.load();
 	await colors.load();
 	await templates.load();
-	await posts.load();
 	await links.load();
+	await posts.load();
+	await mentions.load();
 
 	events.emit('ready');
 }

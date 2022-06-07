@@ -34,6 +34,8 @@ const editable_ui_templates = [
 	'rsvp_meta.html',
 	'not_found.html',
 	'author_card.html',
+	'mention_card.html',
+	'mention_thread.html',
 	'external_entry.html',
 	'external_event.html',
 	'styles.css',
@@ -110,6 +112,12 @@ export function page_partials(page_content: string, page_meta: string) {
 		},
 		get rsvp_card() {
 			return get_template('rsvp_card.html');
+		},
+		get mention_card() {
+			return get_template('mention_card.html');
+		},
+		get mention_thread() {
+			return get_template('mention_thread.html');
 		},
 		get external_entry() {
 			return get_template('external_entry.html');

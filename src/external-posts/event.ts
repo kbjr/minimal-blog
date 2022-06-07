@@ -1,11 +1,12 @@
 
 import { conf } from '../conf';
 import { Cache } from '../cache';
-import { store } from '../storage';
 import { MicroformatRoot, parse_url_response } from './parse';
 import { ExternalAuthor, read_author_from_prop } from './author';
-import { take_first, mf2_extract_date, mf2_extract_str, url_is_local, url_to_local_path, as_date, truncate_str } from './utils';
+import { take_first, mf2_extract_date, mf2_extract_str, as_date, truncate_str, mf2_extract_html } from './utils';
 import { wrap_date } from '../util';
+import { parse_local_url, url_is_local } from './local';
+import { store } from '../storage';
 
 const event_cache = new Cache<ExternalEvent>(
 	conf.data.caches.external_event.max_size,
@@ -22,22 +23,22 @@ export interface ExternalEventData {
 	end?: Date;
 	published?: Date;
 	updated?: Date;
+	full_content?: string;
 	content_preview?: string;
-	local_post?: store.posts.Post;
+	is_local?: boolean;
 }
 
 export async function read_as_event(url: string, skip_cache = false) {
-	if (url_is_local(url)) {
-		const path = url_to_local_path(url);
-		// todo: shortcut to just load info from storage
-	}
-
 	if (! skip_cache) {
 		const cached = event_cache.get_from_cache(url);
 	
 		if (cached) {
 			return cached;
 		}
+	}
+	
+	if (url_is_local(url)) {
+		return read_local_as_event(url);
 	}
 
 	const { title, open_graph, microformats } = await parse_url_response(url, skip_cache);
@@ -52,7 +53,7 @@ export async function read_as_event(url: string, skip_cache = false) {
 		published: null,
 		updated: null,
 		content_preview: null,
-		local_post: null,
+		is_local: false,
 	};
 
 	let h_event: MicroformatRoot;
@@ -97,10 +98,15 @@ export async function read_as_event(url: string, skip_cache = false) {
 		event.published = mf2_extract_date(published);
 		event.updated = mf2_extract_date(updated);
 
-		const full_content = mf2_extract_str(content);
+		const text_content = mf2_extract_str(content);
+		const full_content = mf2_extract_html(content);
+
+		if (text_content) {
+			event.content_preview = truncate_str(text_content, 250, 240);
+		}
 
 		if (full_content) {
-			event.content_preview = truncate_str(full_content, 250, 240);
+			event.full_content = full_content;
 		}
 	}
 
@@ -139,12 +145,47 @@ export async function read_as_event(url: string, skip_cache = false) {
 	return wrapped;
 }
 
+async function read_local_as_event(url: string) {
+	let event: ExternalEventData;
+	const parsed = parse_local_url(url);
+
+	if (parsed.type === 'post' && parsed.post_type === 'event') {
+		const post = await store.posts.get_post(parsed.post_type, parsed.uri_name);
+		
+		event = {
+			url,
+			title: post.title,
+			subtitle: post.subtitle,
+			full_content: post.content_html,
+			is_local: true,
+		};
+	}
+	
+	else {
+		// todo: better representation of other pages
+		event = {
+			url,
+			title: '',
+			is_local: true,
+		};
+	}
+
+	const wrapped = new ExternalEvent(event);
+	event_cache.store_to_cache(url, wrapped);
+
+	return wrapped;
+}
+
 
 
 export class ExternalEvent {
 	constructor(
 		private readonly data: ExternalEventData
 	) { }
+
+	get is_local() {
+		return this.data.is_local;
+	}
 
 	get url() {
 		return this.data.url;
@@ -178,12 +219,12 @@ export class ExternalEvent {
 		return wrap_date(this.data.end);
 	}
 
-	get content_preview() {
-		return this.data.content_preview;
+	get full_content() {
+		return this.data.full_content;
 	}
 
-	get local_post() {
-		return this.data.local_post;
+	get content_preview() {
+		return this.data.content_preview;
 	}
 }
 

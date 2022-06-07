@@ -4,9 +4,10 @@ import { Cache } from '../cache';
 import { store } from '../storage';
 import { MicroformatRoot, parse_url_response } from './parse';
 import { ExternalAuthor, read_author_from_prop } from './author';
-import { take_first, mf2_extract_date, mf2_extract_str, url_is_local, url_to_local_path, as_date, truncate_str } from './utils';
+import { take_first, mf2_extract_date, mf2_extract_str, as_date, truncate_str, mf2_extract_html } from './utils';
 import { ExternalInReplyTo, read_in_reply_to_from_prop } from './in-reply-to';
 import { wrap_date } from '../util';
+import { parse_local_url, url_is_local } from './local';
 
 const post_cache = new Cache<ExternalEntry>(
 	conf.data.caches.external_entry.max_size,
@@ -21,24 +22,27 @@ export interface ExternalEntryData {
 	author?: ExternalAuthor;
 	published?: Date;
 	updated?: Date;
+	full_content?: string;
 	content_preview?: string;
 	in_reply_to?: ExternalInReplyTo;
+	like_of?: ExternalInReplyTo;
+	repost_of?: ExternalInReplyTo;
+	bookmark_of?: ExternalInReplyTo;
 	rsvp_type?: 'yes' | 'no' | 'maybe' | 'interested';
-	local_post?: store.posts.Post;
+	is_local?: boolean;
 }
 
 export async function read_as_entry(url: string, skip_cache = false) {
-	if (url_is_local(url)) {
-		const path = url_to_local_path(url);
-		// todo: shortcut to just load info from storage
-	}
-
 	if (! skip_cache) {
 		const cached = post_cache.get_from_cache(url);
 	
 		if (cached) {
 			return cached;
 		}
+	}
+
+	if (url_is_local(url)) {
+		return read_local_as_entry(url);
 	}
 
 	const { title, open_graph, microformats } = await parse_url_response(url, skip_cache);
@@ -50,10 +54,14 @@ export async function read_as_entry(url: string, skip_cache = false) {
 		author: null,
 		published: null,
 		updated: null,
+		full_content: null,
 		content_preview: null,
 		in_reply_to: null,
+		like_of: null,
+		repost_of: null,
+		bookmark_of: null,
 		rsvp_type: null,
-		local_post: null,
+		is_local: false,
 	};
 
 	let h_entry: MicroformatRoot;
@@ -96,6 +104,9 @@ export async function read_as_entry(url: string, skip_cache = false) {
 		entry.published = mf2_extract_date(published);
 		entry.updated = mf2_extract_date(updated);
 		entry.in_reply_to = read_in_reply_to_from_prop(h_entry.properties['in-reply-to']);
+		entry.like_of = read_in_reply_to_from_prop(h_entry.properties['like-of']);
+		entry.repost_of = read_in_reply_to_from_prop(h_entry.properties['repost-of']);
+		entry.bookmark_of = read_in_reply_to_from_prop(h_entry.properties['bookmark-of']);
 
 		const rsvp = mf2_extract_str(h_entry.properties.rsvp);
 
@@ -103,10 +114,15 @@ export async function read_as_entry(url: string, skip_cache = false) {
 			entry.rsvp_type = rsvp.toLowerCase() as ExternalEntryData['rsvp_type'];
 		}
 
-		const full_content = mf2_extract_str(content);
+		const text_content = mf2_extract_str(content);
+		const full_content = mf2_extract_html(content);
+
+		if (text_content) {
+			entry.content_preview = truncate_str(text_content, 250, 240);
+		}
 
 		if (full_content) {
-			entry.content_preview = truncate_str(full_content, 250, 240);
+			entry.full_content = full_content;
 		}
 	}
 
@@ -145,12 +161,44 @@ export async function read_as_entry(url: string, skip_cache = false) {
 	return wrapped;
 }
 
+async function read_local_as_entry(url: string) {
+	let entry: ExternalEntryData;
+	const parsed = parse_local_url(url);
+
+	switch (parsed.type) {
+		case 'post':
+			const post = await store.posts.get_post(parsed.post_type, parsed.uri_name);
+			
+			entry = {
+				url,
+				title: post.title,
+				full_content: post.content_html,
+				is_local: true,
+			};
+			break;
+
+		default:
+			// todo: better representation of other pages
+			entry = { url, is_local: true };
+			break;
+	}
+
+	const wrapped = new ExternalEntry(entry);
+	post_cache.store_to_cache(url, wrapped);
+
+	return wrapped;
+}
+
 
 
 export class ExternalEntry {
 	constructor(
 		private readonly data: ExternalEntryData
 	) { }
+
+	get is_local() {
+		return this.data.is_local;
+	}
 
 	get url() {
 		return this.data.url;
@@ -176,6 +224,10 @@ export class ExternalEntry {
 		return wrap_date(this.data.updated);
 	}
 
+	get full_content() {
+		return this.data.full_content;
+	}
+
 	get content_preview() {
 		return this.data.content_preview;
 	}
@@ -184,11 +236,19 @@ export class ExternalEntry {
 		return this.data.in_reply_to;
 	}
 
-	get rsvp_type() {
-		return this.data.rsvp_type;
+	get like_of() {
+		return this.data.like_of;
 	}
 
-	get local_post() {
-		return this.data.local_post;
+	get repost_of() {
+		return this.data.repost_of;
+	}
+
+	get bookmark_of() {
+		return this.data.bookmark_of;
+	}
+
+	get rsvp_type() {
+		return this.data.rsvp_type;
 	}
 }

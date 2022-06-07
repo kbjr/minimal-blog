@@ -11,6 +11,7 @@ import type { Options as MiniSearchOption } from 'minisearch';
 import { logger } from '../debug';
 import { JSDOM } from 'jsdom';
 import { ExternalEntry, ExternalEvent } from '../external-posts';
+import { Mention } from './mentions';
 
 const log_search = logger('search');
 const max_search_results = 50;
@@ -298,6 +299,7 @@ export class Tag implements Readonly<TagData> {
 }
 
 export class Post implements Readonly<PostData> {
+	public mentions: Mention[];
 	public external_data: ExternalEvent | ExternalEntry;
 
 	constructor(private data: PostData & Partial<SearchMeta>) { }
@@ -451,6 +453,14 @@ export class Post implements Readonly<PostData> {
 	get tags() {
 		// TODO: Move this sort() somewhere more efficient
 		return this.data.tags.sort().slice();
+	}
+
+	get mentions_top_5() {
+		return this.mentions.slice(0, 5);
+	}
+
+	get mentions_top_10() {
+		return this.mentions.slice(0, 10);
 	}
 
 	get search_score() {

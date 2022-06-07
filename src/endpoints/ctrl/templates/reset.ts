@@ -45,6 +45,8 @@ const resetable_templates = new Set([
 	'rsvp_meta.html',
 	'not_found.html',
 	'author_card.html',
+	'mention_card.html',
+	'mention_thread.html',
 	'external_entry.html',
 	'external_event.html',
 	'styles.css',

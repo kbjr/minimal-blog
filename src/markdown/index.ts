@@ -6,7 +6,7 @@ import { katex_block_ext, katex_inline_ext } from './katex';
 import { footnote_list_ext, footnote_ref_ext } from './footnotes';
 import { mark_ext } from './mark';
 import { description_list_ext } from './description-list';
-import { sanitize_html } from './sanitize';
+import { sanitize_html } from '../html-sanitize';
 import { note_ext } from './note';
 
 marked.use({

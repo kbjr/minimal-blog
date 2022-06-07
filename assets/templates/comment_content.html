@@ -31,5 +31,19 @@
 			{{/ date_updated_iso }}
 		</p>
 	</footer>
+
+	{{# mentions.length }}
+	<aside class="mention-thread">
+		<h2>Recent Mentions:</h2>
+		<a href="{{{ post_url }}}/mentions">See All ({{ mentions.length }}) Mentions</a>
+		<ul>
+			{{# mentions_top_5 }}
+			<li>
+				{{> mention_card }}
+			</li>
+			{{/ mentions_top_5 }}
+		</ul>
+	</aside>
+	{{/ mentions.length }}
 </article>
 {{/ post }}

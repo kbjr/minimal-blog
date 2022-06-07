@@ -1,8 +1,9 @@
 
 import { store } from '../storage';
 import { MicroformatRoot } from './parse';
-import { mf2_extract_str, url_is_local } from './utils';
+import { mf2_extract_str } from './utils';
 import { MicroformatProperty } from './parse';
+import { url_is_local } from './local';
 
 export interface ExternalInReplyTo {
 	title?: string;

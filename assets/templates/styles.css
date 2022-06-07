@@ -554,6 +554,47 @@ main:is([data-page='comment'], [data-page='rsvp']) header blockquote.external-em
 
 
 
+/* ===== Mentions ===== */
+
+aside.mention-thread {
+	margin-top: 10rem;
+}
+
+aside.mention-thread > h2 {
+	margin-top: 0;
+	font-size: 2rem;
+	font-weight: 300;
+}
+
+aside.mention-thread > ul {
+	list-style: none;
+	padding-inline-start: 0;
+}
+
+aside.mention-thread article[role='comment'] {
+	margin-block: 4rem;
+}
+
+aside.mention-thread article[role='comment'] > main {
+	max-height: 70vh;
+	overflow-y: auto;
+}
+
+aside.mention-thread article[role='comment'] > header h1 {
+	font-size: 1.2rem;
+	font-weight: 700;
+	margin-block-end: 1rem;
+}
+
+aside.mention-thread article[role='comment'] > footer p {
+	font-size: 0.8rem;
+	margin-block: 0.5rem;
+}
+
+
+
+
+
 
 /* ===== Typography ===== */
 

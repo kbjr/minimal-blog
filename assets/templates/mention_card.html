@@ -1,0 +1,43 @@
+<article role="comment" class="e-comment h-cite" id="mention-{{ snowflake }}">
+	<header>
+		{{# is_event }}
+		{{# external.rsvp_type }}
+		{{# external.rsvp_yes }}<h1 class="p-name">{{> author_card }} is going</h1>{{/ external.rsvp_yes }}
+		{{# external.rsvp_no }}<h1 class="p-name">{{> author_card }} is not going</h1>{{/ external.rsvp_no }}
+		{{# external.rsvp_maybe }}<h1 class="p-name">{{> author_card }} might be going</h1>{{/ external.rsvp_maybe }}
+		{{# external.rsvp_interested }}<h1 class="p-name">{{> author_card }} is interested</h1>{{/ external.rsvp_interested }}
+		{{/ external.rsvp_type }}
+		
+		{{^ external.rsvp_type }}
+		<h1 class="p-name">{{> author_card }} commented:</h1>
+		{{/ external.rsvp_type }}
+		{{/ is_event }}
+		
+		{{^ is_event }}
+		<h1 class="p-name">{{> author_card }} commented:</h1>
+		{{/ is_event }}
+	</header>
+
+	{{# external.full_content }}
+	<main class="e-content">
+		<p>{{{ external.full_content }}}</p>
+	</main>
+	{{/ external.full_content }}
+
+	<footer>
+		<p>
+			<a href="{{{ post_url }}}/mentions#mention-{{ snowflake }}">Permalink</a>
+			| <a class="u-url" rel="{{^ is_local }}external{{/ is_local }}" href="{{{ source_url }}}">Source</a>
+
+			{{# external.published }}
+			| <time class="dt-published" datetime="{{ iso }}">{{ utc }}</time>
+			{{/ external.published }}
+	
+			{{# external.updated }}
+			| Updated: <time class="dt-updated" datetime="{{ iso }}">{{ utc }}</time>
+			{{/ external.updated }}
+			
+			| Received: <time datetime="{{ received.iso }}">{{ received.utc }}</time>
+		</p>
+	</footer>
+</article>
