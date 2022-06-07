@@ -4,7 +4,6 @@ import { HttpError } from './http-error';
 import { xml_content_processor, xml_rpc_fault } from './xml-rpc';
 import fastify, { FastifyError, FastifyLoggerOptions, FastifyReply, FastifyRequest } from 'fastify';
 import formbody from '@fastify/formbody';
-import { URL } from 'url';
 import { swagger_opts } from './swagger';
 import { show_not_found } from './endpoints/web/not-found';
 

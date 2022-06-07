@@ -38,7 +38,6 @@
 	{{/ page.require_auth}}
 
 	<script src="{{{ ctrl_panel.url }}}/time.js" async></script>
-	<script src="{{{ ctrl_panel.url }}}/svg_icon.js" async></script>
 	
 	{{> page_head }}
 </head>
@@ -78,7 +77,10 @@
 		{{> page_content }}
 
 		<footer>
-			<p>Minimal Blog: Control Panel</p>
+			<p>
+				<a href="https://github.com/kbjr/minimal-blog">Minimal Blog</a>:
+				Control Panel
+			</p>
 			<p>Version: {{ site.app_version }}</p>
 		</footer>
 	</div>

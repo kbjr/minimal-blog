@@ -2,11 +2,13 @@
 	
 	const elems = document.querySelectorAll('time');
 	const language = document.body.parentElement.getAttribute('lang');
-	const formatter = Intl.DateTimeFormat(language, { dateStyle: 'full', timeStyle: 'long' });
+	const formatter_short = Intl.DateTimeFormat(language, { dateStyle: 'medium', timeStyle: 'short' });
+	const formatter_long = Intl.DateTimeFormat(language, { dateStyle: 'full', timeStyle: 'long' });
 
 	elems.forEach((elem) => {
 		const date = new Date(Date.parse(elem.dateTime));
-		elem.innerHTML = formatter.format(date);
+		elem.title = formatter_long.format(date);
+		elem.innerHTML = formatter_short.format(date);
 	});
 
 })();

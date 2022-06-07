@@ -49,9 +49,11 @@ web.get('/svg_icon.js', async (req, res) => {
 	return svg_icon_js();
 });
 
+const color_theme_toggle_js = rendered_asset_cache('color_theme_toggle.js', new TemplateContext(null), { }, { });
+
 web.get('/color_theme_toggle.js', async (req, res) => {
 	res.type('application/javascript; charset=utf-8');
-	return load_asset('color_theme_toggle.js');
+	return color_theme_toggle_js();
 });
 
 // ===== CSS Assets =====

@@ -5,6 +5,8 @@ import { load_default_template } from './assets';
 import { render as mustache_render, parse } from 'mustache';
 import { settings, colors, feed, store, events, posts, links } from './store';
 import { Post } from './posts';
+import { icons } from '../icons';
+import { Link } from './links';
 
 const log = logger('asset_files');
 
@@ -32,6 +34,8 @@ const editable_ui_templates = [
 	'rsvp_meta.html',
 	'not_found.html',
 	'author_card.html',
+	'external_entry.html',
+	'external_event.html',
 	'styles.css',
 	'robots.txt',
 	'svg_icon.js',
@@ -107,6 +111,12 @@ export function page_partials(page_content: string, page_meta: string) {
 		get rsvp_card() {
 			return get_template('rsvp_card.html');
 		},
+		get external_entry() {
+			return get_template('external_entry.html');
+		},
+		get external_event() {
+			return get_template('external_event.html');
+		}
 	});
 }
 
@@ -144,13 +154,14 @@ const feed_context = Object.freeze({
 	get event_uri_format() { return settings.get('event_uri_format'); },
 	get all_tags() { return posts.list_tags(); },
 	get show_tag_counts() { return settings.get('show_tag_counts'); },
-	get links() { return links.get_links(); }
+	get links() { return links.get_links().map((data) => new Link(data)); }
 });
 
 export class TemplateContext {
 	public readonly site = site_context;
 	public readonly colors = colors_context;
 	public readonly feed = feed_context;
+	public readonly icons = icons;
 
 	constructor(
 		public readonly page: Readonly<PageContext>,

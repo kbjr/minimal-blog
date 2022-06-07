@@ -1,26 +1,48 @@
 
-import { MicroformatRoot, read_url_as_post } from './parse';
+import { conf } from '../conf';
+import { Cache } from '../cache';
+import { store } from '../storage';
+import { MicroformatRoot, parse_url_response } from './parse';
 import { ExternalAuthor, read_author_from_prop } from './author';
-import { take_first, mf2_extract_date, mf2_extract_str } from './utils';
+import { take_first, mf2_extract_date, mf2_extract_str, url_is_local, url_to_local_path, as_date, truncate_str } from './utils';
+import { wrap_date } from '../util';
 
-export interface ExternalEvent {
+const event_cache = new Cache<ExternalEvent>(
+	conf.data.caches.external_event.max_size,
+	conf.data.caches.external_event.max_age,
+	conf.data.caches.external_event.cycle_count,
+);
+
+export interface ExternalEventData {
 	url: string;
 	title: string;
 	subtitle?: string;
 	author?: ExternalAuthor;
-	start?: string;
-	end?: string;
-	published?: string;
-	updated?: string;
+	start?: Date;
+	end?: Date;
+	published?: Date;
+	updated?: Date;
 	content_preview?: string;
+	local_post?: store.posts.Post;
 }
 
-// todo: should there be another layer of caching on this function?
-
 export async function read_as_event(url: string, skip_cache = false) {
-	const { title, open_graph, microformats } = await read_url_as_post(url, skip_cache);
+	if (url_is_local(url)) {
+		const path = url_to_local_path(url);
+		// todo: shortcut to just load info from storage
+	}
 
-	const event: ExternalEvent = {
+	if (! skip_cache) {
+		const cached = event_cache.get_from_cache(url);
+	
+		if (cached) {
+			return cached;
+		}
+	}
+
+	const { title, open_graph, microformats } = await parse_url_response(url, skip_cache);
+
+	const event: ExternalEventData = {
 		url,
 		title: null,
 		subtitle: null,
@@ -30,6 +52,7 @@ export async function read_as_event(url: string, skip_cache = false) {
 		published: null,
 		updated: null,
 		content_preview: null,
+		local_post: null,
 	};
 
 	let h_event: MicroformatRoot;
@@ -77,7 +100,7 @@ export async function read_as_event(url: string, skip_cache = false) {
 		const full_content = mf2_extract_str(content);
 
 		if (full_content) {
-			event.content_preview = full_content.length > 250 ? full_content.slice(0, 200) + '&hellip;' : full_content;
+			event.content_preview = truncate_str(full_content, 250, 240);
 		}
 	}
 
@@ -103,12 +126,64 @@ export async function read_as_event(url: string, skip_cache = false) {
 	}
 
 	if (! event.published && open_graph['article:published_time']) {
-		event.published = take_first(open_graph['article:published_time']);
+		event.published = as_date(take_first(open_graph['article:published_time']));
 	}
 
 	if (! event.updated && open_graph['article:modified_time']) {
-		event.updated = take_first(open_graph['article:modified_time']);
+		event.updated = as_date(take_first(open_graph['article:modified_time']));
 	}
 
-	return event;
+	const wrapped = new ExternalEvent(event);
+	event_cache.store_to_cache(url, wrapped);
+
+	return wrapped;
 }
+
+
+
+export class ExternalEvent {
+	constructor(
+		private readonly data: ExternalEventData
+	) { }
+
+	get url() {
+		return this.data.url;
+	}
+
+	get title() {
+		return this.data.title;
+	}
+
+	get subtitle() {
+		return this.data.subtitle;
+	}
+
+	get author() {
+		return this.data.author;
+	}
+
+	get published() {
+		return wrap_date(this.data.published);
+	}
+
+	get updated() {
+		return wrap_date(this.data.updated);
+	}
+
+	get start() {
+		return wrap_date(this.data.start);
+	}
+
+	get end() {
+		return wrap_date(this.data.end);
+	}
+
+	get content_preview() {
+		return this.data.content_preview;
+	}
+
+	get local_post() {
+		return this.data.local_post;
+	}
+}
+

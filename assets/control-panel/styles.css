@@ -349,15 +349,15 @@ button {
 	align-items: center;
 }
 
-	button svg-icon {
+	button svg.icon {
 		--icon-size: 2rem;
 	}
 
-	button svg-icon:first-child {
+	button svg.icon:first-child {
 		margin-inline-end: 0.5rem;
 	}
 
-	button svg-icon:last-child {
+	button svg.icon:last-child {
 		margin-inline-start: 0.5rem;
 	}
 

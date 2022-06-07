@@ -136,8 +136,10 @@ function footnote_link_backs(id: number, count: number) {
 		return `<sup><a href="#cite:ref-${id}-1" title="Back to reference">^</a></sup>`;
 	}
 
-	// NOTE: We're using letters for link backs; If we run out, only
+	// note: We're using letters for link backs; If we run out, only
 	// show the first 26 references
+	// todo: A more ideal solution would be to start using double-letters,
+	// like "aa", "ab", "ac", etc. after running out of single letter options
 	count = Math.min(count, 26);
 
 	const links: string[] = [ ];

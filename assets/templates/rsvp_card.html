@@ -16,26 +16,8 @@
 			<data class="p-rsvp" value="interested">Is Interested</data> in an Event:
 			{{/ rsvp_interested }}
 		</h3>
-
-		<blockquote class="external-embed">
-			<article class="h-event u-in-reply-to">
-				<h2 class="p-name">
-					<a href="{{{ external_url }}}" class="u-url" rel="external">{{ title }}</a>
-				</h2>
-
-				{{# subtitle }}
-				<p class="p-summary">{{ subtitle }}</p>
-				{{/ subtitle }}
 		
-				{{# date_event_start_iso }}
-				<p class="start date">Starts: <time datetime="{{ date_event_start_iso }}" class="dt-start">{{ date_event_start_utc }}</time></p>
-				{{/ date_event_start_iso }}
-		
-				{{# date_event_end_iso }}
-				<p class="end date">Ends: <time datetime="{{ date_event_end_iso }}" class="dt-end">{{ date_event_end_utc }}</time></p>
-				{{/ date_event_end_iso }}
-			</article>
-		</blockquote>
+		{{# external_data }}{{> external_event }}{{/ external_data }}
 	</header>
 
 	<main>

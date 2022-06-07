@@ -52,24 +52,24 @@
 					transform: translateX(-${size}rem);
 				}
 
-		:host svg-icon {
+		:host svg.icon {
 			--icon-size: ${size}rem;
 			transition: opacity ${animation};
 		}
 
-			:host svg-icon[icon='sun'] {
+			:host svg.icon.sun {
 				color: var(--theme-sun);
 			}
 
-			:host [data-mode='dark'] svg-icon[icon='sun'] {
+			:host [data-mode='dark'] svg.icon.sun {
 				opacity: 0;
 			}
 
-			:host svg-icon[icon='moon'] {
+			:host svg.icon.moon {
 				color: var(--theme-moon);
 			}
 
-			:host [data-mode='light'] svg-icon[icon='moon'] {
+			:host [data-mode='light'] svg.icon.moon {
 				opacity: 0;
 			}
 	`;
@@ -78,8 +78,8 @@
 		<style>${styles}</style>
 		<div class="wrapper" title="Toggle Light / Dark Mode" tabindex="0" role="button" aria-pressed="false">
 			<div class="icons">
-				<svg-icon icon="sun"></svg-icon>
-				<svg-icon icon="moon"></svg-icon>
+				{{{ icons.sun }}}
+				{{{ icons.moon }}}
 			</div>
 		</div>
 	`;

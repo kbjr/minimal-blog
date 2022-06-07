@@ -1,6 +1,5 @@
 
-import { MicroformatRoot } from './parse';
-import type { MicroformatProperty } from 'microformats-parser/dist/types';
+import { MicroformatRoot, MicroformatProperty } from './parse';
 
 export interface ExternalAuthor {
 	author_name?: string;

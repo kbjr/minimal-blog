@@ -11,7 +11,7 @@ const default_count = 10;
 const front_page = custom_cache(async () => {
 	const posts = await store.posts.get_posts(default_count, null, null, null, false);
 	return build_xml_for_posts(posts, default_count);
-}, { feed: true });
+}, { posts: true });
 
 type Req = FastifyRequest<{
 	Querystring: {

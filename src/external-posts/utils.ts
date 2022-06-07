@@ -1,6 +1,7 @@
 
 import { JSDOM } from 'jsdom';
-import type { MicroformatProperty } from 'microformats-parser/dist/types';
+import { conf } from '../conf';
+import { MicroformatProperty } from './parse';
 
 export function mf2_extract_str(prop: MicroformatProperty[]) {
 	if (! prop || ! prop.length) {
@@ -30,9 +31,7 @@ export function mf2_extract_date(prop: MicroformatProperty[]) {
 	const prop0 = prop[0];
 
 	if (typeof prop0 === 'string') {
-		if (Date.parse(prop0)) {
-			return prop0;
-		}
+		return as_date(prop0);
 	}
 
 	return null;
@@ -45,4 +44,24 @@ export function html_to_dom(url: string, html: string) {
 
 export function take_first(raw: string | string[]) {
 	return Array.isArray(raw) ? raw[0] : raw;
+}
+
+export function url_is_local(url: string) : url is `${typeof conf.http.web_url}${'' | `/${string}`}` {
+	return url === conf.http.web_url || url.startsWith(conf.http.web_url + '/');
+}
+
+export function url_to_local_path(url: string) : string {
+	return url.slice(conf.http.web_url.length);
+}
+
+export function as_date(date_str: string) {
+	const parsed = Date.parse(date_str);
+
+	if (parsed) {
+		return new Date(parsed);
+	}
+}
+
+export function truncate_str(str: string, max: number, trim_to: number) {
+	return str.length > max ? str.slice(0, trim_to) + '…' : str;
 }

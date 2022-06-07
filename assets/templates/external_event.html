@@ -1,0 +1,44 @@
+<blockquote class="external-embed" title="Embedded summary of the referenced event">
+	<article class="h-event u-in-reply-to">
+		<header>
+			<h1 class="p-name">
+				<a href="{{{ url }}}" class="u-url" rel="external">{{ title }}</a>
+			</h1>
+	
+			{{# subtitle }}
+			<p class="p-summary">{{ subtitle }}</p>
+			{{/ subtitle }}
+	
+			{{# start.iso }}
+			<p class="start date">Starts: <time datetime="{{ start.iso }}" class="dt-start">{{ start.utc }}</time></p>
+			{{/ start.iso }}
+	
+			{{# end.iso }}
+			<p class="end date">Ends: <time datetime="{{ end.iso }}" class="dt-end">{{ end.utc }}</time></p>
+			{{/ end.iso }}
+		</header>
+
+		{{# content_preview }}
+		<main>
+			<p>{{ content_preview }}</p>
+		</main>
+		{{/ content_preview }}
+
+		<footer>
+			<p>
+				<a class="u-url" href="{{{ post_url }}}">Permalink</a>
+				{{# author }}
+				| By: {{> author_card }}
+				{{/ author }}
+
+				{{# published }}
+				| <time class="dt-published" datetime="{{ iso }}">{{ utc }}</time>
+				{{/ published }}
+		
+				{{# updated }}
+				| Updated: <time class="dt-updated" datetime="{{ iso }}">{{ utc }}</time>
+				{{/ updated }}
+			</p>
+		</footer>
+	</article>
+</blockquote>

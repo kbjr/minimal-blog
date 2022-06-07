@@ -45,6 +45,8 @@ const getable_templates = new Set([
 	'rsvp_meta.html',
 	'not_found.html',
 	'author_card.html',
+	'external_entry.html',
+	'external_event.html',
 	'styles.css',
 	'robots.txt',
 	'svg_icon.js',

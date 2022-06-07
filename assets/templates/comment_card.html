@@ -2,11 +2,9 @@
 	<header>
 		<h3>
 			{{> author_card }}
-			Commented On:<br>
-			<span class="u-in-reply-to h-cite">
-				<cite><a href="{{{ external_url }}}" class="u-url" rel="external">{{ external_url }}</a></cite>
-			</span>
+			Commented On:
 		</h3>
+		{{# external_data }}{{> external_entry }}{{/ external_data }}
 	</header>
 
 	<main class="e-content">

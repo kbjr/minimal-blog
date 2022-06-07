@@ -8,8 +8,8 @@ import { renderSvg as render_nomnoml } from 'nomnoml';
 import { pikchr } from 'pikchr';
 import { parse as parse_yaml } from 'yaml';
 import railroad from '@prantlf/railroad-diagrams';
+import { icons } from '../icons';
 // import * as vega from 'vega';
-
 
 export const renderer = new marked.Renderer();
 
@@ -20,7 +20,7 @@ renderer.heading = function(text, level, raw, slugger) {
 		<h${level} id="${id}">
 			${text}
 			<a class="heading-anchor" href="#${id}">
-				<svg-icon icon="link" aria-hidden="true"></svg-icon>
+				${icons.link}
 				<span style="display: none">Section titled ${text}</span>
 			</a>
 		</h${level}>

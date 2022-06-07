@@ -8,7 +8,6 @@ import { create as create_xml } from 'xmlbuilder2';
 import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces';
 
 const sitemap = custom_cache(build_sitemap, {
-	feed: true,
 	posts: true,
 });
 
@@ -20,8 +19,8 @@ web.get('/sitemap.xml', async (req, res) => {
 	res.send(xml);
 });
 
-// TODO: Make priorities / frequencies configurable
-// TODO: Support for sitemap index file for large sites (https://www.sitemaps.org/protocol.html#index)
+// todo: Make priorities / frequencies configurable
+// todo: Support for sitemap index file for large sites (https://www.sitemaps.org/protocol.html#index)
 
 async function build_sitemap() {
 	const now = (new Date).toISOString();

@@ -12,6 +12,8 @@ import * as links from './links';
 export let store: Store;
 export const events = new EventEmitter();
 
+events.setMaxListeners(15);
+
 export * as feed from './feed';
 export * as users from './users';
 export * as settings from './settings';

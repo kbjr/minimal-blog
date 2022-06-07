@@ -3,6 +3,8 @@ import { ctrl } from '../../../http';
 import { render } from './render';
 import { store,assets } from '../../../storage';
 import { RouteShorthandOptions } from 'fastify';
+import { rendered_asset_cache } from '../../../cache';
+import { TemplateContext } from '../../../storage/templates';
 
 const opts: RouteShorthandOptions = {
 	schema: {
@@ -42,14 +44,11 @@ ctrl.get('/login_check.js', opts, async (req, res) => {
 	return assets.load_control_panel_asset('login_check.js');
 });
 
+const color_theme_toggle_js = rendered_asset_cache('color_theme_toggle.js', new TemplateContext(null), { }, { });
+
 ctrl.get('/color_theme_toggle.js', opts, async (req, res) => {
 	res.type('application/javascript; charset=utf-8');
-	return assets.load_control_panel_asset('../color_theme_toggle.js');
-});
-
-ctrl.get('/svg_icon.js', opts, async (req, res) => {
-	res.type('application/javascript; charset=utf-8');
-	return assets.load_control_panel_asset('svg_icon.js');
+	return color_theme_toggle_js();
 });
 
 ctrl.get('/styles.css', opts, async (req, res) => {

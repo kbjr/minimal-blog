@@ -1,4 +1,5 @@
 
+import { icons } from '../icons';
 import { store, events } from './store';
 
 let link_data: LinkData[];
@@ -23,4 +24,26 @@ export interface LinkData {
 	label: string;
 	icon: string;
 	rel?: string;
+}
+
+export class Link {
+	constructor(
+		private readonly data: LinkData
+	) { }
+
+	public get link_url() {
+		return this.data.link_url;
+	}
+
+	public get label() {
+		return this.data.label;
+	}
+
+	public get icon() {
+		return icons[this.data.icon];
+	}
+
+	public get rel() {
+		return this.data.rel;
+	}
 }

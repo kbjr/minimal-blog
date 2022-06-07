@@ -2,6 +2,8 @@
 import { Loggers } from './debug';
 import { resolve as resolve_path } from 'path';
 
+type http_url = `http${'s' | ''}://${string}`;
+
 export namespace conf {
 	/** The current version of the blog software; Should stay in sync with package.json */
 	export const app_version = '0.1.0-alpha.1';
@@ -15,10 +17,10 @@ export namespace conf {
 		export const ctrl_port = cast_int<number>(process.env.HTTP_CTRL_PORT, 3001);
 
 		/** The URL the main web HTTP server will be accessed through */
-		export const web_url = cast_str<string>(process.env.HTTP_WEB_URL, `http://localhost:${web_port}`);
+		export const web_url = cast_str<http_url>(process.env.HTTP_WEB_URL, `http://localhost:${web_port}`);
 
 		/** The URL the control panel HTTP server will be accessed through */
-		export const ctrl_url = cast_str<string>(process.env.HTTP_CTRL_URL, `http://localhost:${ctrl_port}`);
+		export const ctrl_url = cast_str<http_url>(process.env.HTTP_CTRL_URL, `http://localhost:${ctrl_port}`);
 
 		/** Controls whether or not the `/.status` endpoint will be accessible under the web URL */
 		export const web_enable_status = cast_bool(process.env.HTTP_WEB_ENABLE_STATUS, true);
@@ -92,7 +94,31 @@ export namespace conf {
 			export const posts_pool_max = 10;
 		}
 
-		// 
+		export namespace caches {
+			export namespace rendered_posts {
+				export const max_age = 1000 * 60 * 60 * 24 * 365;
+				export const max_size = 100;
+				export const cycle_count = 50;
+			}
+
+			export namespace external_url {
+				export const max_age = 1000 * 60 * 60;
+				export const max_size = 200;
+				export const cycle_count = 20;
+			}
+
+			export namespace external_event {
+				export const max_age = 1000 * 60 * 60;
+				export const max_size = 200;
+				export const cycle_count = 20;
+			}
+
+			export namespace external_entry {
+				export const max_age = 1000 * 60 * 60;
+				export const max_size = 200;
+				export const cycle_count = 20;
+			}
+		}
 	}
 	
 	/** Static file asset configuration */

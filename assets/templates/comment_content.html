@@ -1,13 +1,11 @@
 {{# post }}
 <article role="comment" class="h-entry" data-post-type="comment">
 	<header>
-		<h2>
+		<h1>
 			{{> author_card }}
-			Commented On:<br>
-			<span class="u-in-reply-to h-cite">
-				<cite><a href="{{{ external_url }}}" class="u-url" rel="external">{{ external_url }}</a></cite>
-			</span>
-		</h2>
+			Commented On:
+		</h1>
+		{{# external_data }}{{> external_entry }}{{/ external_data }}
 	</header>
 
 	<main class="e-content">

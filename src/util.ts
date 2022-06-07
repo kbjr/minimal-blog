@@ -28,3 +28,16 @@ export function obj_frozen<T>(data?: T) : Readonly<T> {
 
 	return Object.freeze(result);
 }
+
+export function wrap_date(date: Date) {
+	if (date) {
+		return {
+			get iso() {
+				return date.toISOString();
+			},
+			get utc() {
+				return date.toUTCString();
+			},
+		}
+	}
+}

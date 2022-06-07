@@ -50,12 +50,18 @@ ENV DATA_STORAGE_TYPE="sqlite3"
 ENV DATA_PATH=/data
 
 
-# === Search ===
+# === Enable / Disable Features ===
 # Controls whether or not to enable content search. If you do not intend
 # to use the search functionality, disabling it can be beneficial to runtime
 # memory consumption and container startup time by removing the need to
 # build and maintain the full-text search index.
 ENV DATA_ENABLE_SEARCH="1"
+# Controls whether the basic healthcheck / status endpoint is accessible on
+# the public web server at "{HTTP_WEB_URL}/.status".
+ENV HTTP_WEB_ENABLE_STATUS="1"
+# Controls whether or not the control API swagger documentation page is
+# enabled and accessible at "{HTTP_CTRL_URL}/api/docs".
+ENV HTTP_CTRL_SWAGGER="1"
 
 
 # === Application Install Path ===

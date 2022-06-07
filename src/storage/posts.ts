@@ -10,6 +10,7 @@ import type MiniSearch from 'minisearch';
 import type { Options as MiniSearchOption } from 'minisearch';
 import { logger } from '../debug';
 import { JSDOM } from 'jsdom';
+import { ExternalEntry, ExternalEvent } from '../external-posts';
 
 const log_search = logger('search');
 const max_search_results = 50;
@@ -297,6 +298,8 @@ export class Tag implements Readonly<TagData> {
 }
 
 export class Post implements Readonly<PostData> {
+	public external_data: ExternalEvent | ExternalEntry;
+
 	constructor(private data: PostData & Partial<SearchMeta>) { }
 
 	get post_url() {
@@ -330,7 +333,7 @@ export class Post implements Readonly<PostData> {
 	}
 
 	get author_name() {
-		return settings.get('author_name');
+		return settings.get('author_name') || 'Anonymous';
 	}
 
 	get author_url() {

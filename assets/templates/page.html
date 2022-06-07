@@ -41,7 +41,6 @@
 	<link rel="stylesheet" href="{{{ site.url }}}/colors.css">
 	<link rel="stylesheet" href="{{{ site.url }}}/styles.css">
 	<link rel="stylesheet" href="{{{ site.url }}}/prism.css">
-	<script src="{{{ site.url }}}/svg_icon.js" async></script>
 </head>
 <body class="{{# page.is_feed }}h-feed{{/ page.is_feed }}">
 	<script src="{{{ site.url }}}/color_theme_toggle.js"></script>
@@ -65,7 +64,7 @@
 				<form action="{{{ site.url }}}/search" method="get" class="search">
 					<input type="text" name="query" aria-labelledby="search-heading" role="search">
 					<button type="submit" class="icon-only" title="Search">
-						<svg-icon icon="search"></svg-icon>
+						{{{ icons.search }}}
 					</button>
 				</form>
 				{{/ feed.search_enabled }}
@@ -85,7 +84,7 @@
 				<ul class="link-list">
 					{{# feed.links }}
 					<li>
-						<svg-icon icon="{{ icon }}"></svg-icon>
+						{{{ icon }}}
 						<a href="{{{ link_url }}}" rel="{{ rel }}">{{ label }}</a>
 					</li>
 					{{/ feed.links }}
@@ -110,7 +109,10 @@
 			{{# feed.receive_webmention_enabled }}| WebMentions Enabled{{/ feed.receive_webmention_enabled }}
 			{{# feed.receive_pingback_enabled }}| Pingbacks Enabled{{/ feed.receive_pingback_enabled }}
 		</p>
-		<p>Minimal Blog / Version {{ site.app_version }}</p>
+		<p>
+			<a href="https://github.com/kbjr/minimal-blog">Minimal Blog</a>
+			/ Version {{ site.app_version }}
+		</p>
 	</footer>
 
 	<script src="{{{ site.url }}}/time.js" async></script>
