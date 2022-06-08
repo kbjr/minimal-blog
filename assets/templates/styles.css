@@ -189,11 +189,23 @@ section.feed-list article {
 	margin-block-end: 6rem;
 }
 
+section.feed-list article header .icon-wrapper {
+	display: flex;
+	align-items: center;
+	--icon-size: 2rem;
+}
+
+section.feed-list article header .icon-wrapper svg {
+	color: var(--theme-text-heading);
+	margin-inline-end: 1rem;
+	flex: 0 0 auto;
+}
+
 /* === Posts === */
 
 section.feed-list article[data-post-type='post'] header h3 {
 	font-size: 1.5rem;
-	margin-block: 0 0.5rem;
+	margin-block: 0;
 }
 
 section.feed-list article[data-post-type='post'] header p {
@@ -216,7 +228,7 @@ section.feed-list article[data-post-type='post'] header p.date.updated {
 
 section.feed-list article[data-post-type='comment'] header h3 {
 	font-size: 1rem;
-	margin-block: 0rem 0.5rem;
+	margin-block: 0rem;
 }
 
 section.feed-list article[data-post-type='comment'] main {
@@ -236,7 +248,7 @@ section.feed-list article[data-post-type='comment'] footer p {
 
 section.feed-list article[data-post-type='note'] header h3 {
 	font-size: 1rem;
-	margin-block: 0rem 0.5rem;
+	margin-block: 0rem;
 }
 
 section.feed-list article[data-post-type='note'] main {
@@ -256,7 +268,7 @@ section.feed-list article[data-post-type='note'] footer p {
 
 section.feed-list article[data-post-type='event'] header h3 {
 	font-size: 1rem;
-	margin-block: 0rem 0.5rem;
+	margin-block: 0rem;
 }
 
 section.feed-list article[data-post-type='event'] header h3 a.event-link {
@@ -288,7 +300,7 @@ section.feed-list article[data-post-type='event'] footer p {
 
 section.feed-list article[data-post-type='rsvp'] header h3 {
 	font-size: 1rem;
-	margin-block: 0rem 0.5rem;
+	margin-block: 0rem;
 }
 
 section.feed-list article[data-post-type='rsvp'] header h3 .u-in-reply-to a {
@@ -573,17 +585,34 @@ aside.mention-thread > ul {
 
 aside.mention-thread article[role='comment'] {
 	margin-block: 4rem;
+	/* padding-inline-start: 1.5rem;
+	border-inline-start: 0.5rem var(--theme-line) solid;
+	padding-block: 1rem;
+	background: var(--theme-bg-light);
+	margin-inline-end: 1rem; */
 }
 
 aside.mention-thread article[role='comment'] > main {
 	max-height: 70vh;
 	overflow-y: auto;
+	padding-block: 0;
+}
+
+aside.mention-thread article[role='comment'] > main p {
+	margin-block: 1rem;
+}
+
+aside.mention-thread article[role='comment'] > header {
+	display: flex;
+	align-items: flex-end;
+	--icon-size: 1.5rem;
 }
 
 aside.mention-thread article[role='comment'] > header h1 {
 	font-size: 1.2rem;
 	font-weight: 700;
-	margin-block-end: 1rem;
+	margin-block: 0;
+	margin-inline-start: 1rem;
 }
 
 aside.mention-thread article[role='comment'] > footer p {

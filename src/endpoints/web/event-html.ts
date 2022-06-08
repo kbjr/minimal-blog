@@ -4,6 +4,7 @@ import { store } from '../../storage';
 import { rendered_post_cache } from '../../cache';
 import { throw_404_not_found } from '../../http-error';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
+import { read_as_entry } from '../../external-posts';
 
 const partials = store.templates.page_partials('event_content.html', 'event_meta.html');
 const post_cache = rendered_post_cache('event');
@@ -59,6 +60,16 @@ async function render_template(uri_name: string) {
 async function create_context(uri_name: string) {
 	const data = await store.posts.get_post('event', uri_name);
 	const post = new store.posts.Post(data);
+
+	const mentions_data = await store.mentions.get_live_post_mentions(post.post_type, post.uri_name);
+	post.mentions = await Promise.all(
+		mentions_data.map(async (data) => {
+			const mention = new store.mentions.Mention(data);
+			mention.external = await read_as_entry(data.source_url);
+			mention.external.context = post;
+			return mention;
+		})
+	);
 
 	const page = {
 		page_name: 'event',

@@ -1,21 +1,26 @@
 <article class="h-entry" data-post-type="rsvp">
 	<header>
-		<h3>
-			{{> author_card }}
-	
+		<div class="icon-wrapper">
 			{{# rsvp_yes }}
-			<data class="p-rsvp" value="yes">Is Going</data> to an Event:
+			{{{ icons.check-circle }}}
+			<h3>{{> author_card }} <data class="p-rsvp" value="yes">Is Going</data> to an Event:</h3>
 			{{/ rsvp_yes }}
+			
 			{{# rsvp_no }}
-			<data class="p-rsvp" value="no">Is Not Going</data> to an Event:
+			{{{ icons.x-circle }}}
+			<h3>{{> author_card }} <data class="p-rsvp" value="no">Is Not Going</data> to an Event:</h3>
 			{{/ rsvp_no }}
+			
 			{{# rsvp_maybe }}
-			<data class="p-rsvp" value="maybe">Might Be Going</data> to an Event:
+			{{{ icons.help-circle }}}
+			<h3>{{> author_card }} <data class="p-rsvp" value="maybe">Might Be Going</data> to an Event:</h3>
 			{{/ rsvp_maybe }}
+	
 			{{# rsvp_interested }}
-			<data class="p-rsvp" value="interested">Is Interested</data> in an Event:
+			{{{ icons.info }}}
+			<h3>{{> author_card }} <data class="p-rsvp" value="interested">Is Interested</data> in an Event:</h3>
 			{{/ rsvp_interested }}
-		</h3>
+		</div>
 		
 		{{# external_data }}{{> external_event }}{{/ external_data }}
 	</header>

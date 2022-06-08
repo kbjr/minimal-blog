@@ -21,9 +21,11 @@
 		{{# external_data }}{{> external_event }}{{/ external_data }}
 	</header>
 
-	<main>
-		{{{ html_content }}}
+	{{# content_html }}
+	<main class="e-content">
+		{{{ content_html }}}
 	</main>
+	{{/ content_html }}
 
 	<footer>
 		<ul class="tag-list">

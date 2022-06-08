@@ -66,6 +66,7 @@ async function create_context(uri_name: string) {
 		mentions_data.map(async (data) => {
 			const mention = new store.mentions.Mention(data);
 			mention.external = await read_as_entry(data.source_url);
+			mention.external.context = post;
 			return mention;
 		})
 	);

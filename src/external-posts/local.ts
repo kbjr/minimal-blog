@@ -8,6 +8,8 @@ export function url_is_local(url: string) : url is `${typeof conf.http.web_url}$
 	return url === conf.http.web_url || url.startsWith(conf.http.web_url + '/');
 }
 
+export type ParsedLocalUrl = ReturnType<typeof parse_local_url>;
+
 export function parse_local_url(url: string) {
 	const path = url.slice(conf.http.web_url.length);
 

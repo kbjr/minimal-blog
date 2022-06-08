@@ -156,6 +156,15 @@ async function read_local_as_event(url: string) {
 			url,
 			title: post.title,
 			subtitle: post.subtitle,
+			author: {
+				author_name: store.settings.get('author_name'),
+				author_url: store.settings.get('author_url'),
+				author_avatar: store.settings.get('author_avatar'),
+			},
+			start: post.date_event_start ? new Date(post.date_event_start) : null,
+			end: post.date_event_end ? new Date(post.date_event_end) : null,
+			published: post.date_published ? new Date(post.date_published) : null,
+			updated: post.date_updated ? new Date(post.date_updated) : null,
 			full_content: post.content_html,
 			is_local: true,
 		};

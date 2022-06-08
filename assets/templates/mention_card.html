@@ -1,21 +1,61 @@
-<article role="comment" class="e-comment h-cite" id="mention-{{ snowflake }}">
+<article role="comment" class="{{ mention_type_class }} h-cite" id="mention-{{ snowflake }}">
 	<header>
-		{{# is_event }}
-		{{# external.rsvp_type }}
-		{{# external.rsvp_yes }}<h1 class="p-name">{{> author_card }} is going</h1>{{/ external.rsvp_yes }}
-		{{# external.rsvp_no }}<h1 class="p-name">{{> author_card }} is not going</h1>{{/ external.rsvp_no }}
-		{{# external.rsvp_maybe }}<h1 class="p-name">{{> author_card }} might be going</h1>{{/ external.rsvp_maybe }}
-		{{# external.rsvp_interested }}<h1 class="p-name">{{> author_card }} is interested</h1>{{/ external.rsvp_interested }}
-		{{/ external.rsvp_type }}
+		{{# is_bookmark_of_this }}
+		{{{ icons.bookmark }}}
+		<h1 class="p-name">{{> author_card }} bookmarked this</h1>
+		{{/ is_bookmark_of_this }}
 		
-		{{^ external.rsvp_type }}
-		<h1 class="p-name">{{> author_card }} commented:</h1>
-		{{/ external.rsvp_type }}
-		{{/ is_event }}
+		{{^ is_bookmark_of_this }}
+		{{# is_repost_of_this }}
+		{{{ icons.repeat }}}
+		<h1 class="p-name">{{> author_card }} reposted this</h1>
+		{{/ is_repost_of_this }}
 		
-		{{^ is_event }}
-		<h1 class="p-name">{{> author_card }} commented:</h1>
-		{{/ is_event }}
+		{{^ is_repost_of_this }}
+		{{# is_like_of_this }}
+		{{{ icons.thumbs-up }}}
+		<h1 class="p-name">{{> author_card }} liked this</h1>
+		{{/ is_like_of_this }}
+		
+		{{^ is_like_of_this }}
+		{{# is_reply_to_this }}
+		
+		{{# is_rsvp }}
+		{{# external.rsvp_yes }}
+		{{{ icons.check-circle }}}
+		<h1 class="p-name">{{> author_card }} is going</h1>
+		{{/ external.rsvp_yes }}
+		
+		{{# external.rsvp_no }}
+		{{{ icons.x-circle }}}
+		<h1 class="p-name">{{> author_card }} is not going</h1>
+		{{/ external.rsvp_no }}
+		
+		{{# external.rsvp_maybe }}
+		{{{ icons.help-circle }}}
+		<h1 class="p-name">{{> author_card }} might be going</h1>
+		{{/ external.rsvp_maybe }}
+		
+		{{# external.rsvp_interested }}
+		{{{ icons.info }}}
+		<h1 class="p-name">{{> author_card }} is interested</h1>
+		{{/ external.rsvp_interested }}
+		{{/ is_rsvp }}
+		
+		{{^ is_rsvp }}
+		{{{ icons.message-circle }}}
+		<h1 class="p-name">{{> author_card }} commented</h1>
+		{{/ is_rsvp }}
+		{{/ is_reply_to_this }}
+		
+		{{^ is_reply_to_this }}
+		{{{ icons.message-circle }}}
+		<h1 class="p-name">{{> author_card }} mentioned this</h1>
+		{{/ is_reply_to_this }}
+
+		{{/ is_like_of_this }}
+		{{/ is_repost_of_this }}
+		{{/ is_bookmark_of_this }}
 	</header>
 
 	{{# external.full_content }}
@@ -26,7 +66,7 @@
 
 	<footer>
 		<p>
-			<a href="{{{ post_url }}}/mentions#mention-{{ snowflake }}">Permalink</a>
+			<a href="{{{ local_mention_url }}}">Permalink</a>
 			| <a class="u-url" rel="{{^ is_local }}external{{/ is_local }}" href="{{{ source_url }}}">Source</a>
 
 			{{# external.published }}

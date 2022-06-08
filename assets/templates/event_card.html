@@ -1,11 +1,14 @@
 <!-- Note: non-standard inclusion of `h-event` in `h-feed` -->
 <article class="h-entry h-event" data-post-type="event">
 	<header>
-		<h3>
-			{{> author_card }}
-			Created an Event:<br>
-			<a href="{{{ post_url }}}" class="event-link u-url p-name">{{ title }}</a>
-		</h3>
+		<div class="icon-wrapper">
+			{{{ icons.calendar }}}
+			<h3>
+				{{> author_card }}
+				Created an Event:<br>
+				<a href="{{{ post_url }}}" class="event-link u-url p-name">{{ title }}</a>
+			</h3>
+		</div>
 	
 		{{# subtitle }}
 		<p class="p-summary">{{ subtitle }}</p>

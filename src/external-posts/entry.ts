@@ -24,10 +24,10 @@ export interface ExternalEntryData {
 	updated?: Date;
 	full_content?: string;
 	content_preview?: string;
-	in_reply_to?: ExternalInReplyTo;
-	like_of?: ExternalInReplyTo;
-	repost_of?: ExternalInReplyTo;
-	bookmark_of?: ExternalInReplyTo;
+	in_reply_to?: ExternalInReplyTo[];
+	like_of?: ExternalInReplyTo[];
+	repost_of?: ExternalInReplyTo[];
+	bookmark_of?: ExternalInReplyTo[];
 	rsvp_type?: 'yes' | 'no' | 'maybe' | 'interested';
 	is_local?: boolean;
 }
@@ -168,11 +168,21 @@ async function read_local_as_entry(url: string) {
 	switch (parsed.type) {
 		case 'post':
 			const post = await store.posts.get_post(parsed.post_type, parsed.uri_name);
-			
+
 			entry = {
 				url,
 				title: post.title,
+				subtitle: post.subtitle,
+				author: {
+					author_name: store.settings.get('author_name'),
+					author_url: store.settings.get('author_url'),
+					author_avatar: store.settings.get('author_avatar'),
+				},
+				published: post.date_published ? new Date(post.date_published) : null,
+				updated: post.date_updated ? new Date(post.date_updated) : null,
 				full_content: post.content_html,
+				in_reply_to: post.external_url ? [{ url: post.external_url }] : null,
+				rsvp_type: post.rsvp_type,
 				is_local: true,
 			};
 			break;
@@ -192,6 +202,8 @@ async function read_local_as_entry(url: string) {
 
 
 export class ExternalEntry {
+	public context: store.posts.Post;
+
 	constructor(
 		private readonly data: ExternalEntryData
 	) { }
@@ -250,5 +262,21 @@ export class ExternalEntry {
 
 	get rsvp_type() {
 		return this.data.rsvp_type;
+	}
+
+	get rsvp_yes() {
+		return this.data.rsvp_type === 'yes';
+	}
+
+	get rsvp_no() {
+		return this.data.rsvp_type === 'no';
+	}
+
+	get rsvp_maybe() {
+		return this.data.rsvp_type === 'maybe';
+	}
+
+	get rsvp_interested() {
+		return this.data.rsvp_type === 'interested';
 	}
 }
