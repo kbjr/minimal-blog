@@ -3,7 +3,6 @@ import { ctrl } from '../../../http';
 import { conf } from '../../../conf';
 import { assets, store } from '../../../storage';
 import { render } from './render';
-import { current_lang } from './i18n';
 import { RouteShorthandOptions } from 'fastify';
 
 const opts: RouteShorthandOptions = {
@@ -26,14 +25,14 @@ ctrl.get('/color_themes', opts, async (req, res) => {
 		page: {
 			url: `${conf.http.ctrl_url}/color_themes`,
 			name: 'color-themes',
-			title: current_lang.pages.color_themes.title,
 			require_auth: true
 		}
 	};
 	
 	const html = await render('base.html', context, {
 		page_head: '<meta name="description" content="Control panel page for color theme management">',
-		page_content: await assets.load_control_panel_asset('color_themes.html')
+		page_content: await assets.load_control_panel_asset('color_themes.html'),
+		color_input: await assets.load_control_panel_asset('color_input.js'),
 	});
 
 	return html;

@@ -45,10 +45,10 @@ async function edit_post_endpoint(req: Req, res: FastifyReply) {
 		page: {
 			url: `${conf.http.ctrl_url}/edit_post${id_fragment}`,
 			name: 'edit-post',
-			title: current_lang.pages.posts.title,
 			require_auth: true,
 			post_id,
 			is_new,
+			markdown_textarea_placeholder
 		},
 		ctrl_panel: {
 			url: conf.http.ctrl_url
@@ -57,8 +57,29 @@ async function edit_post_endpoint(req: Req, res: FastifyReply) {
 	
 	const html = await render('base.html', context, {
 		page_head: '<meta name="description" content="Control panel page for creating, editing, and publishing posts">',
-		page_content: await assets.load_control_panel_asset('edit_post.html')
+		page_content: await assets.load_control_panel_asset('edit_post.html'),
+		markdown_preview: await assets.load_control_panel_asset('markdown_preview.js'),
 	});
 
 	return html;
 }
+
+const markdown_textarea_placeholder = `
+## Headings
+
+### Sub-Headings
+
+#### etc.
+
+**Bold**
+_Italic_
+\`Monospace\`
+
+\`\`\`js
+console.log('Code Blocks');
+\`\`\`
+
+$$
+\\text{KaTeX Block}
+$$
+`.replace(/\n/g, '&#10;');

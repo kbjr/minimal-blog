@@ -1,6 +1,9 @@
 
 <main>
+	<h1>{{ labels.pages.color_themes.title }}</h1>
+
 	<div id="main-panel">
+		<!-- Select Active Themes -->
 		<section id="sec-themes-select">
 			<h3>{{ labels.pages.color_themes.select_subtitle }}</h3>
 		
@@ -15,10 +18,13 @@
 					<option value="">{{ labels.loading }}</option>
 				</select>
 		
-				<button type="submit" id="btn-themes-select" disabled>{{ labels.pages.color_themes.select_update }}</button>
+				<div data-flex="row align-center">
+					<button type="submit" id="btn-themes-select" disabled>{{ labels.pages.color_themes.select_update }}</button>
+				</div>
 			</form>
 		</section>
 	
+		<!-- Create New Theme -->
 		<section id="sec-themes-create">
 			<h3>{{ labels.pages.color_themes.create_subtitle }}</h3>
 		
@@ -31,10 +37,49 @@
 				<label for="in-themes-create-name">{{ labels.pages.color_themes.create_label_new_name }}</label>
 				<input type="text" id="in-themes-create-name" required>
 		
-				<button type="submit" id="btn-themes-create" disabled>{{ labels.pages.color_themes.create_theme }}</button>
+				<div data-flex="row align-center">
+					<button type="submit" id="btn-themes-create" disabled>{{ labels.pages.color_themes.create_theme }}</button>
+				</div>
+			</form>
+		</section>
+	
+		<!-- Import Theme From File -->
+		<section id="sec-themes-import">
+			<!-- fixme: i18n label -->
+			<h3>Import Color Theme</h3>
+		
+			<form id="form-themes-import" aria-busy="true" aria-live="polite">
+				<!-- fixme: i18n label -->
+				<label for="in-themes-import">Select Theme File to Import</label>
+				<input type="file" accept="application/json" id="in-themes-import" required>
+		
+				<div data-flex="row align-center">
+					<!-- fixme: i18n label -->
+					<button type="submit" id="btn-themes-import" disabled>Import</button>
+				</div>
+			</form>
+		</section>
+	
+		<!-- Export Theme To File -->
+		<section id="sec-themes-export">
+			<!-- fixme: i18n label -->
+			<h3>Export Color Theme</h3>
+		
+			<form id="form-themes-export" aria-busy="true" aria-live="polite">
+				<!-- fixme: i18n label -->
+				<label for="in-themes-select-export">Select Theme to Export</label>
+				<select id="in-themes-select-export" disabled>
+					<option value="">{{ labels.loading }}</option>
+				</select>
+		
+				<div data-flex="row align-center">
+					<!-- fixme: i18n label -->
+					<button type="submit" id="btn-themes-export" disabled>Export</button>
+				</div>
 			</form>
 		</section>
 		
+		<!-- Edit Colors in a Theme -->
 		<section id="sec-themes-edit">
 			<h3>{{ labels.pages.color_themes.edit_subtitle }}</h3>
 		
@@ -48,13 +93,14 @@
 					<button type="button" id="btn-themes-delete" disabled data-style="secondary">{{ labels.pages.color_themes.delete_theme }}</button>
 					<button type="submit" id="btn-themes-edit" disabled>
 						<span>{{ labels.pages.color_themes.edit_colors }}</span>
-						{{{ icons.arrow-right }}}
+						{{{ icons.arrow-down }}}
 					</button>
 				</div>
 			</form>
 		</section>
 	</div>
 
+	<!-- Color Pickers -->
 	<div id="edit-colors-panel">
 		<section id="sec-edit-colors" disabled aria-disabled="true">
 			<h3>Edit Colors</h3>
@@ -139,7 +185,7 @@
 
 				<div data-flex="row align-center">
 					<button type="reset" id="btn-theme-edit-cancel" data-style="secondary">
-						{{{ icons.arrow-left }}}
+						{{{ icons.arrow-up }}}
 						<span>Back</span>
 					</button>
 					<button type="submit" id="btn-theme-edit-save">Save Changes</button>
@@ -150,6 +196,10 @@
 </main>
 
 <script>
+	{{> color_input }}
+</script>
+
+<script>
 (async () => {
 
 let themes;
@@ -157,9 +207,14 @@ let settings;
 let theme_being_edited;
 let theme_edits;
 
+const exported_color_theme_uuid = '6b9736da-e6f8-11ec-82bd-00155d93d186';
+
 
 
 // ===== Elements =====
+
+const heading = document.querySelector('main > h1');
+const edit_colors_panel = document.querySelector('#edit-colors-panel');
 
 const form_select = document.querySelector('#form-themes-select');
 const select_light_theme = document.querySelector('#in-themes-select-light');
@@ -170,6 +225,14 @@ const form_create = document.querySelector('#form-themes-create');
 const select_create_from = document.querySelector('#in-themes-create-start-from');
 const input_create_name = document.querySelector('#in-themes-create-name');
 const button_create = document.querySelector('#btn-themes-create');
+
+const form_import = document.querySelector('#form-themes-import');
+const input_import = document.querySelector('#in-themes-import');
+const button_import = document.querySelector('#btn-themes-import');
+
+const form_export = document.querySelector('#form-themes-export');
+const select_export = document.querySelector('#in-themes-select-export');
+const button_export = document.querySelector('#btn-themes-export');
 
 const form_edit = document.querySelector('#form-themes-edit');
 const select_edit = document.querySelector('#in-themes-edit');
@@ -227,8 +290,29 @@ form_edit.addEventListener('submit', (event) => {
 	reload_color_inputs();
 	enable_color_editor();
 
+	edit_colors_panel.scrollIntoView({
+		behavior: 'smooth',
+		block: 'start',
+	});
+
 	return false;
 });
+
+form_export.addEventListener('submit', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	const theme = select_export.value;
+
+	if (! theme || ! themes[theme]) {
+		// TODO: Error
+		return false;
+	}
+
+	export_color_theme(theme);
+
+	return false;
+})
 
 button_delete.addEventListener('click', (event) => {
 	event.preventDefault();
@@ -267,311 +351,13 @@ form_edit_colors.addEventListener('reset', (event) => {
 	disable_color_editor();
 	enable_form(form_edit);
 
+	heading.scrollIntoView({
+		behavior: 'smooth',
+		block: 'start',
+	});
+
 	return false;
 });
-
-
-
-// ===== <color-input> component =====
-
-const styles = `
-:host {
-	display: contents;
-}
-
-.wrapper {
-	width: 16rem;
-	padding: 0.5rem;
-	border-radius: 0.5rem;
-	cursor: pointer;
-	overflow: hidden;
-	background: var(--theme-bg-input);
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-}
-
-.color-swatch {
-	flex: 0 0 3rem;
-	width: 3rem;
-	height: 3rem;
-	margin: 0;
-	padding: 0;
-	display: block;
-	content: " ";
-	overflow: hidden;
-	border: 0.125rem var(--theme-border-input) solid;
-	border-radius: 0.5rem;
-	background-size: 1rem 1rem;
-	background-image: linear-gradient(45deg,
-		#fff 33.33%,
-		#000 33.33%,
-		#000 50%,
-		#fff 50%,
-		#fff 83.33%,
-		#000 83.33%,
-		#000 100%
-	);
-}
-
-.color-swatch div {
-	width: 3rem;
-	height: 3rem;
-	margin: 0;
-	padding: 0;
-	display: block;
-	content: " ";
-}
-
-.color-swatch input[type='color'] {
-	position: relative;
-	top: 3rem;
-	height: 0;
-	visibility: hidden;
-}
-
-.color-info {
-	margin-left: 1rem;
-	flex: 1 1 auto;
-}
-
-.color-name {
-	font-size: 0.8rem;
-	font-weight: 700;
-	user-select: none;
-}
-
-.color-value {
-	font-size: 0.8rem;
-	/* font-weight: 700; */
-	user-select: none;
-}
-
-.color-info input {
-	display: block;
-	margin-top: 0.1rem;
-	border: 0.125rem var(--theme-border-input) solid;
-	border-radius: 0.25rem;
-	color: var(--theme-text-body);
-	background-color: var(--theme-bg-input);
-	padding: 0.1rem 0.5rem;
-	font-family: var(--font-open-sans);
-	font-size: 1rem;
-	width: 10rem;
-}
-
-:host([show-editor]) .color-value,
-:host(:not([show-editor])) .color-info input {
-	display: none;
-}
-`;
-
-const template = `
-<style>${styles}</style>
-<div class="wrapper" title="Edit Color" tabindex="0" role="button" aria-pressed="false">
-	<div class="color-swatch">
-		<div></div>
-	</div>
-	<div class="color-info">
-		<label for="value" class="color-name"></label>
-		<div class="color-value" aria-hidden="false"></div>
-		<input type="text" id="value" aria-hidden="true">
-	</div>
-</div>
-`;
-
-customElements.define('color-input',
-	class ColorInput extends HTMLElement {
-		static get observedAttributes() {
-			return [ 'disabled', 'show-editor', 'data-color' ];
-		}
-
-		constructor() {
-			super();
-			this.attachShadow({ mode: 'open' });
-			this.shadowRoot.innerHTML = template;
-
-			this.wrapper = this.shadowRoot.querySelector('.wrapper');
-			this.color_swatch = this.wrapper.querySelector('.color-swatch div');
-			this.color_info = this.wrapper.querySelector('.color-info');
-			this.color_name = this.wrapper.querySelector('.color-name');
-			this.color_value = this.wrapper.querySelector('.color-value');
-			this.color_input = this.wrapper.querySelector('.color-info input');
-		}
-
-		connectedCallback() {
-			this.unbind_this = make_button_like(this, this.on_select);
-			// this.unbind_editor_icon = make_button_like(this.editor_icon, this.on_select_editor_icon);
-
-			this.reload();
-			this.update_state();
-		}
-		
-		disconnectedCallback() {
-			this.unbind_this();
-			// this.unbind_editor_input();
-		}
-
-		get color() {
-			return this.getAttribute('data-color');
-		}
-
-		get disabled() {
-			return this.getAttribute('disabled') != null;
-		}
-
-		set disabled(value) {
-			if (value) {
-				this.setAttribute('disabled', '');
-			}
-
-			else {
-				this.removeAttribute('disabled');
-			}
-		}
-
-		get show_editor() {
-			return this.hasAttribute('show-editor');
-		}
-
-		set show_editor(value) {
-			if (value === this.show_editor) {
-				// Don't perform no-ops
-				return;
-			}
-
-			if (value) {
-				this.setAttribute('show-editor', '');
-				this.color_input.value = this.value;
-				this.color_input.focus();
-				this.color_input.addEventListener('blur', this.on_input_blur);
-			}
-
-			else {
-				this.removeAttribute('show-editor');
-				this.color_input.value = '';
-
-				if (document.activeElement === this) {
-					this.color_input.blur();
-				}
-
-				this.color_input.removeEventListener('blur', this.on_input_blur);
-			}
-		}
-
-		get value() {
-			return this.wrapper.getAttribute('data-value');
-		}
-
-		get edited_value() {
-			return theme_edits && theme_edits[this.color];
-		}
-
-		set edited_value(value) {
-			if (value === this.original_value) {
-				delete theme_edits[this.color];
-			}
-
-			else {
-				theme_edits[this.color] = value;
-			}
-		}
-
-		get original_value() {
-			return themes && themes[theme_being_edited] && themes[theme_being_edited][this.color];
-		}
-
-		set value(value) {
-			if (value == null) {
-				value = 'transparent';
-				this.color_value.innerHTML = '<em>no value</em>';
-			}
-
-			else {
-				this.color_value.innerHTML = value;
-			}
-
-			this.wrapper.setAttribute('data-value', value);
-			this.color_swatch.style.background = value;
-		}
-
-		attributeChangedCallback(attr_name, old_value, new_value) {
-			switch (attr_name) {
-				case 'data-color':
-					return this.reload();
-
-				case 'disabled':
-				case 'show-editor':
-					return this.update_state();
-			}
-		}
-
-		update_state() {
-			const { disabled, show_editor } = this;
-
-			if (disabled || show_editor) {
-				this.wrapper.removeAttribute('tabindex');
-			}
-
-			else {
-				this.wrapper.setAttribute('tabindex', '0');
-			}
-
-			if (show_editor) {
-				this.wrapper.setAttribute('aria-pressed', 'true');
-				this.color_value.setAttribute('aria-hidden', 'true');
-				this.color_input.setAttribute('aria-hidden', 'false');
-			}
-
-			else {
-				this.wrapper.setAttribute('aria-pressed', 'false');
-				this.color_value.setAttribute('aria-hidden', 'false');
-				this.color_input.setAttribute('aria-hidden', 'true');
-			}
-		}
-
-		reload() {
-			this.color_name.innerHTML = this.color;
-
-			if (this.edited_value) {
-				this.value = this.edited_value;
-				return;
-			}
-
-			if (themes && theme_being_edited) {
-				const theme = themes[theme_being_edited];
-
-				if (theme) {
-					this.value = theme[this.color];
-					return;
-				}
-			}
-
-			this.value = null;
-		}
-
-		on_select = () => {
-			if (this.disabled) {
-				return;
-			}
-
-			if (! this.show_editor) {
-				this.show_editor = true;
-			}
-		};
-
-		on_input_change = () => {
-			// TODO: Show live color updates while the user is typing?
-		};
-
-		on_input_blur = () => {
-			const new_value = this.color_input.value;
-			this.value = new_value;
-			this.edited_value = new_value;
-			this.show_editor = false;
-		};
-	}
-);
 
 
 
@@ -593,11 +379,13 @@ async function load() {
 	select_light_theme.innerHTML = '';
 	select_dark_theme.innerHTML = '';
 	select_edit.innerHTML = '';
+	select_export.innerHTML = '';
 
 	for (const [name, colors] of Object.entries(themes)) {
 		append_option(select_light_theme, name, settings.theme_light === name);
 		append_option(select_dark_theme, name, settings.theme_dark === name);
 		append_option(select_create_from, name, settings.theme_light === name);
+		append_option(select_export, name, settings.theme_light === name);
 
 		if (colors.$builtin) {
 			// pass: cannot edit or delete builtin themes
@@ -611,16 +399,21 @@ async function load() {
 	form_select.setAttribute('aria-busy', 'false');
 	form_create.setAttribute('aria-busy', 'false');
 	form_edit.setAttribute('aria-busy', 'false');
+	form_export.setAttribute('aria-busy', 'false');
+	form_import.setAttribute('aria-busy', 'false');
 	form_edit_colors.setAttribute('aria-busy', 'false');
 
 	select_create_from.disabled = false;
 	select_light_theme.disabled = false;
 	select_dark_theme.disabled = false;
+	select_export.disabled = false;
 	select_edit.disabled = false;
 
 	button_create.disabled = false;
 	button_select.disabled = false;
 	button_edit.disabled = false;
+	button_export.disabled = false;
+	button_import.disabled = false;
 	button_delete.disabled = false;
 
 	reload_color_inputs();
@@ -772,6 +565,26 @@ async function submit_edit_save() {
 	Object.assign(themes[theme_being_edited], theme_edits);
 	theme_edits = { };
 	enable_color_editor();
+}
+
+function import_color_theme(json) {
+	const obj = JSON.parse(json);
+	// 
+}
+
+function export_color_theme(name) {
+	const colors = Object.assign({ }, themes[name]);
+	delete obj.$builtin;
+
+	const obj = {
+		$schema: 'https://raw.githubusercontent.com/kbjr/minimal-blog/master/color-theme.schema.json',
+		name: name,
+		colors: colors
+	};
+
+	const json = JSON.stringify(obj, null, 2);
+
+	app.download_file('application/json', json, `${name}.theme.json`);
 }
 
 })();

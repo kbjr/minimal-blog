@@ -3,7 +3,6 @@ import { ctrl } from '../../../http';
 import { conf } from '../../../conf';
 import { assets, store } from '../../../storage';
 import { render } from './render';
-import { current_lang } from './i18n';
 import { RouteShorthandOptions } from 'fastify';
 
 const opts: RouteShorthandOptions = {
@@ -23,21 +22,20 @@ ctrl.get('/', opts, async (req, res) => {
 		await store.settings.set('show_setup', false);
 	}
 
-	return render_main_page();
+	return render_dashboard_page();
 });
 
-async function render_main_page() {
+async function render_dashboard_page() {
 	const context = {
 		page: {
 			url: conf.http.ctrl_url,
-			name: 'main',
-			title: current_lang.pages.main.title,
+			name: 'dashboard',
 			require_auth: true,
 		}
 	};
 	
 	const html = await render('base.html', context, {
-		page_head: '<meta name="description" content="Control panel main landing page">',
+		page_head: '<meta name="description" content="Control panel main dashboard page">',
 		page_content: await assets.load_control_panel_asset('main.html')
 	});
 
@@ -49,7 +47,6 @@ async function render_first_time_setup_page() {
 		page: {
 			url: conf.http.ctrl_url,
 			name: 'first-time-setup',
-			title: current_lang.pages.first_time_setup.title,
 			require_auth: false,
 		}
 	};

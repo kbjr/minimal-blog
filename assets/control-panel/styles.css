@@ -13,7 +13,7 @@
 	box-sizing: border-box;
 }
 
-html, body, #root {
+html, body {
 	height: 100%;
 	min-height: 100%;
 }
@@ -29,44 +29,70 @@ body[data-color-transition-enabled] :is(button, pre, input, textarea, select, ma
 
 #root {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	padding: 2rem;
+	min-height: calc(100vh - 20rem);
 	max-width: 100rem;
 	margin: auto;
 }
 
-	#root main {
-		flex-grow: 1;
-	}
-
-
-
-
-
-/* ===== Main Heading ===== */
-
-#root > header {
-	padding: 0 1rem;
-	position: relative;
+color-theme-toggle {
+	position: fixed;
+	top: 1rem;
+	right: 1rem;
+	display: block;
 }
 
-	#root > header color-theme-toggle {
-		display: block;
-		position: absolute;
-		top: 2rem;
-		right: 2rem
-	}
 
-	#root > header nav {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: space-evenly;
-		align-items: baseline;
-		margin-bottom: 1.5rem;
-		padding-bottom: 1.5rem;
-		border-bottom: 1px var(--theme-line) solid;
-	}
+
+
+
+/* ===== Header / Nav Sidebar ===== */
+
+#root > header {
+	width: 20rem;
+	flex: 0 0 20rem;
+	padding: 0;
+	margin-inline-end: 4rem;
+	position: sticky;
+	top: 2rem;
+	align-self: flex-start;
+}
+
+#root > header p {
+	display: block;
+	margin-block: 1rem;
+	margin-inline: 0;
+	line-height: 1;
+	font-style: italic;
+	font-size: 0.8rem;
+}
+
+#root > header nav {
+	margin-block: 2rem;
+}
+
+#root > header nav ul {
+	margin-inline-start: 2rem;
+}
+
+
+
+
+
+/* ===== Footer ===== */
+
+body > footer {
+	margin: 0;
+	margin-block-start: 4rem;
+	padding-block-end: 2rem;
+}
+
+body > footer p {
+	margin: 1rem;
+	text-align: center;
+	font-size: 0.8rem;
+}
 
 
 
@@ -131,6 +157,7 @@ pre {
 h1 {
 	font-size: 2rem;
 	font-weight: 300;
+	margin-block: 2rem 4rem;
 }
 
 h2 {
@@ -224,14 +251,6 @@ h1 > a:visited, h2 > a:visited {
 	color: inherit;
 }
 
-header p {
-	display: block;
-	margin: 1rem;
-	line-height: 1;
-	font-style: italic;
-	font-size: 1rem;
-}
-
 blockquote {
 	margin-block: 2rem;
 	margin-inline: 1rem;
@@ -260,20 +279,6 @@ mark {
 	margin: 4rem;
 	color: var(--theme-text-light);
 	font-style: italic;
-}
-
-
-
-/* ===== Footer ===== */
-
-footer {
-	margin: 4rem 0 1rem;
-}
-
-footer p {
-	margin: 1rem;
-	text-align: center;
-	font-size: 0.8rem;
 }
 
 
@@ -318,6 +323,42 @@ textarea {
 	textarea:invalid {
 		border-color: var(--theme-border-input-invalid);
 	}
+
+input[type='checkbox'] {
+	width: auto;
+	height: auto;
+	appearance: none;
+	width: 1rem;
+	height: 1rem;
+	display: inline-block;
+	margin: 0;
+	cursor: pointer;
+	position: relative;
+}
+
+label + input[type='checkbox'] {
+	margin-inline-start: 0.5rem;
+}
+
+input[type='checkbox']:after {
+	opacity: 0;
+	content: '';
+	display: block;
+	position: absolute;
+	pointer-events: none;
+	transition: opacity linear .1s;
+}
+
+input[type='checkbox']:checked:after {
+	opacity: 1;
+	left: 0.25rem;
+	top: 0;
+	width: 0.3125rem;
+	height: 0.625rem;
+	border: solid var(--theme-text-body);
+	border-width: 0 0.1875rem 0.1875rem 0;
+	transform: rotate(45deg);
+}
 
 textarea {
 	line-height: 1.7rem;
@@ -459,12 +500,13 @@ table {
 
 #page-edit-post main {
 	width: 100%;
-	max-width: 80rem;
-	margin: 0 auto;
-	padding: 3rem 1rem;
+	margin-block: 0;
+	margin-inline: auto;
+	padding-block: 0;
+	padding-inline: 1rem;
 }
 
-	#page-edit-post main input,
+	#page-edit-post main input:not([type='checkbox']),
 	#page-edit-post main textarea {
 		width: 100%;
 		max-width: 80rem;
@@ -519,9 +561,34 @@ table {
 			flex: 0 1 auto;
 		}
 
+	#page-edit-post .textarea-hat {
+		align-items: flex-end;
+	}
+
+		#page-edit-post .textarea-hat label[for='in-post-markdown'] {
+			flex: 1 0 auto;
+		}
+		
+		#page-edit-post .textarea-hat label[for='in-post-markdown-spellcheck'] {
+			flex: 0 0 auto;
+		}
+
+		#page-edit-post .textarea-hat label[for='in-post-markdown-monospace'] {
+			flex: 0 0 auto;
+			margin-inline-start: 1.5rem;
+		}
+
 	#page-edit-post #in-post-markdown {
 		height: 50vh;
 		min-height: 35rem;
+	}
+	
+	#page-edit-post #in-post-markdown.monospace {
+		font-family: var(--font-monospace);
+	}
+	
+	#page-edit-post #in-post-markdown.no-monospace {
+		font-family: var(--font-open-sans);
 	}
 
 
@@ -530,15 +597,15 @@ table {
 
 #page-color-themes main {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	flex-wrap: nowrap;
 }
 
 	#page-color-themes #main-panel {
 		flex: 0 0 auto;
 		display: flex;
-		flex-direction: column;
-		flex-wrap: nowrap;
+		flex-direction: row;
+		flex-wrap: wrap;
 	}
 
 		#page-color-themes #main-panel section {
@@ -546,7 +613,7 @@ table {
 		}
 
 	#page-color-themes #edit-colors-panel {
-		flex: 0 0 calc(100% - 27rem);
+		/*  */
 	}
 
 		#page-color-themes #edit-colors-panel ul {
@@ -561,7 +628,7 @@ table {
 			}
 
 	#page-color-themes section {
-		margin: 2rem 3rem 4rem;
+		margin: 2rem 2rem 4rem;
 	}
 
 	#page-color-themes section[disabled] {
@@ -579,16 +646,13 @@ table {
 
 @media (max-width: 60rem) {
 	#root {
-		padding: 2rem 0;
+		padding: 2rem;
+		display: block;
 	}
-	
-	#root > header nav {
-		margin-top: 1.5rem;
+
+	#root > header {
+		position: static;
 	}
-	
-		#root > header nav a {
-			margin: 0.25rem 0.65rem;
-		}
 
 	article > header:not(:last-child) {
 		margin-bottom: 4rem;

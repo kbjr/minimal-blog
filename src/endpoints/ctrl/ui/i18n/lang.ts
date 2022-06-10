@@ -32,10 +32,13 @@ export interface LanguageLabels {
 			title: string;
 			prompt: string;
 		};
-		main: {
+		dashboard: {
 			title: string;
 		};
 		posts: {
+			title: string;
+		};
+		create_new_post: {
 			title: string;
 		};
 		settings: {

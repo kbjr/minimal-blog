@@ -7,7 +7,7 @@ export const icons = dict<string, string>();
 const whitespace = /[\s\t\n]+/g;
 
 for (const [name, { contents }] of Object.entries(feather.icons)) {
-	const svg = `
+	icons[name] = `
 	<svg xmlns="http://www.w3.org/2000/svg"
 		class="icon ${name}"
 		aria-hidden="true"
@@ -20,10 +20,6 @@ for (const [name, { contents }] of Object.entries(feather.icons)) {
 		stroke-linejoin="round"
 	>${contents}</svg>
 	`.replace(whitespace, ' ').trim();
-
-	Object.defineProperty(icons, name, {
-		get() { return svg; }
-	});
 }
 
 Object.freeze(icons);

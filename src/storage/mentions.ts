@@ -10,6 +10,8 @@ export type MentionType = 'webmention' | 'pingback';
 let mentions: MentionData[];
 let mentions_index: Record<PostType, Record<string, MentionData[]>>;
 let mentions_by_snowflake: Record<string, MentionData>;
+let mentions_needing_moderation: MentionData[];
+let mentions_needing_verification: MentionData[];
 
 export async function load() {
 	// mentions = await store.get_all_mentions();
@@ -46,6 +48,8 @@ export async function load() {
 		rsvp: obj(),
 	});
 	mentions_by_snowflake = obj();
+	mentions_needing_moderation = [ ];
+	mentions_needing_verification = [ ];
 
 	for (const mention of mentions) {
 		if (! mentions_index[mention.post_type][mention.uri_name]) {
@@ -57,6 +61,14 @@ export async function load() {
 		}
 
 		mentions_by_snowflake[mention.snowflake] = mention;
+
+		if (mention.needs_moderation) {
+			mentions_needing_moderation.push(mention);
+		}
+
+		if (! mention.verified) {
+			mentions_needing_verification.push(mention);
+		}
 	}
 }
 
@@ -70,6 +82,22 @@ export async function get_live_post_mentions(post_type: PostType, uri_name: stri
 	return mentions.filter((mention) => {
 		return ! mention.needs_moderation && mention.verified;
 	});
+}
+
+export function get_mentions_needing_moderation(count: number, offset: number) {
+	return mentions_needing_moderation.slice(offset, offset + count);
+}
+
+export function get_mentions_needing_verification(count: number, offset: number) {
+	return mentions_needing_verification.slice(offset, offset + count);
+}
+
+export function get_mentions_needing_moderation_count() {
+	return mentions_needing_moderation.length;
+}
+
+export function get_mentions_needing_verification_count() {
+	return mentions_needing_verification.length;
 }
 
 export interface MentionData {
@@ -97,6 +125,18 @@ export class Mention {
 
 	public get source_url() {
 		return this.data.source_url;
+	}
+
+	public get author_name() {
+		return this.external.author.author_name;
+	}
+
+	public get author_url() {
+		return this.external.author.author_url;
+	}
+
+	public get author_avatar() {
+		return this.external.author.author_avatar;
 	}
 
 	public get vouch_url() {

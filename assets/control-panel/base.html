@@ -23,6 +23,7 @@
 			ctrl_panel_url: '{{{ ctrl_panel.url }}}',
 			current_page: '{{{ page.name }}}',
 			post_uri_format: '{{{ feed.post_uri_format }}}',
+			event_uri_format: '{{{ feed.event_uri_format }}}',
 			author: {
 				name: {{# feed.author_name }}'{{ feed.author_name }}' || {{/ feed.author_name }}null,
 				url: {{# feed.author_url }}'{{ feed.author_url }}' || {{/ feed.author_url }}null,
@@ -43,46 +44,62 @@
 </head>
 <body id="page-{{{ page.name }}}">
 	<script src="{{{ ctrl_panel.url }}}/color_theme_toggle.js"></script>
+	<color-theme-toggle></color-theme-toggle>
 	
 	<div id="root">
 		<header>
-			<h2>{{ labels.control_panel }} / {{ page.title }}</h2>
+			<h2>{{ labels.control_panel }}</h2>
 			<p>{{ labels.website }}: <a href="{{{ site.url }}}">{{ site.url }}</a></p>
 			<p>{{ labels.control_panel }}: <a href="{{{ ctrl_panel.url }}}">{{ ctrl_panel.url }}</a></p>
 
 			<noscript>
 				<p><strong>{{ labels.noscript }}</strong></p>
 			</noscript>
-
+			
 			{{# page.require_auth }}
 			<nav>
-				<a href="{{{ ctrl_panel.url }}}/posts">{{ labels.pages.posts.title }}</a>
-				<a href="{{{ ctrl_panel.url }}}/settings">{{ labels.pages.settings.title }}</a>
-				<a href="{{{ ctrl_panel.url }}}/color_themes">{{ labels.pages.color_themes.title }}</a>
-				<a href="{{{ ctrl_panel.url }}}/templates">{{ labels.pages.templates.title }}</a>
-				<a href="{{{ ctrl_panel.url }}}/interactions">{{ labels.pages.interactions.title }}</a>
-				<a href="{{{ ctrl_panel.url }}}/users">{{ labels.pages.users.title }}</a>
-				<button id="btn-logout">{{ labels.logout }}</button>
-				<script>
-					document
-						.querySelector('#btn-logout')
-						.addEventListener('click', () => app.logout());
-				</script>
+				<ul>
+					<!-- fixme: i18n labels for these strings -->
+					<li><a href="{{{ ctrl_panel.url }}}">{{ labels.pages.dashboard.title }}</a></li>
+					<li>Create New
+						<ul>
+							<li><a href="{{{ ctrl_panel.url }}}/posts">New Post</a></li>
+							<li><a href="{{{ ctrl_panel.url }}}/posts">New Comment</a></li>
+							<li><a href="{{{ ctrl_panel.url }}}/posts">New Note</a></li>
+							<li><a href="{{{ ctrl_panel.url }}}/posts">New Event</a></li>
+							<li><a href="{{{ ctrl_panel.url }}}/posts">New RSVP</a></li>
+						</ul>
+					</li>
+					<li>Mentions
+						<ul>
+							<li><a href="">Moderation Queue</a></li>
+							<li><a href="">Auto-Moderation Settings</a></li>
+						</ul>
+					</li>
+					<li>Other Settings
+						<ul>
+							<li><a href="{{{ ctrl_panel.url }}}/settings">{{ labels.pages.settings.title }}</a></li>
+							<li><a href="{{{ ctrl_panel.url }}}/color_themes">{{ labels.pages.color_themes.title }}</a></li>
+							<li><a href="{{{ ctrl_panel.url }}}/templates">{{ labels.pages.templates.title }}</a></li>
+							<li><a href="{{{ ctrl_panel.url }}}/users">{{ labels.pages.users.title }}</a></li>
+						</ul>
+					</li>
+				</ul>
 			</nav>
+			
+			<button id="btn-logout" onclick="void app.logout()">{{ labels.logout }}</button>
 			{{/ page.require_auth }}
-
-			<color-theme-toggle></color-theme-toggle>
 		</header>
 		
 		{{> page_content }}
-
-		<footer>
-			<p>
-				<a href="https://github.com/kbjr/minimal-blog">Minimal Blog</a>:
-				Control Panel
-			</p>
-			<p>Version: {{ site.app_version }}</p>
-		</footer>
 	</div>
+
+	<footer>
+		<p>
+			<a href="https://github.com/kbjr/minimal-blog">Minimal Blog</a>:
+			Control Panel
+		</p>
+		<p>Version: {{ site.app_version }}</p>
+	</footer>
 </body>
 </html>

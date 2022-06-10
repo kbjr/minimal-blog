@@ -34,11 +34,14 @@ export const en_us: LanguageLabels = {
 			title: 'Login',
 			prompt: 'Login to continue',
 		},
-		main: {
-			title: 'Main',
+		dashboard: {
+			title: 'Dashboard',
 		},
 		posts: {
-			title: 'Posts',
+			title: 'View & Edit Posts',
+		},
+		create_new_post: {
+			title: 'Create New Post',
 		},
 		settings: {
 			title: 'Settings',

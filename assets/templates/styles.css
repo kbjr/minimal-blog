@@ -128,7 +128,7 @@ ul.link-list li {
 }
 
 ul.link-list svg.icon {
-	margin-inline-end: 0.5rem;
+	margin-inline-end: 1rem;
 }
 
 ul.link-list a {
@@ -1090,6 +1090,11 @@ select {
 
 /* lines and boxes */
 .rendered-pikchr svg path[style*='stroke:rgb(0,0,0);'] {
+	stroke: var(--theme-text-body) !important;
+}
+
+/* circles */
+.rendered-pikchr svg circle[style*='stroke:rgb(0,0,0);'] {
 	stroke: var(--theme-text-body) !important;
 }
 

@@ -57,6 +57,14 @@ app.get_snowflake = async function get_snowflake() {
 	return (await app.http_get('/api/snowflake')).snowflake;
 };
 
+app.download_file = function download_file(type, content, default_name = '') {
+	const url = `data:${type};base64,${btoa(content)}`;
+	const anchor = document.createElement('a');
+	anchor.href = url;
+	anchor.setAttribute('download', default_name);
+	anchor.click();
+};
+
 app.http = async function http(method, path, headers = { }, body = null) {
 	return fetch(conf.ctrl_panel_url + path, {
 		method,
