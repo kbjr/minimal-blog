@@ -1,3 +1,5 @@
+# see: https://github.com/docker/build-push-action/blob/master/docs/advanced/multi-platform.md
+
 name: Build Docker
 
 on:
@@ -7,17 +9,15 @@ on:
     branches: [ "master" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        platform-target: [arm64, amd64]
-        
     steps:
     - uses: actions/checkout@v3
-    - name: Build ${{ matrix.platform-target }} Docker image
-      run: docker build . --file Dockerfile --tag minimal-blog:${{ matrix.platform-target }}-$(date +%s) --platform linux/${{ matrix.platform-target }}
+    - name: Build Docker images
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: false
+        tags: minimal-blog:latest
+        # tags: jbrumond/minimal-blog:latest
