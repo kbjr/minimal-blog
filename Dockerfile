@@ -83,7 +83,7 @@ COPY package.json tsconfig.json ${BLOG_PATH}/
 
 # Install build dependencies for sqlite3 / pikchr
 #  see: https://github.com/gliderlabs/docker-alpine/blob/master/docs/usage.md (re: `--no-cache` flag)
-RUN [ "apk", "add", "--no-cache", "python2", "python3", "g++", "make" ]
+RUN [ "apk", "add", "--no-cache", "python3", "g++", "make" ]
 
 # Install dependencies and build the application
 RUN [ "npm", "install" ]
