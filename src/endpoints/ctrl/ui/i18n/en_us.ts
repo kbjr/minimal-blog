@@ -11,6 +11,7 @@ export const en_us: LanguageLabels = {
 	username: 'Username',
 	password: 'Password',
 	noscript: 'JavaScript is required to use this control panel',
+	optional: 'optional',
 
 	enums: {
 		mention_type: {
@@ -39,9 +40,92 @@ export const en_us: LanguageLabels = {
 		},
 		posts: {
 			title: 'View & Edit Posts',
+			post_subtitle: 'Sub-Title / Summary',
+			post_body: 'Body',
+			post_tags: 'Tags',
+			preview: 'Preview',
+			cancel: 'Cancel',
+			published: 'Published',
+			not_published: 'Not Published',
+			tags_pattern_hint: 'Tags should be comma delimited, and contain only letters, numbers, and hyphens',
+			types: {
+				post: {
+					post_title: 'Post Title',
+					helper_text: 'Posts are your typical, structured article or blog post.',
+				},
+				comment: {
+					external_url: 'Reply To URL',
+					helper_text: 'Comments let you post a response to some other content online.',
+				},
+				note: {
+					helper_text: 'Note are for micro-blogging. They are typically short, unstructured posts or status updates.',
+				},
+				event: {
+					post_title: 'Event Title',
+					helper_text: 'Events let you create a post with additional time and location information that other people can send RSVPs to.',
+				},
+				rsvp: {
+					external_url: 'Event URL',
+					helper_text: 'RSVPs let you post a response to an event posted online, along with whether you plan to attend.',
+					rsvp_type: 'RSVP Type',
+					rsvp_types: {
+						yes: 'Going',
+						no: 'Not Going',
+						maybe: 'Maybe',
+						interested: 'Interested',
+					},
+				},
+			}
 		},
-		create_new_post: {
+		create_post: {
 			title: 'Create New Post',
+			save: 'Save Draft Post',
+			publish: 'Create & Publish Post',
+		},
+		create_comment: {
+			title: 'Create New Comment',
+			save: 'Save Draft Comment',
+			publish: 'Create & Publish Comment',
+		},
+		create_note: {
+			title: 'Create New Note',
+			save: 'Save Draft Note',
+			publish: 'Create & Publish Note',
+		},
+		create_event: {
+			title: 'Create New Event',
+			save: 'Save Draft Event',
+			publish: 'Create & Publish Event',
+		},
+		create_rsvp: {
+			title: 'Create New RSVP',
+			save: 'Save Draft RSVP',
+			publish: 'Create & Publish RSVP',
+		},
+		edit_post: {
+			title: 'Edit Post',
+			save: 'Save Post',
+			publish: 'Create & Publish Post',
+		},
+		edit_comment: {
+			title: 'Edit Comment',
+			save: 'Save Comment',
+			publish: 'Create & Publish Comment',
+		},
+		edit_note: {
+			title: 'Edit Note',
+			save: 'Save Note',
+			publish: 'Create & Publish Note',
+		},
+		edit_event: {
+			title: 'Edit Event',
+			save: 'Save Event',
+			publish: 'Create & Publish Event',
+		},
+		edit_rsvp: {
+			title: 'Edit RSVP',
+			save: 'Save RSVP',
+			publish: 'Create & Publish RSVP',
 		},
 		settings: {
 			title: 'Settings',

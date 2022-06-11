@@ -80,7 +80,7 @@ export const default_themes = <Record<string, ColorThemeData>> dict({
 		bg_button_secondary: '#495159',
 		bg_button_secondary_hover: '#86a7f04c',
 		text_button_secondary: '#bbbbbb',
-		bg_input: '#555555',
+		bg_input: '#3e444a',
 		border_input: '#dddddd',
 		border_input_invalid: '#bbbbbb',
 		code_normal: '#c0c5ce',

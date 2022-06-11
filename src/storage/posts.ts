@@ -19,6 +19,10 @@ const max_search_results = 50;
 export type PostType = 'post' | 'comment' | 'note' | 'event' | 'rsvp';
 // | 'share' | 'like/reaction' | 'media-album'
 
+export function post_types() : PostType[] {
+	return ['post', 'comment', 'note', 'event', 'rsvp'];
+}
+
 // Note: `posts` is ordered with the most recent post first
 let posts: PostData[];
 let posts_index: Record<PostType, Record<string, PostData>>;

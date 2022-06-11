@@ -1,11 +1,12 @@
 
 import type { JSONSchema6 } from 'json-schema';
 import { arr, str, str_enum } from '../../../json-schema';
+import { store } from '../../../storage';
 
 export const post_create_req_schema: JSONSchema6 = {
 	type: 'object',
 	properties: {
-		post_type: str_enum(['post', 'comment', 'note', 'event', 'rsvp']),
+		post_type: str_enum(store.posts.post_types()),
 		uri_name: str(),
 		title: str(),
 		subtitle: str(),
@@ -26,7 +27,7 @@ export const post_create_req_schema: JSONSchema6 = {
 export const post_res_schema: JSONSchema6 = {
 	type: 'object',
 	properties: {
-		post_type: str_enum(['post', 'comment', 'note', 'event', 'rsvp']),
+		post_type: str_enum(store.posts.post_types()),
 		uri_name: str(),
 		title: str(),
 		subtitle: str(),

@@ -9,6 +9,7 @@ export interface LanguageLabels {
 	username: string;
 	password: string;
 	noscript: string;
+	optional: string;
 
 	enums: {
 		mention_type: {
@@ -37,9 +38,92 @@ export interface LanguageLabels {
 		};
 		posts: {
 			title: string;
+			post_subtitle: string;
+			post_body: string;
+			post_tags: string;
+			preview: string;
+			cancel: string;
+			published: string;
+			not_published: string;
+			tags_pattern_hint: string;
+			types: {
+				post: {
+					post_title: string;
+					helper_text: string;
+				};
+				comment: {
+					external_url: string;
+					helper_text: string;
+				};
+				note: {
+					helper_text: string;
+				};
+				event: {
+					post_title: string;
+					helper_text: string;
+				};
+				rsvp: {
+					external_url: string;
+					helper_text: string;
+					rsvp_type: string;
+					rsvp_types: {
+						yes: string;
+						no: string;
+						maybe: string;
+						interested: string;
+					};
+				};
+			};
 		};
-		create_new_post: {
+		create_post: {
 			title: string;
+			save: string;
+			publish: string;
+		};
+		create_comment: {
+			title: string;
+			save: string;
+			publish: string;
+		};
+		create_note: {
+			title: string;
+			save: string;
+			publish: string;
+		};
+		create_event: {
+			title: string;
+			save: string;
+			publish: string;
+		};
+		create_rsvp: {
+			title: string;
+			save: string;
+			publish: string;
+		};
+		edit_post: {
+			title: string;
+			save: string;
+			publish: string;
+		};
+		edit_comment: {
+			title: string;
+			save: string;
+			publish: string;
+		};
+		edit_note: {
+			title: string;
+			save: string;
+			publish: string;
+		};
+		edit_event: {
+			title: string;
+			save: string;
+			publish: string;
+		};
+		edit_rsvp: {
+			title: string;
+			save: string;
+			publish: string;
 		};
 		settings: {
 			title: string;

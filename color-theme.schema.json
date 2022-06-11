@@ -3,9 +3,13 @@
   "$id": "https://raw.githubusercontent.com/kbjr/minimal-blog/master/color-theme.schema.json",
   "type": "object",
   "properties": {
-    "name": { "type": "string" },
+    "name": {
+      "type": "string",
+      "description": "The name of the color theme as it is displayed in the control panel. Must be unique in any given instance"
+    },
     "colors": {
       "type": "object",
+      "description": "Contains the values that will be used to populate the CSS variables controlling the UI theme",
       "properties": {
         "sun": { "type": "string" },
         "moon": { "type": "string" },

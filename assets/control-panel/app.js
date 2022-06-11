@@ -30,6 +30,10 @@ app.replace_url = function replace_url(new_uri) {
 	history.replaceState({ }, '', new_url);
 }
 
+app.title_to_slug = function title_to_slug(title) {
+	return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9:-]/g, '');
+}
+
 app.login = function login(token, payload, redirect = false) {
 	set_auth_token(token);
 	conf.token_payload = payload;

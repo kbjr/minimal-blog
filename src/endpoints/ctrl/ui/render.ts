@@ -1,5 +1,5 @@
 
-import { languages } from './i18n';
+import { current_lang } from './i18n';
 import { conf } from '../../../conf';
 import { dict } from '../../../util';
 import { load_control_panel_asset } from '../../../storage/assets';
@@ -22,7 +22,7 @@ export async function render(name: string, context: Readonly<object>, partials?:
 	}
 
 	context = Object.assign(new TemplateContext(null, null, null), context, {
-		labels: languages.en_us,
+		labels: current_lang,
 		ctrl_panel: {
 			url: conf.http.ctrl_url
 		}

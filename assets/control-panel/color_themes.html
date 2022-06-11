@@ -359,6 +359,21 @@ form_edit_colors.addEventListener('reset', (event) => {
 	return false;
 });
 
+for (const input of color_inputs) {
+	input.addEventListener('change', (event) => {
+		const name = input.color;
+		const value = event.detail.new_value;
+
+		if (value === original_color_value(name)) {
+			delete theme_edits[name];
+		}
+
+		else {
+			theme_edits[name] = value;
+		}
+	});
+}
+
 
 
 // ===== Start Loading Data =====
@@ -419,37 +434,6 @@ async function load() {
 	reload_color_inputs();
 }
 
-function make_button_like(button, on_select) {
-	button.addEventListener('click', on_select);
-	button.addEventListener('keydown', on_keydown);
-	button.addEventListener('keyup', on_keyup);
-
-	return function unbind() {
-		button.removeEventListener('click', on_selectt);
-		button.removeEventListener('keydown', on_keydown);
-		button.removeEventListener('keyup', on_keyup);
-	}
-
-	function on_keydown(/** @type KeyboardEvent */ event) {
-		if (event.keyCode === 32) {
-			event.preventDefault();
-		}
-
-
-		if (event.keyCode === 13) {
-			event.preventDefault();
-			on_select();
-		}
-	}
-
-	function on_keyup(/** @type KeyboardEvent */ event) {
-		if (event.keyCode === 32) {
-			event.preventDefault();
-			on_select();
-		}
-	}
-}
-
 function append_option(to, name, select) {
 	const opt = document.createElement('option');
 	opt.value = name;
@@ -495,9 +479,33 @@ function enable_color_editor() {
 	enable_form(form_edit_colors);
 }
 
+function reload_color_input(input) {
+	input.color_name.innerHTML = input.color;
+
+	if (input.edited_value) {
+		input.value = input.edited_value;
+		return;
+	}
+
+	if (themes && theme_being_edited) {
+		const theme = themes[theme_being_edited];
+
+		if (theme) {
+			input.value = theme[input.color];
+			return;
+		}
+	}
+
+	input.value = null;
+}
+
+function original_color_value(name) {
+	return themes && themes[theme_being_edited] && themes[theme_being_edited][name];
+}
+
 function reload_color_inputs() {
 	for (const input of color_inputs) {
-		input.reload();
+		reload_color_input(input);
 	}
 }
 
@@ -567,6 +575,8 @@ async function submit_edit_save() {
 	enable_color_editor();
 }
 
+const schema_uri = 'https://raw.githubusercontent.com/kbjr/minimal-blog/master/color-theme.schema.json';
+
 function import_color_theme(json) {
 	const obj = JSON.parse(json);
 	// 
@@ -574,14 +584,9 @@ function import_color_theme(json) {
 
 function export_color_theme(name) {
 	const colors = Object.assign({ }, themes[name]);
-	delete obj.$builtin;
+	delete colors.$builtin;
 
-	const obj = {
-		$schema: 'https://raw.githubusercontent.com/kbjr/minimal-blog/master/color-theme.schema.json',
-		name: name,
-		colors: colors
-	};
-
+	const obj = { $schema: schema_uri, name, colors };
 	const json = JSON.stringify(obj, null, 2);
 
 	app.download_file('application/json', json, `${name}.theme.json`);

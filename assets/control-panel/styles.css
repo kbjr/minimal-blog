@@ -289,18 +289,18 @@ label {
 	display: block;
 	font-family: var(--font-open-sans);
 	font-size: 1rem;
-	margin-top: 1rem;
+	margin-block-start: 1rem;
 }
 
 label:not(:first-of-type) {
-	margin-top: 2rem;
+	margin-block-start: 2rem;
 }
 
 input,
 textarea {
 	display: block;
-	margin-top: 0.35rem;
-	margin-bottom: 1rem;
+	margin-block-start: 0.35rem;
+	margin-block-end: 1rem;
 	border: 0.125rem var(--theme-border-input) solid;
 	border-radius: 0.25rem;
 	color: var(--theme-text-body);
@@ -506,6 +506,11 @@ table {
 	padding-inline: 1rem;
 }
 
+	#page-edit-post .helper-text {
+		margin-block-start: -2rem;
+		margin-block-end: 4rem;
+	}
+
 	#page-edit-post main input:not([type='checkbox']),
 	#page-edit-post main textarea {
 		width: 100%;
@@ -563,7 +568,12 @@ table {
 
 	#page-edit-post .textarea-hat {
 		align-items: flex-end;
+		margin-block-start: 2rem;
 	}
+
+		#page-edit-post .textarea-hat label {
+			margin-block-start: 0;
+		}
 
 		#page-edit-post .textarea-hat label[for='in-post-markdown'] {
 			flex: 1 0 auto;

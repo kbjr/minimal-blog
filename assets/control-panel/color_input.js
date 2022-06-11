@@ -1,3 +1,4 @@
+(() => {
 
 const styles = `
 :host {
@@ -126,15 +127,10 @@ customElements.define('color-input',
 
 		connectedCallback() {
 			this.unbind_this = make_button_like(this, this.on_select);
-			// this.unbind_editor_icon = make_button_like(this.editor_icon, this.on_select_editor_icon);
-
-			this.reload();
-			this.update_state();
 		}
 		
 		disconnectedCallback() {
 			this.unbind_this();
-			// this.unbind_editor_input();
 		}
 
 		get color() {
@@ -188,24 +184,6 @@ customElements.define('color-input',
 			return this.wrapper.getAttribute('data-value');
 		}
 
-		get edited_value() {
-			return theme_edits && theme_edits[this.color];
-		}
-
-		set edited_value(value) {
-			if (value === this.original_value) {
-				delete theme_edits[this.color];
-			}
-
-			else {
-				theme_edits[this.color] = value;
-			}
-		}
-
-		get original_value() {
-			return themes && themes[theme_being_edited] && themes[theme_being_edited][this.color];
-		}
-
 		set value(value) {
 			if (value == null) {
 				value = 'transparent';
@@ -222,9 +200,6 @@ customElements.define('color-input',
 
 		attributeChangedCallback(attr_name, old_value, new_value) {
 			switch (attr_name) {
-				case 'data-color':
-					return this.reload();
-
 				case 'disabled':
 				case 'show-editor':
 					return this.update_state();
@@ -255,26 +230,6 @@ customElements.define('color-input',
 			}
 		}
 
-		reload() {
-			this.color_name.innerHTML = this.color;
-
-			if (this.edited_value) {
-				this.value = this.edited_value;
-				return;
-			}
-
-			if (themes && theme_being_edited) {
-				const theme = themes[theme_being_edited];
-
-				if (theme) {
-					this.value = theme[this.color];
-					return;
-				}
-			}
-
-			this.value = null;
-		}
-
 		on_select = () => {
 			if (this.disabled) {
 				return;
@@ -290,10 +245,50 @@ customElements.define('color-input',
 		};
 
 		on_input_blur = () => {
+			const old_value = this.value;
 			const new_value = this.color_input.value;
 			this.value = new_value;
-			this.edited_value = new_value;
+
+			const event = new CustomEvent('change', {
+				detail: { old_value, new_value }
+			});
+
+			this.dispatchEvent(event);
+
 			this.show_editor = false;
 		};
 	}
 );
+
+function make_button_like(button, on_select) {
+	button.addEventListener('click', on_select);
+	button.addEventListener('keydown', on_keydown);
+	button.addEventListener('keyup', on_keyup);
+
+	return function unbind() {
+		button.removeEventListener('click', on_selectt);
+		button.removeEventListener('keydown', on_keydown);
+		button.removeEventListener('keyup', on_keyup);
+	}
+
+	function on_keydown(/** @type KeyboardEvent */ event) {
+		if (event.keyCode === 32) {
+			event.preventDefault();
+		}
+
+
+		if (event.keyCode === 13) {
+			event.preventDefault();
+			on_select();
+		}
+	}
+
+	function on_keyup(/** @type KeyboardEvent */ event) {
+		if (event.keyCode === 32) {
+			event.preventDefault();
+			on_select();
+		}
+	}
+}
+
+})();
