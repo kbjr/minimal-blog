@@ -1,0 +1,22 @@
+name: Build Docker
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        platform-target: [arm64, amd64]
+        
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build ${{ matrix.platform-target }} Docker image
+      run: docker build . --file Dockerfile --tag minimal-blog:${{ matrix.platform-target }}-$(date +%s) --platform linux/${{ matrix.platform-target }}
