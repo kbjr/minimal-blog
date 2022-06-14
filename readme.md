@@ -31,6 +31,7 @@
 	- [`h-feed` Microformat](https://microformats.org/wiki/h-feed)
 	- [JF2 Feed](https://jf2.spec.indieweb.org/)
   - [Open Graph protocol](https://ogp.me/)
+  - [iCalendar](https://datatracker.ietf.org/doc/html/rfc5545) (for Events)
 - Produces standard [sitemap.xml](https://www.sitemaps.org/protocol.html)
 - Light / dark mode toggle (defaulting to system preference)
 - Easily edit and swap between color themes in the control panel
@@ -43,6 +44,7 @@
 - Send and receive interactions in multiple standard formats (with moderation / spam blocking features):
 	- [Pingbacks](https://www.hixie.ch/specs/pingback/pingback)
 	- [WebMentions](https://www.w3.org/TR/webmention) (with support for [vouches](https://indieweb.org/Vouch))
+- HTTPS termination in the server itself
 
 ## Building from source
 

@@ -8,15 +8,13 @@ import { post_res_schema } from './schema';
 type Req = ReqUser & FastifyRequest<{
 	Querystring: {
 		count: number;
-		tagged_with?: string;
-		before?: string;
 	};
 }>;
 
 const opts: RouteShorthandOptions = {
 	schema: {
-		tags: ['posts'],
-		description: 'Returns a list of Posts, filtered by the given parameters',
+		tags: ['posts', 'drafts'],
+		description: 'Returns a list of draft Posts',
 		security: [
 			{ bearer: [ ] }
 		],
@@ -28,13 +26,6 @@ const opts: RouteShorthandOptions = {
 					minimum: 1,
 					maximum: 50,
 					default: 10,
-				},
-				before: {
-					type: 'string',
-					format: 'date-time',
-				},
-				tagged: {
-					type: 'string'
 				}
 			}
 		},
@@ -47,11 +38,11 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
-ctrl.get('/api/posts', opts, async (req: Req, res) => {
+ctrl.get('/api/drafts', opts, async (req: Req, res) => {
 	require_auth(req);
 
-	const { count, tagged_with, before } = req.query;
-	const raw_posts = store.posts.get_posts(count, tagged_with, before);
+	const { count } = req.query;
+	const raw_posts = store.posts.get_draft_posts(count);
 
 	res.status(200);
 	return raw_posts;

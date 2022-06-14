@@ -37,6 +37,9 @@ export const en_us: LanguageLabels = {
 		},
 		dashboard: {
 			title: 'Dashboard',
+			drafts: 'Drafts',
+			recent_posts: 'Recent Posts',
+			recent_mentions: 'Recent Mentions'
 		},
 		posts: {
 			title: 'View & Edit Posts',

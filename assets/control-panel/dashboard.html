@@ -1,0 +1,227 @@
+
+<main>
+	<h1>{{ labels.pages.dashboard.title }}</h1>
+
+	<section id="drafts" class="show-message">
+		<h2>{{ labels.pages.dashboard.drafts }}</h2>
+		<div class="message">
+			<p>{{ labels.loading }}</p>
+		</div>
+		<div class="table">
+			<table>
+				<thead>
+					<tr>
+						<!-- todo: i18n labels -->
+						<th class="type">Type</th>
+						<th class="title-preview">Title / Preview</th>
+						<th class="actions">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- todo: i18n labels for `title` attributes -->
+					<!-- <tr>
+						<td class="type">{{ post_type }}</td>
+						<td class="title-preview">{{ title }}</td>
+						<td class="actions">
+							<a title="Edit Draft" class="icon-only" href="{{{ ctrl_panel.url }}}/edit/{{ post_type }}/{{ uri_name }}">{{{ icons.edit }}}</a>
+							<button title="Publish Draft" class="icon-only">{{{ icons.send }}}</button>
+							<button title="Delete Draft" class="icon-only">{{{ icons.trash }}}</button>
+						</td>
+					</tr> -->
+				</tbody>
+			</table>
+		</div>
+	</section>
+	
+	<section id="posts" class="show-message">
+		<h2>{{ labels.pages.dashboard.recent_posts }}</h2>
+		<div class="message">
+			<p>{{ labels.loading }}</p>
+		</div>
+		<div class="table">
+			<table>
+				<thead>
+					<tr>
+						<!-- todo: i18n labels -->
+						<th class="link">Link</th>
+						<th class="title-preview">Title / Preview</th>
+						<th class="published">Published</th>
+						<th class="actions">Actions</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</section>
+
+	<section id="mentions" class="show-message">
+		<h2>{{ labels.pages.dashboard.recent_mentions }}</h2>
+		<div class="message">
+			<p>{{ labels.loading }}</p>
+		</div>
+		<div class="table">
+			<table>
+				<thead>
+					<tr></tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</section>
+</main>
+
+<script>
+(() => {
+
+let drafts;
+let posts;
+// let mentions;
+
+const sect_drafts    = document.querySelector('#drafts');
+const table_drafts   = sect_drafts.querySelector('.table table');
+const tbody_drafts   = table_drafts.querySelector('tbody');
+const message_drafts = sect_drafts.querySelector('.message p');
+
+const sect_posts    = document.querySelector('#posts');
+const table_posts   = sect_posts.querySelector('.table table');
+const tbody_posts   = table_posts.querySelector('tbody');
+const message_posts = sect_posts.querySelector('.message p');
+
+const sect_mentions    = document.querySelector('#mentions');
+const table_mentions   = sect_mentions.querySelector('.table table');
+const tbody_mentions   = table_mentions.querySelector('tbody');
+const message_mentions = sect_mentions.querySelector('.message p');
+
+load();
+
+
+
+
+
+async function load() {
+	[ drafts, posts /*, mentions */ ] = await Promise.all([
+		app.http_get('/api/drafts?count=50', true),
+		app.http_get('/api/posts?count=50', true),
+		// app.http_get('/api/mentions', true)
+	]);
+
+	render_drafts();
+	render_posts();
+	render_mentions();
+}
+
+function render_drafts() {
+	if (! drafts.length) {
+		show_message(sect_drafts, message_drafts, 'Nothing to show here.');
+		return;
+	}
+
+	// todo: render_drafts
+}
+
+function render_posts() {
+	if (! posts.length) {
+		show_message(sect_posts, message_posts, 'Nothing to show here.');
+		return;
+	}
+
+	const post_rows = [ ];
+
+	for (const post of posts) {
+		post_rows.push(post_template(post));
+	}
+
+	tbody_posts.innerHTML = post_rows.join('');
+	hide_message(sect_posts);
+}
+
+function render_mentions() {
+	show_message(sect_mentions, message_mentions, 'Nothing to show here.');
+
+	// todo: render_mentions
+}
+
+function show_message(section, message_p, message) {
+	message_p.innerHTML = message;
+	message_p.setAttribute('aria-hidden', 'false');
+	section.classList.add('show-message');
+}
+
+function hide_message(section) {
+	message_posts.innerHTML = '';
+	message_posts.setAttribute('aria-hidden', 'true');
+	section.classList.remove('show-message');
+}
+
+const date_formatter_short = Intl.DateTimeFormat('{{ ctrl_panel.lang }}', { dateStyle: 'medium', timeStyle: 'short' });
+const date_formatter_long = Intl.DateTimeFormat('{{ ctrl_panel.lang }}', { dateStyle: 'full', timeStyle: 'long' });
+
+const date = (iso_date) => {
+	const date = new Date(Date.parse(iso_date));
+	return `<time datetime="${iso_date}" title="${date_formatter_long.format(date)}">${date_formatter_short.format(date)}</time>`;
+};
+
+// todo: i18n labels for `title` attributes
+const post_template = (post) => `
+<tr>
+	<td class="link">
+		<a title="Permalink to Post" class="icon-only" href="{{{ site.url }}}/${post.post_type}s/${post.uri_name}">{{{ icons.link }}}</a>
+	</td>
+	<td class="title-preview">${post_preview(post)}</td>
+	<td class="published">${date(post.date_published)}</td>
+	<td class="actions">
+		<a title="Edit Post" class="icon-only" href="{{{ ctrl_panel.url }}}/edit/${post.post_type}/${post.uri_name}">{{{ icons.edit }}}</a>
+		<button title="Delete Post" class="icon-only">{{{ icons.trash }}}</button>
+	</td>
+</tr>
+`;
+
+// todo: i18n
+function post_preview(post) {
+	switch (post.post_type) {
+		case 'post':
+			return `<span class="post-type">Post:</span> ${post.title}`;
+
+		case 'event':
+			return `<span class="post-type">Event:</span> ${post.title}`;
+
+		case 'note':
+			return `<span class="post-type">Note:</span> <q>${html_to_content_preview(post.content_html)}</q>`;
+
+		case 'comment':
+			return `<span class="post-type">Comment on ${short_link(post.external_url, 'nofollow external')}:</span> <q>${html_to_content_preview(post.content_html)}</q>`;
+
+		case 'rsvp':
+			return `<span class="post-type">RSVP:</span>`;
+			// return `<span class="post-type">RSVP:</span> ${html_to_content_preview(post.content_html)}`;
+	}
+}
+
+function html_to_content_preview(html) {
+	const div = document.createElement('div');
+	div.innerHTML = html;
+	const preview = trunc_str(div.innerText, 250, 240);
+	div.innerHTML = '';
+	return preview;
+}
+
+function trunc_str(str, max, trim_to) {
+	return str.length > max ? str.slice(0, trim_to).trim() + '…' : str.trim();
+}
+
+function trunc_url(url) {
+	let { origin, pathname } = new URL(url);
+
+	if (pathname.length > 20) {
+		pathname = pathname.slice(0, 6) + '[&hellip;]' + url.slice(-6);
+	}
+
+	return origin + pathname;
+}
+
+function short_link(url, rel = '') {
+	return `<a href="${url}" rel="${rel}">${trunc_url(url)}</a>`;
+}
+
+})();
+</script>

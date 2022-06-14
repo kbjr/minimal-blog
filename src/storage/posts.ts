@@ -63,6 +63,8 @@ let next_search_id = 1;
 const search_index: MiniSearch = new Minisearch(search_opts);
 
 export async function load() {
+	// todo: map to Post instances here
+	// todo: generate post preview here
 	posts = await store.get_all_posts();
 	tags = (await store.list_all_tags()).map((data) => new Tag(data)).sort(sort_tags);
 	posts_index = obj({

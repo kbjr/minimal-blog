@@ -35,6 +35,9 @@ export interface LanguageLabels {
 		};
 		dashboard: {
 			title: string;
+			drafts: string;
+			recent_posts: string;
+			recent_mentions: string;
 		};
 		posts: {
 			title: string;

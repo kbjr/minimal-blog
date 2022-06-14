@@ -24,7 +24,8 @@ export async function render(name: string, context: Readonly<object>, partials?:
 	context = Object.assign(new TemplateContext(null, null, null), context, {
 		labels: current_lang,
 		ctrl_panel: {
-			url: conf.http.ctrl_url
+			url: conf.http.ctrl_url,
+			lang: current_lang.lang_code,
 		}
 	});
 

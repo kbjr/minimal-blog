@@ -1,4 +1,8 @@
 
+{{# page.is_events }}
+<link rel="alternate" type="text/calendar" href="{{{ site.url }}}/events.ics" title="iCalendar Recent Events">
+{{/ page.is_events }}
+
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{{ site.url }}}">
 <meta property="og:title" content="{{ feed.title }}">

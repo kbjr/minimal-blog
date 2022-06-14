@@ -19,6 +19,9 @@ export function import_endpoints() {
 	require('./web/feed-json');
 	require('./web/feed-jf2');
 	require('./web/feed-rss');
+
+	// iCalendar
+	require('./web/event-icalendar');
 	
 	// HTML pages
 	require('./web/feed-html');
@@ -45,7 +48,7 @@ export function import_endpoints() {
 	// UI
 	require('./ctrl/ui/assets');
 	require('./ctrl/ui/login');
-	require('./ctrl/ui/main');
+	require('./ctrl/ui/dashboard');
 	require('./ctrl/ui/color-themes');
 	require('./ctrl/ui/posts');
 	require('./ctrl/ui/edit-post');
@@ -83,6 +86,7 @@ export function import_endpoints() {
 	
 	// Posts
 	require('./ctrl/posts/list');
+	require('./ctrl/posts/list-drafts');
 	require('./ctrl/posts/get');
 	require('./ctrl/posts/create');
 	// require('./ctrl/posts/update');
