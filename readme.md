@@ -28,7 +28,7 @@
 - Produces multiple standard feed / metadata formats by default:
 	- [RSS](https://www.rssboard.org/rss-specification)
 	- [JSON Feed](https://www.jsonfeed.org/)
-	- [`h-feed` Microformat](https://microformats.org/wiki/h-feed)
+	- [`h-feed`](https://microformats.org/wiki/h-feed) / [h-event](https://microformats.org/wiki/h-event) Microformats
 	- [JF2 Feed](https://jf2.spec.indieweb.org/)
   - [Open Graph protocol](https://ogp.me/)
   - [iCalendar](https://datatracker.ietf.org/doc/html/rfc5545) (for Events)
