@@ -64,7 +64,7 @@
 			</div>
 			<div class="right" data-flex="row align-center">
 				<p id="post-publish-status">{{ labels.loading }}</p>
-				<button type="button" id="btn-post-toggle-publish" disabled>{{ label_publish }}</button>
+				<button type="button" id="btn-post-publish" disabled>{{ label_publish }}</button>
 			</div>
 		</div>
 	</form>
@@ -89,6 +89,21 @@ const post_type = '{{ post_type }}';
 const uri_name_format = '{{ uri_name_format }}';
 
 let post;
+let has_unsaved_changes = false;
+
+window.onbeforeunload = (event) => {
+	if (has_unsaved_changes) {
+		return false;
+	}
+};
+
+function onchange() {
+	has_unsaved_changes = true;
+}
+
+
+
+// ===== Select Elements =====
 
 const main_elem           = document.querySelector('#root > main');
 const form_edit_post      = document.querySelector('#form-edit-post');
@@ -111,22 +126,43 @@ const input_external_url = document.querySelector('#in-post-external-url');
 const select_rsvp_type = document.querySelector('#in-post-rsvp-type');
 {{/ post_type_is_rsvp }}
 
-const input_tags                = document.querySelector('#in-post-tags');
-const input_markdown_font       = document.querySelector('#in-post-markdown-monospace');
-const input_markdown_spellcheck = document.querySelector('#in-post-markdown-spellcheck');
-const textarea_markdown         = document.querySelector('#in-post-markdown');
+const input_tags = document.querySelector('#in-post-tags');
 
-const btn_toggle_publish = document.querySelector('#btn-post-toggle-publish');
-const btn_save           = document.querySelector('#btn-post-save');
-const btn_preview        = document.querySelector('#btn-post-preview');
-const btn_cancel         = document.querySelector('#btn-post-cancel');
-const btn_back_to_edit   = document.querySelector('#btn-post-back-to-edit');
+const input_markdown_font = document.querySelector('#in-post-markdown-monospace');
+const input_markdown_spellcheck = document.querySelector('#in-post-markdown-spellcheck');
+
+const textarea_markdown = document.querySelector('#in-post-markdown');
+
+const btn_publish      = document.querySelector('#btn-post-publish');
+const btn_save         = document.querySelector('#btn-post-save');
+const btn_preview      = document.querySelector('#btn-post-preview');
+const btn_cancel       = document.querySelector('#btn-post-cancel');
+const btn_back_to_edit = document.querySelector('#btn-post-back-to-edit');
 
 const preview = document.querySelector('markdown-preview');
 
 
 
 // ===== Setup event listeners =====
+
+{{# post_type_has_title }}
+input_title.addEventListener('change', onchange);
+{{/ post_type_has_title }}
+
+{{# post_type_has_subtitle }}
+input_subtitle.addEventListener('change', onchange);
+{{/ post_type_has_subtitle }}
+
+{{# post_type_has_external_url }}
+input_external_url.addEventListener('change', onchange);
+{{/ post_type_has_external_url }}
+
+{{# post_type_is_rsvp }}
+select_rsvp_type.addEventListener('change', onchange);
+{{/ post_type_is_rsvp }}
+
+input_tags.addEventListener('change', onchange);
+textarea_markdown.addEventListener('change', onchange);
 
 btn_preview.addEventListener('click', () => {
 	main_elem.setAttribute('data-preview', '');
@@ -207,12 +243,12 @@ async function load() {
 	input_tags.value = post.tags.join(', ');
 
 	if (post.is_draft) {
-		btn_toggle_publish.disabled = false;
+		btn_publish.disabled = false;
 		span_publish_status.innerHTML = '{{ labels.pages.posts.not_published }}';
 	}
 
 	else {
-		btn_toggle_publish.parentNode.removeChild(btn_toggle_publish);
+		btn_publish.parentNode.removeChild(btn_publish);
 		span_publish_status.innerHTML = `<a href="${post_url()}">{{ labels.pages.posts.published }}</a>`;
 	}
 }
@@ -242,47 +278,113 @@ function load_new_post() {
 	input_tags.disabled = false;
 	input_tags.value = '';
 
-	btn_toggle_publish.disabled = false;
+	btn_publish.disabled = false;
 	span_publish_status.innerHTML = '{{ labels.pages.posts.not_published }}';
 }
 
+function toggle_buttons_enabled(enabled) {
+	btn_publish.disabled = ! enabled;
+	btn_save.disabled = ! enabled;
+	btn_preview.disabled = ! enabled;
+	btn_cancel.disabled = ! enabled;
+}
+
 async function cancel_edit() {
-	// TODO: Confirm cancel
-	// TODO: Navigate back to /posts
+	// todo: Confirm cancel
+	// todo: Navigate back to /posts
 }
 
 async function save_post() {
-	if (uri_name) {
-		return update_existing_post();
+	toggle_buttons_enabled(false);
+
+	try {
+		if (uri_name) {
+			return await update_existing_post();
+		}
+
+		return await create_new_post();
 	}
 
-	return create_new_post();
+	catch (error) {
+		// todo: error handling
+		throw error;
+	}
 }
 
-async function create_new_post() {
+async function create_new_post(draft = true) {
 	uri_name = uri_name_format === 'slug'
 		? app.title_to_slug(input_title.value)
 		: await app.get_snowflake();
 
-	console.log({uri_name});
+	const post_data = {
+		post_type,
+		uri_name,
+		content_markdown: textarea_markdown.value,
+		is_draft: draft,
+		tags: input_tags.value.split(',').map((tag) => tag.trim()).filter(Boolean),
+	};
+
+	switch (post_type) {
+		case 'post':
+			post_data.title = input_title.value;
+			post_data.subtitle = input_subtitle.value;
+			break;
+
+		case 'comment':
+			post_data.external_url = input_external_url.value;
+			break;
+
+		case 'note':
+			// pass
+			break;
+
+		case 'event':
+			post_data.title = input_title.value;
+			post_data.subtitle = input_subtitle.value;
+			// todo: post_data.start
+			// todo: post_data.end
+			break;
+
+		case 'rsvp':
+			post_data.external_url = input_external_url.value;
+			post_data.rsvp_type = select_rsvp_type.value;
+			break;
+	}
+
+	const post = await app.http_post('/api/posts', true, post_data);
+
+	has_unsaved_changes = false;
+	app.replace_url(`edit/${post_type}/${uri_name}`);
+	location.reload();
 }
 
 async function update_existing_post() {
-	// 
+	// todo: Save changes
+
+	toggle_buttons_enabled(true);
+	has_unsaved_changes = false;
 }
 
 async function publish_post() {
-	// TODO: Confirm publish
-	// TODO: Disable button / show indication
-	// TODO: Publish post
-	// TODO: Enable button / change verbage / change message / show indication
-}
+	// todo: Confirm publish
 
-async function unpublish_post() {
-	// TODO: Confirm unpublish
-	// TODO: Disable button / show indication
-	// TODO: Publish post
-	// TODO: Enable button / change verbage / change message / show indication
+	toggle_buttons_enabled(false);
+	// todo: Show indication
+
+	const create_new = ! uri_name;
+
+	if (create_new) {
+		// todo: Create new post
+	}
+
+	// todo: Publish post
+
+	if (create_new) {
+		// todo: Redirect to edit page
+	}
+
+	// todo: change verbage / change message / show indication
+	toggle_buttons_enabled(true);
 }
 
 })();

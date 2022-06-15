@@ -25,6 +25,12 @@ export const en_us: LanguageLabels = {
 			allow: 'Allow',
 			trust: 'Trust',
 		},
+		rsvp_type: {
+			yes: 'Yes',
+			no: 'No',
+			maybe: 'Maybe',
+			interested: 'Interested',
+		},
 	},
 
 	pages: {

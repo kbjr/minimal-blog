@@ -515,7 +515,7 @@ table {
 }
 
 #page-dashboard section:is(#drafts) > :is(.message, .table) {
-	height: 10rem;
+	height: 11rem;
 	overflow: auto;
 }
 
@@ -566,6 +566,10 @@ table {
 	--icon-size: 1rem;
 }
 
+#page-dashboard table span.post-type {
+	font-weight: 700;
+}
+
 
 
 /* ===== Posts Page ===== */
@@ -614,7 +618,7 @@ table {
 		margin: 0;
 	}
 	
-	#page-edit-post #btn-post-toggle-publish {
+	#page-edit-post #btn-post-publish {
 		margin-left: 2rem;
 	}
 

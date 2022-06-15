@@ -12,23 +12,11 @@
 				<thead>
 					<tr>
 						<!-- todo: i18n labels -->
-						<th class="type">Type</th>
 						<th class="title-preview">Title / Preview</th>
 						<th class="actions">Actions</th>
 					</tr>
 				</thead>
-				<tbody>
-					<!-- todo: i18n labels for `title` attributes -->
-					<!-- <tr>
-						<td class="type">{{ post_type }}</td>
-						<td class="title-preview">{{ title }}</td>
-						<td class="actions">
-							<a title="Edit Draft" class="icon-only" href="{{{ ctrl_panel.url }}}/edit/{{ post_type }}/{{ uri_name }}">{{{ icons.edit }}}</a>
-							<button title="Publish Draft" class="icon-only">{{{ icons.send }}}</button>
-							<button title="Delete Draft" class="icon-only">{{{ icons.trash }}}</button>
-						</td>
-					</tr> -->
-				</tbody>
+				<tbody></tbody>
 			</table>
 		</div>
 	</section>
@@ -116,7 +104,14 @@ function render_drafts() {
 		return;
 	}
 
-	// todo: render_drafts
+	const draft_rows = [ ];
+
+	for (const draft of drafts) {
+		draft_rows.push(draft_template(draft));
+	}
+
+	tbody_drafts.innerHTML = draft_rows.join('');
+	hide_message(sect_drafts);
 }
 
 function render_posts() {
@@ -162,6 +157,18 @@ const date = (iso_date) => {
 };
 
 // todo: i18n labels for `title` attributes
+const draft_template = (post) => `
+<tr>
+	<td class="title-preview">${post_preview(post)}</td>
+	<td class="actions">
+		<a title="Edit Draft" class="icon-only" href="{{{ ctrl_panel.url }}}/edit/${post.post_type}/${post.uri_name}">{{{ icons.edit }}}</a>
+		<button title="Publish Draft" class="icon-only">{{{ icons.send }}}</button>
+		<button title="Delete Draft" class="icon-only">{{{ icons.trash }}}</button>
+	</td>
+</tr>
+`;
+
+// todo: i18n labels for `title` attributes
 const post_template = (post) => `
 <tr>
 	<td class="link">
@@ -180,20 +187,36 @@ const post_template = (post) => `
 function post_preview(post) {
 	switch (post.post_type) {
 		case 'post':
-			return `<span class="post-type">Post:</span> ${post.title}`;
+			return `<span class="post-type">Post</span>: ${post.title}`;
 
 		case 'event':
-			return `<span class="post-type">Event:</span> ${post.title}`;
+			return `<span class="post-type">Event</span>: ${post.title}`;
 
 		case 'note':
-			return `<span class="post-type">Note:</span> <q>${html_to_content_preview(post.content_html)}</q>`;
+			return `<span class="post-type">Note</span>: ${post_content_preview(post)}`;
 
 		case 'comment':
-			return `<span class="post-type">Comment on ${short_link(post.external_url, 'nofollow external')}:</span> <q>${html_to_content_preview(post.content_html)}</q>`;
+			return `<span class="post-type">Comment</span> on ${short_link(post.external_url, 'nofollow external')}: ${post_content_preview(post)}`;
 
 		case 'rsvp':
-			return `<span class="post-type">RSVP:</span>`;
-			// return `<span class="post-type">RSVP:</span> ${html_to_content_preview(post.content_html)}`;
+			return `<span class="post-type">RSVP ${rsvp_type(post.rsvp_type)}</span> on ${short_link(post.external_url, 'nofollow external')}: ${post_content_preview(post)}`;
+	}
+}
+
+function post_content_preview(post) {
+	if (post.content_markdown.trim()) {
+		return `<q>${html_to_content_preview(post.content_html)}</q>`;
+	}
+
+	return '';
+}
+
+function rsvp_type(type) {
+	switch (type) {
+		case 'yes': return `<data class="rsvp-type" value="yes">{{ labels.enums.rsvp_type.yes }}</data>`;
+		case 'no': return `<data class="rsvp-type" value="no">{{ labels.enums.rsvp_type.no }}</data>`;
+		case 'maybe': return `<data class="rsvp-type" value="maybe">{{ labels.enums.rsvp_type.maybe }}</data>`;
+		case 'interested': return `<data class="rsvp-type" value="interested">{{ labels.enums.rsvp_type.interested }}</data>`;
 	}
 }
 

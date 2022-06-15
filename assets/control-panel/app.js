@@ -26,7 +26,7 @@ app.redirect_to_login = function redirect_to_login(redirect_back = false) {
 };
 
 app.replace_url = function replace_url(new_uri) {
-	const new_url = `${conf.ctrl_panel_url}/${path}`;
+	const new_url = `${conf.ctrl_panel_url}/${new_uri}`;
 	history.replaceState({ }, '', new_url);
 }
 

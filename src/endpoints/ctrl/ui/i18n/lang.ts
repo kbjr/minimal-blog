@@ -23,6 +23,12 @@ export interface LanguageLabels {
 			allow: string;
 			trust: string;
 		};
+		rsvp_type: {
+			yes: string;
+			no: string;
+			maybe: string;
+			interested: string;
+		}
 	};
 
 	pages: {
