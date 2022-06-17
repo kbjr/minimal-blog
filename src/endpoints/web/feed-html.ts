@@ -127,7 +127,7 @@ if (conf.data.enable_search) {
 }
 
 async function build_feed_html(count: number, tagged_with?: string, before?: string, post_type?: store.posts.PostType) {
-	const data = await store.posts.get_posts(count, tagged_with, before, post_type, false);
+	const data = store.posts.get_posts(count, tagged_with, before, post_type, false);
 	const posts = await Promise.all(data.map(map_post_data));
 	return build_html_for_posts(posts, null, count, tagged_with, before, post_type);
 }
@@ -139,7 +139,7 @@ async function build_search_html(query: string) {
 }
 
 async function get_default_context() {
-	const data = await store.posts.get_posts(default_count, null, null, null, false);
+	const data = store.posts.get_posts(default_count, null, null, null, false);
 	const posts = await Promise.all(data.map(map_post_data));
 	const page = page_context(default_count, null, null, null, null, posts);
 	const context = new store.templates.TemplateContext(page, posts);

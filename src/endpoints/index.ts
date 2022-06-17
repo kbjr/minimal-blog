@@ -89,7 +89,7 @@ export function import_endpoints() {
 	require('./ctrl/posts/list-drafts');
 	require('./ctrl/posts/get');
 	require('./ctrl/posts/create');
-	// require('./ctrl/posts/update');
+	require('./ctrl/posts/update');
 	// require('./ctrl/posts/delete');
 
 	// Interactions

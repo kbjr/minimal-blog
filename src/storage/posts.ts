@@ -3,7 +3,7 @@ import { obj } from '../util';
 import { conf } from '../conf';
 import { events, store } from './store';
 import { render_markdown_to_html } from '../markdown';
-import { throw_422_unprocessable_entity } from '../http-error';
+import { throw_404_not_found, throw_422_unprocessable_entity } from '../http-error';
 import * as settings from './settings';
 import Minisearch = require('minisearch');
 import type MiniSearch from 'minisearch';
@@ -111,11 +111,11 @@ export async function get_draft_posts(count: number) {
 	return results;
 }
 
-export async function get_post(post_type: PostType, post_uri: string) {
+export function get_post(post_type: PostType, post_uri: string) {
 	return posts_index[post_type]?.[post_uri];
 }
 
-export async function get_posts(count: number, tagged_with?: string, before?: string, post_type?: PostType, include_drafts?: boolean) {
+export function get_posts(count: number, tagged_with?: string, before?: string, post_type?: PostType, include_drafts?: boolean) {
 	let results = posts;
 
 	if (before) {
@@ -191,6 +191,65 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 	return full_post;
 }
 
+export async function update_post(post_type: PostType, uri_name: string, updates: Omit<PostDataPatch, 'post_type' | 'uri_name'>) {
+	const post = get_post(post_type, uri_name);
+
+	if (! post) {
+		throw_404_not_found(`post_type "${post_type}" with uri_name "${uri_name}" not found`);
+	}
+
+	if (post.is_draft && updates.is_draft === false) {
+		post.date_published = (new Date).toISOString();
+	}
+
+	else if (! post.is_draft && updates.is_draft !== true) {
+		post.date_updated = (new Date).toISOString();
+	}
+
+	if ('tags' in updates) {
+		const old_tags = post.tags;
+		const new_tags = updates.tags;
+		const old_tags_set = new Set(old_tags);
+		const new_tags_set = new Set(new_tags);
+	
+		const tags_to_add: string[] = [ ];
+		const tags_to_remove: string[] = [ ];
+	
+		for (const tag of old_tags) {
+			if (! new_tags_set.has(tag)) {
+				drop_tag(tag);
+				tags_to_remove.push(tag);
+			}
+		}
+	
+		for (const tag of new_tags) {
+			if (! old_tags_set.has(tag)) {
+				tags_to_add.push(tag);
+			}
+		}
+	
+		if (tags_to_remove.length) {
+			await store.delete_post_tags(post.post_id, tags_to_remove);
+		}
+	
+		if (tags_to_add.length) {
+			add_tags(tags_to_add);
+			await store.create_post_tags(post.post_id, tags_to_add);
+		}
+	
+		post.tags = new_tags;
+		delete updates.tags;
+	}
+
+	Object.assign(post, updates);
+	
+	await store.update_post(post);
+
+	search_index.add(post);
+	events.emit('posts.update', post);
+	return post;
+}
+
 export function list_tags() {
 	return tags.slice();
 }
@@ -210,6 +269,12 @@ function add_tags(new_tags: string[]) {
 		}
 
 		tags_index[tag].add_ref();
+	}
+}
+
+function drop_tag(tag: string) {
+	if (tags_index[tag]) {
+		tags_index[tag].drop_ref();
 	}
 }
 
@@ -243,15 +308,15 @@ export interface PostDataPatch {
 	title?: string;
 	subtitle?: string;
 	external_url?: string;
-	content_html: string;
-	content_markdown: string;
+	content_html?: string;
+	content_markdown?: string;
 	image?: string;
 	banner_image?: string;
 	is_draft: boolean;
 	date_event_start?: string;
 	date_event_end?: string;
 	rsvp_type?: 'yes' | 'no' | 'maybe' | 'interested';
-	tags: string[];
+	tags?: string[];
 }
 
 export interface TagData {

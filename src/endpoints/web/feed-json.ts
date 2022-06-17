@@ -54,7 +54,7 @@ web.get('/feed.json', opts, async (req: Req, res) => {
 		avatar: store.settings.get('author_avatar'),
 	};
 
-	const post_data = await store.posts.get_posts(req.query.count, req.query.tagged_with, req.query.before, null, false);
+	const post_data = store.posts.get_posts(req.query.count, req.query.tagged_with, req.query.before, null, false);
 	const posts = post_data.map((data) => new store.posts.Post(data));
 
 	const result: JSONFeed = {

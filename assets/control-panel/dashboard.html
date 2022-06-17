@@ -19,6 +19,7 @@
 				<tbody></tbody>
 			</table>
 		</div>
+		<button id="expand-drafts" data-style="secondary">Expand</button>
 	</section>
 	
 	<section id="posts" class="show-message">
@@ -40,6 +41,7 @@
 				<tbody></tbody>
 			</table>
 		</div>
+		<button id="expand-posts" data-style="secondary">Expand</button>
 	</section>
 
 	<section id="mentions" class="show-message">
@@ -55,6 +57,7 @@
 				<tbody></tbody>
 			</table>
 		</div>
+		<button id="expand-mentions" data-style="secondary">Expand</button>
 	</section>
 </main>
 
@@ -65,20 +68,38 @@ let drafts;
 let posts;
 // let mentions;
 
-const sect_drafts    = document.querySelector('#drafts');
-const table_drafts   = sect_drafts.querySelector('.table table');
-const tbody_drafts   = table_drafts.querySelector('tbody');
-const message_drafts = sect_drafts.querySelector('.message p');
+const sect_drafts       = document.querySelector('#drafts');
+const div_drafts_table  = sect_drafts.querySelector('.table');
+const table_drafts      = div_drafts_table.querySelector('table');
+const tbody_drafts      = table_drafts.querySelector('tbody');
+const message_drafts    = sect_drafts.querySelector('.message p');
+const btn_expand_drafts = sect_drafts.querySelector('button#expand-drafts');
 
-const sect_posts    = document.querySelector('#posts');
-const table_posts   = sect_posts.querySelector('.table table');
-const tbody_posts   = table_posts.querySelector('tbody');
-const message_posts = sect_posts.querySelector('.message p');
+const sect_posts       = document.querySelector('#posts');
+const div_posts_table  = sect_posts.querySelector('.table');
+const table_posts      = div_posts_table.querySelector('table');
+const tbody_posts      = table_posts.querySelector('tbody');
+const message_posts    = sect_posts.querySelector('.message p');
+const btn_expand_posts = sect_posts.querySelector('button#expand-posts');
 
-const sect_mentions    = document.querySelector('#mentions');
-const table_mentions   = sect_mentions.querySelector('.table table');
-const tbody_mentions   = table_mentions.querySelector('tbody');
-const message_mentions = sect_mentions.querySelector('.message p');
+const sect_mentions       = document.querySelector('#mentions');
+const div_mentions_table  = sect_mentions.querySelector('.table');
+const table_mentions      = div_mentions_table.querySelector('table');
+const tbody_mentions      = table_mentions.querySelector('tbody');
+const message_mentions    = sect_mentions.querySelector('.message p');
+const btn_expand_mentions = sect_mentions.querySelector('button#expand-mentions');
+
+
+
+// ===== Event Listeners =====
+
+btn_expand_drafts.addEventListener('click', expand_section(sect_drafts));
+btn_expand_posts.addEventListener('click', expand_section(sect_posts));
+btn_expand_mentions.addEventListener('click', expand_section(sect_mentions));
+
+
+
+// ===== Start Loading... =====
 
 load();
 
@@ -101,6 +122,7 @@ async function load() {
 function render_drafts() {
 	if (! drafts.length) {
 		show_message(sect_drafts, message_drafts, 'Nothing to show here.');
+		btn_expand_drafts.parentNode.removeChild(btn_expand_drafts);
 		return;
 	}
 
@@ -117,6 +139,7 @@ function render_drafts() {
 function render_posts() {
 	if (! posts.length) {
 		show_message(sect_posts, message_posts, 'Nothing to show here.');
+		btn_expand_posts.parentNode.removeChild(btn_expand_posts);
 		return;
 	}
 
@@ -132,6 +155,7 @@ function render_posts() {
 
 function render_mentions() {
 	show_message(sect_mentions, message_mentions, 'Nothing to show here.');
+	btn_expand_mentions.parentNode.removeChild(btn_expand_mentions);
 
 	// todo: render_mentions
 }
@@ -146,6 +170,15 @@ function hide_message(section) {
 	message_posts.innerHTML = '';
 	message_posts.setAttribute('aria-hidden', 'true');
 	section.classList.remove('show-message');
+}
+
+function expand_section(section) {
+	return function(event) {
+		event.preventDefault();
+		event.stopImmediatePropagation();
+		section.classList.add('expanded');
+		event.target.parentNode.removeChild(event.target);
+	};
 }
 
 const date_formatter_short = Intl.DateTimeFormat('{{ ctrl_panel.lang }}', { dateStyle: 'medium', timeStyle: 'short' });

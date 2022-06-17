@@ -150,7 +150,7 @@ async function read_local_as_event(url: string) {
 	const parsed = parse_local_url(url);
 
 	if (parsed.type === 'post' && parsed.post_type === 'event') {
-		const post = await store.posts.get_post(parsed.post_type, parsed.uri_name);
+		const post = store.posts.get_post(parsed.post_type, parsed.uri_name);
 		
 		event = {
 			url,

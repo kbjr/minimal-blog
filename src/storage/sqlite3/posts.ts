@@ -109,10 +109,15 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 			date_event_start: null,
 			date_event_end: null,
 			rsvp_type: null,
+			tags: null,
 		});
 
 		if (data.tags && data.tags.length) {
 			await create_post_tags(result.lastID, data.tags);
+		}
+
+		else {
+			post.tags = [ ];
 		}
 
 		return Object.assign({ }, post, data);
@@ -130,9 +135,48 @@ values
 	($post_type, $uri_name, $title, $subtitle, $external_url, $content_html, $content_markdown, $image, $banner_image, $is_draft, $date_published, $date_event_start, $date_event_end, $rsvp_type)
 `);
 
-export async function update_post(data: Partial<PostDataPatch>) : Promise<void> {
-	// 
+export async function update_post(data: PostData) : Promise<void> {
+	const db = await posts_pool.acquire();
+
+	try {
+		await run(db, sql_update_post, {
+			$post_id: data.post_id,
+			$title: data.title,
+			$subtitle: data.subtitle,
+			$external_url: data.external_url,
+			$content_html: data.content_html,
+			$content_markdown: data.content_markdown,
+			$image: data.image,
+			$banner_image: data.banner_image,
+			$is_draft: data.is_draft,
+			$date_published: data.date_published,
+			$date_event_start: data.date_event_start,
+			$date_event_end: data.date_event_end,
+			$rsvp_type: data.rsvp_type,
+		});
+	}
+
+	finally {
+		posts_pool.release(db);
+	}
 }
+
+const sql_update_post = `
+update posts
+set title            = $title,
+    subtitle         = $subtitle,
+    external_url     = $external_url,
+    content_html     = $content_html,
+    content_markdown = $content_markdown,
+    image            = $image,
+    banner_image     = $banner_image,
+    is_draft         = $is_draft,
+    date_published   = $date_published,
+    date_event_start = $date_event_start,
+    date_event_end   = $date_event_end,
+    rsvp_type        = $rsvp_type
+where post_id = $post_id
+`;
 
 export async function delete_post(uri_name: string) : Promise<void> {
 	// 
@@ -160,7 +204,7 @@ from tags
 group by tag_name
 `);
 
-async function create_post_tags(post_id: number, tag_names: string[]) {
+export async function create_post_tags(post_id: number, tag_names: string[]) {
 	const db = await posts_pool.acquire();
 
 	try {
@@ -183,6 +227,24 @@ values
 	(?, ?)
 `);
 
-const sql_delete_post_tag = sql(`
+export async function delete_post_tags(post_id: number, tag_names: string[]) {
+	const db = await posts_pool.acquire();
 
+	try {
+		await Promise.all(
+			tag_names.map(
+				(tag_name) => run(db, sql_delete_post_tag, [ tag_name, post_id ])
+			)
+		);
+	}
+
+	finally {
+		posts_pool.release(db);
+	}
+}
+
+const sql_delete_post_tag = sql(`
+delete from tags
+where tag_name = ?
+  and post_id = ?
 `);

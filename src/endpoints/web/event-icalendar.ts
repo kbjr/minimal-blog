@@ -43,7 +43,7 @@ web.get('/events/:post_uri_name/event.ics', opts, async (req: Req, res) => {
 
 // todo: implement caching?
 async function get_event_calendar(uri_name: string) {
-	const data = await store.posts.get_post('event', uri_name);
+	const data = store.posts.get_post('event', uri_name);
 
 	if (! data) {
 		throw_404_not_found('event not found');
@@ -69,7 +69,7 @@ async function get_event_calendar(uri_name: string) {
 
 // todo: implement caching?
 async function get_recent_events_calendar() {
-	const data = await store.posts.get_posts(50, null, null, 'event', false);
+	const data = store.posts.get_posts(50, null, null, 'event', false);
 	const events = await Promise.all(
 		data.map(async (data) => {
 			const post = new store.posts.Post(data);

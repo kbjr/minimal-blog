@@ -40,7 +40,7 @@ async function get_post_html(uri_name: string) {
 		return cached;
 	}
 
-	const data = await store.posts.get_post('note', uri_name);
+	const data = store.posts.get_post('note', uri_name);
 
 	if (! data) {
 		throw_404_not_found('note not found');
@@ -57,7 +57,7 @@ async function render_template(uri_name: string) {
 }
 
 async function create_context(uri_name: string) {
-	const data = await store.posts.get_post('note', uri_name);
+	const data = store.posts.get_post('note', uri_name);
 	const post = new store.posts.Post(data);
 
 	// fixme: These strings should come from a template or setting somewhere

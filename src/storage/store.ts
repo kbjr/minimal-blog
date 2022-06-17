@@ -129,7 +129,13 @@ export interface Store {
 	create_post(data: posts.PostDataPatch) : Promise<posts.PostData>;
 
 	/**  */
-	update_post(data: Partial<posts.PostDataPatch>) : Promise<void>;
+	update_post(data: posts.PostData) : Promise<void>;
+
+	/**  */
+	create_post_tags(post_id: number, tags: string[]) : Promise<void>;
+
+	/**  */
+	delete_post_tags(post_id: number, tags: string[]) : Promise<void>;
 
 	/**  */
 	delete_post(uri_name: string) : Promise<void>;

@@ -509,12 +509,12 @@ table {
 	margin-block-end: 1.5rem;
 }
 
-#page-dashboard section:is(#posts, #mentions) > :is(.message, .table) {
+#page-dashboard section:is(#posts, #mentions):not(.expanded) > :is(.message, .table) {
 	height: 20rem;
 	overflow: auto;
 }
 
-#page-dashboard section:is(#drafts) > :is(.message, .table) {
+#page-dashboard section:is(#drafts):not(.expanded) > :is(.message, .table) {
 	height: 11rem;
 	overflow: auto;
 }
@@ -536,6 +536,11 @@ table {
 	margin: auto;
 	text-align: center;
 	font-weight: 700;
+}
+
+#page-dashboard section:is(#drafts, #posts, #mentions) > button[id^='expand-'] {
+	margin: 1rem auto;
+	padding: 0.125rem 2rem;
 }
 
 #page-dashboard section:is(#drafts, #posts, #mentions) table {

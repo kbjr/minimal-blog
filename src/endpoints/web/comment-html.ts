@@ -41,7 +41,7 @@ async function get_post_html(uri_name: string) {
 		return cached;
 	}
 
-	const data = await store.posts.get_post('comment', uri_name);
+	const data = store.posts.get_post('comment', uri_name);
 
 	if (! data) {
 		throw_404_not_found('comment not found');
@@ -58,7 +58,7 @@ async function render_template(uri_name: string) {
 }
 
 async function create_context(uri_name: string) {
-	const data = await store.posts.get_post('comment', uri_name);
+	const data = store.posts.get_post('comment', uri_name);
 	const post = new store.posts.Post(data);
 
 	// Comments should always have an `external_url`, but just for safety

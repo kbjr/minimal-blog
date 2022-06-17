@@ -114,27 +114,27 @@ export const en_us: LanguageLabels = {
 		edit_post: {
 			title: 'Edit Post',
 			save: 'Save Post',
-			publish: 'Create & Publish Post',
+			publish: 'Publish Post',
 		},
 		edit_comment: {
 			title: 'Edit Comment',
 			save: 'Save Comment',
-			publish: 'Create & Publish Comment',
+			publish: 'Publish Comment',
 		},
 		edit_note: {
 			title: 'Edit Note',
 			save: 'Save Note',
-			publish: 'Create & Publish Note',
+			publish: 'Publish Note',
 		},
 		edit_event: {
 			title: 'Edit Event',
 			save: 'Save Event',
-			publish: 'Create & Publish Event',
+			publish: 'Publish Event',
 		},
 		edit_rsvp: {
 			title: 'Edit RSVP',
 			save: 'Save RSVP',
-			publish: 'Create & Publish RSVP',
+			publish: 'Publish RSVP',
 		},
 		settings: {
 			title: 'Settings',

@@ -9,7 +9,7 @@ import { PostData } from '../../storage/posts';
 
 const default_count = 10;
 const front_page = custom_cache(async () => {
-	const posts = await store.posts.get_posts(default_count, null, null, null, false);
+	const posts = store.posts.get_posts(default_count, null, null, null, false);
 	return build_xml_for_posts(posts, default_count);
 }, { posts: true });
 
@@ -35,7 +35,7 @@ async function build_feed_xml(count: number, tagged_with?: string, before?: stri
 		return front_page();
 	}
 
-	const posts = await store.posts.get_posts(count, tagged_with, before, null, false);
+	const posts = store.posts.get_posts(count, tagged_with, before, null, false);
 	return build_xml_for_posts(posts, default_count);
 }
 

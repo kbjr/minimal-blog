@@ -200,6 +200,15 @@ form_edit_post.addEventListener('reset', (event) => {
 	return false;
 });
 
+btn_publish.addEventListener('click', () => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	publish_post();
+
+	return false;
+});
+
 
 
 // ===== Start loading data =====
@@ -302,7 +311,8 @@ async function save_post() {
 			return await update_existing_post();
 		}
 
-		return await create_new_post();
+		await create_new_post();
+		redirect_to_edit();
 	}
 
 	catch (error) {
@@ -351,8 +361,10 @@ async function create_new_post(draft = true) {
 			break;
 	}
 
-	const post = await app.http_post('/api/posts', true, post_data);
+	await app.http_post('/api/posts', true, post_data);
+}
 
+function redirect_to_edit() {
 	has_unsaved_changes = false;
 	app.replace_url(`edit/${post_type}/${uri_name}`);
 	location.reload();
@@ -371,17 +383,13 @@ async function publish_post() {
 	toggle_buttons_enabled(false);
 	// todo: Show indication
 
-	const create_new = ! uri_name;
-
-	if (create_new) {
-		// todo: Create new post
+	if (! uri_name) {
+		await create_new_post();
+		redirect_to_edit();
+		return;
 	}
 
-	// todo: Publish post
-
-	if (create_new) {
-		// todo: Redirect to edit page
-	}
+	await app.http_patch(`/api/posts/${post_type}/${uri_name}`, true, { is_draft: false });
 
 	// todo: change verbage / change message / show indication
 	toggle_buttons_enabled(true);

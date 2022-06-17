@@ -26,7 +26,7 @@ ctrl.get('/', opts, async (req, res) => {
 });
 
 async function render_dashboard_page() {
-	const post_data = await store.posts.get_posts(50, null, null, null, false);
+	const post_data = store.posts.get_posts(50, null, null, null, false);
 	const draft_data = await store.posts.get_draft_posts(50);
 
 	const posts = post_data.map((data) => new store.posts.Post(data));

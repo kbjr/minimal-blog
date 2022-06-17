@@ -46,7 +46,7 @@ export const post_res_schema: JSONSchema6 = {
 	}
 };
 
-export const post_update_req_schema: JSONSchema6 = {
+export const patch_update_req_schema: JSONSchema6 = {
 	type: 'object',
 	properties: {
 		title: str(),

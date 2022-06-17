@@ -41,7 +41,7 @@ async function get_post_html(uri_name: string) {
 		return cached;
 	}
 
-	const data = await store.posts.get_post('post', uri_name);
+	const data = store.posts.get_post('post', uri_name);
 
 	if (! data) {
 		throw_404_not_found('post not found');
@@ -58,7 +58,7 @@ async function render_template(uri_name: string) {
 }
 
 async function create_context(uri_name: string) {
-	const data = await store.posts.get_post('post', uri_name);
+	const data = store.posts.get_post('post', uri_name);
 	const post = new store.posts.Post(data);
 
 	const mentions_data = await store.mentions.get_live_post_mentions(post.post_type, post.uri_name);
