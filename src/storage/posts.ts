@@ -5,16 +5,8 @@ import { events, store } from './store';
 import { render_markdown_to_html } from '../markdown';
 import { throw_404_not_found, throw_422_unprocessable_entity } from '../http-error';
 import * as settings from './settings';
-import Minisearch = require('minisearch');
-import type MiniSearch from 'minisearch';
-import type { Options as MiniSearchOption } from 'minisearch';
-import { logger } from '../debug';
-import { JSDOM } from 'jsdom';
 import { ExternalEntry, ExternalEvent } from '../external-posts';
 import { Mention } from './mentions';
-
-const log_search = logger('search');
-const max_search_results = 50;
 
 export type PostType = 'post' | 'comment' | 'note' | 'event' | 'rsvp';
 // | 'share' | 'like/reaction' | 'media-album'
@@ -29,38 +21,6 @@ let posts_index: Record<PostType, Record<string, PostData>>;
 
 let tags: Tag[];
 let tags_index: Record<string, Tag>;
-
-const search_opts: MiniSearchOption = {
-	idField: 'post_id',
-	fields: ['title', 'subtitle', 'content', 'tags', 'post_type'],
-	storeFields: ['post_type', 'uri_name'],
-	searchOptions: {
-		boost: {
-			tags: 2,
-			title: 2,
-			subtitle: 1.5,
-		}
-	},
-	extractField(doc: PostData, field) {
-		switch (field) {
-			case 'content': {
-				const { window } = new JSDOM('');
-				window.document.body.innerHTML = doc.content_html;
-				return window.document.body.textContent;
-			};
-
-			case 'tags': {
-				return doc.tags.join(' ');
-			};
-		}
-
-		return doc[field];
-	},
-};
-
-let next_search_id = 1;
-// @ts-ignore: type definition doesn't match reality of what's exported
-const search_index: MiniSearch = new Minisearch(search_opts);
 
 export async function load() {
 	// todo: map to Post instances here
@@ -83,16 +43,6 @@ export async function load() {
 	for (const tag of tags) {
 		tags_index[tag.tag_name] = tag;
 	}
-
-	rebuild_search_index();
-}
-
-function rebuild_search_index() {
-	const now = Date.now();
-	log_search.info('Rebuilding index...');
-	search_index.removeAll();
-	search_index.addAll(posts);
-	log_search.info(`Finished rebuilding index. (~${Date.now() - now}ms)`);
 }
 
 export async function get_draft_posts(count: number) {
@@ -150,28 +100,16 @@ export function get_posts(count: number, tagged_with?: string, before?: string, 
 	return results.slice(0, count);
 }
 
-export interface SearchMeta {
-	search_score: number;
-	search_terms: string[];
-	search_match: Record<string, string[]>;
-}
-
 export async function search_posts(query: string) {
-	const now = Date.now();
-	const log = log_search.child({ search_id: next_search_id++, query });
-	log.debug('Starting search...');
+	if (! conf.data.enable_search) {
+		return [ ];
+	}
+	
+	const results = await store.search_posts(query);
 
-	const results = search_index.search(query, { });
-
-	log.info(`Finished search, found ${results.length} matches. (~${Date.now() - now}ms)`);
-
-	return results.slice(0, max_search_results).map((result) => {
+	return results.map((result) => {
 		const data: PostData = posts_index[result.post_type][result.uri_name];
-		return Object.assign({
-			search_score: result.score,
-			search_terms: result.terms,
-			search_match: result.match,
-		}, data);
+		return Object.assign<SearchResult, PostData>(result, data);
 	});
 }
 
@@ -186,7 +124,6 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 	posts.unshift(full_post);
 	posts_index[data.post_type][data.uri_name] = full_post;
 	add_tags(full_post.tags);
-	search_index.add(full_post);
 	events.emit('posts.create');
 	return full_post;
 }
@@ -242,10 +179,7 @@ export async function update_post(post_type: PostType, uri_name: string, updates
 	}
 
 	Object.assign(post, updates);
-	
 	await store.update_post(post);
-
-	search_index.add(post);
 	events.emit('posts.update', post);
 	return post;
 }
@@ -324,6 +258,12 @@ export interface TagData {
 	tag_count: number;
 }
 
+export interface SearchResult {
+	post_type: PostType;
+	uri_name: string;
+	search_score: number;
+}
+
 // export interface FullPostData extends PostData {
 // 	attachments: AttachmentData[];
 // }
@@ -373,7 +313,7 @@ export class Post implements Readonly<PostData> {
 	public mentions: Mention[];
 	public external_data: ExternalEvent | ExternalEntry;
 
-	constructor(private data: PostData & Partial<SearchMeta>) { }
+	constructor(private data: PostData & Partial<SearchResult>) { }
 
 	get post_url() {
 		switch (this.data.post_type) {
@@ -535,14 +475,6 @@ export class Post implements Readonly<PostData> {
 	}
 
 	get search_score() {
-		return this.data.search_score.toFixed(2);
-	}
-
-	get search_match() {
-		return this.data.search_match;
-	}
-
-	get search_terms() {
-		return this.data.search_terms;
+		return this.data.search_score.toFixed(5);
 	}
 }

@@ -35,8 +35,6 @@
 - Produces standard [sitemap.xml](https://www.sitemaps.org/protocol.html)
 - Light / dark mode toggle (defaulting to system preference)
 - Easily edit and swap between color themes in the control panel
-- Full-text search on content powered by [minisearch](https://github.com/lucaong/minisearch)
-  - `<link>` for [OpenSearch](https://github.com/dewitt/opensearch/blob/master/opensearch-1-1-draft-6.md) discovery
 
 ### Roadmap Features
 

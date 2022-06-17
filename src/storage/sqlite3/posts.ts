@@ -1,6 +1,6 @@
 
 import { obj } from '../../util';
-import { PostData, PostDataPatch, TagData } from '../posts';
+import { PostData, PostDataPatch, SearchResult, TagData } from '../posts';
 import { run, get_one, get_all, sql, posts_pool } from './db';
 
 type RawPostRecord = Omit<PostData, 'tags'> & {
@@ -248,3 +248,36 @@ delete from tags
 where tag_name = ?
   and post_id = ?
 `);
+
+export async function search_posts(query: string) {
+	query = query.trim();
+
+	if (! query) {
+		return [ ];
+	}
+
+	const db = await posts_pool.acquire();
+
+	try {
+		return await get_all<SearchResult>(db, sql_search_posts, {
+			$query: query
+		});
+	}
+
+	finally {
+		posts_pool.release(db);
+	}
+}
+
+const sql_search_posts = `
+select
+	post.post_type       as post_type,
+	post.uri_name        as uri_name,
+	abs(bm25(posts_fts)) as search_score
+from posts_fts search
+left outer join posts post
+	on post.post_id = search.rowid
+where posts_fts match $query
+order by bm25(posts_fts)
+limit 50
+`;

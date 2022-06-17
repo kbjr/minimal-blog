@@ -125,6 +125,9 @@ export interface Store {
 	/**  */
 	get_post(uri_name: string) : Promise<posts.PostData>;
 
+	/*  */
+	search_posts(query: string) : Promise<posts.SearchResult[]>;
+
 	/**  */
 	create_post(data: posts.PostDataPatch) : Promise<posts.PostData>;
 

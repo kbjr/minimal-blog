@@ -343,4 +343,61 @@ namespace posts_db {
 				references posts (post_id)
 		)
 	`);
+
+	async function create_fts_index(db: sqlite3.Database) {
+		await run(db, sql_build_index);
+		// await run(db, sql_populate_index);
+		await run(db, sql_after_insert_trigger);
+		await run(db, sql_after_delete_trigger);
+		await run(db, sql_after_update_trigger);
+	}
+
+	const sql_build_index = `
+		create virtual table posts_fts using fts5(
+			title,
+			subtitle,
+			content_markdown,
+			content='posts',
+			content_rowid='post_id'
+		)
+	`;
+
+	// note: this would only be needed if you already had content in the posts database,
+	//   which shouldn't happen without manual tampering
+	const sql_populate_index = `
+		insert into posts_fts
+		select title, subtitle, content_markdown
+		from posts
+	`;
+
+	const sql_after_insert_trigger = `
+		create trigger posts_fts_after_insert after insert on posts begin
+			insert into posts_fts
+				(rowid, title, subtitle, content_markdown)
+			values
+				(new.post_id, new.title, new.subtitle, new.content_markdown);
+		end
+	`;
+
+	const sql_after_delete_trigger = `
+		create trigger posts_fts_after_delete after delete on posts begin
+			insert into posts_fts
+				(posts_fts, rowid, title, subtitle, content_markdown)
+			values
+				('delete', old.post_id, old.title, old.subtitle, old.content_markdown);
+		end
+	`;
+
+	const sql_after_update_trigger = `
+		create trigger posts_fts_after_update after update on posts begin
+			insert into posts_fts
+				(posts_fts, rowid, title, subtitle, content_markdown)
+			values
+				('delete', old.post_id, old.title, old.subtitle, old.content_markdown);
+			insert into posts_fts
+				(rowid, title, subtitle, content_markdown)
+			values
+				(new.post_id, new.title, new.subtitle, new.content_markdown);
+		end
+	`;
 }

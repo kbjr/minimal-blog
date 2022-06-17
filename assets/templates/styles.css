@@ -357,41 +357,6 @@ section.feed-list div.search-meta span.score {
 	margin-inline-end: 0.25rem;
 }
 
-section.feed-list div.search-meta span.score:after {
-	content: "|";
-	margin-inline-start: 0.5rem;
-}
-
-section.feed-list div.search-meta ul.terms {
-	display: inline;
-	list-style: none;
-	font-size: inherit;
-	color: inherit;
-	margin: 0;
-	padding: 0;
-}
-
-section.feed-list div.search-meta ul.terms li {
-	display: inline;
-	font-size: inherit;
-	color: inherit;
-	margin: 0;
-	padding: 0;
-}
-
-section.feed-list div.search-meta ul.terms li:before {
-	content: '"';
-}
-
-section.feed-list div.search-meta ul.terms li:after {
-	content: '"';
-}
-
-section.feed-list div.search-meta ul.terms li:not(:last-of-type):after {
-	content: '",';
-	margin-inline-end: 0.25rem;
-}
-
 
 
 
