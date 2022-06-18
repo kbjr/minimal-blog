@@ -5,8 +5,8 @@ name: build
 
 steps:
 - name: docker:arm64
-  image: node
+  image: node:16-alpine
   commands:
   - npm install
-  - npm run docker:arm64
+  - npm run build
 
