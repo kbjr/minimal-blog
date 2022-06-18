@@ -2,6 +2,8 @@
 const { APIClient } = require('../../utils/api');
 const { lorem_ipsum } = require('../../utils/lorem-ipsum');
 
+const conf = require('../../../data/test.json');
+
 const api = new APIClient('http://localhost:3001');
 
 const sample_count = 30;
@@ -10,7 +12,7 @@ const content_samples = [ ];
 main();
 
 async function main() {
-	await api.login('', '');
+	await api.login(conf.username, conf.password);
 	await populate_content_samples();
 
 	for (let i = 0; i < 10000; i++) {

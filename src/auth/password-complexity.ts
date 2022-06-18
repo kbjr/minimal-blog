@@ -250,7 +250,7 @@ function calc_repeats_sequences_score(repeats: number, max_repeat: number, seque
 function get_char_class(char: number) : char_class {
 	// Extra level of if statement just to bisect the list of if statements
 	// to be tiny bit more efficient
-	if (char < 90) {
+	if (char <= 64) {
 		// ASCII Control Characters
 		if (char < 32) {
 			return char_class.other;
@@ -267,9 +267,7 @@ function get_char_class(char: number) : char_class {
 		}
 
 		// Special Characters: : ; < = > ? @
-		if (char <= 64) {
-			return char_class.special;
-		}
+		return char_class.special;
 	}
 
 	// Uppercase Letters

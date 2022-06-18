@@ -1,0 +1,13 @@
+---
+kind: pipeline
+type: kubernetes
+name: build
+
+steps:
+- name: docker:arm64
+  image: node
+  commands:
+  - npm install
+  - npm run docker:arm64
+
+---
