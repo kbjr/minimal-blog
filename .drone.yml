@@ -10,4 +10,3 @@ steps:
   - npm install
   - npm run docker:arm64
 
----
