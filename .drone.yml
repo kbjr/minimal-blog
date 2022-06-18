@@ -4,9 +4,18 @@ type: kubernetes
 name: build
 
 steps:
-- name: docker:arm64
+- name: node16
   image: node:16-alpine
   commands:
   - npm install
+  - apk add --no-cache python3 g++ make
   - npm run build
+# todo: build and publish docker images
+# - name: docker:arm64
+#   image: plugins/docker
+#   settings:
+#     registry: https://docker.jbrumond.me
+#     username: ""
+#     password: ""
+#     repo: minimal-blog
 
