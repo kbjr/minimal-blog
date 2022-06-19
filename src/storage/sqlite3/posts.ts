@@ -148,7 +148,7 @@ export async function update_post(data: PostData) : Promise<void> {
 			$content_markdown: data.content_markdown,
 			$image: data.image,
 			$banner_image: data.banner_image,
-			$is_draft: data.is_draft,
+			$is_draft: data.is_draft ? 1 : 0,
 			$date_published: data.date_published,
 			$date_event_start: data.date_event_start,
 			$date_event_end: data.date_event_end,
