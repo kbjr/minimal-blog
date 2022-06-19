@@ -5,7 +5,6 @@ import { load_asset } from './storage/assets';
 import { render } from 'mustache';
 import { conf } from './conf';
 
-
 class CacheEntry<T> {
 	public score = 2;
 	public time = Date.now();

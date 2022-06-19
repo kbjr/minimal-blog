@@ -384,15 +384,16 @@ async function publish_post() {
 	// todo: Show indication
 
 	if (! uri_name) {
-		await create_new_post();
+		await create_new_post(false);
 		redirect_to_edit();
 		return;
 	}
 
 	await app.http_patch(`/api/posts/${post_type}/${uri_name}`, true, { is_draft: false });
 
-	// todo: change verbage / change message / show indication
 	toggle_buttons_enabled(true);
+	btn_publish.parentNode.removeChild(btn_publish);
+	span_publish_status.innerHTML = `<a href="${post_url()}">{{ labels.pages.posts.published }}</a>`;
 }
 
 })();
