@@ -137,6 +137,11 @@ export async function update_post(post_type: PostType, uri_name: string, updates
 
 	if (post.is_draft && updates.is_draft === false) {
 		post.date_published = (new Date).toISOString();
+		// move the post to the front of the list if this was the publish event so
+		// it shows up in correct, publish-sorted order
+		const orig_index = posts.findIndex((data) => data === post);
+		posts.splice(orig_index, 1);
+		posts.unshift(post);
 	}
 
 	else if (! post.is_draft && updates.is_draft !== true) {
