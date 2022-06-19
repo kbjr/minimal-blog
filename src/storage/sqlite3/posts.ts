@@ -278,6 +278,7 @@ from posts_fts search
 left outer join posts post
 	on post.post_id = search.rowid
 where posts_fts match $query
+	and post.is_draft = 0
 order by bm25(posts_fts)
 limit 50
 `;
