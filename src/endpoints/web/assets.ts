@@ -38,17 +38,6 @@ web.get('/time.js', async (req, res) => {
 	return load_asset('time.js');
 });
 
-const svg_icon_js = rendered_template_cache('svg_icon.js', null_context, { }, {
-	settings: true,
-	colors: true,
-	templates: true
-});
-
-web.get('/svg_icon.js', async (req, res) => {
-	res.type('application/javascript; charset=utf-8');
-	return svg_icon_js();
-});
-
 const color_theme_toggle_js = rendered_asset_cache('color_theme_toggle.js', new TemplateContext(null), { }, { });
 
 web.get('/color_theme_toggle.js', async (req, res) => {

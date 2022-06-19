@@ -40,7 +40,6 @@ const editable_ui_templates = [
 	'external_event.html',
 	'styles.css',
 	'robots.txt',
-	'svg_icon.js',
 ];
 
 export async function load() {

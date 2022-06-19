@@ -51,7 +51,6 @@ const resetable_templates = new Set([
 	'external_event.html',
 	'styles.css',
 	'robots.txt',
-	'svg_icon.js',
 ]);
 
 ctrl.delete('/api/templates/:template_name', opts, async (req: Req, res) => {

@@ -44,7 +44,6 @@ const putable_templates = new Set([
 	'mention_thread.html',
 	'styles.css',
 	'robots.txt',
-	'svg_icon.js',
 ]);
 
 ctrl.put('/api/templates/:template_name', opts, async (req: Req, res) => {
