@@ -8,18 +8,56 @@ trigger:
   branch: [ master ]
 
 steps:
+- name: node14
+  image: node:14-alpine
+  commands:
+  - apk add --no-cache python3 g++ make
+  - npm install
+  - npm run build
+  depends_on: [ ]
 - name: node16
   image: node:16-alpine
   commands:
   - apk add --no-cache python3 g++ make
   - npm install
   - npm run build
-# todo: build and publish docker images
-# - name: docker:arm64
-#   image: plugins/docker
-#   settings:
-#     registry: https://docker.jbrumond.me
-#     username: ""
-#     password: ""
-#     repo: minimal-blog
+  depends_on: [ ]
+- name: node17
+  image: node:17-alpine
+  commands:
+  - apk add --no-cache python3 g++ make
+  - npm install
+  - npm run build
+  depends_on: [ ]
+- name: build
+  image: plugins/docker
+  settings:
+    registry: https://docker.jbrumond.me
+    username: drone
+    password:
+      from_secret: docker-jbrumond-me-password
+    repo: docker.jbrumond.me/minimal-blog
+    dry_run: true
+  depends_on: [ ]
 
+---
+kind: pipeline
+type: kubernetes
+name: deploy-stg
+
+trigger:
+  event: [ promote ]
+  target: [ publish ]
+
+steps:
+- name: build-and-publish
+  image: plugins/docker
+  settings:
+    registry: https://docker.jbrumond.me
+    username: drone
+    password:
+      from_secret: docker-jbrumond-me-password
+    repo: docker.jbrumond.me/minimal-blog
+    tags:
+    - latest
+    - 0.1-alpha
