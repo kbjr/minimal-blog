@@ -8,12 +8,6 @@ trigger:
   branch: [ master ]
 
 steps:
-# - name: node16
-#   image: node:16-alpine
-#   commands:
-#   - apk add --no-cache python3 g++ make
-#   - npm install
-#   - npm run build
 - name: build
   image: plugins/docker
   settings:
@@ -27,7 +21,7 @@ steps:
 ---
 kind: pipeline
 type: kubernetes
-name: deploy-stg
+name: publish-image
 
 trigger:
   event: [ promote ]

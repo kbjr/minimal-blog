@@ -166,7 +166,8 @@ namespace settings_db {
 			link_url varchar(2000) primary key,
 			label varchar(50),
 			icon varchar(50),
-			sort_order int
+			sort_order int,
+			rel varchar(50)
 		)
 	`);
 }
