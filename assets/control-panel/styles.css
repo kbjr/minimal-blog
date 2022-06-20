@@ -185,10 +185,14 @@ li {
 }
 
 dl {
-	margin-block: 3rem;
+	margin-block: 2rem;
 }
 
 dt, dd {
+	margin-block: 0.25rem;
+}
+
+:is(dt, dd) p {
 	margin-block: 1rem;
 }
 
@@ -196,21 +200,9 @@ dt {
 	font-weight: 700;
 }
 
-	dt p {
-		margin-block-end: 1rem;
-	}
-
 dd {
-	margin-inline-start: 1rem;
-	padding-inline-start: 1rem;
-	padding-block: 0.125rem;
-	border-inline-start: 0.5rem var(--theme-line) solid;
-	background: var(--theme-bg-heavy);
+	margin-block-end: 1rem;
 }
-
-	dd p {
-		margin-block: 1rem;
-	}
 
 small {
 	font-size: 0.8rem;
@@ -687,6 +679,65 @@ table {
 	#page-edit-post #in-post-markdown.no-monospace {
 		font-family: var(--font-open-sans);
 	}
+
+
+
+/* ===== Mentions Settings Page ===== */
+
+#page-mention-settings main {
+	/*  */
+}
+
+	#page-mention-settings section {
+		margin-block-end: 6rem;
+	}
+
+	#page-mention-settings main p {
+		font-size: 1rem;
+	}
+
+	#page-mention-settings form {
+		margin-block: 3rem;
+		margin-inline: 2rem;
+	}
+
+	#page-mention-settings form .inputs {
+		justify-content: space-evenly;
+	}
+
+	#page-mention-settings form .buttons {
+		margin-block: 2rem;
+		justify-content: space-evenly;
+	}
+
+	#page-mention-settings fieldset {
+		margin: 2rem;
+	}
+
+	#page-mention-settings div.checkbox {
+		display: flex;
+		flex-direction: row;
+		padding-block: 0.5rem;
+		padding-inline: 0.25rem;
+	}
+	
+	#page-mention-settings div.checkbox label,
+	#page-mention-settings div.checkbox input {
+		margin: 0;
+	}
+	
+	#page-mention-settings div.checkbox input {
+		margin-inline-end: 1rem;
+	}
+
+	#page-mention-settings legend {
+		font-size: 1rem;
+		font-weight: 700;
+		font-family: var(--font-open-sans);
+		margin-block-end: 1rem;
+		color: var(--theme-text-heading);
+	}
+
 
 
 

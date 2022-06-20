@@ -1,0 +1,113 @@
+
+<main>
+	<h1>{{ labels.pages.mention_settings.title }}</h1>
+
+	<section>
+		<!-- fixme: i18n -->
+		<h3>Enable Mentions</h3>
+		<!-- fixme: i18n -->
+		<p>
+			"Mentions" refers to when one page on the internet links to another and sends a notification to the referenced page.
+			You might receive these when someone comments on or replies to your posts, or RSVPs to your events. You can also send
+			them automatically yourself when you mention other people's content to let them know about your replies.
+		</p>
+		<!-- fixme: i18n -->
+		<p>
+			The two most common methods of sending and receiving these mentions are called
+			<a href="https://www.hixie.ch/specs/pingback/pingback">Pingbacks</a> and
+			<a href="https://www.w3.org/TR/webmention">WebMentions</a>. These settings control whether or not your blog sends and
+			receives mentions of either type.
+		</p>
+		<form id="form-enable-mentions" aria-busy="true" aria-live="polite">
+			<div data-flex="row" class="inputs">
+				<fieldset id="fs-enable-pingbacks">
+					<!-- fixme: i18n -->
+					<legend>Pingbacks</legend>
+					
+					<div class="checkbox">
+						<!-- fixme: i18n -->
+						<input type="checkbox" id="in-enable-send-pingbacks">
+						<label for="in-enable-send-pingbacks">Send Pingbacks</label>
+					</div>
+					
+					<div class="checkbox">
+						<!-- fixme: i18n -->
+						<input type="checkbox" id="in-enable-send-pingbacks">
+						<label for="in-enable-send-pingbacks">Receive Pingbacks</label>
+					</div>
+				</fieldset>
+				
+				<fieldset id="fs-enable-webmentions">
+					<!-- fixme: i18n -->
+					<legend>WebMentions</legend>
+					
+					<div class="checkbox">
+						<!-- fixme: i18n -->
+						<input type="checkbox" id="in-enable-send-webmentions">
+						<label for="in-enable-send-webmentions">Send WebMentions</label>
+					</div>
+					
+					<div class="checkbox">
+						<!-- fixme: i18n -->
+						<input type="checkbox" id="in-enable-send-webmentions">
+						<label for="in-enable-send-webmentions">Receive WebMentions</label>
+					</div>
+				</fieldset>
+			</div>
+
+			<div data-flex="row" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-enable-mentions" disabled>Save Changes</button>
+			</div>
+		</form>
+	</section>
+
+	<section>
+		<!-- fixme: i18n -->
+		<h3>Auto-Moderation Defaults</h3>
+		<p>
+			These are the auto-moderation default behaviors for mentions you receive. These apply to any mentions
+			from any source that doesn't have a more specific moderation rule applied to it. 
+		</p>
+		<dl>
+			<dt>Allow</dt>
+			<dd>Mentions from unknown sources are automatically approved and displayed.</dd>
+			
+			<dt>Block</dt>
+			<dd>Mentions from unknown sources are blocked.</dd>
+			
+			<dt>Review</dt>
+			<dd>Mentions from unknown sources will be sent to the Moderation Queue for review before displaying.</dd>
+		</dl>
+		<form id="form-mentions-defaults" aria-busy="true" aria-live="polite">
+			<div data-flex="row" class="inputs">
+				<div>
+					<!-- fixme: i18n -->
+					<label for="in-pingback-default">Pingback Default</label>
+					<!-- fixme: i18n -->
+					<select id="in-pingback-default">
+						<option value="allow">Allow</option>
+						<option value="block">Block</option>
+						<option value="review">Review</option>
+					</select>
+				</div>
+
+				<div>
+					<!-- fixme: i18n -->
+					<label for="in-webmention-default">Pingback Default</label>
+					<!-- fixme: i18n -->
+					<select id="in-webmention-default">
+						<option value="allow">Allow</option>
+						<option value="block">Block</option>
+						<option value="review">Review</option>
+					</select>
+				</div>
+			</div>
+
+			<div data-flex="row" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-mentions-defaults" disabled>Save Changes</button>
+			</div>
+		</form>
+	</section>
+</main>

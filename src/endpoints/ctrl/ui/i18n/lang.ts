@@ -134,6 +134,10 @@ export interface LanguageLabels {
 			save: string;
 			publish: string;
 		};
+		mention_settings: {
+			title: string;
+			// 
+		};
 		settings: {
 			title: string;
 		};

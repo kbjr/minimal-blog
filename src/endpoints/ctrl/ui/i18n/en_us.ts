@@ -136,8 +136,11 @@ export const en_us: LanguageLabels = {
 			save: 'Save RSVP',
 			publish: 'Publish RSVP',
 		},
+		mention_settings: {
+			title: 'Mention Settings',
+		},
 		settings: {
-			title: 'Settings',
+			title: 'General Settings',
 		},
 		color_themes: {
 			title: 'Color Themes',

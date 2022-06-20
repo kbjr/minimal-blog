@@ -53,6 +53,7 @@ export function import_endpoints() {
 	require('./ctrl/ui/posts');
 	require('./ctrl/ui/edit-post');
 	require('./ctrl/ui/interactions');
+	require('./ctrl/ui/mention-settings');
 	require('./ctrl/ui/settings');
 	require('./ctrl/ui/templates');
 	require('./ctrl/ui/users');
