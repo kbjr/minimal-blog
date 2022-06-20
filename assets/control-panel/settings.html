@@ -4,26 +4,141 @@
 
 	<section>
 		<!-- fixme: i18n -->
-		<h3>Metadata</h3>
-		<!-- todo: language -->
-		<!-- todo: feed_title -->
-		<!-- todo: feed_description -->
-		<!-- todo: favicon -->
-		<!-- todo: copyright_notice -->
+		<h2>Blog Title / Description</h2>
+
+		<p>
+			The title and description of your blog will be displayed in the title bar of visitors'
+			browsers, as well as prominently on the main webpage. They should describe the blog as
+			a whole, and what kind of content people can expect to find here.
+		</p>
+
+		<form>
+			<label for="in-title">Title</label>
+			<input type="text" id="in-title" required>
+			
+			<label for="in-subtitle">Sub-Title / Summary / Description</label>
+			<input type="text" id="in-subtitle">
+			
+			<div data-flex="row" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-titles" disabled>Save Changes</button>
+			</div>
+		</form>
+	</section>
+		
+	<section>
+		<h2>Content Language</h2>
+		
+		<p>
+			The content language will be presented in metadata to your visitors' browsers or other
+			clients, to inform them of what language to expect content on the site to be written in.
+		</p>
+
+		<form>
+			<label for="in-language">Language Code</label>
+			<input type="text" id="in-language" placeholder="e.g. &quot;en-us&quot;" required>
+			
+			<div data-flex="row" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-language" disabled>Save Changes</button>
+			</div>
+		</form>
+	</section>
+	
+	<section>
+		<h2>Copyright Notice</h2>
+
+		<p>
+			The copyright notice text will be displayed alongside any content on the page, to identify the
+			owner of the website's contents.
+		</p>
+
+		<form>
+			<label for="in-copyright">Copyright Notice</label>
+			<input type="text" id="in-copyright" placeholder="e.g. &quot;Copyright 2022 Some Person&quot;">
+			
+			<div data-flex="row" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-copyright" disabled>Save Changes</button>
+			</div>
+		</form>
+	</section>
+	
+	<section>
+		<h2>Favicon</h2>
+
+		<p>
+			A Favicon is an icon image that is often displayed alongside your page, such as in the title bar
+			of a web browser. They are typically fairly small and have square dimensions.
+		</p>
+
+		<!-- todo: show current favicon -->
+
+		<form>
+			<!-- fixme: i18n label -->
+			<label for="in-favicon">Upload New Favicon</label>
+			<input type="file" accept="image/*" id="in-favicon">
+	
+			<div data-flex="row" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-favicon" disabled>Save Changes</button>
+			</div>
+		</form>
 	</section>
 
 	<section>
 		<!-- fixme: i18n -->
-		<h3>Author</h3>
-		<!-- todo: name -->
-		<!-- todo: url -->
-		<!-- todo: avatar -->
+		<h2>Author Information</h2>
+
+		<p>
+			<!--  -->
+		</p>
+		
+		<form>
+			<!-- fixme: i18n -->
+			<label for="in-author-name">Author Name</label>
+			<input type="text" id="in-author-name" required>
+			
+			<!-- fixme: i18n -->
+			<label for="in-author-url">Author URL</label>
+			<input type="text" id="in-author-url">
+			
+			<!-- fixme: i18n -->
+			<label for="in-author-avatar">Author Avatar URL</label>
+			<input type="text" id="in-author-avatar">
+	
+			<div data-flex="row" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-favicon" disabled>Save Changes</button>
+			</div>
+		</form>
 	</section>
 
 	<section>
 		<!-- fixme: i18n -->
-		<h3>Post URIs</h3>
-		<!-- todo: post_uri_format -->
-		<!-- todo: event_uri_format -->
+		<h2>Post URIs</h2>
+
+		<p>
+			<!--  -->
+		</p>
+
+		<form>
+			<label for="in-post-uri-format">Post URI Format</label>
+			<select id="in-post-uri-format">
+				<option value="slug">Slug</option>
+				<option value="snowflake">Snowflake</option>
+			</select>
+			
+			<label for="in-event-uri-format">Event URI Format</label>
+			<select id="in-event-uri-format">
+				<option value="slug">Slug</option>
+				<option value="snowflake">Snowflake</option>
+			</select>
+	
+			<div data-flex="row" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-uri-format" disabled>Save Changes</button>
+			</div>
+		</form>
 	</section>
 </main>

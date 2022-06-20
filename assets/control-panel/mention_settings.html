@@ -4,7 +4,7 @@
 
 	<section>
 		<!-- fixme: i18n -->
-		<h3>Enable Mentions</h3>
+		<h2>Enable Mentions</h2>
 		<!-- fixme: i18n -->
 		<p>
 			"Mentions" refers to when one page on the internet links to another and sends a notification to the referenced page.
@@ -13,10 +13,9 @@
 		</p>
 		<!-- fixme: i18n -->
 		<p>
-			The two most common methods of sending and receiving these mentions are called
-			<a href="https://www.hixie.ch/specs/pingback/pingback">Pingbacks</a> and
-			<a href="https://www.w3.org/TR/webmention">WebMentions</a>. These settings control whether or not your blog sends and
-			receives mentions of either type.
+			Two common methods of sending and receiving these notifications are <a href="https://www.hixie.ch/specs/pingback/pingback">Pingbacks</a>
+			and <a href="https://www.w3.org/TR/webmention">WebMentions</a>. These settings control whether or not your blog sends and receives
+			notifications of either type.
 		</p>
 		<form id="form-enable-mentions" aria-busy="true" aria-live="polite">
 			<div data-flex="row" class="inputs">
@@ -64,7 +63,31 @@
 
 	<section>
 		<!-- fixme: i18n -->
-		<h3>Auto-Moderation Defaults</h3>
+		<h2>HTTPS Only</h2>
+		<form>
+			<!-- fixme: i18n -->
+			<p id="desc-https-only">
+				To verify a mention that has been received, a request has to be made from your blog to the URL in
+				the notification. If you would prefer your blog not make requests to insecure websites, you can enable
+				HTTPS-only; This will result in all notifications from insecure sites being automatically blocked.
+			</p>
+					
+			<div class="checkbox">
+				<!-- fixme: i18n -->
+				<input type="checkbox" id="in-https-only" aria-describedby="desc-https-only">
+				<label for="in-https-only">HTTPS Only</label>
+			</div>
+
+			<div data-flex="row" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-https-only" disabled>Save Changes</button>
+			</div>
+		</form>
+	</section>
+
+	<section>
+		<!-- fixme: i18n -->
+		<h2>Auto-Moderation Defaults</h2>
 		<p>
 			These are the auto-moderation default behaviors for mentions you receive. These apply to any mentions
 			from any source that doesn't have a more specific moderation rule applied to it. 
@@ -77,11 +100,11 @@
 			<dd>Mentions from unknown sources are blocked.</dd>
 			
 			<dt>Review</dt>
-			<dd>Mentions from unknown sources will be sent to the Moderation Queue for review before displaying.</dd>
+			<dd>Mentions from unknown sources are sent to the Moderation Queue for review before displaying.</dd>
 		</dl>
 		<form id="form-mentions-defaults" aria-busy="true" aria-live="polite">
 			<div data-flex="row" class="inputs">
-				<div>
+				<div class="select-box">
 					<!-- fixme: i18n -->
 					<label for="in-pingback-default">Pingback Default</label>
 					<!-- fixme: i18n -->
@@ -92,9 +115,9 @@
 					</select>
 				</div>
 
-				<div>
+				<div class="select-box">
 					<!-- fixme: i18n -->
-					<label for="in-webmention-default">Pingback Default</label>
+					<label for="in-webmention-default">WebMention Default</label>
 					<!-- fixme: i18n -->
 					<select id="in-webmention-default">
 						<option value="allow">Allow</option>
@@ -109,5 +132,73 @@
 				<button type="submit" id="btn-mentions-defaults" disabled>Save Changes</button>
 			</div>
 		</form>
+	</section>
+
+	<section>
+		<!-- fixme: i18n -->
+		<h2>Auto-Moderation Rules</h2>
+		<!-- fixme: i18n -->
+		<p>
+			These rules enable you to override the above default behavior for mentions coming from specific sources.
+			This can be used to automatically allow trusted sources to post comments without needing approvals, or to
+			block comments from sources you don't trust.
+		</p>
+		<dl>
+			<!-- fixme: i18n -->
+			<dt>Allow</dt>
+			<dd>Mentions from the given source are automatically approved and displayed.</dd>
+			
+			<!-- fixme: i18n -->
+			<dt>Block</dt>
+			<dd>Mentions from the given source are blocked.</dd>
+			
+			<!-- fixme: i18n -->
+			<dt>Review</dt>
+			<dd>Mentions from the given source are sent to the Moderation Queue for review before displaying.</dd>
+		</dl>
+		<table id="table-mentions-rules" aria-busy="true" aria-live="polite">
+			<thead>
+				<tr>
+					<!-- fixme: i18n -->
+					<th>Source</th>
+					<th>Pingbacks</th>
+					<th>WebMentions</th>
+					<th>Notes</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input type="text" placeholder="https://example.com"></td>
+					<td>
+						<select>
+							<!-- fixme: i18n -->
+							<option value="">Default</option>
+							<option value="allow">Allow</option>
+							<option value="block">Block</option>
+							<option value="review">Review</option>
+						</select>
+					</td>
+					<td>
+						<select>
+							<!-- fixme: i18n -->
+							<option value="">Default</option>
+							<option value="allow">Allow</option>
+							<option value="block">Block</option>
+							<option value="review">Review</option>
+						</select>
+					</td>
+					<td><input type="text"></td>
+					<td>
+						<button title="Delete Rule" class="icon-only">{{{ icons.trash }}}</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div data-flex="row" class="buttons">
+			<!-- fixme: i18n label -->
+			<button type="button" id="btn-mentions-add-rule" disabled>Add Rule</button>
+			<button type="submit" id="btn-mentions-save-rules" disabled>Save Changes</button>
+		</div>
 	</section>
 </main>

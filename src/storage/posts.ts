@@ -9,7 +9,7 @@ import { ExternalEntry, ExternalEvent } from '../external-posts';
 import { Mention } from './mentions';
 
 export type PostType = 'post' | 'comment' | 'note' | 'event' | 'rsvp';
-// | 'share' | 'like/reaction' | 'media-album'
+// | 'poll' | 'poll-response' | 'share' | 'like/reaction' | 'media-album'
 
 export function post_types() : PostType[] {
 	return ['post', 'comment', 'note', 'event', 'rsvp'];

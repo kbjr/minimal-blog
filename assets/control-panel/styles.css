@@ -73,7 +73,8 @@ color-theme-toggle {
 }
 
 #root > header nav ul {
-	margin-inline-start: 2rem;
+	list-style: none;
+	margin-inline-start: 1rem;
 }
 
 
@@ -684,6 +685,71 @@ table {
 
 /* ===== Mentions Settings Page ===== */
 
+#page-settings main {
+	/*  */
+}
+
+	#page-settings section {
+		margin-block-end: 6rem;
+	}
+
+	#page-settings main p {
+		font-size: 1rem;
+	}
+
+	#page-settings input[type='text'] {
+		width: 30rem;
+	}
+
+	#page-settings form {
+		margin-block: 2rem;
+	}
+
+	#page-settings form .inputs {
+		/*  */
+	}
+
+	#page-settings form .buttons {
+		margin-block: 2rem;
+	}
+
+	#page-settings form .select-box {
+		margin-inline-end: 6rem;
+	}
+
+	#page-settings fieldset {
+		margin-block: 2rem;
+		margin-inline-end: 6rem;
+	}
+
+	#page-settings div.checkbox {
+		display: flex;
+		flex-direction: row;
+		padding-block: 0.5rem;
+		padding-inline: 0.25rem;
+	}
+	
+	#page-settings div.checkbox label,
+	#page-settings div.checkbox input {
+		margin: 0;
+	}
+	
+	#page-settings div.checkbox input {
+		margin-inline-end: 1rem;
+	}
+
+	#page-settings legend {
+		font-size: 1rem;
+		font-weight: 700;
+		font-family: var(--font-open-sans);
+		margin-block-end: 1rem;
+		color: var(--theme-text-heading);
+	}
+
+
+
+/* ===== Mentions Settings Page ===== */
+
 #page-mention-settings main {
 	/*  */
 }
@@ -697,21 +763,24 @@ table {
 	}
 
 	#page-mention-settings form {
-		margin-block: 3rem;
-		margin-inline: 2rem;
+		margin-block: 2rem;
 	}
 
 	#page-mention-settings form .inputs {
-		justify-content: space-evenly;
+		/*  */
 	}
 
 	#page-mention-settings form .buttons {
 		margin-block: 2rem;
-		justify-content: space-evenly;
+	}
+
+	#page-mention-settings form .select-box {
+		margin-inline-end: 6rem;
 	}
 
 	#page-mention-settings fieldset {
-		margin: 2rem;
+		margin-block: 2rem;
+		margin-inline-end: 6rem;
 	}
 
 	#page-mention-settings div.checkbox {
@@ -738,6 +807,30 @@ table {
 		color: var(--theme-text-heading);
 	}
 
+	#page-mention-settings #table-mentions-rules {
+		/*  */
+	}
+	
+	#page-mention-settings #table-mentions-rules input {
+		width: 15rem;
+		font-size: 0.9rem;
+	}
+
+	#page-mention-settings #table-mentions-rules select {
+		width: 10rem;
+	}
+	
+	#page-mention-settings #table-mentions-rules input,
+	#page-mention-settings #table-mentions-rules select,
+	#page-mention-settings #table-mentions-rules button {
+		margin: 0;
+	}
+
+	#page-mention-settings #table-mentions-rules button svg {
+		margin: 0;
+		--icon-size: 1.5rem;
+	}
+
 
 
 
@@ -748,6 +841,11 @@ table {
 	flex-direction: column;
 	flex-wrap: nowrap;
 }
+
+	#page-color-themes .helper-text {
+		margin-block-start: -2rem;
+		margin-block-end: 4rem;
+	}
 
 	#page-color-themes #main-panel {
 		flex: 0 0 auto;
