@@ -6,6 +6,7 @@ import fastify, { FastifyError, FastifyLoggerOptions, FastifyReply, FastifyReque
 import formbody from '@fastify/formbody';
 import { swagger_opts } from './swagger';
 import { show_not_found } from './endpoints/web/not-found';
+import { store } from './storage';
 
 const logging: FastifyLoggerOptions = conf.logging.level !== 'none' && {
 	level: conf.logging.level,
@@ -86,6 +87,13 @@ function error_handler(is_web: boolean) {
 		res.send(xml_rpc_fault(-32700, error.message));
 	}
 
+	function send_webmention_error(error: HttpError, req: FastifyRequest, res: FastifyReply) {
+		res.status(error.status_code);
+		res.send({
+			error: error.message
+		});
+	}
+
 	function send_http_error_web(error: HttpError, req: FastifyRequest, res: FastifyReply) {
 		if (error.status_code === 404) {
 			show_not_found(req, res);
@@ -141,13 +149,19 @@ function error_handler(is_web: boolean) {
 
 	return function(error: Err, req: FastifyRequest, res: FastifyReply) {
 		// If hitting the XML-RPC pingback endpoint, respond with an XML-RPC formatted error
-		if (req.url === '/pingback') {
+		if (req.url === '/pingback' && store.settings.get('receive_pingback')) {
 			send_pingback_error(error, req, res);
 		}
 
 		else if (error instanceof HttpError) {
 			if (is_web) {
-				send_http_error_web(error, req, res);
+				if (req.url === '/webmention' && store.settings.get('receive_webmention')) {
+					send_webmention_error(error, req, res);
+				}
+
+				else {
+					send_http_error_web(error, req, res);
+				}
 			}
 
 			else {

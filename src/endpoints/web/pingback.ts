@@ -3,6 +3,8 @@ import { web } from '../../http';
 import { create as create_xml } from 'xmlbuilder2';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { xml_rpc_fault } from '../../xml-rpc';
+import { store } from '../../storage';
+import { throw_404_not_found } from '../../http-error';
 
 type Req = FastifyRequest<{
 	Body: {
@@ -59,6 +61,10 @@ const opts: RouteShorthandOptions = {
 };
 
 web.post('/pingback', opts, async (req: Req, res) => {
+	if (! store.settings.get('receive_pingback')) {
+		throw_404_not_found('not found');
+	}
+
 	res.status(200);
 	res.type('text/xml; charset=utf-8');
 

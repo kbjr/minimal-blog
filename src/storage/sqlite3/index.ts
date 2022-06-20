@@ -5,6 +5,7 @@ import * as color_themes from './color-themes';
 import * as templates from './templates';
 import * as posts from './posts';
 import * as links from './links';
+import * as mentions from './mentions';
 import { Store } from '../store';
 import { bring_db_schema_up_to_date } from './migrate';
 import { create_backup } from './backup';
@@ -45,7 +46,7 @@ export const store_sqlite3 = obj_frozen<Store>({
 	move_post: posts.move_post,
 	list_all_tags: posts.list_all_tags,
 
-	// TODO: Interactions
+	get_all_mentions: mentions.get_all_mentions,
 
 	// create_attachment: null,
 	// read_attachment_streaming: null,

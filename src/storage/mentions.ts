@@ -1,9 +1,10 @@
 
 import { conf } from '../conf';
-import { PostType } from './posts';
+import { PostData, PostType } from './posts';
 import { ExternalEntry, ExternalEvent } from '../external-posts';
 import { obj, wrap_date } from '../util';
 import { unique_id } from '../snowflake';
+import { events, store } from './store';
 
 export type MentionType = 'webmention' | 'pingback';
 
@@ -14,32 +15,7 @@ let mentions_needing_moderation: MentionData[];
 let mentions_needing_verification: MentionData[];
 
 export async function load() {
-	// mentions = await store.get_all_mentions();
-	mentions = [
-		// fixme: remove test data...
-		{
-			post_type: 'post',
-			uri_name: 'running-rancher-k3s-on-raspberry-pi-4b-and-manjaro-linux',
-			mention_type: 'webmention',
-			needs_moderation: false,
-			received_time: (new Date).toISOString(),
-			snowflake: unique_id().toString(),
-			source_url: 'http://localhost:3000/comments/318117335091151969',
-			updated_time: (new Date).toISOString(),
-			verified: true,
-		},
-		{
-			post_type: 'event',
-			uri_name: 'blog-event-testing-event',
-			mention_type: 'webmention',
-			needs_moderation: false,
-			received_time: (new Date).toISOString(),
-			snowflake: unique_id().toString(),
-			source_url: 'http://localhost:3000/rsvps/319217064969516516',
-			updated_time: (new Date).toISOString(),
-			verified: true,
-		},
-	];
+	mentions = await store.get_all_mentions();
 	mentions_index = obj({
 		post: obj(),
 		comment: obj(),
@@ -100,7 +76,52 @@ export function get_mentions_needing_verification_count() {
 	return mentions_needing_verification.length;
 }
 
+export async function create_new_mention(post: PostData, data: EditableMentionData) {
+	const mention: MentionData = {
+		post_id: post.post_id,
+		post_type: post.post_type,
+		uri_name: post.uri_name,
+		source_url: data.source_url,
+		vouch_url: data.vouch_url,
+		snowflake: unique_id().toString(),
+		needs_moderation: data.needs_moderation,
+		mention_type: data.mention_type,
+		received_time: (new Date).toISOString(),
+		updated_time: (new Date).toISOString(),
+		verified: false,
+	};
+
+	// todo: actually create mention
+
+	events.emit('mentions.create', mention);
+}
+
+export async function update_mention(snowflake: string, data: Partial<EditableMentionData>) {
+	const mention = mentions_by_snowflake[snowflake];
+
+	// todo: actually update mention
+
+	events.emit('mentions.update', mention);
+}
+
+export async function delete_mention(snowflake: string) {
+	const mention = mentions_by_snowflake[snowflake];
+
+	// todo: actually delete mention
+
+	events.emit('mentions.delete', mention);
+}
+
+export interface EditableMentionData {
+	source_url: string;
+	vouch_url?: string;
+	needs_moderation: boolean;
+	mention_type: MentionType;
+	verified: boolean;
+}
+
 export interface MentionData {
+	post_id: number;
 	post_type: PostType;
 	uri_name: string;
 	source_url: string;

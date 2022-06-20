@@ -149,9 +149,9 @@ export interface Store {
 	/**  */
 	list_all_tags() : Promise<posts.TagData[]>;
 
-	// ===== Interactions =====
+	// ===== Mentions =====
 
-	// TODO: Interactions
+	get_all_mentions() : Promise<mentions.MentionData[]>;
 
 	// ===== Attachments =====
 

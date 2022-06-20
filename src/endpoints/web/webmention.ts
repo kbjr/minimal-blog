@@ -1,6 +1,12 @@
 
+import { URL } from 'url';
 import { web } from '../../http';
+import { conf } from '../../conf';
+import { store } from '../../storage';
+import { str } from '../../json-schema';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
+import { throw_403_forbidden, throw_404_not_found } from '../../http-error';
+import { parse_local_url } from '../../external-posts/local';
 
 type Req = FastifyRequest<{
 	Body: {
@@ -23,18 +29,9 @@ const opts: RouteShorthandOptions = {
 		body: {
 			type: 'object',
 			properties: {
-				source: {
-					type: 'string',
-					maxLength: 1000
-				},
-				target: {
-					type: 'string',
-					maxLength: 1000
-				},
-				vouch: {
-					type: 'string',
-					maxLength: 1000
-				},
+				source: str('uri'),
+				target: str('uri'),
+				vouch: str('uri'),
 			},
 			required: ['source', 'target']
 		}
@@ -42,9 +39,52 @@ const opts: RouteShorthandOptions = {
 };
 
 web.post('/webmention', opts, async (req: Req, res) => {
+	if (! store.settings.get('receive_webmention')) {
+		throw_404_not_found('not found');
+	}
+
 	// SEE: https://www.w3.org/TR/webmention/#receiving-webmentions
 	// TODO: Validate mention and register
 	// TODO: Re-render post with new interaction
+
+	if (! req.body.target.startsWith(conf.http.web_url)) {
+		throw_403_forbidden('target URL not valid');
+	}
+	
+	const source = new URL(req.body.source);
+	const target = parse_local_url(req.body.target);
+	const vouch = req.body.vouch ? new URL(req.body.vouch) : null;
+
+	if (store.settings.get('https_only')) {
+		if (source.protocol === 'http') {
+			throw_403_forbidden('insecure source URL not allowed');
+		}
+
+		if (vouch && vouch.protocol === 'http') {
+			throw_403_forbidden('insecure vouch URL not allowed');
+		}
+	}
+
+	if (target.type !== 'post') {
+		throw_404_not_found('target URL not found or not a valid target');
+	}
+
+	const post = store.posts.get_post(target.post_type, target.uri_name);
+
+	if (! post || post.is_draft) {
+		throw_404_not_found('target URL not found or not a valid target');
+	}
+
+	// todo: check moderation rules to determine what to do based on the source
+
+	await store.mentions.create_new_mention(post, {
+		mention_type: 'webmention',
+		verified: false,
+		// todo: depends on the source
+		needs_moderation: false,
+		source_url: req.body.source,
+		vouch_url: req.body.vouch,
+	});
 
 	res.status(202);
 	return {
