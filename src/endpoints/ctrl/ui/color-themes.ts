@@ -4,6 +4,7 @@ import { conf } from '../../../conf';
 import { assets, store } from '../../../storage';
 import { render } from './render';
 import { RouteShorthandOptions } from 'fastify';
+import { current_lang } from './i18n';
 
 const opts: RouteShorthandOptions = {
 	schema: {
@@ -24,6 +25,7 @@ ctrl.get('/color_themes', opts, async (req, res) => {
 	const context = {
 		page: {
 			url: `${conf.http.ctrl_url}/color_themes`,
+			title: current_lang.pages.color_themes.title,
 			name: 'color-themes',
 			require_auth: true
 		}

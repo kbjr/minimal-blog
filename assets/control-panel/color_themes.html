@@ -1,29 +1,35 @@
 
 <main>
 	<h1>{{ labels.pages.color_themes.title }}</h1>
-	<!-- fixme: i18n -->
-	<p class="helper-text">
-		These settings control the color themes - both light and dark - for the main website. (They do
-		not control the color themes used in this control panel.)
-	</p>
-
 	<div id="main-panel">
 		<!-- Select Active Themes -->
 		<section id="sec-themes-select">
-			<h3>{{ labels.pages.color_themes.select_subtitle }}</h3>
+			<h2>{{ labels.pages.color_themes.select_subtitle }}</h2>
+
+			<!-- fixme: i18n -->
+			<p>
+				Select the two active color themes that will be available for your visitors to choose between. (Note:
+				these themes do not apply in the control panel, which always uses the default themes.)
+			</p>
 		
 			<form id="form-themes-select" aria-busy="true" aria-live="polite">
-				<label for="in-themes-select-light">{{ labels.pages.color_themes.select_label_light_mode }}</label>
-				<select id="in-themes-select-light" disabled>
-					<option value="">{{ labels.loading }}</option>
-				</select>
+				<div class="inputs" data-flex="row wrap">
+					<div class="input-wrapper">
+						<label for="in-themes-select-light">{{ labels.pages.color_themes.select_label_light_mode }}</label>
+						<select id="in-themes-select-light" disabled>
+							<option value="">{{ labels.loading }}</option>
+						</select>
+					</div>
+
+					<div class="input-wrapper">
+						<label for="in-themes-select-dark">{{ labels.pages.color_themes.select_label_dark_mode }}</label>
+						<select id="in-themes-select-dark" disabled>
+							<option value="">{{ labels.loading }}</option>
+						</select>
+					</div>
+				</div>
 		
-				<label for="in-themes-select-dark">{{ labels.pages.color_themes.select_label_dark_mode }}</label>
-				<select id="in-themes-select-dark" disabled>
-					<option value="">{{ labels.loading }}</option>
-				</select>
-		
-				<div data-flex="row align-center">
+				<div class="buttons" data-flex="row align-center">
 					<button type="submit" id="btn-themes-select" disabled>{{ labels.pages.color_themes.select_update }}</button>
 				</div>
 			</form>
@@ -31,70 +37,113 @@
 	
 		<!-- Create New Theme -->
 		<section id="sec-themes-create">
-			<h3>{{ labels.pages.color_themes.create_subtitle }}</h3>
+			<h2>{{ labels.pages.color_themes.create_subtitle }}</h2>
+
+			<!-- fixme: i18n -->
+			<p>
+				Create a new color theme. The "Start From" theme will be used as a starting point to copy from when creating
+				the new theme.
+			</p>
 		
 			<form id="form-themes-create" aria-busy="true" aria-live="polite">
-				<label for="in-themes-create-start-from">{{ labels.pages.color_themes.create_label_start_from }}</label>
-				<select id="in-themes-create-start-from" disabled>
-					<option value="">{{ labels.loading }}</option>
-				</select>
+				<div class="inputs" data-flex="row wrap">
+					<div class="input-wrapper">
+						<label for="in-themes-create-name">{{ labels.pages.color_themes.create_label_new_name }}</label>
+						<input type="text" id="in-themes-create-name" placeholder="e.g. &quot;My New Theme (Light)&quot;" required>
+					</div>
+					
+					<div class="input-wrapper">
+						<label for="in-themes-create-start-from">{{ labels.pages.color_themes.create_label_start_from }}</label>
+						<select id="in-themes-create-start-from" disabled>
+							<option value="">{{ labels.loading }}</option>
+						</select>
+					</div>
+				</div>
 		
-				<label for="in-themes-create-name">{{ labels.pages.color_themes.create_label_new_name }}</label>
-				<input type="text" id="in-themes-create-name" required>
-		
-				<div data-flex="row align-center">
+				<div class="buttons" data-flex="row align-center">
 					<button type="submit" id="btn-themes-create" disabled>{{ labels.pages.color_themes.create_theme }}</button>
 				</div>
 			</form>
 		</section>
 	
-		<!-- Import Theme From File -->
-		<section id="sec-themes-import">
-			<!-- fixme: i18n label -->
-			<h3>Import Color Theme</h3>
-		
-			<form id="form-themes-import" aria-busy="true" aria-live="polite">
+		<div data-flex="row wrap">
+			<!-- Export Theme To File -->
+			<section id="sec-themes-export">
 				<!-- fixme: i18n label -->
-				<label for="in-themes-import">Select Theme File to Import</label>
-				<input type="file" accept="application/json" id="in-themes-import" required>
-		
-				<div data-flex="row align-center">
-					<!-- fixme: i18n label -->
-					<button type="submit" id="btn-themes-import" disabled>Import</button>
-				</div>
-			</form>
-		</section>
-	
-		<!-- Export Theme To File -->
-		<section id="sec-themes-export">
-			<!-- fixme: i18n label -->
-			<h3>Export Color Theme</h3>
-		
-			<form id="form-themes-export" aria-busy="true" aria-live="polite">
+				<h2>Export Color Theme</h2>
+				
 				<!-- fixme: i18n label -->
-				<label for="in-themes-select-export">Select Theme to Export</label>
-				<select id="in-themes-select-export" disabled>
-					<option value="">{{ labels.loading }}</option>
-				</select>
-		
-				<div data-flex="row align-center">
-					<!-- fixme: i18n label -->
-					<button type="submit" id="btn-themes-export" disabled>Export</button>
-				</div>
-			</form>
-		</section>
+				<p>
+					Export a color theme to a downloadable file that you can backup, share, and copy to another
+					server instance.
+				</p>
+			
+				<form id="form-themes-export" aria-busy="true" aria-live="polite">
+					<div class="inputs">
+						<div class="input-wrapper">
+							<!-- fixme: i18n label -->
+							<label for="in-themes-select-export">Select Theme to Export</label>
+							<select id="in-themes-select-export" disabled>
+								<option value="">{{ labels.loading }}</option>
+							</select>
+						</div>
+					</div>
+			
+					<div class="buttons" data-flex="row align-center">
+						<!-- fixme: i18n label -->
+						<button type="submit" id="btn-themes-export" disabled>Export</button>
+					</div>
+				</form>
+			</section>
+
+			<!-- Import Theme From File -->
+			<section id="sec-themes-import">
+				<!-- fixme: i18n label -->
+				<h2>Import Color Theme</h2>
+				
+				<!-- fixme: i18n label -->
+				<p>
+					Upload an exported color theme file from your computer to import the color theme.
+				</p>
+			
+				<form id="form-themes-import" aria-busy="true" aria-live="polite">
+					<div class="inputs">
+						<div class="input-wrapper">
+							<!-- fixme: i18n label -->
+							<label for="in-themes-import">Select Theme File to Import</label>
+							<input type="file" accept="application/json" id="in-themes-import" required>
+						</div>
+					</div>
+			
+					<div class="buttons" data-flex="row align-center">
+						<!-- fixme: i18n label -->
+						<button type="submit" id="btn-themes-import" disabled>Import</button>
+					</div>
+				</form>
+			</section>
+		</div>
 		
 		<!-- Edit Colors in a Theme -->
 		<section id="sec-themes-edit">
-			<h3>{{ labels.pages.color_themes.edit_subtitle }}</h3>
+			<h2>{{ labels.pages.color_themes.edit_subtitle }}</h2>
+
+			<!-- fixme: i18n -->
+			<p>
+				Select a color theme from the list below to delete it or change the colors. (Note: the default
+				color themes cannot be edited or deleted.)
+			</p>
 		
 			<form id="form-themes-edit" aria-busy="true" aria-live="polite">
-				<label for="in-themes-edit">{{ labels.pages.color_themes.edit_label_theme }}</label>
-				<select id="in-themes-edit" disabled>
-					<option value="">{{ labels.loading }}</option>
-				</select>
+				<div class="inputs">
+					<div class="input-wrapper">
+						<label for="in-themes-edit">{{ labels.pages.color_themes.edit_label_theme }}</label>
+						<select id="in-themes-edit" disabled>
+							<option value="">{{ labels.loading }}</option>
+						</select>
+					</div>
+				</div>
 		
-				<div data-flex="row align-center">
+				<div class="buttons" data-flex="row align-center">
 					<button type="button" id="btn-themes-delete" disabled data-style="secondary">{{ labels.pages.color_themes.delete_theme }}</button>
 					<button type="submit" id="btn-themes-edit" disabled>
 						<span>{{ labels.pages.color_themes.edit_colors }}</span>
@@ -108,7 +157,7 @@
 	<!-- Color Pickers -->
 	<div id="edit-colors-panel">
 		<section id="sec-edit-colors" disabled aria-disabled="true">
-			<h3>Edit Colors</h3>
+			<h2>Edit Colors</h2>
 
 			<form id="form-themes-edit-colors" aria-busy="true" aria-live="polite">
 				<section>
@@ -188,7 +237,7 @@
 					</ul>
 				</section>
 
-				<div data-flex="row align-center">
+				<div class="buttons" data-flex="row align-center">
 					<button type="reset" id="btn-theme-edit-cancel" data-style="secondary">
 						{{{ icons.arrow-up }}}
 						<span>Back</span>
@@ -356,7 +405,7 @@ form_edit_colors.addEventListener('reset', (event) => {
 	disable_color_editor();
 	enable_form(form_edit);
 
-	heading.scrollIntoView({
+	form_edit.scrollIntoView({
 		behavior: 'smooth',
 		block: 'start',
 	});

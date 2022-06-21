@@ -144,7 +144,7 @@ export const en_us: LanguageLabels = {
 		},
 		color_themes: {
 			title: 'Color Themes',
-			select_subtitle: 'Select Color Themes',
+			select_subtitle: 'Active Color Themes',
 			select_label_light_mode: 'Light-Mode Theme',
 			select_label_dark_mode: 'Dark-Mode Theme',
 			select_update: 'Update',
