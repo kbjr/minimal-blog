@@ -24,6 +24,6 @@ const tags
 		`${major}.${minor}.${patch}`,
 	];
 
-writeFileSync(tags_file, 'utf8', tags.join(','));
+writeFileSync(tags_file, tags.join(','), 'utf8');
 
 console.log(`Setup to publish container image with the following tags:\n- ${tags.join('\n- ')}`);
