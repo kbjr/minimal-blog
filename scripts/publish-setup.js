@@ -7,15 +7,16 @@ const tags_file = resolve(__dirname, '../.tags');
 
 const [ base_version, pre_release ] = version.split('-');
 const [ major, minor, patch ] = base_version.split('.');
+const build = process.env.DRONE_BUILD_NUMBER;
 
 const tags
 	= pre_release ? [
 		`${major}-${pre_release}`,
-		`${major}-${pre_release}.${DRONE_BUILD_NUMBER}`,
+		`${major}-${pre_release}.${build}`,
 		`${major}.${minor}-${pre_release}`,
-		`${major}.${minor}-${pre_release}.${DRONE_BUILD_NUMBER}`,
+		`${major}.${minor}-${pre_release}.${build}`,
 		`${major}.${minor}.${patch}-${pre_release}`,
-		`${major}.${minor}.${patch}-${pre_release}.${DRONE_BUILD_NUMBER}`,
+		`${major}.${minor}.${patch}-${pre_release}.${build}`,
 	]
 	: [
 		`${major}`,
