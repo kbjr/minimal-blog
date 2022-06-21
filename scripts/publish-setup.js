@@ -24,3 +24,5 @@ const tags
 	];
 
 writeFileSync(tags_file, 'utf8', tags.join(','));
+
+console.log(`Setup to publish container image with the following tags:\n- ${tags.join('\n- ')}`);
