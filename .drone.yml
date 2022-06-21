@@ -11,7 +11,7 @@ steps:
 - name: build
   image: plugins/docker
   settings:
-    registry: https://docker.jbrumond.me
+    registry: docker.jbrumond.me
     username: drone
     password:
       from_secret: docker-jbrumond-me-password
@@ -28,14 +28,16 @@ trigger:
   target: [ publish ]
 
 steps:
+- name: setup
+  image: node:16-alpine
+  commands:
+  - node ./scripts/publish-setup.js
+
 - name: build-and-publish
   image: plugins/docker
   settings:
-    registry: https://docker.jbrumond.me
+    registry: docker.jbrumond.me
     username: drone
     password:
       from_secret: docker-jbrumond-me-password
     repo: docker.jbrumond.me/minimal-blog
-    tags:
-    - latest
-    - 0.1-alpha

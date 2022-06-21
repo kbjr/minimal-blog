@@ -45,16 +45,13 @@ ENV COMPRESSION_ENCODINGS="br,deflate,gzip"
 # The "sqlite3" implementation is currently the only supported storage type.
 ENV DATA_STORAGE_TYPE="sqlite3"
 # The directory where persistent data storage will be written. If you want
-# you data to persist between restarts (likely), you'll want this to point
+# your data to persist between restarts (likely), you'll want this to point
 # to a persistent volume of some kind.
 ENV DATA_PATH=/data
 
 
 # === Enable / Disable Features ===
-# Controls whether or not to enable content search. If you do not intend
-# to use the search functionality, disabling it can be beneficial to runtime
-# memory consumption and container startup time by removing the need to
-# build and maintain the full-text search index.
+# Controls whether or not to enable content search.
 ENV DATA_ENABLE_SEARCH="1"
 # Controls whether the basic healthcheck / status endpoint is accessible on
 # the public web server at "{HTTP_WEB_URL}/.status".
