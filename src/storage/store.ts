@@ -2,7 +2,6 @@
 import { conf } from '../conf';
 import { EventEmitter } from 'events';
 import { store_sqlite3 } from './sqlite3';
-import * as users from './users';
 import * as settings from './settings';
 import * as colors from './colors';
 import * as templates from './templates';
@@ -16,7 +15,6 @@ export const events = new EventEmitter();
 events.setMaxListeners(15);
 
 export * as feed from './feed';
-export * as users from './users';
 export * as settings from './settings';
 export * as colors from './colors';
 export * as templates from './templates';
@@ -43,7 +41,6 @@ export async function setup(no_update = false) {
 	}
 
 	await store.init(no_update);
-	await users.load();
 	await settings.load();
 	await colors.load();
 	await templates.load();
@@ -67,23 +64,6 @@ export interface Store {
 
 	/**  */
 	shutdown() : Promise<void>;
-
-	// ===== Users =====
-
-	/**  */
-	get_all_users() : Promise<users.FullUserData[]>;
-
-	/**  */
-	get_user(name: string) : Promise<users.FullUserData>;
-
-	/**  */
-	create_user(name: string, password_hash: string, is_admin?: boolean) : Promise<void>;
-
-	/**  */
-	delete_user(name: string) : Promise<void>;
-
-	/**  */
-	update_password(name: string, password_hash: string) : Promise<void>;
 
 	// ===== Settings =====
 

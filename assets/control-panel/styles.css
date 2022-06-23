@@ -4,6 +4,8 @@
 	--font-open-sans: 'Open Sans', sans-serif;
 	--font-monospace: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 	--font-cursive: cursive;
+	/* fixme: this file needs to be a rendered template to enable i18n here */
+	--text-note-prefix: 'Note: ';
 }
 
 * {
@@ -146,6 +148,10 @@ code, pre {
 	font-size: 1.35rem;
 }
 
+p code {
+	font-size: inherit;
+}
+
 pre {
 	margin: 3rem 2rem;
 	padding: 1rem 1.5rem;
@@ -178,6 +184,20 @@ p {
 	margin: 2rem 0;
 	font-size: 1.2rem;
 	line-height: 1.75;
+}
+
+p[role='note'] {
+	font-size: 1rem;
+	color: var(--theme-text-light);
+	margin-inline-start: 0.25rem;
+	padding-inline-start: 0.75rem;
+	border-inline-start: 0.25rem var(--theme-line) solid;
+}
+
+p[role='note']:before {
+	content: var(--text-note-prefix);
+	color: var(--theme-text-heading);
+	font-weight: 700;
 }
 
 li {
@@ -234,6 +254,10 @@ a:focus {
 
 a:visited {
 	color: var(--theme-text-link-visited);
+}
+
+a svg.external-link.icon {
+	--icon-size: 1rem;
 }
 
 h1 > a, h2 > a,
@@ -310,12 +334,14 @@ textarea {
 		pointer-events: none;
 	}
 
-	/* :is():user-invalid */
 	:is(
 		input[type='text'],
 		input[type='password'],
 		textarea
-	):not(:placeholder-shown):not(:focus) {
+	):is(
+		:user-invalid,
+		:-moz-ui-invalid
+	) {
 		border-color: var(--theme-border-input-invalid);
 	}
 
@@ -715,7 +741,8 @@ table {
 		margin-block: 2rem;
 	}
 
-	#page-settings form .select-box {
+	#page-settings form .select-box,
+	#page-settings form [data-flex='row'] .input-wrapper {
 		margin-inline-end: 6rem;
 	}
 

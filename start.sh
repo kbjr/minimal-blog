@@ -10,6 +10,9 @@
 export AUTH_HMAC_SECRET="dXxTp2ioFXFXPttaX4aB5xZIIs7nwa0/iIOq7P1JmZS4gRyS2dHt+/E2UO2zvpLOY2VwpVDaZMGT9H+EX7PVEBPXp3FSSeYOu5JBpHVBjTGshYxk49ZPJexI0pKJiNfmh54hM4XZt1Y7IiBlBpInxSlptPxPoMajHjRN7El4FeQ="
 # export AUTH_SIGNING_KEY="/path/to/key/file"
 
+# First-time-setup password. Change this before first-time deploying; Can be removed after setup
+export AUTH_SETUP_CODE="MUK7kBU1NUgliz8FKzlmvg=="
+
 export HTTP_WEB_PORT="3000"
 export HTTP_CTRL_PORT="3001"
 export HTTP_WEB_URL="http://localhost:$HTTP_WEB_PORT"

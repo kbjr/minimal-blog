@@ -49,25 +49,22 @@ export function import_endpoints() {
 	require('./ctrl/ui/assets');
 	require('./ctrl/ui/login');
 	require('./ctrl/ui/dashboard');
-	require('./ctrl/ui/color-themes');
 	require('./ctrl/ui/posts');
 	require('./ctrl/ui/edit-post');
-	require('./ctrl/ui/interactions');
-	require('./ctrl/ui/mention-settings');
 	require('./ctrl/ui/settings');
+	require('./ctrl/ui/color-themes');
+	require('./ctrl/ui/mention-settings');
+	require('./ctrl/ui/moderation-queue');
 	require('./ctrl/ui/templates');
-	require('./ctrl/ui/users');
 	
-	// Users / authentication
+	// Authentication
 	require('./ctrl/token/get');
-	require('./ctrl/users/list');
-	require('./ctrl/users/create');
-	require('./ctrl/users/update-password');
-	require('./ctrl/users/delete');
 	
 	// Settings
 	require('./ctrl/settings/get');
 	require('./ctrl/settings/update');
+	require('./ctrl/settings/setup');
+	require('./ctrl/settings/update-password');
 	
 	// Links
 	require('./ctrl/links/get');

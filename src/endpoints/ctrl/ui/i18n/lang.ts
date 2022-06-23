@@ -162,7 +162,7 @@ export interface LanguageLabels {
 		templates: {
 			title: string;
 		};
-		interactions: {
+		moderation_queue: {
 			title: string;
 		};
 		users: {

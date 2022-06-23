@@ -37,7 +37,8 @@ select
 	mention.needs_moderation as needs_moderation,
 	mention.mention_type     as mention_type,
 	mention.received_time    as received_time,
-	mention.verified         as verified
+	mention.verified         as verified,
+	mention.blocked          as blocked
 from mentions mention
 left outer join posts post
 	on post.post_id = mention.post_id

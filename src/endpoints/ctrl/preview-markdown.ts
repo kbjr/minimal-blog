@@ -23,7 +23,7 @@ const opts: RouteShorthandOptions = {
 };
 
 ctrl.post('/api/preview-markdown', opts, async (req: Req, res) => {
-	require_auth(req, false);
+	require_auth(req);
 
 	const html = await render_markdown_to_html(req.body);
 

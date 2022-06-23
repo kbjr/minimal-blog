@@ -56,7 +56,7 @@ export async function get_live_post_mentions(post_type: PostType, uri_name: stri
 	}
 
 	return mentions.filter((mention) => {
-		return ! mention.needs_moderation && mention.verified;
+		return ! mention.needs_moderation && ! mention.blocked && mention.verified;
 	});
 }
 
@@ -87,8 +87,8 @@ export async function create_new_mention(post: PostData, data: EditableMentionDa
 		needs_moderation: data.needs_moderation,
 		mention_type: data.mention_type,
 		received_time: (new Date).toISOString(),
-		updated_time: (new Date).toISOString(),
 		verified: false,
+		blocked: false,
 	};
 
 	// todo: actually create mention
@@ -118,6 +118,7 @@ export interface EditableMentionData {
 	needs_moderation: boolean;
 	mention_type: MentionType;
 	verified: boolean;
+	blocked: boolean;
 }
 
 export interface MentionData {
@@ -130,8 +131,8 @@ export interface MentionData {
 	needs_moderation: boolean;
 	mention_type: MentionType;
 	received_time: string;
-	updated_time: string;
 	verified: boolean;
+	blocked: boolean;
 }
 
 export class Mention {
@@ -182,10 +183,6 @@ export class Mention {
 
 	public get received() {
 		return wrap_date(new Date(this.data.received_time));
-	}
-
-	public get updated() {
-		return wrap_date(new Date(this.data.updated_time));
 	}
 
 	public get is_verified() {

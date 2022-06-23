@@ -4,74 +4,52 @@ import { store } from '../../../storage';
 import { create_jwt } from '../../../auth';
 import * as http_error from '../../../http-error';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
+import { arr, int, JSONSchema6, obj, one_of, str } from '../../../json-schema';
+
+const res_schema: JSONSchema6 = obj({
+	token: str(),
+	payload: obj({
+		iss: str(),
+		sub: str(),
+		aud: one_of([
+			str(),
+			arr(str()),
+		]),
+		exp: int(),
+		iat: int()
+	})
+});
 
 const opts: RouteShorthandOptions = {
 	schema: {
 		tags: ['auth'],
-		description: 'The primary "login" endpoint; Exchanges user credentials for a JWT access token',
+		description: 'The primary "login" endpoint; Exchanges login credentials for a JWT access token',
 		response: {
-			200: {
-				type: 'object',
-				properties: {
-					token: { type: 'string' },
-					payload: {
-						type: 'object',
-						properties: {
-							iss: { type: 'string' },
-							sub: { type: 'string' },
-							aud: { oneOf: [
-								{ type: 'string' },
-								{ type: 'array', items: { type: 'string' } },
-							] },
-							exp: { type: 'number' },
-							iat: { type: 'number' },
-							roles: {
-								type: 'object',
-								properties: {
-									admin: { type: 'boolean' }
-								}
-							}
-						}
-					}
-				}
-			}
+			200: res_schema
 		},
 		body: {
 			type: 'object',
 			properties: {
-				username: { type: 'string' },
-				password: { type: 'string' }
+				password: str()
 			},
-			required: ['username', 'password']
+			required: ['password']
 		}
 	}
 };
 
 type Req = FastifyRequest<{
 	Body: {
-		username: string;
 		password: string;
 	};
 }>;
 
 ctrl.post('/api/token', opts, async (req: Req, res) => {
-	if (! req.body.username || typeof req.body.username !== 'string') {
-		http_error.throw_422_unprocessable_entity('"username" field must be a string');
-	}
-
 	if (! req.body.password || typeof req.body.password !== 'string') {
 		http_error.throw_422_unprocessable_entity('"password" field must be a string');
 	}
 
-	await store.users.verify_credentials(req.body.username, req.body.password);
-
-	const user = store.users.get_user(req.body.username);
-	const payload = {
-		sub: req.body.username,
-		roles: {
-			admin: Boolean(user.is_admin)
-		}
-	};
+	await store.settings.check_password(req.body.password);
+	const payload = { sub: 'admin' };
 
 	const token = create_jwt(payload);
 	return { token, payload };

@@ -76,10 +76,14 @@ web.post('/webmention', opts, async (req: Req, res) => {
 	}
 
 	// todo: check moderation rules to determine what to do based on the source
+	// todo: check if we already know about this mention
+	//   - if we do, and its blocked, just send the 202 but don't do anything else
+	//   - if we do, and its not blocked... (re-verify?)
 
 	await store.mentions.create_new_mention(post, {
 		mention_type: 'webmention',
 		verified: false,
+		blocked: false,
 		// todo: depends on the source
 		needs_moderation: false,
 		source_url: req.body.source,

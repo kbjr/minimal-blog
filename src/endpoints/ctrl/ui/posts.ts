@@ -5,6 +5,7 @@ import { render } from './render';
 import { assets, store } from '../../../storage';
 import { current_lang } from './i18n';
 import { RouteShorthandOptions } from 'fastify';
+import { redirect_for_first_time_setup } from './setup';
 
 const opts: RouteShorthandOptions = {
 	schema: {
@@ -13,12 +14,7 @@ const opts: RouteShorthandOptions = {
 };
 
 ctrl.get('/posts', opts, async (req, res) => {
-	if (store.settings.get('show_setup')) {
-		// If in setup mode, redirect to the main URL for first-time setup
-		res.status(303);
-		res.header('location', conf.http.ctrl_url);
-		return { redirect_to: conf.http.ctrl_url };
-	}
+	if (redirect_for_first_time_setup(req, res)) return;
 
 	res.type('text/html; charset=utf-8');
 

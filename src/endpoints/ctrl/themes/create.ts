@@ -83,7 +83,7 @@ const opts: RouteShorthandOptions = {
 };
 
 ctrl.post('/api/themes', opts, async (req: Req, res) => {
-	require_auth(req, true);
+	require_auth(req);
 
 	const { base_name, theme_name } = req.body;
 

@@ -67,7 +67,7 @@ export const en_us: LanguageLabels = {
 					helper_text: 'Comments let you post a response to some other content online.',
 				},
 				note: {
-					helper_text: 'Note are for micro-blogging. They are typically short, unstructured posts or status updates.',
+					helper_text: 'Notes are for micro-blogging. They are typically short, unstructured posts or status updates.',
 				},
 				event: {
 					post_title: 'Event Title',
@@ -160,8 +160,8 @@ export const en_us: LanguageLabels = {
 		templates: {
 			title: 'Templates',
 		},
-		interactions: {
-			title: 'Interactions'
+		moderation_queue: {
+			title: 'Moderation Queue'
 		},
 		users: {
 			title: 'Users',

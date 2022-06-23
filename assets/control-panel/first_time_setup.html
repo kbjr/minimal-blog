@@ -1,21 +1,30 @@
 
-<!-- todo: prompt for language selection -->
-
 <main>
 	<form id="form-create-user">
+		<!-- fixme: i18n -->
 		<p>Welcome to your new control panel!</p>
-		<p>To get started, you'll need to create a new user:</p>
+		<p>To get started, you'll need to fill out the following:</p>
+
+		<!-- fixme: i18n -->
+		<label for="in-lang-code">Control Panel Language</label>
+		<select id="in-lang-code" required>
+			<option value="en-us">English (US)</option>
+		</select>
 	
-		<label for="in-username">New Admin Username</label>
-		<input type="text" id="in-username" required autofocus>
-	
-		<label for="in-password">New Admin Password</label>
+		<!-- fixme: i18n -->
+		<label for="in-setup-code">Setup Code</label>
+		<input type="password" id="in-setup-code" required autofocus>
+
+		<!-- fixme: i18n -->
+		<label for="in-password">New Password</label>
 		<input type="password" id="in-password" required autocomplete="new-password" minlength="8">
 	
-		<label for="in-password-confirm">Confirm New Admin Password</label>
+		<!-- fixme: i18n -->
+		<label for="in-password-confirm">Confirm New Password</label>
 		<input type="password" id="in-password-confirm" required>
 	
-		<button type="submit" id="btn-create-user">Create User</button>
+		<!-- fixme: i18n -->
+		<button type="submit" id="btn-setup">Finish Setup</button>
 	</form>
 </main>
 
@@ -23,10 +32,11 @@
 (() => {
 
 const form                   = document.querySelector('#form-create-user');
-const input_username         = form.querySelector('#in-username');
+const select_lang_code       = form.querySelector('#in-lang-code');
+const input_setup_code       = form.querySelector('#in-setup-code');
 const input_password         = form.querySelector('#in-password');
 const input_password_confirm = form.querySelector('#in-password-confirm');
-const button_submit          = form.querySelector('#btn-create-user');
+const button_submit          = form.querySelector('#btn-setup');
 
 input_password.addEventListener('change', () => {
 	input_password_confirm.setCustomValidity('');
@@ -40,7 +50,8 @@ form.addEventListener('submit', (event) => {
 	event.preventDefault();
 	event.stopImmediatePropagation();
 
-	const username = input_username.value;
+	const lang_code = select_lang_code.value;
+	const setup_code = input_setup_code.value;
 	const password = input_password.value;
 	const password_confirm = input_password_confirm.value;
 
@@ -55,39 +66,40 @@ form.addEventListener('submit', (event) => {
 	}
 
 	disable_form();
-	create_user(username, password);
+	setup(lang_code, setup_code, password);
 
 	return false;
 });
 
 function disable_form() {
-	input_username.disabled = true;
+	select_lang_code.disabled = true;
+	input_setup_code.disabled = true;
 	input_password.disabled = true;
 	input_password_confirm.disabled = true;
 	button_submit.disabled = true;
 }
 
 function enable_form() {
-	input_username.disabled = false;
+	select_lang_code.disabled = false;
+	input_setup_code.disabled = false;
 	input_password.disabled = false;
 	input_password_confirm.disabled = false;
 	button_submit.disabled = false;
 }
 	
-async function create_user(username, password) {
+async function setup(lang_code, setup_code, password) {
 	const headers = app.http_headers(true, {
 		'content-type': 'application/json'
 	});
 
 	const body = JSON.stringify({
-		username, password,
-		first_time_setup: true
+		lang_code, setup_code, password
 	});
 
-	const res = await app.http('POST', '/api/users', headers, body);
+	const res = await app.http('POST', '/api/setup', headers, body);
 
 	switch (res.status) {
-		case 201: {
+		case 200: {
 			// TODO: Transition more smoothly than this
 			location.reload();
 			break;

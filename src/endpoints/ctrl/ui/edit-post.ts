@@ -6,6 +6,7 @@ import { assets, store } from '../../../storage';
 import { current_lang } from './i18n';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { RouteShorthandOptions } from 'fastify';
+import { redirect_for_first_time_setup } from './setup';
 
 const opts: RouteShorthandOptions = {
 	schema: {
@@ -25,11 +26,15 @@ const post_types: store.posts.PostType[] = ['post', 'comment', 'note', 'event', 
 
 for (const post_type of post_types) {
 	ctrl.get(`/create/${post_type}`, opts, (req: Req, res: FastifyReply) => {
+		if (redirect_for_first_time_setup(req, res)) return;
+
 		req.params.post_type = post_type;
 		return edit_post_endpoint(req, res);
 	});
 	
 	ctrl.get(`/edit/${post_type}/:uri_name`, opts, (req: Req, res: FastifyReply) => {
+		if (redirect_for_first_time_setup(req, res)) return;
+
 		req.params.post_type = post_type;
 		return edit_post_endpoint(req, res);
 	});

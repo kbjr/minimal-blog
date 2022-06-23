@@ -1,5 +1,4 @@
 
-import * as users from './users';
 import * as settings from './settings';
 import * as color_themes from './color-themes';
 import * as templates from './templates';
@@ -16,12 +15,6 @@ export const store_sqlite3 = obj_frozen<Store>({
 	init: bring_db_schema_up_to_date,
 	backup: create_backup,
 	shutdown: close_all,
-
-	get_all_users: users.get_all_users,
-	get_user: users.get_user,
-	create_user: users.create_user,
-	delete_user: users.delete_user,
-	update_password: users.update_password,
 
 	get_all_settings: settings.get_all_settings,
 	set_setting: settings.set_setting,

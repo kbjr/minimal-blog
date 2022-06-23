@@ -261,9 +261,6 @@ let settings;
 let theme_being_edited;
 let theme_edits;
 
-const exported_color_theme_uuid = '6b9736da-e6f8-11ec-82bd-00155d93d186';
-
-
 
 // ===== Elements =====
 
@@ -288,6 +285,7 @@ const form_export = document.querySelector('#form-themes-export');
 const select_export = document.querySelector('#in-themes-select-export');
 const button_export = document.querySelector('#btn-themes-export');
 
+const sec_edit = document.querySelector('#sec-themes-edit');
 const form_edit = document.querySelector('#form-themes-edit');
 const select_edit = document.querySelector('#in-themes-edit');
 const button_edit = document.querySelector('#btn-themes-edit');
@@ -405,9 +403,9 @@ form_edit_colors.addEventListener('reset', (event) => {
 	disable_color_editor();
 	enable_form(form_edit);
 
-	form_edit.scrollIntoView({
+	sec_edit.scrollIntoView({
 		behavior: 'smooth',
-		block: 'start',
+		block: 'center',
 	});
 
 	return false;

@@ -132,6 +132,12 @@ export namespace conf {
 
 	/** Configuration for the control API authentication mechanism */
 	export namespace auth {
+		/**
+		 * Used as a temporary first-time-setup password, to block the control panel from
+		 * unauthorized users before the instance can be configured
+		 */
+		export const setup_code = cast_str<string>(process.env.AUTH_SETUP_CODE, null);
+
 		/** Time to live (TTL) to set on issued tokens */
 		export const token_ttl = '3h';
 

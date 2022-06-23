@@ -32,7 +32,6 @@ namespace settings_db {
 			await create_settings(db);
 			await create_templates(db);
 			await create_colors(db);
-			await create_users(db);
 			await create_mention_rules(db);
 			await create_links(db);
 		}
@@ -92,18 +91,6 @@ namespace settings_db {
 		)
 	`);
 
-	async function create_users(db: sqlite3.Database) {
-		await run(db, sql_create_users);
-	}
-
-	const sql_create_users = sql(`
-		create table if not exists users (
-			name varchar(50) primary key,
-			password_hash varchar(255) not null,
-			is_admin int not null
-		)
-	`);
-	
 	async function create_mention_rules(db: sqlite3.Database) {
 		await create_mention_types(db);
 		await create_rule_types(db);
@@ -298,6 +285,7 @@ namespace posts_db {
 			mention_type varchar(50),
 			received_time timestamp,
 			verified tinyint,
+			blocked tinyint,
 
 			primary key (post_id, source_url),
 			unique (snowflake),

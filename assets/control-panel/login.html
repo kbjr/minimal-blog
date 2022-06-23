@@ -3,9 +3,6 @@
 	<form id="form-login">
 		<p>Login to continue</p>
 		
-		<label for="in-username">Username</label>
-		<input type="text" id="in-username" required autofocus autocomplete="username">
-	
 		<label for="in-password">Password</label>
 		<input type="password" id="in-password" required autocomplete="current-password">
 	
@@ -17,7 +14,6 @@
 (() => {
 
 const form           = document.querySelector('#form-login');
-const input_username = form.querySelector('#in-username');
 const input_password = form.querySelector('#in-password');
 const button_submit  = form.querySelector('#btn-login');
 
@@ -25,32 +21,24 @@ form.addEventListener('submit', (event) => {
 	event.preventDefault();
 	event.stopImmediatePropagation();
 
-	const username = document.querySelector('#in-username').value;
 	const password = document.querySelector('#in-password').value;
 
 	disable_form();
-	login(username, password);
+	login(password);
 
 	return false;
-});
-
-input_username.addEventListener('change', () => {
-	button_submit.setCustomValidity('');
 });
 
 input_password.addEventListener('change', () => {
 	button_submit.setCustomValidity('');
 });
 
-async function login(username, password) {
+async function login(password) {
 	const headers = app.http_headers(true, {
 		'content-type': 'application/json'
 	});
 
-	const body = JSON.stringify({
-		username, password
-	});
-
+	const body = JSON.stringify({ password });
 	const res = await app.http('POST', '/api/token', headers, body);
 
 	switch (res.status) {
@@ -84,13 +72,11 @@ async function login(username, password) {
 }
 
 function disable_form() {
-	input_username.disabled = true;
 	input_password.disabled = true;
 	button_submit.disabled = true;
 }
 
 function enable_form() {
-	input_username.disabled = false;
 	input_password.disabled = false;
 	button_submit.disabled = false;
 }
