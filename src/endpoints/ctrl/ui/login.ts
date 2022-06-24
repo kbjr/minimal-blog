@@ -1,7 +1,6 @@
 
 import { ctrl } from '../../../http';
 import { conf } from '../../../conf';
-import { assets, store } from '../../../storage';
 import { render } from './render';
 import { current_lang } from './i18n';
 import { RouteShorthandOptions } from 'fastify';
@@ -21,16 +20,10 @@ ctrl.get('/login', opts, async (req, res) => {
 	const context = {
 		page: {
 			url: `${conf.http.ctrl_url}/login`,
-			name: 'login',
 			title: current_lang.pages.login.title,
-			require_auth: false
 		}
 	};
 	
-	const html = await render('base.html', context, {
-		page_head: '<meta name="description" content="Control panel login page">',
-		page_content: await assets.load_control_panel_asset('login.html')
-	});
-
+	const html = await render('login.html', context, { });
 	return html;
 });

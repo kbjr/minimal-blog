@@ -3,9 +3,13 @@ FROM node:16-alpine
 
 
 # === Auth Config ===
+# The setup code is needed only during the initial setup of a new server, and
+# acts as a one-time password to protect the control panel until setup can be
+# completed.
+ENV AUTH_SETUP_CODE=""
 # There are three different options for token signing:
 # 1) User-provided HMAC signing secret; If provided, this value will be read as
-# as base-64 string, and used as the HMAC secret to sign tokens.
+# a base-64 string, and used as the HMAC secret to sign tokens.
 ENV AUTH_HMAC_SECRET=""
 # 2) User-provided private key file; If provided, this value will be read as a
 # file path pointing to a private key file, and used to sign tokens.

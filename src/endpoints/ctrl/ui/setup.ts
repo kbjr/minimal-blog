@@ -1,8 +1,8 @@
 
 import { render } from './render';
 import { conf } from '../../../conf';
+import { store } from '../../../storage';
 import { current_lang } from './i18n';
-import { assets, store } from '../../../storage';
 import { throw_500_internal_server_error } from '../../../http-error';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
@@ -51,16 +51,10 @@ async function render_first_time_setup_page() {
 	const context = {
 		page: {
 			url: conf.http.ctrl_url,
-			name: 'first-time-setup',
 			title: current_lang.pages.first_time_setup.title,
-			require_auth: false,
 		}
 	};
 	
-	const html = await render('base.html', context, {
-		page_head: '<meta name="description" content="Control panel first-time setup page">',
-		page_content: await assets.load_control_panel_asset('first_time_setup.html')
-	});
-
+	const html = await render('first_time_setup.html', context, { });
 	return html;
 }

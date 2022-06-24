@@ -30,7 +30,6 @@ async function render_dashboard_page() {
 			url: conf.http.ctrl_url,
 			title: current_lang.pages.dashboard.title,
 			name: 'dashboard',
-			require_auth: true,
 		},
 		posts,
 		drafts,

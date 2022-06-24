@@ -23,7 +23,6 @@ ctrl.get('/moderation_queue', opts, async (req, res) => {
 			url: `${conf.http.ctrl_url}/moderation_queue`,
 			name: 'moderation_queue',
 			title: current_lang.pages.moderation_queue.title,
-			require_auth: true
 		}
 	};
 	

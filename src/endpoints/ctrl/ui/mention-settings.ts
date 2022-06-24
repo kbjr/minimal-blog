@@ -23,7 +23,6 @@ ctrl.get('/mention_settings', opts, async (req, res) => {
 			url: `${conf.http.ctrl_url}/mention_settings`,
 			name: 'mention-settings',
 			title: current_lang.pages.mention_settings.title,
-			require_auth: true
 		},
 		ctrl_panel: {
 			url: conf.http.ctrl_url

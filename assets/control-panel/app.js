@@ -25,6 +25,44 @@ app.redirect_to_login = function redirect_to_login(redirect_back = false) {
 	app.redirect_to('login');
 };
 
+app.login_check = function login_check() {
+	const token = localStorage.getItem('auth_token');
+
+	if (! token) {
+		return app.redirect_to_login(true);
+	}
+
+	try {
+		const payload_base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+		const payload_json = decodeURIComponent(
+			atob(payload_base64)
+				.split('')
+				.map((char) => `%${char.charCodeAt(0).toString(16).padStart(2, '0')}`)
+				.join('')
+		);
+
+		const payload = JSON.parse(payload_json);
+
+		if (payload) {
+			const now = Date.now();
+			const exp = payload.exp * 1000;
+
+			// TODO: Add a check here to refresh token if near expiring?
+
+			if (exp < now) {
+				app.redirect_to_login(true);
+			}
+		}
+
+		conf.token_payload = payload;
+	}
+
+	catch (error) {
+		console.error(error);
+		app.redirect_to_login(true);
+	}
+};
+
 app.replace_url = function replace_url(new_uri) {
 	const new_url = `${conf.ctrl_panel_url}/${new_uri}`;
 	history.replaceState({ }, '', new_url);

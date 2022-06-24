@@ -33,10 +33,9 @@
 	</script>
 
 	<script src="{{{ ctrl_panel.url }}}/app.js"></script>
-
-	{{# page.require_auth }}
-	<script src="{{{ ctrl_panel.url }}}/login_check.js"></script>
-	{{/ page.require_auth}}
+	<script>
+	app.login_check();
+	</script>
 
 	<script src="{{{ ctrl_panel.url }}}/time.js" async></script>
 	
@@ -56,7 +55,6 @@
 				<p><strong>{{ labels.noscript }}</strong></p>
 			</noscript>
 			
-			{{# page.require_auth }}
 			<nav>
 				<ul>
 					<!-- fixme: i18n labels for these strings -->
@@ -83,7 +81,6 @@
 			</nav>
 			
 			<button id="btn-logout" onclick="void app.logout()">{{ labels.logout }}</button>
-			{{/ page.require_auth }}
 		</header>
 		
 		{{> page_content }}

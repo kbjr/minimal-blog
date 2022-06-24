@@ -23,7 +23,6 @@ ctrl.get('/posts', opts, async (req, res) => {
 			url: `${conf.http.ctrl_url}/posts`,
 			name: 'posts',
 			title: current_lang.pages.posts.title,
-			require_auth: true
 		},
 		ctrl_panel: {
 			url: conf.http.ctrl_url

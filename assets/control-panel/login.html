@@ -1,85 +1,146 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ page.title }}</title>
+	<meta name="color-scheme" content="dark light">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<main>
-	<form id="form-login">
-		<p>Login to continue</p>
-		
-		<label for="in-password">Password</label>
-		<input type="password" id="in-password" required autocomplete="current-password">
-	
-		<button type="submit" id="btn-login">Login</button>
-	</form>
-</main>
+	<!-- Font imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap">
 
-<script>
-(() => {
+	<link rel="stylesheet" href="{{{ ctrl_panel.url }}}/colors.css">
+	<link rel="stylesheet" href="{{{ ctrl_panel.url }}}/styles.css">
 
-const form           = document.querySelector('#form-login');
-const input_password = form.querySelector('#in-password');
-const button_submit  = form.querySelector('#btn-login');
-
-form.addEventListener('submit', (event) => {
-	event.preventDefault();
-	event.stopImmediatePropagation();
-
-	const password = document.querySelector('#in-password').value;
-
-	disable_form();
-	login(password);
-
-	return false;
-});
-
-input_password.addEventListener('change', () => {
-	button_submit.setCustomValidity('');
-});
-
-async function login(password) {
-	const headers = app.http_headers(true, {
-		'content-type': 'application/json'
-	});
-
-	const body = JSON.stringify({ password });
-	const res = await app.http('POST', '/api/token', headers, body);
-
-	switch (res.status) {
-		case 200: {
-			const json = await res.json();
-			app.login(json.token, json.payload, true);
-			break;
-		};
-
-		case 401:
-		case 422:
-		default: {
-			let message;
-
-			try {
-				message = (await res.json()).error;
+	<!-- Expose some configuration values to client-side JS -->
+	<script>
+		window.conf = {
+			site_url: '{{{ site.url }}}',
+			ctrl_panel_url: '{{{ ctrl_panel.url }}}',
+			current_page: '{{{ page.name }}}',
+			post_uri_format: '{{{ feed.post_uri_format }}}',
+			event_uri_format: '{{{ feed.event_uri_format }}}',
+			author: {
+				name: {{# feed.author_name }}'{{ feed.author_name }}' || {{/ feed.author_name }}null,
+				url: {{# feed.author_url }}'{{ feed.author_url }}' || {{/ feed.author_url }}null,
+				avatar: {{# feed.author_avatar }}'{{ feed.author_avatar }}' || {{/ feed.author_avatar }}null,
 			}
-
-			catch (error) { }
-
-			message = message || 'Something went wrong';
-
-			console.error(message);
-			button_submit.setCustomValidity(message);
-			button_submit.reportValidity();
-
-			enable_form();
-			break;
 		};
-	}
-}
+	</script>
 
-function disable_form() {
-	input_password.disabled = true;
-	button_submit.disabled = true;
-}
-
-function enable_form() {
-	input_password.disabled = false;
-	button_submit.disabled = false;
-}
+	<script src="{{{ ctrl_panel.url }}}/app.js"></script>
+</head>
+<body id="page-login">
+	<script src="{{{ ctrl_panel.url }}}/color_theme_toggle.js"></script>
+	<color-theme-toggle></color-theme-toggle>
 	
-})();
-</script>
+	<div id="root">
+		<header>
+			<h2>{{ labels.control_panel }}</h2>
+			<p>{{ labels.website }}: <a href="{{{ site.url }}}">{{ site.url }}</a></p>
+			<p>{{ labels.control_panel }}: <a href="{{{ ctrl_panel.url }}}">{{ ctrl_panel.url }}</a></p>
+
+			<noscript>
+				<p><strong>{{ labels.noscript }}</strong></p>
+			</noscript>
+		</header>
+		
+		<main>
+			<form id="form-login">
+				<p>Login to continue</p>
+				
+				<label for="in-password">Password</label>
+				<input type="password" id="in-password" required autocomplete="current-password">
+			
+				<button type="submit" id="btn-login">Login</button>
+			</form>
+		</main>
+		
+		<script>
+		(() => {
+		
+		const form           = document.querySelector('#form-login');
+		const input_password = form.querySelector('#in-password');
+		const button_submit  = form.querySelector('#btn-login');
+		
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+		
+			const password = document.querySelector('#in-password').value;
+		
+			disable_form();
+			login(password);
+		
+			return false;
+		});
+		
+		input_password.addEventListener('change', () => {
+			button_submit.setCustomValidity('');
+		});
+		
+		async function login(password) {
+			const headers = app.http_headers(true, {
+				'content-type': 'application/json'
+			});
+		
+			const body = JSON.stringify({ password });
+			const res = await app.http('POST', '/api/token', headers, body);
+		
+			switch (res.status) {
+				case 200: {
+					const json = await res.json();
+					app.login(json.token, json.payload, true);
+					break;
+				};
+		
+				case 401:
+				case 422:
+				default: {
+					let message;
+		
+					try {
+						message = (await res.json()).error;
+					}
+		
+					catch (error) { }
+		
+					message = message || 'Something went wrong';
+		
+					console.error(message);
+					button_submit.setCustomValidity(message);
+					button_submit.reportValidity();
+		
+					enable_form();
+					break;
+				};
+			}
+		}
+		
+		function disable_form() {
+			input_password.disabled = true;
+			button_submit.disabled = true;
+		}
+		
+		function enable_form() {
+			input_password.disabled = false;
+			button_submit.disabled = false;
+		}
+			
+		})();
+		</script>		
+	</div>
+
+	<footer>
+		<p>
+			<a href="https://github.com/kbjr/minimal-blog">Minimal Blog</a>:
+			Control Panel
+		</p>
+		<p>Version: {{ site.app_version }}</p>
+	</footer>
+</body>
+</html>
+
+

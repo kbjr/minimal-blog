@@ -22,8 +22,7 @@ ctrl.get('/color_themes', opts, async (req, res) => {
 		page: {
 			url: `${conf.http.ctrl_url}/color_themes`,
 			title: current_lang.pages.color_themes.title,
-			name: 'color-themes',
-			require_auth: true
+			name: 'color-themes'
 		}
 	};
 	

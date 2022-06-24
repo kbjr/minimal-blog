@@ -29,7 +29,7 @@ body[data-color-transition-enabled] :is(button, pre, input, textarea, select, ma
 	transition: background linear .5s;
 }
 
-#root {
+body:not(#page-login, #page-first-time-setup) #root {
 	display: flex;
 	flex-direction: row;
 	padding: 2rem;
@@ -51,7 +51,7 @@ color-theme-toggle {
 
 /* ===== Header / Nav Sidebar ===== */
 
-#root > header {
+body:not(#page-login, #page-first-time-setup) #root > header {
 	width: 20rem;
 	flex: 0 0 20rem;
 	padding: 0;
@@ -493,20 +493,32 @@ table {
 
 
 
-/* ===== Login Page ===== */
+/* ===== Login / Setup Page ===== */
 
-#page-login main {
+:is(#page-login, #page-first-time-setup) #root {
+	width: 100%;
+	max-width: 30rem;
+	padding: 1rem;
+	margin: auto;
+}
+
+:is(#page-login, #page-first-time-setup) header {
+	margin-block-start: 4rem;
+	text-align: center;
+}
+
+:is(#page-login, #page-first-time-setup) main {
 	padding: 2rem;
 	margin: 5rem auto;
 }
 
+:is(#page-login, #page-first-time-setup) :is(input, label, button) {
+	width: 100%;
+}
 
-
-/* ===== First-Time Setup Page ===== */
-
-#page-first-time-setup main {
-	padding: 2rem;
-	margin: 5rem auto;
+:is(#page-login, #page-first-time-setup) button {
+	width: 100%;
+	justify-content: center;
 }
 
 

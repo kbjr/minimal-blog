@@ -26,27 +26,18 @@ const post_types: store.posts.PostType[] = ['post', 'comment', 'note', 'event', 
 
 for (const post_type of post_types) {
 	ctrl.get(`/create/${post_type}`, opts, (req: Req, res: FastifyReply) => {
-		if (redirect_for_first_time_setup(req, res)) return;
-
 		req.params.post_type = post_type;
 		return edit_post_endpoint(req, res);
 	});
 	
 	ctrl.get(`/edit/${post_type}/:uri_name`, opts, (req: Req, res: FastifyReply) => {
-		if (redirect_for_first_time_setup(req, res)) return;
-
 		req.params.post_type = post_type;
 		return edit_post_endpoint(req, res);
 	});
 }
 
 async function edit_post_endpoint(req: Req, res: FastifyReply) {
-	if (store.settings.get('show_setup')) {
-		// If in setup mode, redirect to the main URL for first-time setup
-		res.status(303);
-		res.header('location', conf.http.ctrl_url);
-		return { redirect_to: conf.http.ctrl_url };
-	}
+	if (redirect_for_first_time_setup(req, res)) return;
 
 	res.type('text/html; charset=utf-8');
 
@@ -58,12 +49,21 @@ async function edit_post_endpoint(req: Req, res: FastifyReply) {
 		;
 
 	const type_specific_labels = current_lang.pages.posts.types[post_type];
+	const label_page_title = (() => {
+		switch (post_type) {
+			case 'post':    return is_new ? current_lang.pages.create_post.title    : current_lang.pages.edit_post.title;
+			case 'comment': return is_new ? current_lang.pages.create_comment.title : current_lang.pages.edit_comment.title;
+			case 'note':    return is_new ? current_lang.pages.create_note.title    : current_lang.pages.edit_note.title;
+			case 'event':   return is_new ? current_lang.pages.create_event.title   : current_lang.pages.edit_event.title;
+			case 'rsvp':    return is_new ? current_lang.pages.create_rsvp.title    : current_lang.pages.edit_rsvp.title;
+		}
+	})();
 
 	const context = {
 		page: {
 			url,
 			name: 'edit-post',
-			require_auth: true
+			title: label_page_title,
 		},
 		ctrl_panel: {
 			url: conf.http.ctrl_url
@@ -75,15 +75,7 @@ async function edit_post_endpoint(req: Req, res: FastifyReply) {
 					? store.settings.get('event_uri_format')
 					: 'snowflake';
 		},
-		get label_page_title() {
-			switch (post_type) {
-				case 'post':    return is_new ? current_lang.pages.create_post.title    : current_lang.pages.edit_post.title;
-				case 'comment': return is_new ? current_lang.pages.create_comment.title : current_lang.pages.edit_comment.title;
-				case 'note':    return is_new ? current_lang.pages.create_note.title    : current_lang.pages.edit_note.title;
-				case 'event':   return is_new ? current_lang.pages.create_event.title   : current_lang.pages.edit_event.title;
-				case 'rsvp':    return is_new ? current_lang.pages.create_rsvp.title    : current_lang.pages.edit_rsvp.title;
-			}
-		},
+		label_page_title,
 		get post_type_is_post() {
 			return post_type === 'post';
 		},

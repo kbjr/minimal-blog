@@ -1,124 +1,184 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ page.title }}</title>
+	<meta name="color-scheme" content="dark light">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<main>
-	<form id="form-create-user">
-		<!-- fixme: i18n -->
-		<p>Welcome to your new control panel!</p>
-		<p>To get started, you'll need to fill out the following:</p>
+	<!-- Font imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap">
 
-		<!-- fixme: i18n -->
-		<label for="in-lang-code">Control Panel Language</label>
-		<select id="in-lang-code" required>
-			<option value="en-us">English (US)</option>
-		</select>
-	
-		<!-- fixme: i18n -->
-		<label for="in-setup-code">Setup Code</label>
-		<input type="password" id="in-setup-code" required autofocus>
+	<link rel="stylesheet" href="{{{ ctrl_panel.url }}}/colors.css">
+	<link rel="stylesheet" href="{{{ ctrl_panel.url }}}/styles.css">
 
-		<!-- fixme: i18n -->
-		<label for="in-password">New Password</label>
-		<input type="password" id="in-password" required autocomplete="new-password" minlength="8">
-	
-		<!-- fixme: i18n -->
-		<label for="in-password-confirm">Confirm New Password</label>
-		<input type="password" id="in-password-confirm" required>
-	
-		<!-- fixme: i18n -->
-		<button type="submit" id="btn-setup">Finish Setup</button>
-	</form>
-</main>
-
-<script>
-(() => {
-
-const form                   = document.querySelector('#form-create-user');
-const select_lang_code       = form.querySelector('#in-lang-code');
-const input_setup_code       = form.querySelector('#in-setup-code');
-const input_password         = form.querySelector('#in-password');
-const input_password_confirm = form.querySelector('#in-password-confirm');
-const button_submit          = form.querySelector('#btn-setup');
-
-input_password.addEventListener('change', () => {
-	input_password_confirm.setCustomValidity('');
-});
-
-input_password_confirm.addEventListener('change', () => {
-	input_password_confirm.setCustomValidity('');
-});
-
-form.addEventListener('submit', (event) => {
-	event.preventDefault();
-	event.stopImmediatePropagation();
-
-	const lang_code = select_lang_code.value;
-	const setup_code = input_setup_code.value;
-	const password = input_password.value;
-	const password_confirm = input_password_confirm.value;
-
-	if (password !== password_confirm) {
-		input_password_confirm.setCustomValidity('Password and confirmation do not match');
-		input_password_confirm.reportValidity();
-		return;
-	}
-
-	else {
-		input_password_confirm.setCustomValidity('');
-	}
-
-	disable_form();
-	setup(lang_code, setup_code, password);
-
-	return false;
-});
-
-function disable_form() {
-	select_lang_code.disabled = true;
-	input_setup_code.disabled = true;
-	input_password.disabled = true;
-	input_password_confirm.disabled = true;
-	button_submit.disabled = true;
-}
-
-function enable_form() {
-	select_lang_code.disabled = false;
-	input_setup_code.disabled = false;
-	input_password.disabled = false;
-	input_password_confirm.disabled = false;
-	button_submit.disabled = false;
-}
-	
-async function setup(lang_code, setup_code, password) {
-	const headers = app.http_headers(true, {
-		'content-type': 'application/json'
-	});
-
-	const body = JSON.stringify({
-		lang_code, setup_code, password
-	});
-
-	const res = await app.http('POST', '/api/setup', headers, body);
-
-	switch (res.status) {
-		case 200: {
-			// TODO: Transition more smoothly than this
-			location.reload();
-			break;
+	<!-- Expose some configuration values to client-side JS -->
+	<script>
+		window.conf = {
+			site_url: '{{{ site.url }}}',
+			ctrl_panel_url: '{{{ ctrl_panel.url }}}',
+			current_page: '{{{ page.name }}}',
+			post_uri_format: '{{{ feed.post_uri_format }}}',
+			event_uri_format: '{{{ feed.event_uri_format }}}',
+			author: {
+				name: {{# feed.author_name }}'{{ feed.author_name }}' || {{/ feed.author_name }}null,
+				url: {{# feed.author_url }}'{{ feed.author_url }}' || {{/ feed.author_url }}null,
+				avatar: {{# feed.author_avatar }}'{{ feed.author_avatar }}' || {{/ feed.author_avatar }}null,
+			}
 		};
+	</script>
 
-		case 422: {
-			// TODO: Tell the user what's wrong
-			console.error(await res.json());
-			enable_form();
-			break;
-		};
+	<script src="{{{ ctrl_panel.url }}}/app.js"></script>
+</head>
+<body id="page-first-time-setup">
+	<script src="{{{ ctrl_panel.url }}}/color_theme_toggle.js"></script>
+	<color-theme-toggle></color-theme-toggle>
+	
+	<div id="root">
+		<header>
+			<h2>{{ labels.control_panel }}</h2>
+			<p>{{ labels.website }}: <a href="{{{ site.url }}}">{{ site.url }}</a></p>
+			<p>{{ labels.control_panel }}: <a href="{{{ ctrl_panel.url }}}">{{ ctrl_panel.url }}</a></p>
 
-		default: {
-			console.error(await res.json());
-			enable_form();
-			break;
-		};
-	}
-}
+			<noscript>
+				<p><strong>{{ labels.noscript }}</strong></p>
+			</noscript>
+		</header>
+		
+		<main>
+			<form id="form-create-user">
+				<!-- fixme: i18n -->
+				<p>Welcome to your new control panel!</p>
+				<p>To get started, you'll need to fill out the following:</p>
+		
+				<!-- fixme: i18n -->
+				<label for="in-lang-code">Control Panel Language</label>
+				<select id="in-lang-code" required>
+					<option value="en-us">English (US)</option>
+				</select>
+			
+				<!-- fixme: i18n -->
+				<label for="in-setup-code">Setup Code</label>
+				<input type="password" id="in-setup-code" required autofocus>
+		
+				<!-- fixme: i18n -->
+				<label for="in-password">New Password</label>
+				<input type="password" id="in-password" required autocomplete="new-password" minlength="8">
+			
+				<!-- fixme: i18n -->
+				<label for="in-password-confirm">Confirm New Password</label>
+				<input type="password" id="in-password-confirm" required>
+			
+				<!-- fixme: i18n -->
+				<button type="submit" id="btn-setup">Finish Setup</button>
+			</form>
+		</main>
+		
+		<script>
+		(() => {
+		
+		const form                   = document.querySelector('#form-create-user');
+		const select_lang_code       = form.querySelector('#in-lang-code');
+		const input_setup_code       = form.querySelector('#in-setup-code');
+		const input_password         = form.querySelector('#in-password');
+		const input_password_confirm = form.querySelector('#in-password-confirm');
+		const button_submit          = form.querySelector('#btn-setup');
+		
+		input_password.addEventListener('change', () => {
+			input_password_confirm.setCustomValidity('');
+		});
+		
+		input_password_confirm.addEventListener('change', () => {
+			input_password_confirm.setCustomValidity('');
+		});
+		
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+		
+			const lang_code = select_lang_code.value;
+			const setup_code = input_setup_code.value;
+			const password = input_password.value;
+			const password_confirm = input_password_confirm.value;
+		
+			if (password !== password_confirm) {
+				input_password_confirm.setCustomValidity('Password and confirmation do not match');
+				input_password_confirm.reportValidity();
+				return;
+			}
+		
+			else {
+				input_password_confirm.setCustomValidity('');
+			}
+		
+			disable_form();
+			setup(lang_code, setup_code, password);
+		
+			return false;
+		});
+		
+		function disable_form() {
+			select_lang_code.disabled = true;
+			input_setup_code.disabled = true;
+			input_password.disabled = true;
+			input_password_confirm.disabled = true;
+			button_submit.disabled = true;
+		}
+		
+		function enable_form() {
+			select_lang_code.disabled = false;
+			input_setup_code.disabled = false;
+			input_password.disabled = false;
+			input_password_confirm.disabled = false;
+			button_submit.disabled = false;
+		}
+			
+		async function setup(lang_code, setup_code, password) {
+			const headers = app.http_headers(true, {
+				'content-type': 'application/json'
+			});
+		
+			const body = JSON.stringify({
+				lang_code, setup_code, password
+			});
+		
+			const res = await app.http('POST', '/api/setup', headers, body);
+		
+			switch (res.status) {
+				case 200: {
+					// TODO: Transition more smoothly than this
+					location.reload();
+					break;
+				};
+		
+				case 422: {
+					// TODO: Tell the user what's wrong
+					console.error(await res.json());
+					enable_form();
+					break;
+				};
+		
+				default: {
+					console.error(await res.json());
+					enable_form();
+					break;
+				};
+			}
+		}
+		
+		})();
+		</script>
+	</div>
 
-})();
-</script>
+	<footer>
+		<p>
+			<a href="https://github.com/kbjr/minimal-blog">Minimal Blog</a>:
+			Control Panel
+		</p>
+		<p>Version: {{ site.app_version }}</p>
+	</footer>
+</body>
+</html>
+

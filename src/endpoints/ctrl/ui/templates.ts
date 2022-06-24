@@ -23,7 +23,6 @@ ctrl.get('/templates', opts, async (req, res) => {
 			url: `${conf.http.ctrl_url}/templates`,
 			name: 'templates',
 			title: current_lang.pages.templates.title,
-			require_auth: true
 		},
 		ctrl_panel: {
 			url: conf.http.ctrl_url
