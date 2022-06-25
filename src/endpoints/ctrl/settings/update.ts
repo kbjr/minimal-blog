@@ -5,10 +5,12 @@ import { require_auth, ReqUser } from '../../../auth';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import * as http_error from '../../../http-error';
 import { settings_schema } from './schema';
+import { LangCode } from '../ui/i18n';
 
 type Req = ReqUser & FastifyRequest<{
 	Body: {
-		language?: string;
+		language?: LangCode | string;
+		ctrl_panel_language?: LangCode;
 		theme_light?: string;
 		theme_dark?: string;
 		feed_title?: string;

@@ -39,6 +39,11 @@ ctrl.get('/app.js', opts, async (req, res) => {
 	return assets.load_control_panel_asset('app.js');
 });
 
+ctrl.get('/form.js', opts, async (req, res) => {
+	res.type('application/javascript; charset=utf-8');
+	return assets.load_control_panel_asset('form.js');
+});
+
 ctrl.get('/login_check.js', opts, async (req, res) => {
 	res.type('application/javascript; charset=utf-8');
 	return assets.load_control_panel_asset('login_check.js');

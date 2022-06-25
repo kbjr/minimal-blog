@@ -2,7 +2,7 @@
 <main>
 	<h1>{{ labels.pages.settings.title }}</h1>
 
-	<section>
+	<section id="sect-titles">
 		<!-- fixme: i18n -->
 		<h2>Blog Title / Description</h2>
 
@@ -29,7 +29,7 @@
 		</form>
 	</section>
 		
-	<section>
+	<section id="sect-content-language">
 		<!-- fixme: i18n -->
 		<h2>Content Language</h2>
 		
@@ -53,7 +53,7 @@
 		</form>
 	</section>
 		
-	<section>
+	<section id="sect-control-panel-language">
 		<!-- fixme: i18n -->
 		<h2>Control Panel Language</h2>
 		
@@ -77,7 +77,7 @@
 		</form>
 	</section>
 	
-	<section>
+	<section id="sect-copyright-notice">
 		<!-- fixme: i18n -->
 		<h2>Copyright Notice</h2>
 
@@ -98,7 +98,7 @@
 		</form>
 	</section>
 	
-	<section>
+	<section id="sect-favicon">
 		<!-- fixme: i18n -->
 		<h2>Favicon</h2>
 
@@ -122,7 +122,7 @@
 		</form>
 	</section>
 
-	<section>
+	<section id="sect-password">
 		<!-- fixme: i18n -->
 		<h2>Update Password</h2>
 
@@ -158,7 +158,7 @@
 		</form>
 	</section>
 
-	<section>
+	<section id="sect-author">
 		<!-- fixme: i18n -->
 		<h2>Author Information</h2>
 
@@ -181,12 +181,12 @@
 	
 			<div data-flex="row" class="buttons">
 				<!-- fixme: i18n label -->
-				<button type="submit" id="btn-favicon" disabled>Save Changes</button>
+				<button type="submit" id="btn-author" disabled>Save Changes</button>
 			</div>
 		</form>
 	</section>
 
-	<section>
+	<section id="sect-uris">
 		<!-- fixme: i18n -->
 		<h2>Post URIs</h2>
 
@@ -242,3 +242,181 @@
 		</form>
 	</section>
 </main>
+
+<script src="{{{ ctrl_panel.url }}}/form.js"></script>
+<script>
+(() => {
+
+let settings;
+
+const sect_titles                 = document.querySelector('#sect-titles');
+const sect_content_language       = document.querySelector('#sect-content-language');
+const sect_control_panel_language = document.querySelector('#sect-control-panel-language');
+const sect_copyright_notice       = document.querySelector('#sect-copyright-notice');
+const sect_favicon                = document.querySelector('#sect-favicon');
+const sect_password               = document.querySelector('#sect-password');
+const sect_author                 = document.querySelector('#sect-author');
+const sect_uris                   = document.querySelector('#sect-uris');
+
+const in_title            = document.querySelector('#in-title');
+const in_subtitle         = document.querySelector('#in-subtitle');
+const btn_titles          = document.querySelector('#btn-titles');
+const in_language         = document.querySelector('#in-language');
+const btn_language        = document.querySelector('#btn-language');
+const in_ctrl_language    = document.querySelector('#in-ctrl-language');
+const btn_ctrl_language   = document.querySelector('#btn-ctrl-language');
+const in_copyright        = document.querySelector('#in-copyright');
+const btn_copyright       = document.querySelector('#btn-copyright');
+const in_favicon          = document.querySelector('#in-favicon');
+const btn_favicon         = document.querySelector('#btn-favicon');
+const in_current_password = document.querySelector('#in-current-password');
+const in_new_password     = document.querySelector('#in-new-password');
+const in_confirm_password = document.querySelector('#in-confirm-password');
+const btn_update_password = document.querySelector('#btn-update-password');
+const in_author_name      = document.querySelector('#in-author-name');
+const in_author_url       = document.querySelector('#in-author-url');
+const in_author_avatar    = document.querySelector('#in-author-avatar');
+const btn_author          = document.querySelector('#btn-author');
+const in_post_uri_format  = document.querySelector('#in-post-uri-format');
+const in_event_uri_format = document.querySelector('#in-event-uri-format');
+const btn_uri_format      = document.querySelector('#btn-uri-format');
+
+const form_titles                 = new app.Form(sect_titles.querySelector('form'), submit_titles);
+const form_content_language       = new app.Form(sect_content_language.querySelector('form'), submit_content_language);
+const form_control_panel_language = new app.Form(sect_control_panel_language.querySelector('form'), submit_control_panel_language);
+const form_copyright_notice       = new app.Form(sect_copyright_notice.querySelector('form'), submit_copyright_notice);
+const form_favicon                = new app.Form(sect_favicon.querySelector('form'), submit_favicon);
+const form_password               = new app.Form(sect_password.querySelector('form'), submit_password);
+const form_author                 = new app.Form(sect_author.querySelector('form'), submit_author);
+const form_uris                   = new app.Form(sect_uris.querySelector('form'), submit_post_uris);
+
+
+
+// 
+
+load();
+
+
+
+
+// 
+
+async function load() {
+	disable_all();
+	settings = await app.http_get('/api/settings', true);
+	set_initial_values();
+	enable_all();
+}
+
+function disable_all() {
+	form_titles.disable();
+	form_content_language.disable();
+	form_control_panel_language.disable();
+	form_copyright_notice.disable();
+	form_favicon.disable();
+	form_password.disable();
+	form_author.disable();
+	form_uris.disable();
+}
+
+function enable_all() {
+	form_titles.enable(false);
+	form_content_language.enable(false);
+	form_control_panel_language.enable(false);
+	form_copyright_notice.enable(false);
+	form_favicon.enable(false);
+	form_password.enable(false);
+	form_author.enable(false);
+	form_uris.enable(false);
+}
+
+function set_initial_values() {
+	in_title.value = settings.feed_title;
+	in_subtitle.value = settings.feed_description;
+	in_language.value = settings.language;
+	in_ctrl_language.value = settings.ctrl_panel_language;
+	in_copyright.value = settings.copyright_notice;
+	// todo: display favicon
+	in_author_name.value = settings.author_name;
+	in_author_url.value = settings.author_url;
+	in_author_avatar.value = settings.author_avatar;
+	in_post_uri_format.value = settings.post_uri_format;
+	in_event_uri_format.value = settings.event_uri_format;
+}
+
+
+
+// 
+
+async function submit_titles() {
+	const title = in_title.value;
+	const subtitle = in_subtitle.value;
+	const patch = {
+		feed_title: title,
+		feed_description: subtitle,
+	};
+
+	await app.http_patch('/api/settings', true, patch);
+	Object.assign(settings, patch);
+}
+
+async function submit_content_language() {
+	const language = in_language.value;
+	const patch = { language };
+
+	await app.http_patch('/api/settings', true, patch);
+	Object.assign(settings, patch);
+}
+
+async function submit_control_panel_language() {
+	const control_panel_language = in_ctrl_language.value;
+	const patch = { control_panel_language };
+
+	await app.http_patch('/api/settings', true, patch);
+	Object.assign(settings, patch);
+}
+
+async function submit_copyright_notice() {
+	const copyright_notice = in_copyright.value;
+	const patch = { copyright_notice };
+
+	await app.http_patch('/api/settings', true, patch);
+	Object.assign(settings, patch);
+}
+
+async function submit_favicon() {
+	// todo: submit favicon
+}
+
+async function submit_password() {
+	// todo: submit password
+}
+
+async function submit_author() {
+	const author_name = in_author_name.value;
+	const author_url = in_author_url.value;
+	const author_avatar = in_author_avatar.value;
+	const patch = {
+		author_name,
+		author_url,
+		author_avatar,
+	};
+
+	await app.http_patch('/api/settings', true, patch);
+	Object.assign(settings, patch);
+}
+
+async function submit_post_uris() {
+	const post_uri_format = in_post_uri_format.value;
+	const event_uri_format = in_event_uri_format.value;
+	const patch = {
+		post_uri_format,
+		event_uri_format,
+	};
+
+	await app.http_patch('/api/settings', true, patch);
+	Object.assign(settings, patch);
+}
+
+})();
+</script>

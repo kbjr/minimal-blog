@@ -32,8 +32,8 @@
 					
 					<div class="checkbox">
 						<!-- fixme: i18n -->
-						<input type="checkbox" id="in-enable-send-pingbacks">
-						<label for="in-enable-send-pingbacks">Receive Pingbacks</label>
+						<input type="checkbox" id="in-enable-receive-pingbacks">
+						<label for="in-enable-receive-pingbacks">Receive Pingbacks</label>
 					</div>
 				</fieldset>
 				
@@ -49,8 +49,8 @@
 					
 					<div class="checkbox">
 						<!-- fixme: i18n -->
-						<input type="checkbox" id="in-enable-send-webmentions">
-						<label for="in-enable-send-webmentions">Receive WebMentions</label>
+						<input type="checkbox" id="in-enable-receive-webmentions">
+						<label for="in-enable-receive-webmentions">Receive WebMentions</label>
 					</div>
 				</fieldset>
 			</div>
@@ -205,3 +205,65 @@
 		</form>
 	</section>
 </main>
+
+<script>
+(() => {
+
+let settings;
+let moderation_rules;
+
+const form_enable_mentions          = document.querySelector('#form-enable-mentions');
+const fs_enable_pingbacks           = document.querySelector('#fs-enable-pingbacks');
+const in_enable_send_pingbacks      = document.querySelector('#in-enable-send-pingbacks');
+const in_enable_receive_pingbacks   = document.querySelector('#in-enable-receive-pingbacks');
+const fs_enable_webmentions         = document.querySelector('#fs-enable-webmentions');
+const in_enable_send_webmentions    = document.querySelector('#in-enable-send-webmentions');
+const in_enable_receive_webmentions = document.querySelector('#in-enable-receive-webmentions');
+const btn_enable_mentions           = document.querySelector('#btn-enable-mentions');
+const desc_https_only               = document.querySelector('#desc-https-only');
+const in_https_only                 = document.querySelector('#in-https-only');
+const btn_https_only                = document.querySelector('#btn-https-only');
+const form_mentions_defaults        = document.querySelector('#form-mentions-defaults');
+const in_pingback_default           = document.querySelector('#in-pingback-default');
+const in_webmention_default         = document.querySelector('#in-webmention-default');
+const btn_mentions_defaults         = document.querySelector('#btn-mentions-defaults');
+const table_mentions_rules          = document.querySelector('#table-mentions-rules');
+const btn_mentions_add_rule         = document.querySelector('#btn-mentions-add-rule');
+const btn_mentions_save_rules       = document.querySelector('#btn-mentions-save-rules');
+
+// 
+
+load();
+
+
+
+
+// 
+
+async function load() {
+	settings = await app.http_get('/api/settings', true);
+	// moderation_rules = await app.http_get('/api/moderation_rules', true);
+	
+	set_initial_values();
+	set_event_listeners();
+	// todo: enable inputs
+}
+
+function set_initial_values() {
+	in_enable_send_pingbacks.checked = settings.send_pingback;
+	in_enable_receive_pingbacks.checked = settings.receive_pingback;
+	in_enable_send_webmentions.checked = settings.send_webmention;
+	in_enable_receive_webmentions.checked = settings.receive_webmention;
+	in_https_only.checked = settings.https_only;
+	in_pingback_default.value = settings.default_pingback;
+	in_webmention_default.value = settings.default_webmention;
+	// todo: moderation rules
+}
+
+function set_event_listeners() {
+	// 
+}
+
+})();
+</script>
+	

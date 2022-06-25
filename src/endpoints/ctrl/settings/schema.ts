@@ -6,6 +6,7 @@ export const settings_schema: JSONSchema6 = {
 	type: 'object',
 	properties: {
 		language: str(),
+		ctrl_panel_language: str(),
 		theme_light: str(),
 		theme_dark: str(),
 		feed_title: str(),
