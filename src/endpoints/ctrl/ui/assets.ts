@@ -56,6 +56,13 @@ ctrl.get('/color_theme_toggle.js', opts, async (req, res) => {
 	return color_theme_toggle_js();
 });
 
+const save_indicator_js = rendered_asset_cache('save_indicator.js', new TemplateContext(null), { }, { });
+
+ctrl.get('/save_indicator.js', opts, async (req, res) => {
+	res.type('application/javascript; charset=utf-8');
+	return save_indicator_js();
+});
+
 ctrl.get('/styles.css', opts, async (req, res) => {
 	res.type('text/css; charset=utf-8');
 	return assets.load_control_panel_asset('styles.css');

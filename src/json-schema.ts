@@ -26,7 +26,10 @@ export const one_of = <T extends JSONSchema6Definition[]>(definitions: T) => ({
 	oneOf: definitions
 });
 
-export const obj = <T extends { [k: string]: JSONSchema6Definition; }>(properties: T) => ({
+export const obj = <T extends { [k: string]: JSONSchema6Definition; }>(
+	properties: T,
+	additional: Partial<JSONSchema6Definition> = { }
+) => Object.assign(additional, {
 	type: 'object' as const,
 	properties
 });

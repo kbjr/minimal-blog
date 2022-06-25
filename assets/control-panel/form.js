@@ -5,6 +5,7 @@ app.Form = class Form {
 	#input_elems = null;
 	#button_elems = null;
 	#submit_elem = null;
+	#save_ind = null;
 	#submit_callback = null;
 	#reset_callback = null;
 
@@ -16,6 +17,7 @@ app.Form = class Form {
 		this.#input_elems = form_elem.querySelectorAll('input, textarea, select');
 		this.#button_elems = form_elem.querySelectorAll('button');
 		this.#submit_elem = form_elem.querySelector('button[type="submit"]');
+		this.#save_ind = form_elem.querySelector('save-indicator');
 
 		this.#form_elem.addEventListener('submit', this.on_submit);
 		this.#form_elem.addEventListener('reset', this.on_reset);
@@ -44,9 +46,10 @@ app.Form = class Form {
 			this.disable();
 
 			try {
-				// todo: show thinking
+				this.show_active();
 				await this.#submit_callback();
-				// todo: show success
+				this.show_success();
+				this.autohide_success();
 			}
 
 			catch (error) {
@@ -62,6 +65,28 @@ app.Form = class Form {
 	async reset() {
 		if (this.#reset_callback) {
 			this.#reset_callback();
+		}
+	}
+
+	show_active() {
+		if (this.#save_ind) {
+			this.#save_ind.show_active(
+				this.#save_ind.getAttribute('data-active-message')
+			);
+		}
+	}
+
+	show_success() {
+		if (this.#save_ind) {
+			this.#save_ind.show_success(
+				this.#save_ind.getAttribute('data-success-message')
+			);
+		}
+	}
+
+	autohide_success() {
+		if (this.#save_ind) {
+			this.#save_ind.hide_in(5000);
 		}
 	}
 

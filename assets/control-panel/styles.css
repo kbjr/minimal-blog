@@ -125,6 +125,10 @@ body > footer p {
 	align-items: center;
 }
 
+[data-flex~='align-center'] button {
+	margin-block-start: 0;
+}
+
 
 
 
@@ -470,6 +474,10 @@ select {
 		font-family: var(--font-open-sans);
 		font-size: 1rem;
 	}
+
+save-indicator {
+	/*  */
+}
 
 
 

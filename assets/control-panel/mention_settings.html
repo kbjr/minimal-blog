@@ -55,9 +55,11 @@
 				</fieldset>
 			</div>
 
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-enable-mentions" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -65,7 +67,7 @@
 	<section>
 		<!-- fixme: i18n -->
 		<h2>HTTPS Only</h2>
-		<form>
+		<form id="form-https-only">
 			<!-- fixme: i18n -->
 			<p id="desc-https-only">
 				To verify a mention that has been received, a request has to be made from your blog to the URL in
@@ -79,9 +81,11 @@
 				<label for="in-https-only">HTTPS Only</label>
 			</div>
 
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-https-only" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -128,9 +132,11 @@
 				</div>
 			</div>
 
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-mentions-defaults" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -157,7 +163,7 @@
 			<dt>Review</dt>
 			<dd>Mentions from the given source are sent to the Moderation Queue for review before displaying.</dd>
 		</dl>
-		<form>
+		<form id="form-mentions-rules">
 			<table id="table-mentions-rules" aria-busy="true" aria-live="polite">
 				<thead>
 					<tr>
@@ -197,22 +203,25 @@
 					</tr>
 				</tbody>
 			</table>
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="button" id="btn-mentions-add-rule" disabled>Add Rule</button>
 				<button type="submit" id="btn-mentions-save-rules" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
 </main>
 
+<script src="{{{ ctrl_panel.url }}}/save_indicator.js"></script>
+<script src="{{{ ctrl_panel.url }}}/form.js"></script>
 <script>
 (() => {
 
 let settings;
 let moderation_rules;
 
-const form_enable_mentions          = document.querySelector('#form-enable-mentions');
 const fs_enable_pingbacks           = document.querySelector('#fs-enable-pingbacks');
 const in_enable_send_pingbacks      = document.querySelector('#in-enable-send-pingbacks');
 const in_enable_receive_pingbacks   = document.querySelector('#in-enable-receive-pingbacks');
@@ -223,7 +232,6 @@ const btn_enable_mentions           = document.querySelector('#btn-enable-mentio
 const desc_https_only               = document.querySelector('#desc-https-only');
 const in_https_only                 = document.querySelector('#in-https-only');
 const btn_https_only                = document.querySelector('#btn-https-only');
-const form_mentions_defaults        = document.querySelector('#form-mentions-defaults');
 const in_pingback_default           = document.querySelector('#in-pingback-default');
 const in_webmention_default         = document.querySelector('#in-webmention-default');
 const btn_mentions_defaults         = document.querySelector('#btn-mentions-defaults');
@@ -232,6 +240,10 @@ const btn_mentions_add_rule         = document.querySelector('#btn-mentions-add-
 const btn_mentions_save_rules       = document.querySelector('#btn-mentions-save-rules');
 
 // 
+const form_enable_mentions   = new app.Form(document.querySelector('#form-enable-mentions'), submit_enable_mentions);
+const form_https_only        = new app.Form(document.querySelector('#form-https-only'), submit_https_only);
+const form_mentions_defaults = new app.Form(document.querySelector('#form-mentions-defaults'), submit_mentions_defaults);
+const form_mentions_rules    = new app.Form(document.querySelector('#form-mentions-rules'), submit_mentions_rules);
 
 load();
 
@@ -241,12 +253,25 @@ load();
 // 
 
 async function load() {
+	disable_all();
 	settings = await app.http_get('/api/settings', true);
 	// moderation_rules = await app.http_get('/api/moderation_rules', true);
-	
 	set_initial_values();
-	set_event_listeners();
-	// todo: enable inputs
+	enable_all();
+}
+
+function disable_all() {
+	form_enable_mentions.disable();
+	form_https_only.disable();
+	form_mentions_defaults.disable();
+	form_mentions_rules.disable();
+}
+
+function enable_all() {
+	form_enable_mentions.enable(false);
+	form_https_only.enable(false);
+	form_mentions_defaults.enable(false);
+	form_mentions_rules.enable(false);
 }
 
 function set_initial_values() {
@@ -260,7 +285,23 @@ function set_initial_values() {
 	// todo: moderation rules
 }
 
-function set_event_listeners() {
+
+
+// 
+
+async function submit_enable_mentions() {
+	// 
+}
+
+async function submit_https_only() {
+	// 
+}
+
+async function submit_mentions_defaults() {
+	// 
+}
+
+async function submit_mentions_rules() {
 	// 
 }
 

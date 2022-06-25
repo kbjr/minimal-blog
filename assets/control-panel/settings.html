@@ -18,13 +18,15 @@
 			<label for="in-title">Title</label>
 			<input type="text" id="in-title" required>
 			
-		<!-- fixme: i18n -->
+			<!-- fixme: i18n -->
 			<label for="in-subtitle">Sub-Title / Summary / Description</label>
 			<input type="text" id="in-subtitle">
 			
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-titles" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -46,9 +48,11 @@
 			<label for="in-language">Language Code</label>
 			<input type="text" id="in-language" placeholder="e.g. &quot;en-us&quot;" required pattern="[a-z]{2}(?:-[a-zA-Z]{2})?">
 			
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-language" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -70,9 +74,11 @@
 				</select>
 			</div>
 			
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-ctrl-language" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -91,9 +97,11 @@
 			<label for="in-copyright">Copyright Notice</label>
 			<input type="text" id="in-copyright" placeholder="e.g. &quot;Copyright 2022 Some Person&quot;">
 			
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-copyright" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -115,9 +123,11 @@
 			<label for="in-favicon">Upload New Favicon</label>
 			<input type="file" accept="image/*" id="in-favicon">
 	
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-favicon" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -151,9 +161,11 @@
 				</div>
 			</div>
 	
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-update-password" disabled>Change Password</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -179,9 +191,11 @@
 			<label for="in-author-avatar">Author Avatar URL</label>
 			<input type="text" id="in-author-avatar">
 	
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-author" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -235,14 +249,17 @@
 				</div>
 			</div>
 	
-			<div data-flex="row" class="buttons">
+			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-uri-format" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
 		</form>
 	</section>
 </main>
 
+<script src="{{{ ctrl_panel.url }}}/save_indicator.js"></script>
 <script src="{{{ ctrl_panel.url }}}/form.js"></script>
 <script>
 (() => {

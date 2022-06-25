@@ -29,6 +29,9 @@ body {
 	--theme-bg-input: {{ colors.light.bg_input }};
 	--theme-border-input: {{ colors.light.border_input }};
 	--theme-border-input-invalid: {{ colors.light.border_input_invalid }};
+	--theme-icon-active-indicator: {{ colors.light.icon_active_indicator }};
+	--theme-icon-success-indicator: {{ colors.light.icon_success_indicator }};
+	--theme-icon-failure-indicator: {{ colors.light.icon_failure_indicator }};
 	--theme-code-normal: {{ colors.light.code_normal }};
 	--theme-code-shadow: {{ colors.light.code_shadow }};
 	--theme-code-background: {{ colors.light.code_background }};
@@ -79,6 +82,9 @@ body[data-color-scheme='dark'] {
 	--theme-bg-input: {{ colors.dark.bg_input }};
 	--theme-border-input: {{ colors.dark.border_input }};
 	--theme-border-input-invalid: {{ colors.dark.border_input_invalid }};
+	--theme-icon-active-indicator: {{ colors.dark.icon_active_indicator }};
+	--theme-icon-success-indicator: {{ colors.dark.icon_success_indicator }};
+	--theme-icon-failure-indicator: {{ colors.dark.icon_failure_indicator }};
 	--theme-code-normal: {{ colors.dark.code_normal }};
 	--theme-code-shadow: {{ colors.dark.code_shadow }};
 	--theme-code-background: {{ colors.dark.code_background }};
@@ -130,6 +136,9 @@ body[data-color-scheme='dark'] {
 		--theme-bg-input: {{ colors.dark.bg_input }};
 		--theme-border-input: {{ colors.dark.border_input }};
 		--theme-border-input-invalid: {{ colors.dark.border_input_invalid }};
+		--theme-icon-active-indicator: {{ colors.dark.icon_active_indicator }};
+		--theme-icon-success-indicator: {{ colors.dark.icon_success_indicator }};
+		--theme-icon-failure-indicator: {{ colors.dark.icon_failure_indicator }};
 		--theme-code-normal: {{ colors.dark.code_normal }};
 		--theme-code-shadow: {{ colors.dark.code_shadow }};
 		--theme-code-background: {{ colors.dark.code_background }};
@@ -180,6 +189,9 @@ body[data-color-scheme='dark'] {
 		--theme-bg-input: {{ colors.light.bg_input }};
 		--theme-border-input: {{ colors.light.border_input }};
 		--theme-border-input-invalid: {{ colors.light.border_input_invalid }};
+		--theme-icon-active-indicator: {{ colors.light.icon_active_indicator }};
+		--theme-icon-success-indicator: {{ colors.light.icon_success_indicator }};
+		--theme-icon-failure-indicator: {{ colors.light.icon_failure_indicator }};
 		--theme-code-normal: {{ colors.light.code_normal }};
 		--theme-code-shadow: {{ colors.light.code_shadow }};
 		--theme-code-background: {{ colors.light.code_background }};
