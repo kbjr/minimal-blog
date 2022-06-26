@@ -8,6 +8,7 @@ import { mark_ext } from './mark';
 import { description_list_ext } from './description-list';
 import { sanitize_html } from '../html-sanitize';
 import { note_ext } from './note';
+import { icon_ext } from './icon';
 
 marked.use({
 	extensions: [
@@ -18,6 +19,7 @@ marked.use({
 		mark_ext,
 		description_list_ext,
 		note_ext,
+		icon_ext,
 	]
 });
 
@@ -28,7 +30,7 @@ export interface MarkdownOptions {
 
 export function render_markdown_to_html(markdown: string, options: MarkdownOptions = { }) {
 	const marked_options: marked.MarkedOptions = {
-		baseUrl: conf.http.web_url + '/posts',
+		baseUrl: conf.http.web_url,
 		breaks: options.breaks || false,
 		renderer,
 	};
