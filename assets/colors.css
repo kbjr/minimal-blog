@@ -32,6 +32,7 @@ body {
 	--theme-icon-active-indicator: {{ colors.light.icon_active_indicator }};
 	--theme-icon-success-indicator: {{ colors.light.icon_success_indicator }};
 	--theme-icon-failure-indicator: {{ colors.light.icon_failure_indicator }};
+	--theme-icon-warning-indicator: {{ colors.light.icon_warning_indicator }};
 	--theme-code-normal: {{ colors.light.code_normal }};
 	--theme-code-shadow: {{ colors.light.code_shadow }};
 	--theme-code-background: {{ colors.light.code_background }};
@@ -85,6 +86,7 @@ body[data-color-scheme='dark'] {
 	--theme-icon-active-indicator: {{ colors.dark.icon_active_indicator }};
 	--theme-icon-success-indicator: {{ colors.dark.icon_success_indicator }};
 	--theme-icon-failure-indicator: {{ colors.dark.icon_failure_indicator }};
+	--theme-icon-warning-indicator: {{ colors.dark.icon_warning_indicator }};
 	--theme-code-normal: {{ colors.dark.code_normal }};
 	--theme-code-shadow: {{ colors.dark.code_shadow }};
 	--theme-code-background: {{ colors.dark.code_background }};
@@ -139,6 +141,7 @@ body[data-color-scheme='dark'] {
 		--theme-icon-active-indicator: {{ colors.dark.icon_active_indicator }};
 		--theme-icon-success-indicator: {{ colors.dark.icon_success_indicator }};
 		--theme-icon-failure-indicator: {{ colors.dark.icon_failure_indicator }};
+		--theme-icon-warning-indicator: {{ colors.dark.icon_warning_indicator }};
 		--theme-code-normal: {{ colors.dark.code_normal }};
 		--theme-code-shadow: {{ colors.dark.code_shadow }};
 		--theme-code-background: {{ colors.dark.code_background }};
@@ -192,6 +195,7 @@ body[data-color-scheme='dark'] {
 		--theme-icon-active-indicator: {{ colors.light.icon_active_indicator }};
 		--theme-icon-success-indicator: {{ colors.light.icon_success_indicator }};
 		--theme-icon-failure-indicator: {{ colors.light.icon_failure_indicator }};
+		--theme-icon-warning-indicator: {{ colors.light.icon_warning_indicator }};
 		--theme-code-normal: {{ colors.light.code_normal }};
 		--theme-code-shadow: {{ colors.light.code_shadow }};
 		--theme-code-background: {{ colors.light.code_background }};

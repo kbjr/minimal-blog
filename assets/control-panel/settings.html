@@ -78,7 +78,7 @@
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-ctrl-language" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+				<save-indicator data-active-message="Saving..." data-success-message="Saved. Refresh to see changes"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -137,7 +137,9 @@
 		<h2>Update Password</h2>
 
 		<p>
-			<!--  -->
+			Here you can update the password used to log in to this control panel. You should try to choose a strong
+			password (long and complex), one you don't use on other sites or applications, and consider periodically
+			updating your password to something new.
 		</p>
 		
 		<form>
@@ -180,16 +182,16 @@
 		
 		<form>
 			<!-- fixme: i18n -->
-			<label for="in-author-name">Author Name</label>
+			<label for="in-author-name">Author Name <sup>*</sup></label>
 			<input type="text" id="in-author-name" required>
 			
 			<!-- fixme: i18n -->
 			<label for="in-author-url">Author URL</label>
-			<input type="text" id="in-author-url">
+			<input type="text" id="in-author-url" placeholder="e.g. &quot;https://example.com&quot;">
 			
 			<!-- fixme: i18n -->
 			<label for="in-author-avatar">Author Avatar URL</label>
-			<input type="text" id="in-author-avatar">
+			<input type="text" id="in-author-avatar" placeholder="e.g. &quot;https://example.com/avatar.png&quot;">
 	
 			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
@@ -252,6 +254,66 @@
 			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-uri-format" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<section id="sect-link">
+		<!-- fixme: i18n -->
+		<h2>Links</h2>
+
+		<!-- fixme: i18n -->
+		<p>
+			Links are shown by default in the header / sidebar. These are just any links you would like to display
+			on your blog to other pages online, typically used for links to personal accounts and profiles on other sites.
+		</p>
+		<p>
+			Each link can have an icon associated to it to be displayed alongside it; Any icon in the
+			<a href="https://feathericons.com/" rel="external">Feather icon set {{{ icons.external-link }}}</a> can be used here.
+		</p>
+		<p>
+			Each link can also have a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel"
+			rel="external"><code>rel</code> attribute {{{ icons.external-link }}}</a> associated to it, which is used
+			to provide additional metadata to your visitors' browsers or other clients about the relationship
+			between your site and the page referenced in the link.
+		</p>
+
+		<form id="form-links">
+			<table id="table-links">
+				<thead>
+					<tr>
+						<!-- fixme: i18n -->
+						<th>Text</th>
+						<th>URL</th>
+						<th>Icon</th>
+						<th><code>rel</code> Value</th>
+						<th>Delete Link</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input type="text" placeholder="e.g. &quot;My Other Website&quot;"></td>
+						<td><input type="text" placeholder="e.g. &quot;https://example.com&quot;"></td>
+						<td>
+							<select>
+								{{# icon_names }}
+								<option value="{{ . }}">{{ . }}</option>
+								{{/ icon_names }}
+							</select>
+						</td>
+						<td><input type="text" placeholder="e.g. &quot;me&quot; or &quot;external&quot;"></td>
+						<td>
+							<button title="Delete Link" class="icon-only">{{{ icons.trash }}}</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="button" id="btn-links-add-link" disabled>Add Link</button>
+				<button type="submit" id="btn-links-save-links" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
 				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
 			</div>
@@ -386,8 +448,8 @@ async function submit_content_language() {
 }
 
 async function submit_control_panel_language() {
-	const control_panel_language = in_ctrl_language.value;
-	const patch = { control_panel_language };
+	const ctrl_panel_language = in_ctrl_language.value;
+	const patch = { ctrl_panel_language };
 
 	await app.http_patch('/api/settings', true, patch);
 	Object.assign(settings, patch);

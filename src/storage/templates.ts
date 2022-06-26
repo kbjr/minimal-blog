@@ -169,6 +169,7 @@ export class TemplateContext {
 	public readonly colors = colors_context;
 	public readonly feed = feed_context;
 	public readonly icons = icons;
+	public readonly icon_names = Object.keys(icons);
 
 	constructor(
 		public readonly page: Readonly<PageContext>,

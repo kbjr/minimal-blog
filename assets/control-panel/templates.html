@@ -1,6 +1,551 @@
 
 <main>
-	<h3 id="todo">
-		TODO: Templates page
-	</h3>
+	<h1>{{ labels.pages.templates.title }}</h1>
+
+	<section id="sect-warning">
+		<h2>{{{ icons.alert-triangle }}} Warning</h2>
+		<p>
+			Making a mistake on this page could <strong>break your website or make it
+			unusable</strong>. Editing these templates requires a working understanding of
+			<a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML {{{ icons.external-link }}}</a>,
+			<a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS {{{ icons.external-link }}}</a>, and
+			<a href="https://mustache.github.io/">Mustache templates{{{ icons.external-link }}} </a>.
+		</p>
+	</section>
+
+	<section id="sect-page-html">
+		<h2>Base Page</h2>
+		<p>
+			The <code>page.html</code> template is used as a base to render all other HTML pages. It receives
+			two partials - <code>&lcub;&lcub;&gt; page_specific_meta_tags &rcub;&rcub;</code> and
+			<code>&lcub;&lcub;&gt; page_content &rcub;&rcub;</code> - which render the page-specific contents
+			of each page that gets wrapped into this base template.
+		</p>
+		<form>
+			<div class="textarea-box">
+				<label for="in-page-html"><code>page.html</code></label>
+				<textarea id="in-page-html"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-page-html" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<section id="sect-styles-css">
+		<h2>Styles</h2>
+		<ul>
+			<li>Make sure all color values reference the <code>var(--theme-*)</code> variables to ensure
+				they use the active light or dark theme.
+			</li>
+		</ul>
+		<form>
+			<div class="textarea-box">
+				<label for="in-styles-css">styles.css</label>
+				<textarea id="in-styles-css"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-styles-css" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<section id="sect-feed">
+		<h2>Feed and Search</h2>
+		<p>
+			<!--  -->
+		</p>
+		<form>
+			<div class="textarea-box">
+				<label for="in-feed-meta-html"><code>feed_meta.html</code></label>
+				<textarea id="in-feed-meta-html" class="short"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-feed-content-html"><code>feed_content.html</code></label>
+				<textarea id="in-feed-content-html"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-feed" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+			
+	<section id="sect-entry-cards">
+		<h2>Entry Cards</h2>
+		<p>
+			<!--  -->
+		</p>
+		<form>
+			<div class="textarea-box">
+				<label for="in-post-card-html"><code>post_card.html</code></label>
+				<textarea id="in-post-card-html"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-comment-card-html"><code>comment_card.html</code></label>
+				<textarea id="in-comment-card-html"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-note-card-html"><code>note_card.html</code></label>
+				<textarea id="in-note-card-html"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-event-card-html"><code>event_card.html</code></label>
+				<textarea id="in-event-card-html"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-rsvp-card-html"><code>rsvp_card.html</code></label>
+				<textarea id="in-rsvp-card-html"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-entry-cards" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<section id="sect-post-entries">
+		<h2>Post Entries</h2>
+		<form>
+			<div class="textarea-box">
+				<label for="in-post-meta-html"><code>post_meta.html</code></label>
+				<textarea id="in-post-meta-html" class="short"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-post-content-html"><code>post_content.html</code></label>
+				<textarea id="in-post-content-html"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-post-entries" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<section id="sect-comment-entries">
+		<h2>Comment Entries</h2>
+		<form>
+			<div class="textarea-box">
+				<label for="in-comment-meta-html"><code>comment_meta.html</code></label>
+				<textarea id="in-comment-meta-html" class="short"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-comment-content-html"><code>comment_content.html</code></label>
+				<textarea id="in-comment-content-html"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-comment-entries" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<section id="sect-note-entries">
+		<h2>Note Entries</h2>
+		<form>
+			<div class="textarea-box">
+				<label for="in-note-meta-html"><code>note_meta.html</code></label>
+				<textarea id="in-note-meta-html" class="short"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-note-content-html"><code>note_content.html</code></label>
+				<textarea id="in-note-content-html"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-note-entries" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<section id="sect-event-entries">
+		<h2>Event Entries</h2>
+		<form>
+			<div class="textarea-box">
+				<label for="in-event-meta-html"><code>event_meta.html</code></label>
+				<textarea id="in-event-meta-html" class="short"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-event-content-html"><code>event_content.html</code></label>
+				<textarea id="in-event-content-html"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-event-entries" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<section id="sect-rsvp-entries">
+		<h2>RSVP Entries</h2>
+		<form>
+			<div class="textarea-box">
+				<label for="in-rsvp-meta-html"><code>rsvp_meta.html</code></label>
+				<textarea id="in-rsvp-meta-html" class="short"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-rsvp-content-html"><code>rsvp_content.html</code></label>
+				<textarea id="in-rsvp-content-html"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-rsvp-entries" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<!-- todo:
+		author card
+		external entry
+		external event
+		mention card
+		mention thread
+	-->
+
+	<section id="sect-not-found-html">
+		<h2>Not Found Page</h2>
+		<p>
+			The <code>not_found.html</code> template is used when someone attempts to view a page that does not
+			exist or has been deleted.
+		</p>
+		<form>
+			<div class="textarea-box">
+				<label for="in-not-found-html"><code>not_found.html</code></label>
+				<textarea id="in-not-found-html" class="short"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-not-found-html" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+	
+	<section id="sect-robots-txt">
+		<h2>Robots</h2>
+		<p>
+			The <code>robots.txt</code> template is used to generate the website's <a href="https://www.robotstxt.org/robotstxt.html"
+			rel="external"><code>robots.txt</code> file {{{ icons.external-link }}}</a>.
+		</p>
+		<form>
+			<div class="textarea-box">
+				<label for="in-robots-txt"><code>robots.txt</code></label>
+				<textarea id="in-robots-txt" class="short"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-robots-txt" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
 </main>
+
+<script src="{{{ ctrl_panel.url }}}/save_indicator.js"></script>
+<script src="{{{ ctrl_panel.url }}}/form.js"></script>
+<script>
+(() => {
+
+const templates = {
+	'author_card.html': null,
+	'comment_card.html': null,
+	'comment_content.html': null,
+	'comment_meta.html': null,
+	'event_card.html': null,
+	'event_content.html': null,
+	'event_meta.html': null,
+	'external_entry.html': null,
+	'external_event.html': null,
+	'feed_content.html': null,
+	'feed_meta.html': null,
+	'mention_card.html': null,
+	'mention_thread.html': null,
+	'not_found.html': null,
+	'note_card.html': null,
+	'note_content.html': null,
+	'note_meta.html': null,
+	'page.html': null,
+	'post_card.html': null,
+	'post_content.html': null,
+	'post_meta.html': null,
+	'robots.txt': null,
+	'rsvp_card.html': null,
+	'rsvp_content.html': null,
+	'rsvp_meta.html': null,
+	'styles.css': null,
+};
+
+// 
+
+const in_page_html            = document.querySelector('#in-page-html');
+const in_styles_css           = document.querySelector('#in-styles-css');
+const in_feed_meta_html       = document.querySelector('#in-feed-meta-html');
+const in_feed_content_html    = document.querySelector('#in-feed-content-html');
+const in_post_card_html       = document.querySelector('#in-post-card-html');
+const in_comment_card_html    = document.querySelector('#in-comment-card-html');
+const in_note_card_html       = document.querySelector('#in-note-card-html');
+const in_event_card_html      = document.querySelector('#in-event-card-html');
+const in_rsvp_card_html       = document.querySelector('#in-rsvp-card-html');
+const in_post_meta_html       = document.querySelector('#in-post-meta-html');
+const in_post_content_html    = document.querySelector('#in-post-content-html');
+const in_comment_meta_html    = document.querySelector('#in-comment-meta-html');
+const in_comment_content_html = document.querySelector('#in-comment-content-html');
+const in_note_meta_html       = document.querySelector('#in-note-meta-html');
+const in_note_content_html    = document.querySelector('#in-note-content-html');
+const in_event_meta_html      = document.querySelector('#in-event-meta-html');
+const in_event_content_html   = document.querySelector('#in-event-content-html');
+const in_rsvp_meta_html       = document.querySelector('#in-rsvp-meta-html');
+const in_rsvp_content_html    = document.querySelector('#in-rsvp-content-html');
+
+const in_not_found_html       = document.querySelector('#in-not-found-html');
+const in_robots_txt           = document.querySelector('#in-robots-txt');
+
+// 
+
+const form_page_html       = new app.Form(document.querySelector('#sect-page-html form'), submit_page_html);
+const form_styles_css      = new app.Form(document.querySelector('#sect-styles-css form'), submit_styles_css);
+const form_feed            = new app.Form(document.querySelector('#sect-feed form'), submit_feed);
+const form_entry_cards     = new app.Form(document.querySelector('#sect-entry-cards form'), submit_entry_cards);
+const form_post_entries    = new app.Form(document.querySelector('#sect-post-entries form'), submit_post_entries);
+const form_comment_entries = new app.Form(document.querySelector('#sect-comment-entries form'), submit_comment_entries);
+const form_note_entries    = new app.Form(document.querySelector('#sect-note-entries form'), submit_note_entries);
+const form_event_entries   = new app.Form(document.querySelector('#sect-event-entries form'), submit_event_entries);
+const form_rsvp_entries    = new app.Form(document.querySelector('#sect-rsvp-entries form'), submit_rsvp_entries);
+
+const form_not_found_html  = new app.Form(document.querySelector('#sect-not-found-html form'), submit_not_found_html);
+const form_robots_txt      = new app.Form(document.querySelector('#sect-robots-txt form'), submit_robots_txt);
+
+// 
+
+load();
+
+// 
+
+async function load() {
+	disable_all();
+	await load_templates();
+	set_initial_values();
+	enable_all();
+}
+
+function disable_all() {
+	form_page_html.disable();
+	form_styles_css.disable();
+	form_feed.disable();
+	form_entry_cards.disable();
+	form_post_entries.disable();
+	form_comment_entries.disable();
+	form_note_entries.disable();
+	form_event_entries.disable();
+	form_rsvp_entries.disable();
+
+	form_not_found_html.disable();
+	form_robots_txt.disable();
+}
+
+function enable_all() {
+	form_page_html.enable(false);
+	form_styles_css.enable(false);
+	form_feed.enable(false);
+	form_entry_cards.enable(false);
+	form_post_entries.enable(false);
+	form_comment_entries.enable(false);
+	form_note_entries.enable(false);
+	form_event_entries.enable(false);
+	form_rsvp_entries.enable(false);
+
+	form_not_found_html.enable(false);
+	form_robots_txt.enable(false);
+}
+
+function set_initial_values() {
+	in_page_html.value            = templates['page.html'];
+	in_styles_css.value           = templates['styles.css'];
+	in_feed_meta_html.value       = templates['feed_meta.html'];
+	in_feed_content_html.value    = templates['feed_content.html'];
+	in_post_card_html.value       = templates['post_card.html'];
+	in_comment_card_html.value    = templates['comment_card.html'];
+	in_note_card_html.value       = templates['note_card.html'];
+	in_event_card_html.value      = templates['event_card.html'];
+	in_rsvp_card_html.value       = templates['rsvp_card.html'];
+	in_post_meta_html.value       = templates['post_meta.html'];
+	in_post_content_html.value    = templates['post_content.html'];
+	in_comment_meta_html.value    = templates['comment_meta.html'];
+	in_comment_content_html.value = templates['comment_content.html'];
+	in_note_meta_html.value       = templates['note_meta.html'];
+	in_note_content_html.value    = templates['note_content.html'];
+	in_event_meta_html.value      = templates['event_meta.html'];
+	in_event_content_html.value   = templates['event_content.html'];
+	in_rsvp_meta_html.value       = templates['rsvp_meta.html'];
+	in_rsvp_content_html.value    = templates['rsvp_content.html'];
+	
+	in_not_found_html.value       = templates['not_found.html'];
+	in_robots_txt.value           = templates['robots.txt'];
+}
+
+async function load_templates() {
+	const promises = [ ];
+	
+	for (const name of Object.keys(templates)) {
+		promises.push(
+			load_template(name).then((content) => {
+				templates[name] = content;
+			})
+		);
+	}
+
+	await Promise.all(promises);
+}
+
+async function load_template(name) {
+	const req_headers = app.http_headers(true);
+	const res = await app.http('GET', `/api/templates/${name}`, req_headers);
+
+	switch (res.status) {
+		case 200: {
+			return res.text();
+		};
+
+		case 401: {
+			app.redirect_to_login(true);
+			break;
+		};
+
+		case 403:
+		case 500:
+		default:
+			return app.throw_http_error(res);
+	}
+}
+
+async function update_template(name, type, content_source) {
+	const req_body = content_source.value;
+	const req_headers = app.http_headers(true, {
+		'content-type': type
+	});
+
+	const res = await app.http('PUT', `/api/templates/${name}`, req_headers, req_body);
+
+	switch (res.status) {
+		case 204: break;
+
+		case 401: {
+			app.redirect_to_login(true);
+			break;
+		};
+
+		case 422: {
+			// todo: handle validation errors
+			break;
+		}
+
+		case 403:
+		case 500:
+		default:
+			return app.throw_http_error(res);
+	}
+}
+
+// 
+
+async function submit_page_html() {
+	await update_template('page.html', 'text/html', in_page_html);
+}
+
+async function submit_styles_css() {
+	await update_template('styles.css', 'text/css', in_styles_css);
+}
+
+async function submit_feed() {
+	await update_template('feed_meta.html', 'text/html', in_feed_meta_html);
+	await update_template('feed_content.html', 'text/html', in_feed_content_html);
+}
+
+async function submit_entry_cards() {
+	await update_template('post_card.html', 'text/html', in_post_card_html);
+	await update_template('comment_card.html', 'text/html', in_comment_card_html);
+	await update_template('note_card.html', 'text/html', in_note_card_html);
+	await update_template('event_card.html', 'text/html', in_event_card_html);
+	await update_template('rsvp_card.html', 'text/html', in_rsvp_card_html);
+}
+
+async function submit_post_entries() {
+	await update_template('post_meta.html', 'text/html', in_post_meta_html);
+	await update_template('post_content.html', 'text/html', in_post_content_html);
+}
+
+async function submit_comment_entries() {
+	await update_template('comment_meta.html', 'text/html', in_comment_meta_html);
+	await update_template('comment_content.html', 'text/html', in_comment_content_html);
+}
+
+async function submit_note_entries() {
+	await update_template('note_meta.html', 'text/html', in_note_meta_html);
+	await update_template('note_content.html', 'text/html', in_note_content_html);
+}
+
+async function submit_event_entries() {
+	await update_template('event_meta.html', 'text/html', in_event_meta_html);
+	await update_template('event_content.html', 'text/html', in_event_content_html);
+}
+
+async function submit_rsvp_entries() {
+	await update_template('rsvp_meta.html', 'text/html', in_rsvp_meta_html);
+	await update_template('rsvp_content.html', 'text/html', in_rsvp_content_html);
+}
+
+
+
+async function submit_not_found_html() {
+	await update_template('not_found.html', 'text/html', in_not_found_html);
+}
+
+async function submit_robots_txt() {
+	await update_template('robots.txt', 'text/plain', in_robots_txt);
+}
+
+})();
+</script>
