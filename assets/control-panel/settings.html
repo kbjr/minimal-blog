@@ -8,8 +8,8 @@
 
 		<!-- fixme: i18n -->
 		<p>
-			The title and description of your blog will be displayed in the title bar of visitors'
-			browsers, as well as prominently on the main webpage. They should describe the blog as
+			The title of your blog will be displayed in the title bar of visitors' browsers, as well as
+			prominently on the main webpage alongside the description. They should describe the blog as
 			a whole, and what kind of content people can expect to find here.
 		</p>
 
@@ -260,7 +260,7 @@
 		</form>
 	</section>
 
-	<section id="sect-link">
+	<section id="sect-links">
 		<!-- fixme: i18n -->
 		<h2>Links</h2>
 
@@ -292,23 +292,7 @@
 						<th>Delete Link</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td><input type="text" placeholder="e.g. &quot;My Other Website&quot;"></td>
-						<td><input type="text" placeholder="e.g. &quot;https://example.com&quot;"></td>
-						<td>
-							<select>
-								{{# icon_names }}
-								<option value="{{ . }}">{{ . }}</option>
-								{{/ icon_names }}
-							</select>
-						</td>
-						<td><input type="text" placeholder="e.g. &quot;me&quot; or &quot;external&quot;"></td>
-						<td>
-							<button title="Delete Link" class="icon-only">{{{ icons.trash }}}</button>
-						</td>
-					</tr>
-				</tbody>
+				<tbody></tbody>
 			</table>
 			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
@@ -327,6 +311,7 @@
 (() => {
 
 let settings;
+let links;
 
 const sect_titles                 = document.querySelector('#sect-titles');
 const sect_content_language       = document.querySelector('#sect-content-language');
@@ -336,6 +321,7 @@ const sect_favicon                = document.querySelector('#sect-favicon');
 const sect_password               = document.querySelector('#sect-password');
 const sect_author                 = document.querySelector('#sect-author');
 const sect_uris                   = document.querySelector('#sect-uris');
+const sect_links                  = document.querySelector('#sect-links');
 
 const in_title            = document.querySelector('#in-title');
 const in_subtitle         = document.querySelector('#in-subtitle');
@@ -359,6 +345,8 @@ const btn_author          = document.querySelector('#btn-author');
 const in_post_uri_format  = document.querySelector('#in-post-uri-format');
 const in_event_uri_format = document.querySelector('#in-event-uri-format');
 const btn_uri_format      = document.querySelector('#btn-uri-format');
+const btn_add_link        = document.querySelector('#btn-links-add-link');
+const tbody_links         = document.querySelector('#table-links tbody');
 
 const form_titles                 = new app.Form(sect_titles.querySelector('form'), submit_titles);
 const form_content_language       = new app.Form(sect_content_language.querySelector('form'), submit_content_language);
@@ -368,6 +356,18 @@ const form_favicon                = new app.Form(sect_favicon.querySelector('for
 const form_password               = new app.Form(sect_password.querySelector('form'), submit_password);
 const form_author                 = new app.Form(sect_author.querySelector('form'), submit_author);
 const form_uris                   = new app.Form(sect_uris.querySelector('form'), submit_post_uris);
+const form_links                  = new app.Form(sect_links.querySelector('form'), submit_links);
+
+
+
+// 
+
+btn_add_link.addEventListener('click', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+	add_link('', '', 'external-link', '');
+	return false;
+});
 
 
 
@@ -382,7 +382,10 @@ load();
 
 async function load() {
 	disable_all();
-	settings = await app.http_get('/api/settings', true);
+	[ settings, links ] = await Promise.all([
+		app.http_get('/api/settings', true),
+		app.http_get('/api/links', true),
+	]);
 	set_initial_values();
 	enable_all();
 }
@@ -396,6 +399,7 @@ function disable_all() {
 	form_password.disable();
 	form_author.disable();
 	form_uris.disable();
+	form_links.disable();
 }
 
 function enable_all() {
@@ -407,6 +411,7 @@ function enable_all() {
 	form_password.enable(false);
 	form_author.enable(false);
 	form_uris.enable(false);
+	form_links.enable(false);
 }
 
 function set_initial_values() {
@@ -421,6 +426,62 @@ function set_initial_values() {
 	in_author_avatar.value = settings.author_avatar;
 	in_post_uri_format.value = settings.post_uri_format;
 	in_event_uri_format.value = settings.event_uri_format;
+
+	for (const link of links) {
+		add_link(link.label, link.link_url, link.icon, link.rel);
+	}
+}
+
+
+
+// 
+
+function add_link(text, url, icon, rel) {
+	const tr = document.createElement('tr');
+	tr.innerHTML = link_row_html;
+
+	tbody_links.appendChild(tr);
+	
+	const in_text = tr.querySelector('.link-text input');
+	const in_url = tr.querySelector('.link-url input');
+	const in_icon = tr.querySelector('.link-icon select');
+	const in_rel = tr.querySelector('.link-rel input');
+	const btn_delete = tr.querySelector('.link-delete button');
+
+	in_text.value = text;
+	in_url.value = url;
+	in_icon.value = icon;
+	in_rel.value = rel;
+	
+	in_text.addEventListener('change', form_links.on_change);
+	in_url.addEventListener('change', form_links.on_change);
+	in_icon.addEventListener('change', form_links.on_change);
+	in_rel.addEventListener('change', form_links.on_change);
+	btn_delete.addEventListener('click', on_delete_link);
+	
+	return { tr, in_text, in_url, in_icon, in_rel, btn_delete };
+}
+
+// fixme: i18n on placeholders
+const link_row_html = `
+<td class="link-text"><input type="text" placeholder="e.g. &quot;My Other Website&quot;"></td>
+<td class="link-url"><input type="text" placeholder="e.g. &quot;https://example.com&quot;"></td>
+<td class="link-icon">
+	<select>
+		{{# icon_names }}
+		<option value="{{ . }}">{{ . }}</option>
+		{{/ icon_names }}
+	</select>
+</td>
+<td class="link-rel"><input type="text" placeholder="e.g. &quot;me&quot; or &quot;external&quot;"></td>
+<td class="link-delete">
+	<button type="button" title="Delete Link" class="icon-only">{{{ icons.trash }}}</button>
+</td>
+`;
+
+function on_delete_link(event) {
+	form_links.on_change(event);
+	// todo: delete link
 }
 
 
@@ -495,6 +556,10 @@ async function submit_post_uris() {
 
 	await app.http_patch('/api/settings', true, patch);
 	Object.assign(settings, patch);
+}
+
+async function submit_links() {
+	// todo: submit links
 }
 
 })();

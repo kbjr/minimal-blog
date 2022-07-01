@@ -4,6 +4,7 @@
 	--font-open-sans: 'Open Sans', sans-serif;
 	--font-monospace: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 	--font-cursive: cursive;
+	--theme-animate-duration: .5s;
 	/* fixme: this file needs to be a rendered template to enable i18n here */
 	--text-note-prefix: 'Note: ';
 }
@@ -26,7 +27,7 @@ body {
 
 body[data-color-transition-enabled],
 body[data-color-transition-enabled] :is(button, pre, input, textarea, select, mark, dd) {
-	transition: background linear .5s;
+	transition: background linear var(--theme-animate-duration);
 }
 
 body:not(#page-login, #page-first-time-setup) #root {
@@ -77,6 +78,13 @@ body:not(#page-login, #page-first-time-setup) #root > header {
 #root > header nav ul {
 	list-style: none;
 	margin-inline-start: 1rem;
+}
+
+#root > header nav ul ul {
+	margin-inline-start: 0.5rem;
+	padding-inline-start: 0.5rem;
+	border-inline-start: 0.125rem solid var(--theme-line);
+	transition: border-color var(--theme-animate-duration) linear;
 }
 
 
@@ -154,6 +162,8 @@ code, pre {
 
 p code,
 li code,
+dt code,
+dd code,
 label code {
 	color: inherit;
 	font-size: inherit;
@@ -900,7 +910,7 @@ table {
 	}
 
 	#page-settings #table-links {
-		/*  */
+		width: 100%;
 	}
 	
 	#page-settings #table-links input {

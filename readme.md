@@ -72,3 +72,9 @@ $ npm run docker:arm64
 # Build for linux/amd64 platform (tagged as "minimal-blog:amd64")
 $ npm run docker:amd64
 ```
+
+## Other Notes
+
+### On Password Storage
+
+The admin login password hash is stored in a setting called `password_hash`. In the builtin SQLite3 storage implementation, that means it will show up in the `$DATA_DIR/settings.db` file. Please take whatever security precautions you consider reasonable for your situation to protect this file accordingly.

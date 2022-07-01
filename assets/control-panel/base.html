@@ -57,8 +57,8 @@
 			
 			<nav>
 				<ul>
-					<!-- fixme: i18n labels for these strings -->
 					<li><a href="{{{ ctrl_panel.url }}}">{{ labels.pages.dashboard.title }}</a></li>
+					<!-- fixme: i18n labels for these strings -->
 					<li>Create New Entry
 						<ul>
 							<li><a href="{{{ ctrl_panel.url }}}/create/post">New Post</a></li>
@@ -68,15 +68,11 @@
 							<li><a href="{{{ ctrl_panel.url }}}/create/rsvp">New RSVP</a></li>
 						</ul>
 					</li>
-					<li>Settings, etc.
-						<ul>
-							<li><a href="{{{ ctrl_panel.url }}}/settings">{{ labels.pages.settings.title }}</a></li>
-							<li><a href="{{{ ctrl_panel.url }}}/mention_settings">{{ labels.pages.mention_settings.title }}</a></li>
-							<li><a href="{{{ ctrl_panel.url }}}/moderation_queue">Moderation Queue</a></li>
-							<li><a href="{{{ ctrl_panel.url }}}/color_themes">{{ labels.pages.color_themes.title }}</a></li>
-							<li><a href="{{{ ctrl_panel.url }}}/templates">{{ labels.pages.templates.title }}</a></li>
-						</ul>
-					</li>
+					<li><a href="{{{ ctrl_panel.url }}}/settings">{{ labels.pages.settings.title }}</a></li>
+					<li><a href="{{{ ctrl_panel.url }}}/mention_settings">{{ labels.pages.mention_settings.title }}</a></li>
+					<li><a href="{{{ ctrl_panel.url }}}/moderation_queue">Moderation Queue</a></li>
+					<li><a href="{{{ ctrl_panel.url }}}/color_themes">{{ labels.pages.color_themes.title }}</a></li>
+					<li><a href="{{{ ctrl_panel.url }}}/templates">{{ labels.pages.templates.title }}</a></li>
 				</ul>
 			</nav>
 			
@@ -88,10 +84,8 @@
 
 	<footer>
 		<p>
-			<a href="https://github.com/kbjr/minimal-blog">Minimal Blog</a>:
-			Control Panel
+			<a href="https://github.com/kbjr/minimal-blog">Minimal Blog</a> /  {{ site.app_version }}
 		</p>
-		<p>Version: {{ site.app_version }}</p>
 	</footer>
 </body>
 </html>

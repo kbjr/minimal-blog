@@ -38,11 +38,11 @@
 
 	<section id="sect-styles-css">
 		<h2>Styles</h2>
-		<ul>
-			<li>Make sure all color values reference the <code>var(--theme-*)</code> variables to ensure
-				they use the active light or dark theme.
-			</li>
-		</ul>
+		<p>
+			The <code>styles.css</code> template provides the majority of the CSS styles for the whole site, across all pages.
+			<code>var(--theme-*)</code> variables are available to enable select the correct colors from the active light or
+			dark theme.
+		</p>
 		<form>
 			<div class="textarea-box">
 				<label for="in-styles-css">styles.css</label>
@@ -86,7 +86,8 @@
 	<section id="sect-entry-cards">
 		<h2>Entry Cards</h2>
 		<p>
-			<!--  -->
+			The <code>[type]_card.html</code> templates are used in the feed and search views to display
+			a more compat, summarized version of each type of entry.
 		</p>
 		<form>
 			<div class="textarea-box">
@@ -124,7 +125,18 @@
 	</section>
 
 	<section id="sect-post-entries">
+		<!-- fixme: i18n -->
 		<h2>Post Entries</h2>
+		<p>
+			The <code>post_meta.html</code> and <code>post_content.html</code> templates are used to render Post entries.
+		</p>
+		<dl>
+			<dt><code>post_meta.html</code></dt>
+			<dd>Meta-tags to be injected into the <code>&lt;head&gt;</code> of the page.</dd>
+			
+			<dt><code>post_content.html</code></dt>
+			<dd>The main page contents to be rendered in the <code>&lt;body&gt;</code> of the page.</dd>
+		</dl>
 		<form>
 			<div class="textarea-box">
 				<label for="in-post-meta-html"><code>post_meta.html</code></label>
@@ -146,7 +158,18 @@
 	</section>
 
 	<section id="sect-comment-entries">
+		<!-- fixme: i18n -->
 		<h2>Comment Entries</h2>
+		<p>
+			The <code>comment_meta.html</code> and <code>comment_content.html</code> templates are used to render Comment entries.
+		</p>
+		<dl>
+			<dt><code>comment_meta.html</code></dt>
+			<dd>Meta-tags to be injected into the <code>&lt;head&gt;</code> of the page.</dd>
+			
+			<dt><code>comment_content.html</code></dt>
+			<dd>The main page contents to be rendered in the <code>&lt;body&gt;</code> of the page.</dd>
+		</dl>
 		<form>
 			<div class="textarea-box">
 				<label for="in-comment-meta-html"><code>comment_meta.html</code></label>
@@ -168,7 +191,18 @@
 	</section>
 
 	<section id="sect-note-entries">
+		<!-- fixme: i18n -->
 		<h2>Note Entries</h2>
+		<p>
+			The <code>note_meta.html</code> and <code>note_content.html</code> templates are used to render Note entries.
+		</p>
+		<dl>
+			<dt><code>note_meta.html</code></dt>
+			<dd>Meta-tags to be injected into the <code>&lt;head&gt;</code> of the page.</dd>
+			
+			<dt><code>note_content.html</code></dt>
+			<dd>The main page contents to be rendered in the <code>&lt;body&gt;</code> of the page.</dd>
+		</dl>
 		<form>
 			<div class="textarea-box">
 				<label for="in-note-meta-html"><code>note_meta.html</code></label>
@@ -190,7 +224,18 @@
 	</section>
 
 	<section id="sect-event-entries">
+		<!-- fixme: i18n -->
 		<h2>Event Entries</h2>
+		<p>
+			The <code>event_meta.html</code> and <code>event_content.html</code> templates are used to render Event entries.
+		</p>
+		<dl>
+			<dt><code>event_meta.html</code></dt>
+			<dd>Meta-tags to be injected into the <code>&lt;head&gt;</code> of the page.</dd>
+			
+			<dt><code>event_content.html</code></dt>
+			<dd>The main page contents to be rendered in the <code>&lt;body&gt;</code> of the page.</dd>
+		</dl>
 		<form>
 			<div class="textarea-box">
 				<label for="in-event-meta-html"><code>event_meta.html</code></label>
@@ -212,7 +257,18 @@
 	</section>
 
 	<section id="sect-rsvp-entries">
+		<!-- fixme: i18n -->
 		<h2>RSVP Entries</h2>
+		<p>
+			The <code>rsvp_meta.html</code> and <code>rsvp_content.html</code> templates are used to render RSVP entries.
+		</p>
+		<dl>
+			<dt><code>rsvp_meta.html</code></dt>
+			<dd>Meta-tags to be injected into the <code>&lt;head&gt;</code> of the page.</dd>
+			
+			<dt><code>rsvp_content.html</code></dt>
+			<dd>The main page contents to be rendered in the <code>&lt;body&gt;</code> of the page.</dd>
+		</dl>
 		<form>
 			<div class="textarea-box">
 				<label for="in-rsvp-meta-html"><code>rsvp_meta.html</code></label>

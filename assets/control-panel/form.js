@@ -1,5 +1,15 @@
 (() => {
 
+const instances = [ ];
+
+window.onbeforeunload = (event) => {
+	for (const form of instances) {
+		if (form.needs_save) {
+			return false;
+		}
+	}
+};
+
 app.FormSubmitError = class FormSubmitError {
 	message = null;
 	constructor(message) {
@@ -17,6 +27,8 @@ app.Form = class Form {
 	#reset_callback = null;
 
 	constructor(form_elem, submit, reset) {
+		instances.push(this);
+
 		this.#form_elem = form_elem;
 		this.#submit_callback = submit;
 		this.#reset_callback = reset;
@@ -30,8 +42,12 @@ app.Form = class Form {
 		this.#form_elem.addEventListener('reset', this.on_reset);
 
 		for (const input of this.#input_elems) {
-			input.addEventListener('change', this.on_input_change);
+			input.addEventListener('change', this.on_change);
 		}
+	}
+
+	get needs_save() {
+		return ! this.#submit_elem.disabled;
 	}
 
 	on_submit = (event) => {
@@ -106,7 +122,7 @@ app.Form = class Form {
 		}
 	}
 
-	on_input_change = (event) => {
+	on_change = (event) => {
 		this.#submit_elem.disabled = false;
 	};
 
@@ -120,15 +136,18 @@ app.Form = class Form {
 		}
 	}
 
-	enable(include_buttons = false) {
+	enable(include_submit = false) {
 		for (const input of this.#input_elems) {
 			input.disabled = false;
 		}
 
-		if (include_buttons) {
-			for (const button of this.#button_elems) {
-				button.disabled = false;
+		for (const button of this.#button_elems) {
+			// skip submit button unless `include_submit` is set
+			if (! include_submit && button.getAttribute('type') === 'submit') {
+				continue;
 			}
+
+			button.disabled = false;
 		}
 	}
 };

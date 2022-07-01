@@ -31,7 +31,7 @@ export async function set_links(new_links: LinkData[]) {
 
 		for (let i = 0; i < new_links.length; i++) {
 			const link = new_links[i];
-			await run(db, sql_set_link, {
+			await run(db, sql_insert_link, {
 				$link_url: link.link_url,
 				$label: link.label,
 				$icon: link.icon,
@@ -50,7 +50,7 @@ const sql_delete_links = sql(`
 delete from links
 `);
 
-const sql_set_link = sql(`
+const sql_insert_link = sql(`
 insert into links
 	(link_url, label, icon, sort_order, rel)
 values

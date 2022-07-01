@@ -290,15 +290,41 @@ function set_initial_values() {
 // 
 
 async function submit_enable_mentions() {
-	// todo: submit enable mentions
+	const send_pingback = in_enable_send_pingbacks.checked;
+	const receive_pingback = in_enable_receive_pingbacks.checked;
+	const send_webmention = in_enable_send_webmentions.checked;
+	const receive_webmention = in_enable_receive_webmentions.checked;
+	const patch = {
+		send_pingback,
+		receive_pingback,
+		send_webmention,
+		receive_webmention,
+	};
+
+	await app.http_patch('/api/settings', true, patch);
+	Object.assign(settings, patch);
 }
 
 async function submit_https_only() {
-	// todo: submit https only
+	const https_only = in_https_only.checked;
+	const patch = {
+		https_only,
+	};
+
+	await app.http_patch('/api/settings', true, patch);
+	Object.assign(settings, patch);
 }
 
 async function submit_mentions_defaults() {
-	// todo: submit mentions defaults
+	const default_pingback = in_pingback_default.value;
+	const default_webmention = in_webmention_default.value;
+	const patch = {
+		default_pingback,
+		default_webmention,
+	};
+
+	await app.http_patch('/api/settings', true, patch);
+	Object.assign(settings, patch);
 }
 
 async function submit_mentions_rules() {
