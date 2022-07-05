@@ -33,6 +33,10 @@ export function throw_404_not_found(message: string, log_message?: string, addit
 	throw new HttpError(404, message, log_message, additional);
 }
 
+export function throw_415_unsupported_media_type(message: string, log_message?: string, additional?: object) : never {
+	throw new HttpError(415, message, log_message, additional);
+}
+
 export function throw_422_unprocessable_entity(message: string, log_message?: string, additional?: object) : never {
 	throw new HttpError(422, message, log_message, additional);
 }
