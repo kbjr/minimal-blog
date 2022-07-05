@@ -50,7 +50,7 @@ export async function setup_plugins() {
 // ===== Request Body Parsers =====
 
 // PNG for favicon uploads
-ctrl.addContentTypeParser([ 'image/png' ], { parseAs: 'buffer' }, noop_content_processor);
+ctrl.addContentTypeParser([ 'image/png', 'image/jpeg', 'image/gif' ], { parseAs: 'buffer' }, noop_content_processor);
 
 // Various text formats for templates and markdown previews
 ctrl.addContentTypeParser([ 'text/html', 'text/markdown', 'text/css' ], { parseAs: 'string' }, noop_content_processor);
