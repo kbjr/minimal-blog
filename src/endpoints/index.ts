@@ -12,7 +12,7 @@ export function import_endpoints() {
 	
 	// Asset files (CSS/JS/Images)
 	require('./web/assets');
-	// require('./web/favicon');
+	require('./web/favicon');
 	
 	// Various feed formats
 	// require('./web/feed-atom');
@@ -64,6 +64,7 @@ export function import_endpoints() {
 	require('./ctrl/settings/get');
 	require('./ctrl/settings/update');
 	require('./ctrl/settings/setup');
+	require('./ctrl/settings/update-favicon');
 	require('./ctrl/settings/update-password');
 	
 	// Links

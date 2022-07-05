@@ -5,6 +5,7 @@ import { store,assets } from '../../../storage';
 import { RouteShorthandOptions } from 'fastify';
 import { rendered_asset_cache } from '../../../cache';
 import { TemplateContext } from '../../../storage/templates';
+import { throw_404_not_found } from '../../../http-error';
 
 const opts: RouteShorthandOptions = {
 	schema: {
@@ -27,6 +28,18 @@ ctrl.get('/colors.css', opts, async (req, res) => {
 	}
 
 	return colors_css;
+});
+
+ctrl.get('/favicon', async (req, res) => {
+	const body = store.settings.get('favicon');
+	const type = store.settings.get('favicon_type');
+
+	if (! body || ! type) {
+		throw_404_not_found('Favicon not found');
+	}
+
+	res.type(type);
+	return body;
 });
 
 ctrl.get('/time.js', opts, async (req, res) => {
