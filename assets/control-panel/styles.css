@@ -432,6 +432,7 @@ button {
 
 	button svg.icon {
 		--icon-size: 2rem;
+		pointer-events: none;
 	}
 
 	button svg.icon:first-child {
