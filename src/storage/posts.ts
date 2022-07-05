@@ -128,7 +128,7 @@ export async function create_post(data: PostDataPatch) : Promise<PostData> {
 	return full_post;
 }
 
-export async function update_post(post_type: PostType, uri_name: string, updates: Omit<PostDataPatch, 'post_type' | 'uri_name'>) {
+export async function update_post(post_type: PostType, uri_name: string, updates: Partial<PostData>) {
 	const post = get_post(post_type, uri_name);
 
 	if (! post) {
@@ -136,16 +136,22 @@ export async function update_post(post_type: PostType, uri_name: string, updates
 	}
 
 	if (post.is_draft && updates.is_draft === false) {
-		post.date_published = (new Date).toISOString();
-		// move the post to the front of the list if this was the publish event so
-		// it shows up in correct, publish-sorted order
+		// if this is the post being initially published, set the publish time
+		updates.date_published = (new Date).toISOString();
+		// move the post to the front of the list so it shows up in correct,
+		// publish-sorted order
 		const orig_index = posts.findIndex((data) => data === post);
 		posts.splice(orig_index, 1);
 		posts.unshift(post);
 	}
 
 	else if (! post.is_draft && updates.is_draft !== true) {
-		post.date_updated = (new Date).toISOString();
+		// if the entry was already previously published, set the update time
+		updates.date_updated = (new Date).toISOString();
+	}
+
+	if ('content_markdown' in updates) {
+		updates.content_html = await render_markdown_to_html(updates.content_markdown, { });
 	}
 
 	if ('tags' in updates) {
