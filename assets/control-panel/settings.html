@@ -26,7 +26,7 @@
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-titles" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="Save Failed"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -52,7 +52,7 @@
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-language" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="Save Failed"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -78,7 +78,7 @@
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-ctrl-language" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved. Refresh to see changes"></save-indicator>
+				<save-indicator data-active-message="Saving..." data-success-message="Saved. Refresh to see changes" data-success-message="Save Failed"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -101,7 +101,7 @@
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-copyright" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="Save Failed"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -127,7 +127,7 @@
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-favicon" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="Save Failed"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -167,7 +167,7 @@
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-update-password" disabled>Change Password</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+				<save-indicator data-active-message="Updating..." data-success-message="Password Updated Successfully" data-failure-message="Update Failed"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -197,7 +197,7 @@
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-author" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="Save Failed"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -255,7 +255,7 @@
 				<!-- fixme: i18n label -->
 				<button type="submit" id="btn-uri-format" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="Save Failed"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -299,7 +299,7 @@
 				<button type="button" id="btn-links-add-link" disabled>Add Link</button>
 				<button type="submit" id="btn-links-save-links" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="Save Failed"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -464,8 +464,8 @@ function add_link(text, url, icon, rel) {
 
 // fixme: i18n on placeholders
 const link_row_html = `
-<td class="link-text"><input type="text" placeholder="e.g. &quot;My Other Website&quot;"></td>
-<td class="link-url"><input type="text" placeholder="e.g. &quot;https://example.com&quot;"></td>
+<td class="link-text"><input type="text" placeholder="e.g. &quot;My Other Website&quot;" required></td>
+<td class="link-url"><input type="text" placeholder="e.g. &quot;https://example.com&quot;" required></td>
 <td class="link-icon">
 	<select>
 		{{# icon_names }}
@@ -481,7 +481,10 @@ const link_row_html = `
 
 function on_delete_link(event) {
 	form_links.on_change(event);
-	// todo: delete link
+	const button = event.target;
+	const td = button.parentElement;
+	const tr = td.parentElement;
+	tr.parentElement.removeChild(tr);
 }
 
 
@@ -525,11 +528,41 @@ async function submit_copyright_notice() {
 }
 
 async function submit_favicon() {
-	// todo: submit favicon
+	/** @type {File} */
+	const file = in_favicon.files[0];
+
+	if (! file) {
+		throw app.FormSubmitError('No file selected');
+	}
+
+	const headers = app.http_headers(true, {
+		'content-type': file.type
+	});
+
+	const contents = await file.arrayBuffer();
+	await app.http('PUT', '/api/settings/favicon', headers, contents);
+	in_favicon.value = '';
+	// todo: update favicon preview
 }
 
 async function submit_password() {
-	// todo: submit password
+	const current_password = in_current_password.value;
+	const new_password = in_new_password.value;
+	const confirm_password = in_confirm_password.value;
+		
+	if (new_password !== confirm_password) {
+		// fixme: i18n
+		throw new app.FormSubmitError('Password and confirmation do not match');
+	}
+
+	await app.http_put('/api/settings/password', true, {
+		current_password,
+		new_password
+	});
+
+	in_current_password.value = '';
+	in_new_password.value = '';
+	in_confirm_password.value = '';
 }
 
 async function submit_author() {
@@ -559,7 +592,20 @@ async function submit_post_uris() {
 }
 
 async function submit_links() {
-	// todo: submit links
+	const rows = tbody_links.querySelectorAll('tr');
+	const new_links = [ ];
+
+	for (const row of rows) {
+		const label = row.querySelector('.link-text input').value;
+		const link_url = row.querySelector('.link-url input').value;
+		const icon = row.querySelector('.link-icon select').value;
+		const rel = row.querySelector('.link-rel input').value;
+		new_links.push({ label, link_url, icon, rel });
+	}
+
+	await app.http_put('/api/links', true, new_links);
+	links.length = 0;
+	links.push(...new_links);
 }
 
 })();
