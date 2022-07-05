@@ -9,7 +9,7 @@
 
 	{{> page_specific_meta_tags }}
 
-	<link rel="icon" href="{{{ site.url }}}/favicon.png">
+	<link rel="icon" type="{{ site.favicon_type }}" href="{{{ site.url }}}/favicon">
 	{{# feed.search_enabled }}
 	<link rel="search" href="{{{ site.url }}}/opensearch.xml" type="application/opensearchdescription+xml" title="Content Search">
 	{{/ feed.search_enabled }}
