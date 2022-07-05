@@ -58,9 +58,10 @@
 
 		<div class="controls">
 			<div class="left" data-flex="row align-center">
-				<button type="submit" id="btn-post-save">{{ label_save }}</button>
 				<button type="button" id="btn-post-preview" data-style="secondary">{{ labels.pages.posts.preview }}</button>
-				<button type="reset" id="btn-post-cancel" data-style="secondary">{{ labels.pages.posts.cancel }}</button>
+				<button type="submit" id="btn-post-save">{{ label_save }}</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="Save Failed"></save-indicator>
 			</div>
 			<div class="right" data-flex="row align-center">
 				<p id="post-publish-status">{{ labels.loading }}</p>
@@ -76,6 +77,7 @@
 	</div>
 </main>
 
+<script src="{{{ ctrl_panel.url }}}/save_indicator.js"></script>
 <script>
 {{> markdown_preview }}
 </script>
@@ -136,8 +138,9 @@ const textarea_markdown = document.querySelector('#in-post-markdown');
 const btn_publish      = document.querySelector('#btn-post-publish');
 const btn_save         = document.querySelector('#btn-post-save');
 const btn_preview      = document.querySelector('#btn-post-preview');
-const btn_cancel       = document.querySelector('#btn-post-cancel');
 const btn_back_to_edit = document.querySelector('#btn-post-back-to-edit');
+
+const save_indicator = document.querySelector('save-indicator');
 
 const preview = document.querySelector('markdown-preview');
 
@@ -260,6 +263,13 @@ async function load() {
 		btn_publish.parentNode.removeChild(btn_publish);
 		span_publish_status.innerHTML = `<a href="${post_url()}">{{ labels.pages.posts.published }}</a>`;
 	}
+	
+	const url = new URL(location);
+
+	if (url.searchParams.has('from_new')) {
+		app.strip_url_querystring();
+		save_ind_success();
+	}
 }
 
 function post_url() {
@@ -295,12 +305,6 @@ function toggle_buttons_enabled(enabled) {
 	btn_publish.disabled = ! enabled;
 	btn_save.disabled = ! enabled;
 	btn_preview.disabled = ! enabled;
-	btn_cancel.disabled = ! enabled;
-}
-
-async function cancel_edit() {
-	// todo: Confirm cancel
-	// todo: Navigate back to /posts
 }
 
 async function save_post() {
@@ -316,12 +320,15 @@ async function save_post() {
 	}
 
 	catch (error) {
-		// todo: error handling
+		console.error(error);
+		save_ind_failure();
 		throw error;
 	}
 }
 
 async function create_new_post(draft = true) {
+	save_ind_active();
+
 	uri_name = uri_name_format === 'slug'
 		? app.title_to_slug(input_title.value)
 		: await app.get_snowflake();
@@ -366,22 +373,55 @@ async function create_new_post(draft = true) {
 
 function redirect_to_edit() {
 	has_unsaved_changes = false;
-	app.replace_url(`edit/${post_type}/${uri_name}`);
+	app.replace_url(`edit/${post_type}/${uri_name}?from_new`);
 	location.reload();
 }
 
 async function update_existing_post() {
-	// todo: Save changes
+	save_ind_active();
+
+	const patch = {
+		content_markdown: textarea_markdown.value,
+		tags: input_tags.value.split(',').map((tag) => tag.trim()).filter(Boolean),
+	};
+
+	switch (post_type) {
+		case 'post':
+			patch.title = input_title.value;
+			patch.subtitle = input_subtitle.value;
+			break;
+
+		case 'comment':
+			patch.external_url = input_external_url.value;
+			break;
+
+		case 'note':
+			// pass
+			break;
+
+		case 'event':
+			patch.title = input_title.value;
+			patch.subtitle = input_subtitle.value;
+			// todo: patch.start
+			// todo: patch.end
+			break;
+
+		case 'rsvp':
+			patch.external_url = input_external_url.value;
+			patch.rsvp_type = select_rsvp_type.value;
+			break;
+	}
+
+	await app.http_patch(`/api/posts/${post_type}/${uri_name}`, true, patch);
 
 	toggle_buttons_enabled(true);
+	save_ind_success();
 	has_unsaved_changes = false;
 }
 
 async function publish_post() {
-	// todo: Confirm publish
-
 	toggle_buttons_enabled(false);
-	// todo: Show indication
+	save_ind_active();
 
 	if (! uri_name) {
 		await create_new_post(false);
@@ -392,8 +432,28 @@ async function publish_post() {
 	await app.http_patch(`/api/posts/${post_type}/${uri_name}`, true, { is_draft: false });
 
 	toggle_buttons_enabled(true);
+	save_ind_success();
 	btn_publish.parentNode.removeChild(btn_publish);
 	span_publish_status.innerHTML = `<a href="${post_url()}">{{ labels.pages.posts.published }}</a>`;
+}
+
+function save_ind_active() {
+	save_indicator.show_active(
+		save_indicator.getAttribute('data-active-message')
+	);
+}
+
+function save_ind_success() {
+	save_indicator.show_success(
+		save_indicator.getAttribute('data-success-message')
+	);
+	save_indicator.hide_in(5000);
+}
+
+function save_ind_failure() {
+	save_indicator.show_failure(
+		save_indicator.getAttribute('data-failure-message')
+	);
 }
 
 })();

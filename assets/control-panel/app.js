@@ -66,11 +66,16 @@ app.login_check = function login_check() {
 app.replace_url = function replace_url(new_uri) {
 	const new_url = `${conf.ctrl_panel_url}/${new_uri}`;
 	history.replaceState({ }, '', new_url);
-}
+};
+
+app.strip_url_querystring = function strip_url_querystring() {
+	const new_url = location.toString().split('?')[0];
+	history.replaceState({ }, '', new_url);
+};
 
 app.title_to_slug = function title_to_slug(title) {
 	return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9:-]/g, '');
-}
+};
 
 app.login = function login(token, payload, redirect = false) {
 	set_auth_token(token);
@@ -161,6 +166,26 @@ app.http_patch = async function http_patch(path, include_auth = false, body = nu
 	});
 
 	const res = await app.http('PATCH', path, headers, body == null ? null : JSON.stringify(body));
+	
+	switch (res.status) {
+		case 204: return;
+		case 200: return res.json();
+		case 401: return app.redirect_to_login(true);
+
+		case 403:
+		case 422:
+		case 500:
+		default:
+			return app.throw_http_error(res);
+	}
+};
+
+app.http_put = async function http_put(path, include_auth = false, body = null) {
+	const headers = app.http_headers(include_auth, body == null ? null : {
+		'content-type': 'application/json'
+	});
+
+	const res = await app.http('PUT', path, headers, body == null ? null : JSON.stringify(body));
 	
 	switch (res.status) {
 		case 204: return;
