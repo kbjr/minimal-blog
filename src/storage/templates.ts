@@ -131,6 +131,7 @@ const site_context = Object.freeze({
 	get url() { return conf.http.web_url; },
 	get language() { return settings.get('language'); },
 	get app_version() { return conf.app_version; },
+	get favicon_type() { return settings.get('favicon_type') || 'image/png'; },
 });
 
 const colors_context = Object.freeze({
