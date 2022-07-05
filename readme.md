@@ -78,3 +78,10 @@ $ npm run docker:amd64
 ### On Password Storage
 
 The admin login password hash is stored in a setting called `password_hash`. In the builtin SQLite3 storage implementation, that means it will show up in the `$DATA_DIR/settings.db` file. Please take whatever security precautions you consider reasonable for your situation to protect this file accordingly.
+
+### On External Runtime Dependencies
+
+In general, this project attempts to avoid the need for external services to function. The following are all known current exceptions:
+
+- Google Fonts (used to load the Open Sans font)
+- cdn.jsdelivr.net (used to load styles and fonts for rendering KaTeX)
