@@ -6,6 +6,8 @@ import { default_dark, default_light } from './default-color-themes';
 export const default_settings = obj<SettingsData>({
 	version: 1,
 	language: 'en',
+	favicon: null,
+	favicon_type: null,
 	ctrl_panel_language: 'en-us',
 	password_hash: null,
 	theme_light: default_light,

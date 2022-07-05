@@ -10,6 +10,8 @@ import { LangCode } from '../endpoints/ctrl/ui/i18n';
 export interface SettingsData {
 	version: 1;
 	language: string;
+	favicon: Buffer;
+	favicon_type: `image/${string}`;
 	ctrl_panel_language: LangCode;
 	password_hash: string;
 	theme_light: string;
