@@ -203,8 +203,12 @@ section.feed-list article header .icon-wrapper svg {
 /* === Posts === */
 
 section.feed-list article[data-post-type='post'] header h3 {
+	font-size: 1rem;
+	margin-block: 0rem;
+}
+
+section.feed-list article[data-post-type='post'] header h3 a.post-link {
 	font-size: 1.5rem;
-	margin-block: 0;
 }
 
 section.feed-list article[data-post-type='post'] header p {
@@ -218,9 +222,9 @@ section.feed-list article[data-post-type='post'] header p.p-summary {
 	color: var(--theme-text-light);
 }
 
-section.feed-list article[data-post-type='post'] header p.date.published,
-section.feed-list article[data-post-type='post'] header p.date.updated {
+section.feed-list article[data-post-type='post'] footer p {
 	font-size: 0.8rem;
+	margin-block: 0.5rem;
 }
 
 /* === Comments === */
