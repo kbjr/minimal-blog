@@ -79,10 +79,6 @@ async function create_context(uri_name: string) {
 		},
 		get url() {
 			return post.post_url;
-		},
-		get description() {
-			// fixme: What should we send back as a description here?
-			return '';
 		}
 	};
 

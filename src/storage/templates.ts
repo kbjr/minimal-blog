@@ -183,5 +183,4 @@ export interface PageContext {
 	page_name: string;
 	url: string;
 	title: string;
-	description: string;
 }

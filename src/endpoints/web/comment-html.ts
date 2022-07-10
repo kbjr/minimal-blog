@@ -79,10 +79,6 @@ async function create_context(uri_name: string) {
 		},
 		get url() {
 			return post.post_url;
-		},
-		get description() {
-			// fixme: Put something better here than the feed description
-			return store.settings.get('feed_description');
 		}
 	};
 

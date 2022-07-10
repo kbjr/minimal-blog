@@ -228,9 +228,6 @@ function page_context(count: number, query: string, tagged_with: string, before:
 		get url() {
 			return page_url(count, tagged_with, before, post_type);
 		},
-		get description() {
-			return store.settings.get('feed_description');
-		},
 		count,
 		tagged_with,
 		post_type,
