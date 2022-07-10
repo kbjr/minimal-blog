@@ -274,6 +274,7 @@ function set_invalidate_triggers(invalidate: () => void, triggers: ExpirationTri
 	if (triggers.posts) {
 		store.events.on('posts.create', invalidate);
 		store.events.on('posts.update', invalidate);
+		store.events.on('posts.delete', invalidate);
 	}
 
 	if (triggers.links) {

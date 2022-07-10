@@ -1,11 +1,11 @@
 <section class="feed-list">
 	{{# page.is_search }}
-	<h2>Showing {{ posts.length }} posts matching '{{ page.search_query }}':</h2>
+	<h2>Showing {{ posts.length }} entries matching '{{ page.search_query }}':</h2>
 	{{/ page.is_search }}
 
 	{{^ page.is_search }}
 	{{# page.tagged_with }}
-	<h2>Showing posts tagged with "{{ page.tagged_with }}":</h2>
+	<h2>Showing entries tagged with "{{ page.tagged_with }}":</h2>
 	{{/ page.tagged_with }}
 	
 	{{^ page.tagged_with }}
@@ -18,7 +18,7 @@
 	{{/ page.post_type }}
 
 	{{^ page.post_type }}
-	<h2>Recent Posts:</h2>
+	<h2>Recent Entries:</h2>
 	{{/ page.post_type }}
 	{{/ page.tagged_with }}
 	{{/ page.is_search }}
@@ -37,11 +37,11 @@
 	
 	{{# page.next_url }}
 	<p>
-		<a rel="prev" href="{{{ page.next_url }}}">See Older Posts</a>
+		<a rel="prev" href="{{{ page.next_url }}}">See Older Entries</a>
 	</p>
 	{{/ page.next_url }}
 	
 	{{^ page.next_url }}
-	<!-- <p>No older posts.</p> -->
+	<!-- <p>No older entries.</p> -->
 	{{/ page.next_url }}
 </section>

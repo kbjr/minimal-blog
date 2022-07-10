@@ -42,7 +42,7 @@ export interface LanguageLabels {
 		dashboard: {
 			title: string;
 			drafts: string;
-			recent_posts: string;
+			recent_entries: string;
 			recent_mentions: string;
 		};
 		posts: {
