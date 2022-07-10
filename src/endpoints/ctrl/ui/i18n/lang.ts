@@ -44,6 +44,9 @@ export interface LanguageLabels {
 			drafts: string;
 			recent_entries: string;
 			recent_mentions: string;
+			no_drafts: string;
+			no_entries: string;
+			no_mentions: string;
 		};
 		posts: {
 			title: string;

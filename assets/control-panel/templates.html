@@ -7,9 +7,11 @@
 		<p>
 			Making a mistake on this page could <strong>break your website or make it
 			unusable</strong>. Editing these templates requires a working understanding of
-			<a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML {{{ icons.external-link }}}</a>,
-			<a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS {{{ icons.external-link }}}</a>, and
-			<a href="https://mustache.github.io/">Mustache templates{{{ icons.external-link }}} </a>.
+			<a href="https://developer.mozilla.org/en-US/docs/Web/HTML" rel="external">HTML {{{ icons.external-link }}}</a>,
+			<a href="https://developer.mozilla.org/en-US/docs/Web/CSS" rel="external">CSS {{{ icons.external-link }}}</a>,
+			<a href="https://mustache.github.io/" rel="external">Mustache templates {{{ icons.external-link }}}</a>,
+			and <a href="https://microformats.org/wiki/h-feed" rel="external">h-feed {{{ icons.external-link }}}</a>
+			and <a href="https://microformats.org/wiki/h-event" rel="external">h-event {{{ icons.external-link }}}</a> microformats.
 		</p>
 	</section>
 
@@ -289,13 +291,58 @@
 		</form>
 	</section>
 
-	<!-- todo:
-		author card
-		external entry
-		external event
-		mention card
-		mention thread
-	-->
+	<section id="sect-author-card">
+		<!-- fixme: i18n -->
+		<h2>Author Card</h2>
+		<!-- todo: description -->
+		<form>
+			<div class="textarea-box">
+				<label for="in-author-card-html"><code>author_card.html</code></label>
+				<textarea id="in-author-card-html"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-author-card" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<section id="sect-external-entries">
+		<!-- fixme: i18n -->
+		<h2>External Entries</h2>
+		<p>
+			The <code>external_entry.html</code> and <code>external_event.html</code> templates are used to render previews of linked
+			external pages.
+		</p>
+		<form>
+			<div class="textarea-box">
+				<label for="in-external-entry-html"><code>external_entry.html</code></label>
+				<textarea id="in-external-entry-html"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-external-event-html"><code>external_event.html</code></label>
+				<textarea id="in-external-event-html"></textarea>
+			</div>
+			
+			<div data-flex="row align-center" class="buttons">
+				<!-- fixme: i18n label -->
+				<button type="submit" id="btn-external-entries" disabled>Save Changes</button>
+				<!-- fixme: i18n label -->
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
+			</div>
+		</form>
+	</section>
+
+	<section id="sect-mentions">
+		<!-- todo:
+			mention card
+			mention thread
+		-->
+	</section>
 
 	<section id="sect-not-found-html">
 		<h2>Not Found Page</h2>
@@ -371,6 +418,11 @@ const templates = {
 	'rsvp_card.html': null,
 	'rsvp_content.html': null,
 	'rsvp_meta.html': null,
+	'author_card.html': null,
+	'external_entry.html': null,
+	'external_event.html': null,
+	// 'mention_card.html': null,
+	// 'mention_thread.html': null,
 	'styles.css': null,
 };
 
@@ -395,24 +447,30 @@ const in_event_meta_html      = document.querySelector('#in-event-meta-html');
 const in_event_content_html   = document.querySelector('#in-event-content-html');
 const in_rsvp_meta_html       = document.querySelector('#in-rsvp-meta-html');
 const in_rsvp_content_html    = document.querySelector('#in-rsvp-content-html');
-
+const in_author_card_html     = document.querySelector('#in-author-card-html');
+const in_external_entry_html  = document.querySelector('#in-external-entry-html');
+const in_external_event_html  = document.querySelector('#in-external-event-html');
+// const in_mention_card_html    = document.querySelector('#in-mention-card-html');
+// const in_mention_thread_html  = document.querySelector('#in-mention-thread-html');
 const in_not_found_html       = document.querySelector('#in-not-found-html');
 const in_robots_txt           = document.querySelector('#in-robots-txt');
 
 // 
 
-const form_page_html       = new app.Form(document.querySelector('#sect-page-html form'), submit_page_html);
-const form_styles_css      = new app.Form(document.querySelector('#sect-styles-css form'), submit_styles_css);
-const form_feed            = new app.Form(document.querySelector('#sect-feed form'), submit_feed);
-const form_entry_cards     = new app.Form(document.querySelector('#sect-entry-cards form'), submit_entry_cards);
-const form_post_entries    = new app.Form(document.querySelector('#sect-post-entries form'), submit_post_entries);
-const form_comment_entries = new app.Form(document.querySelector('#sect-comment-entries form'), submit_comment_entries);
-const form_note_entries    = new app.Form(document.querySelector('#sect-note-entries form'), submit_note_entries);
-const form_event_entries   = new app.Form(document.querySelector('#sect-event-entries form'), submit_event_entries);
-const form_rsvp_entries    = new app.Form(document.querySelector('#sect-rsvp-entries form'), submit_rsvp_entries);
-
-const form_not_found_html  = new app.Form(document.querySelector('#sect-not-found-html form'), submit_not_found_html);
-const form_robots_txt      = new app.Form(document.querySelector('#sect-robots-txt form'), submit_robots_txt);
+const form_page_html        = new app.Form(document.querySelector('#sect-page-html form'), submit_page_html);
+const form_styles_css       = new app.Form(document.querySelector('#sect-styles-css form'), submit_styles_css);
+const form_feed             = new app.Form(document.querySelector('#sect-feed form'), submit_feed);
+const form_entry_cards      = new app.Form(document.querySelector('#sect-entry-cards form'), submit_entry_cards);
+const form_post_entries     = new app.Form(document.querySelector('#sect-post-entries form'), submit_post_entries);
+const form_comment_entries  = new app.Form(document.querySelector('#sect-comment-entries form'), submit_comment_entries);
+const form_note_entries     = new app.Form(document.querySelector('#sect-note-entries form'), submit_note_entries);
+const form_event_entries    = new app.Form(document.querySelector('#sect-event-entries form'), submit_event_entries);
+const form_rsvp_entries     = new app.Form(document.querySelector('#sect-rsvp-entries form'), submit_rsvp_entries);
+const form_author_card      = new app.Form(document.querySelector('#sect-author-card form'), submit_author_card);
+const form_external_entries = new app.Form(document.querySelector('#sect-external-entries form'), submit_external_entries);
+// const form_mentions         = new app.Form(document.querySelector('#sect-mentions form'), submit_mentions);
+const form_not_found_html   = new app.Form(document.querySelector('#sect-not-found-html form'), submit_not_found_html);
+const form_robots_txt       = new app.Form(document.querySelector('#sect-robots-txt form'), submit_robots_txt);
 
 // 
 
@@ -437,7 +495,9 @@ function disable_all() {
 	form_note_entries.disable();
 	form_event_entries.disable();
 	form_rsvp_entries.disable();
-
+	form_author_card.disable();
+	form_external_entries.disable();
+	// form_mentions.disable();
 	form_not_found_html.disable();
 	form_robots_txt.disable();
 }
@@ -452,7 +512,9 @@ function enable_all() {
 	form_note_entries.enable(false);
 	form_event_entries.enable(false);
 	form_rsvp_entries.enable(false);
-
+	form_author_card.enable(false);
+	form_external_entries.enable(false);
+	// form_mentions.enable(false);
 	form_not_found_html.enable(false);
 	form_robots_txt.enable(false);
 }
@@ -477,7 +539,11 @@ function set_initial_values() {
 	in_event_content_html.value   = templates['event_content.html'];
 	in_rsvp_meta_html.value       = templates['rsvp_meta.html'];
 	in_rsvp_content_html.value    = templates['rsvp_content.html'];
-	
+	in_author_card_html.value     = templates['author_card.html'];
+	in_external_entry_html.value  = templates['external_entry.html'];
+	in_external_event_html.value  = templates['external_event.html'];
+	// in_mention_card_html.value    = templates['mention_card.html'];
+	// in_mention_thread_html.value  = templates['mention_thread.html'];
 	in_not_found_html.value       = templates['not_found.html'];
 	in_robots_txt.value           = templates['robots.txt'];
 }
@@ -534,7 +600,8 @@ async function update_template(name, type, content_source) {
 		};
 
 		case 422: {
-			// todo: handle validation errors
+			const body = await res.json();
+			throw new app.FormSubmitError(body.error);
 			break;
 		}
 
@@ -593,7 +660,19 @@ async function submit_rsvp_entries() {
 	await update_template('rsvp_content.html', 'text/html', in_rsvp_content_html);
 }
 
+async function submit_author_card() {
+	await update_template('author_card.html', 'text/html', in_author_card_html);
+}
 
+async function submit_external_entries() {
+	await update_template('external_entry.html', 'text/html', in_external_entry_html);
+	await update_template('external_event.html', 'text/html', in_external_event_html);
+}
+
+async function submit_mentions() {
+	await update_template('mention_card.html', 'text/html', in_mention_card_html);
+	await update_template('mention_thread.html', 'text/html', in_mention_thread_html);
+}
 
 async function submit_not_found_html() {
 	await update_template('not_found.html', 'text/html', in_not_found_html);

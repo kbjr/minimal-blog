@@ -45,6 +45,10 @@ export const en_us: LanguageLabels = {
 			title: 'Dashboard',
 			drafts: 'Drafts',
 			recent_entries: 'Recently Published Entries',
+			recent_mentions: 'Recent Mentions',
+			no_drafts: 'Nothing to show here.<br />This is where your unpublished drafts will show up.',
+			no_entries: 'Nothing to show here.<br />This is where your published entries will show up.',
+			no_mentions: 'Nothing to show here.<br />This is where external pages mentioning your blog will show up if you receive WebMentions or Pingbacks.',
 		},
 		posts: {
 			title: 'View & Edit Posts',
