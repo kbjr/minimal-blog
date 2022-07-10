@@ -996,16 +996,18 @@ table {
 	}
 
 	#page-mention-settings #table-mentions-rules {
-		/*  */
+		table-layout: fixed;
+		width: 100%;
 	}
 	
-	#page-mention-settings #table-mentions-rules input {
-		width: 15rem;
-		font-size: 0.9rem;
+	#page-mention-settings #table-mentions-rules .rule-delete {
+		width: 6rem;
 	}
 
+	#page-mention-settings #table-mentions-rules input,
 	#page-mention-settings #table-mentions-rules select {
-		width: 10rem;
+		width: 100%;
+		font-size: 0.9rem;
 	}
 	
 	#page-mention-settings #table-mentions-rules input,

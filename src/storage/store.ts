@@ -102,9 +102,6 @@ export interface Store {
 	/**  */
 	get_all_posts() : Promise<posts.PostData[]>;
 
-	/**  */
-	get_post(uri_name: string) : Promise<posts.PostData>;
-
 	/*  */
 	search_posts(query: string) : Promise<posts.SearchResult[]>;
 
@@ -121,7 +118,7 @@ export interface Store {
 	delete_post_tags(post_id: number, tags: string[]) : Promise<void>;
 
 	/**  */
-	delete_post(uri_name: string) : Promise<void>;
+	delete_post(post_type: posts.PostType, uri_name: string) : Promise<void>;
 
 	/**  */
 	move_post(old_uri_name: string, new_uri_name: string) : Promise<void>;

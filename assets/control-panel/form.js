@@ -81,7 +81,9 @@ app.Form = class Form {
 
 				if (this.#save_ind) {
 					if (error instanceof app.FormSubmitError) {
-						this.#save_ind.show_failure(error.message);
+						this.#save_ind.show_failure(
+							error.message || this.#save_ind.getAttribute('data-failure-message')
+						);
 					}
 
 					else {

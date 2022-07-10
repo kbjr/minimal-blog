@@ -168,47 +168,21 @@
 				<thead>
 					<tr>
 						<!-- fixme: i18n -->
-						<th>Source Prefix</th>
-						<th>Pingbacks</th>
-						<th>WebMentions</th>
-						<th>Notes</th>
-						<th>Delete</th>
+						<th class="rule-source">Source Prefix</th>
+						<th class="rule-pingback">Pingbacks</th>
+						<th class="rule-webmention">WebMentions</th>
+						<th class="rule-notes">Notes</th>
+						<th class="rule-delete">Delete</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td><input type="text" placeholder="e.g. &quot;https://example.com&quot;"></td>
-						<td>
-							<select>
-								<!-- fixme: i18n -->
-								<option value="">Default</option>
-								<option value="allow">Allow</option>
-								<option value="block">Block</option>
-								<option value="review">Review</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<!-- fixme: i18n -->
-								<option value="">Default</option>
-								<option value="allow">Allow</option>
-								<option value="block">Block</option>
-								<option value="review">Review</option>
-							</select>
-						</td>
-						<td><input type="text"></td>
-						<td>
-							<button title="Delete Rule" class="icon-only">{{{ icons.trash }}}</button>
-						</td>
-					</tr>
-				</tbody>
+				<tbody></tbody>
 			</table>
 			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
 				<button type="button" id="btn-mentions-add-rule" disabled>Add Rule</button>
 				<button type="submit" id="btn-mentions-save-rules" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
-				<save-indicator data-active-message="Saving..." data-success-message="Saved"></save-indicator>
+				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="Save Failed"></save-indicator>
 			</div>
 		</form>
 	</section>
@@ -236,6 +210,7 @@ const in_pingback_default           = document.querySelector('#in-pingback-defau
 const in_webmention_default         = document.querySelector('#in-webmention-default');
 const btn_mentions_defaults         = document.querySelector('#btn-mentions-defaults');
 const table_mentions_rules          = document.querySelector('#table-mentions-rules');
+const tbody_rules                   = table_mentions_rules.querySelector('tbody');
 const btn_mentions_add_rule         = document.querySelector('#btn-mentions-add-rule');
 const btn_mentions_save_rules       = document.querySelector('#btn-mentions-save-rules');
 
@@ -247,6 +222,13 @@ const form_mentions_rules    = new app.Form(document.querySelector('#form-mentio
 
 load();
 
+btn_mentions_add_rule.addEventListener('click', (event) => {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+	add_rule('', '', '', '');
+	return false;
+});
+
 
 
 
@@ -255,6 +237,12 @@ load();
 async function load() {
 	disable_all();
 	settings = await app.http_get('/api/settings', true);
+	moderation_rules = [{
+		source: 'https://blog.jbrumond.me',
+		pingback: null,
+		webmention: 'allow',
+		notes: 'Me :)'
+	}];
 	// moderation_rules = await app.http_get('/api/moderation_rules', true);
 	set_initial_values();
 	enable_all();
@@ -282,8 +270,79 @@ function set_initial_values() {
 	in_https_only.checked = settings.https_only;
 	in_pingback_default.value = settings.default_pingback;
 	in_webmention_default.value = settings.default_webmention;
-	// todo: moderation rules
+	
+	for (const rule of moderation_rules) {
+		add_rule(rule.source, rule.pingback, rule.webmention, rule.notes);
+	}
 }
+
+
+
+// 
+
+function add_rule(source, pingback, webmention, notes) {
+	const tr = document.createElement('tr');
+	tr.innerHTML = rule_row_html;
+
+	tbody_rules.appendChild(tr);
+	
+	const in_source = tr.querySelector('.rule-source input');
+	const in_pingback = tr.querySelector('.rule-pingback select');
+	const in_webmention = tr.querySelector('.rule-webmention select');
+	const in_notes = tr.querySelector('.rule-notes input');
+	const btn_delete = tr.querySelector('.rule-delete button');
+
+	in_source.value = source;
+	in_pingback.value = pingback || '';
+	in_webmention.value = webmention || '';
+	in_notes.value = notes;
+	
+	in_source.addEventListener('change', form_mentions_rules.on_change);
+	in_pingback.addEventListener('change', form_mentions_rules.on_change);
+	in_webmention.addEventListener('change', form_mentions_rules.on_change);
+	in_notes.addEventListener('change', form_mentions_rules.on_change);
+	btn_delete.addEventListener('click', on_delete_rule);
+	
+	return { tr, in_source, in_pingback, in_webmention, in_notes, btn_delete };
+}
+
+// fixme: i18n on placeholders
+const rule_row_html = `
+<td class="rule-source"><input type="text" placeholder="e.g. &quot;https://example.com&quot;"></td>
+<td class="rule-pingback">
+	<select>
+		<!-- fixme: i18n -->
+		<option value="">Default</option>
+		<option value="allow">Allow</option>
+		<option value="block">Block</option>
+		<option value="review">Review</option>
+	</select>
+</td>
+<td class="rule-webmention">
+	<select>
+		<!-- fixme: i18n -->
+		<option value="">Default</option>
+		<option value="allow">Allow</option>
+		<option value="block">Block</option>
+		<option value="review">Review</option>
+	</select>
+</td>
+<td class="rule-notes">
+	<input type="text">
+</td>
+<td class="rule-delete">
+	<button title="Delete Rule" class="icon-only">{{{ icons.trash }}}</button>
+</td>
+`;
+
+function on_delete_rule(event) {
+	form_mentions_rules.on_change(event);
+	const button = event.target;
+	const td = button.parentElement;
+	const tr = td.parentElement;
+	tr.parentElement.removeChild(tr);
+}
+
 
 
 
@@ -328,7 +387,25 @@ async function submit_mentions_defaults() {
 }
 
 async function submit_mentions_rules() {
-	// todo: submit mentions rules
+	const trs = table_mentions_rules.querySelectorAll('tbody tr');
+	const new_rules = [ ];
+
+	for (const tr of trs) {
+		const in_source = tr.querySelector('.rule-source input');
+		const in_pingback = tr.querySelector('.rule-pingback select');
+		const in_webmention = tr.querySelector('.rule-webmention select');
+		const in_notes = tr.querySelector('.rule-notes input');
+
+		new_rules.push({
+			source: in_source.value,
+			pingback: in_pingback.value || null,
+			webmention: in_webmention.value || null,
+			notes: in_notes.value,
+		});
+	}
+
+	await app.http_put('/api/moderation_rules', true, new_rules);
+	moderation_rules = new_rules;
 }
 
 })();
