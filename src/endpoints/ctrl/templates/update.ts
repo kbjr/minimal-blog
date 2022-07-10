@@ -4,6 +4,7 @@ import { store } from '../../../storage';
 import { require_auth, ReqUser } from '../../../auth';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import * as http_error from '../../../http-error';
+import { parse } from 'mustache';
 
 type Req = ReqUser & FastifyRequest<{
 	Body: string;
@@ -61,7 +62,15 @@ ctrl.put('/api/templates/:template_name', opts, async (req: Req, res) => {
 		http_error.throw_404_not_found('template not found');
 	}
 
-	await store.templates.update_template(name, req.body);
+	try {
+		parse(req.body);
+	}
 
+	catch (error) {
+		const message = error instanceof Error ? error.message : 'Failed to parse template';
+		http_error.throw_422_unprocessable_entity(message);
+	}
+
+	await store.templates.update_template(name, req.body);
 	res.status(204);
 });

@@ -8,6 +8,7 @@ import * as templates from './templates';
 import * as posts from './posts';
 import * as links from './links';
 import * as mentions from './mentions';
+import * as moderation_rules from './moderation-rules';
 
 export let store: Store;
 export const events = new EventEmitter();
@@ -21,6 +22,7 @@ export * as templates from './templates';
 export * as posts from './posts';
 export * as links from './links';
 export * as mentions from './mentions';
+export * as moderation_rules from './moderation-rules';
 
 
 
@@ -47,6 +49,7 @@ export async function setup(no_update = false) {
 	await links.load();
 	await posts.load();
 	await mentions.load();
+	await moderation_rules.load();
 
 	events.emit('ready');
 }
@@ -129,6 +132,14 @@ export interface Store {
 	// ===== Mentions =====
 
 	get_all_mentions() : Promise<mentions.MentionData[]>;
+
+	// todo: update
+
+	// ===== Moderation Rules =====
+
+	get_all_moderation_rules() : Promise<moderation_rules.ModerationRuleData[]>;
+
+	// todo: update
 
 	// ===== Attachments =====
 
