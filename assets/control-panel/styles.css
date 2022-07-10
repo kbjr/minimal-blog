@@ -559,7 +559,7 @@ table {
 }
 
 #page-dashboard section:is(#drafts, #posts, #mentions) {
-	margin-block-end: 3rem;
+	margin-block-end: 7rem;
 }
 
 #page-dashboard section:is(#drafts, #posts, #mentions) > h2 {
@@ -593,6 +593,11 @@ table {
 	margin: auto;
 	text-align: center;
 	font-weight: 700;
+	max-width: 40rem;
+	padding: 3rem;
+	transition: background var(--theme-animate-duration) linear;
+	background: var(--theme-bg-light);
+	color: var(--theme-text-light);
 }
 
 #page-dashboard section:is(#drafts, #posts, #mentions) > button[id^='expand-'] {
@@ -600,9 +605,19 @@ table {
 	padding: 0.125rem 2rem;
 }
 
+#page-dashboard section:is(#drafts, #posts, #mentions) save-indicator {
+	margin: 0.5rem;
+	align-self: center;
+}
+
 #page-dashboard section:is(#drafts, #posts, #mentions) table {
 	width: 100%;
 	margin-block: 0;
+}
+
+#page-dashboard section:is(#drafts, #posts, #mentions) table tr[data-active='deleting'] {
+	opacity: 0.4;
+	pointer-events: none;
 }
 
 #page-dashboard table a.icon-only {
@@ -999,11 +1014,11 @@ table {
 		table-layout: fixed;
 		width: 100%;
 	}
-	
+
 	#page-mention-settings #table-mentions-rules .rule-delete {
 		width: 6rem;
 	}
-
+	
 	#page-mention-settings #table-mentions-rules input,
 	#page-mention-settings #table-mentions-rules select {
 		width: 100%;
