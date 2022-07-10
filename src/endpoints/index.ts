@@ -93,6 +93,10 @@ export function import_endpoints() {
 	// Mentions
 	// TODO: Mentions
 
+	// Moderation Rules
+	require('./ctrl/moderation-rules/get');
+	require('./ctrl/moderation-rules/update');
+
 	// Syndications
 	// TODO: Syndications
 	

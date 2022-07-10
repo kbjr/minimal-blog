@@ -22,5 +22,5 @@ const opts: RouteShorthandOptions = {
 
 ctrl.get('/api/moderation_rules', opts, async (req: Req, res) => {
 	require_auth(req);
-	return store.rules.get_rules();
+	return store.moderation_rules.get_rules();
 });

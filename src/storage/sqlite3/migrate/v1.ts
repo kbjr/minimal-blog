@@ -32,7 +32,7 @@ namespace settings_db {
 			await create_settings(db);
 			await create_templates(db);
 			await create_colors(db);
-			await create_mention_rules(db);
+			await create_moderation_rules(db);
 			await create_links(db);
 		}
 
@@ -91,41 +91,23 @@ namespace settings_db {
 		)
 	`);
 
-	async function create_mention_rules(db: sqlite3.Database) {
-		await create_mention_types(db);
+	async function create_moderation_rules(db: sqlite3.Database) {
 		await create_rule_types(db);
-		await run(db, sql_create_mention_rules);
+		await run(db, sql_create_moderation_rules);
 	}
 
-	const sql_create_mention_rules = sql(`
-		create table if not exists mention_rules (
+	const sql_create_moderation_rules = sql(`
+		create table if not exists moderation_rules (
 			source_url varchar(1000) primary key,
-			mention_type varchar(50),
-			rule_type varchar(50),
+			pingback_rule varchar(50),
+			webmention_rule varchar(50),
 			notes varchar(255),
-			vouch_url varchar(1000),
 
-			foreign key (mention_type)
-				references mention_types (name),
-			foreign key (rule_type)
+			foreign key (pingback_rule)
+				references rule_types (name),
+			foreign key (webmention_rule)
 				references rule_types (name)
 		)
-	`);
-	
-	async function create_mention_types(db: sqlite3.Database) {
-		await run(db, sql_create_mention_types);
-		await run(db, sql_set_mention_types);
-	}
-
-	const sql_create_mention_types = sql(`
-		create table if not exists mention_types (
-			name varchar(50) primary key
-		)
-	`);
-	
-	const sql_set_mention_types = sql(`
-		insert into mention_types (name)
-		values ('all'), ('webmention'), ('pingback')
 	`);
 
 	async function create_rule_types(db: sqlite3.Database) {
@@ -141,7 +123,7 @@ namespace settings_db {
 	
 	const sql_set_rule_types = sql(`
 		insert into rule_types (name)
-		values ('block'), ('review'), ('allow'), ('trust')
+		values ('block'), ('review'), ('allow'), ('default')
 	`);
 
 	async function create_links(db: sqlite3.Database) {

@@ -1,33 +1,43 @@
 
-import { conf } from '../conf';
-import { PostData, PostType } from './posts';
-import { ExternalEntry, ExternalEvent } from '../external-posts';
-import { dict, obj, wrap_date } from '../util';
-import { unique_id } from '../snowflake';
-import { events, store } from './store';
+import { obj } from '../util';
+import { store } from './store';
 
-export type MentionType = 'webmention' | 'pingback' /* | 'all' */;
-export type ModerationRuleType = 'allow' | 'block' | 'review' | /* 'trust' | */ null;
+export type ModerationRuleType = 'allow' | 'block' | 'review' | 'default';
 
 let rules: ModerationRuleData[];
 
 export async function load() {
 	rules = await store.get_all_moderation_rules();
-	// 
 }
 
-// export async function update_mention(snowflake: string, data: Partial<EditableMentionData>) {
-// 	const mention = mentions_by_snowflake[snowflake];
+export function get_rules() {
+	return rules.map((rule) => obj(rule));
+}
 
-// 	// todo: actually update mention
+export async function update_rules(new_rules: ModerationRuleData[]) {
+	await store.update_moderation_rules(new_rules);
+	rules = new_rules.map((rule) => obj(rule));
+}
 
-// 	events.emit('mentions.update', mention);
-// }
+export function find_rule(source_url: string) {
+	let len = 0;
+	let match: ModerationRuleData;
+
+	for (const rule of rules) {
+		if (rule.source_url.length > len) {
+			if (source_url.startsWith(rule.source_url)) {
+				len = rule.source_url.length;
+				match = rule;
+			}
+		}
+	}
+
+	return match;
+}
 
 export interface ModerationRuleData {
 	source_url: string;
-	mention_type: MentionType;
-	rule_type: ModerationRuleType;
+	pingback_rule: ModerationRuleType;
+	webmention_rule: ModerationRuleType;
 	notes: string;
-	// vouch_url?: string;
 }

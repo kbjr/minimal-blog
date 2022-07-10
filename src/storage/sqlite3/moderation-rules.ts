@@ -1,46 +1,60 @@
 
-import { MentionData } from '../mentions';
-import { run, get_all, sql, posts_pool } from './db';
+import { ModerationRuleData } from '../moderation-rules';
+import { run, get_all, sql, settings_pool } from './db';
 
-type MentionDataRow = Omit<MentionData, 'needs_moderation' | 'verified'> & {
-	post_id: number;
-	needs_moderation: 0 | 1;
-	verified: 0 | 1;
-};
-
-export async function get_all_mentions() {
-	const db = await posts_pool.acquire();
+export async function get_all_moderation_rules() {
+	const db = await settings_pool.acquire();
 
 	try {
-		const rows = await get_all<MentionDataRow>(db, sql_get_mentions);
-		return rows.map((row) : MentionData => {
-			return Object.assign(row, {
-				needs_moderation: !! row.needs_moderation,
-				verified: !! row.verified,
-			});
-		});
+		return await get_all<ModerationRuleData>(db, sql_get_moderation_rules);
 	}
 
 	finally {
-		await posts_pool.release(db);
+		await settings_pool.release(db);
 	}
 }
 
-const sql_get_mentions = sql(`
+const sql_get_moderation_rules = sql(`
 select
-	mention.post_id          as post_id,
-	post.post_type           as post_type,
-	post.uri_name            as uri_name,
-	mention.source_url       as source_url,
-	mention.vouch_url        as vouch_url,
-	mention.snowflake        as snowflake,
-	mention.needs_moderation as needs_moderation,
-	mention.mention_type     as mention_type,
-	mention.received_time    as received_time,
-	mention.verified         as verified,
-	mention.blocked          as blocked
-from mentions mention
-left outer join posts post
-	on post.post_id = mention.post_id
-order by mention.received_time desc
+	source_url,
+	pingback_rule,
+	webmention_rule,
+	notes
+from moderation_rules
+`);
+
+export async function update_moderation_rules(new_rules: ModerationRuleData[]) {
+	const db = await settings_pool.acquire();
+	
+	try {
+		// fixme: This is a pretty naive imlementation of this, just deleting all
+		// existing records and inserting new without any guarentees that an update
+		// won't fail part way through.
+		await run(db, sql_delete_moderation_rules);
+
+		for (let i = 0; i < new_rules.length; i++) {
+			const rule = new_rules[i];
+			await run(db, sql_insert_rule, {
+				$source_url: rule.source_url,
+				$pingback_rule: rule.pingback_rule,
+				$webmention_rule: rule.webmention_rule,
+				$notes: rule.notes,
+			});
+		}
+	}
+
+	finally {
+		await settings_pool.release(db);
+	}
+}
+
+const sql_delete_moderation_rules = sql(`
+delete from moderation_rules
+`);
+
+const sql_insert_rule = sql(`
+insert into moderation_rules
+	(source_url, pingback_rule, webmention_rule, notes)
+values
+	($source_url, $pingback_rule, $webmention_rule, $notes)
 `);

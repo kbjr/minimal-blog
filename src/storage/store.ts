@@ -137,9 +137,11 @@ export interface Store {
 
 	// ===== Moderation Rules =====
 
+	/**  */
 	get_all_moderation_rules() : Promise<moderation_rules.ModerationRuleData[]>;
 
-	// todo: update
+	/**  */
+	update_moderation_rules(new_rules: moderation_rules.ModerationRuleData[]) : Promise<void>;
 
 	// ===== Attachments =====
 

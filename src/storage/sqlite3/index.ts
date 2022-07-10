@@ -5,6 +5,7 @@ import * as templates from './templates';
 import * as posts from './posts';
 import * as links from './links';
 import * as mentions from './mentions';
+import * as moderation_rules from './moderation-rules';
 import { Store } from '../store';
 import { bring_db_schema_up_to_date } from './migrate';
 import { create_backup } from './backup';
@@ -39,6 +40,9 @@ export const store_sqlite3 = obj_frozen<Store>({
 	list_all_tags: posts.list_all_tags,
 
 	get_all_mentions: mentions.get_all_mentions,
+
+	get_all_moderation_rules: moderation_rules.get_all_moderation_rules,
+	update_moderation_rules: moderation_rules.update_moderation_rules,
 
 	// create_attachment: null,
 	// read_attachment_streaming: null,

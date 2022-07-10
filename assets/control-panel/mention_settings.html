@@ -152,6 +152,10 @@
 		</p>
 		<dl>
 			<!-- fixme: i18n -->
+			<dt>Default</dt>
+			<dd>Mentions from the given source will use the applicable default rule from above.</dd>
+
+			<!-- fixme: i18n -->
 			<dt>Allow</dt>
 			<dd>Mentions from the given source are automatically approved and displayed.</dd>
 			
@@ -225,7 +229,7 @@ load();
 btn_mentions_add_rule.addEventListener('click', (event) => {
 	event.preventDefault();
 	event.stopImmediatePropagation();
-	add_rule('', '', '', '');
+	add_rule('', 'default', 'default', '');
 	return false;
 });
 
@@ -237,13 +241,7 @@ btn_mentions_add_rule.addEventListener('click', (event) => {
 async function load() {
 	disable_all();
 	settings = await app.http_get('/api/settings', true);
-	moderation_rules = [{
-		source: 'https://blog.jbrumond.me',
-		pingback: null,
-		webmention: 'allow',
-		notes: 'Me :)'
-	}];
-	// moderation_rules = await app.http_get('/api/moderation_rules', true);
+	moderation_rules = await app.http_get('/api/moderation_rules', true);
 	set_initial_values();
 	enable_all();
 }
@@ -272,7 +270,7 @@ function set_initial_values() {
 	in_webmention_default.value = settings.default_webmention;
 	
 	for (const rule of moderation_rules) {
-		add_rule(rule.source, rule.pingback, rule.webmention, rule.notes);
+		add_rule(rule.source_url, rule.pingback_rule, rule.webmention_rule, rule.notes);
 	}
 }
 
@@ -312,7 +310,7 @@ const rule_row_html = `
 <td class="rule-pingback">
 	<select>
 		<!-- fixme: i18n -->
-		<option value="">Default</option>
+		<option value="default">Default</option>
 		<option value="allow">Allow</option>
 		<option value="block">Block</option>
 		<option value="review">Review</option>
@@ -321,7 +319,7 @@ const rule_row_html = `
 <td class="rule-webmention">
 	<select>
 		<!-- fixme: i18n -->
-		<option value="">Default</option>
+		<option value="default">Default</option>
 		<option value="allow">Allow</option>
 		<option value="block">Block</option>
 		<option value="review">Review</option>
@@ -397,9 +395,9 @@ async function submit_mentions_rules() {
 		const in_notes = tr.querySelector('.rule-notes input');
 
 		new_rules.push({
-			source: in_source.value,
-			pingback: in_pingback.value || null,
-			webmention: in_webmention.value || null,
+			source_url: in_source.value,
+			pingback_rule: in_pingback.value || null,
+			webmention_rule: in_webmention.value || null,
 			notes: in_notes.value,
 		});
 	}
