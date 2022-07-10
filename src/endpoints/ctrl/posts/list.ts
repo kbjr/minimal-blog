@@ -15,8 +15,8 @@ type Req = ReqUser & FastifyRequest<{
 
 const opts: RouteShorthandOptions = {
 	schema: {
-		tags: ['posts'],
-		description: 'Returns a list of Posts, filtered by the given parameters',
+		tags: ['entries'],
+		description: 'Returns a list of Entries, filtered by the given parameters',
 		security: [
 			{ bearer: [ ] }
 		],

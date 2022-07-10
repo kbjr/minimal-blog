@@ -5,6 +5,7 @@ import * as http_error from '../../../http-error';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { obj, str, str_enum } from '../../../json-schema';
 import { LangCode, lang_by_code } from '../ui/i18n';
+import { attempt_login_lock } from '../../../auth/login-lock';
 
 const opts: RouteShorthandOptions = {
 	schema: {
@@ -41,6 +42,8 @@ ctrl.post('/api/setup', opts, async (req: Req, res) => {
 	if (! lang_by_code(req.body.lang_code)) {
 		http_error.throw_422_unprocessable_entity('invalid language code choice');
 	}
+
+	attempt_login_lock();
 
 	await store.settings.setup_password(req.body.password, req.body.setup_code);
 	await store.settings.set('ctrl_panel_language', req.body.lang_code);

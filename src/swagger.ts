@@ -33,12 +33,11 @@ export const swagger_opts = {
 			{ name: 'meta', description: 'Various meta / status endpoints' },
 			{ name: 'auth', description: 'Endpoints related to authentication, tokens, and passwords' },
 			{ name: 'settings', description: 'Endpoints for managing application Settings' },
-			{ name: 'users', description: 'Endpoints for managing Users' },
-			{ name: 'posts', description: 'Endpoints to read and write Post information' },
+			{ name: 'entries', description: 'Endpoints to read and write Entry information' },
 			{ name: 'templates', description: 'Endpoints for managing page Templates' },
 			{ name: 'themes', description: 'Endpoints for managing Color Themes' },
 			{ name: 'links', description: 'Endpoints for managing sidebar links' },
-			{ name: 'interactions', description: 'Endpoints for managing Interactions like Pingbacks and WebMentions' },
+			{ name: 'mentions', description: 'Endpoints for managing mentions like Pingbacks and WebMentions' },
 		],
 		consumes: [
 			'application/json'

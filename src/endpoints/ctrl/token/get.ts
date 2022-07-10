@@ -5,6 +5,7 @@ import { create_jwt } from '../../../auth';
 import * as http_error from '../../../http-error';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { arr, int, JSONSchema6, obj, one_of, str } from '../../../json-schema';
+import { attempt_login_lock } from '../../../auth/login-lock';
 
 const res_schema: JSONSchema6 = obj({
 	token: str(),
@@ -47,6 +48,8 @@ ctrl.post('/api/token', opts, async (req: Req, res) => {
 	if (! req.body.password || typeof req.body.password !== 'string') {
 		http_error.throw_422_unprocessable_entity('"password" field must be a string');
 	}
+
+	attempt_login_lock();
 
 	await store.settings.check_password(req.body.password);
 	const payload = { sub: 'admin' };

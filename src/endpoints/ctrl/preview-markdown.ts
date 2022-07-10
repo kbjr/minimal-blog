@@ -10,8 +10,8 @@ type Req = ReqUser & FastifyRequest<{
 
 const opts: RouteShorthandOptions = {
 	schema: {
-		tags: ['posts'],
-		description: 'Endpoint responsible for rendering previews of markdown content while authoring Posts',
+		tags: ['entries'],
+		description: 'Endpoint responsible for rendering previews of markdown content while authoring Entries',
 		security: [
 			{ bearer: [ ] }
 		],

@@ -41,6 +41,10 @@ export function throw_422_unprocessable_entity(message: string, log_message?: st
 	throw new HttpError(422, message, log_message, additional);
 }
 
+export function throw_429_too_many_requests(message: string, log_message?: string, additional?: object) : never {
+	throw new HttpError(429, message, log_message, additional);
+}
+
 export function throw_500_internal_server_error(message: string, log_message?: string, additional?: object) : never {
 	throw new HttpError(500, message, log_message, additional);
 }

@@ -13,8 +13,8 @@ type Req = ReqUser & FastifyRequest<{
 
 const opts: RouteShorthandOptions = {
 	schema: {
-		tags: ['posts', 'drafts'],
-		description: 'Returns a list of draft Posts',
+		tags: ['entries'],
+		description: 'Returns a list of draft Entries',
 		security: [
 			{ bearer: [ ] }
 		],

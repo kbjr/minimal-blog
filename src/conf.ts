@@ -153,6 +153,9 @@ export namespace conf {
 		/** Secret size (in bytes) to auto-generate for HMAC token signing (if no other signing method is provided) */
 		export const hmac_secret_size = 128;
 
+		/** Time in milliseconds to lock the login endpoint for after each login attempt */
+		export const login_attempt_lock_duration = 1000;
+
 		/** Configuration for the argon2 hasher used for hashing user passwords for storage */
 		export namespace argon2 {
 			export const hash_length = 100;

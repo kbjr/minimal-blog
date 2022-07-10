@@ -30,7 +30,7 @@ ctrl.get('/colors.css', opts, async (req, res) => {
 	return colors_css;
 });
 
-ctrl.get('/favicon', async (req, res) => {
+ctrl.get('/favicon', opts, async (req, res) => {
 	const body = store.settings.get('favicon');
 	const type = store.settings.get('favicon_type');
 

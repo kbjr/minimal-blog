@@ -3,6 +3,7 @@ import { ctrl } from '../../../http';
 import { store } from '../../../storage';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { obj, str, str_enum } from '../../../json-schema';
+import { attempt_login_lock } from '../../../auth/login-lock';
 
 const opts: RouteShorthandOptions = {
 	schema: {
@@ -32,6 +33,7 @@ type Req = FastifyRequest<{
 }>;
 
 ctrl.put('/api/settings/password', opts, async (req: Req, res) => {
+	attempt_login_lock();
 	await store.settings.update_password(req.body.new_password, req.body.current_password);
 	return { message: 'ok' };
 });

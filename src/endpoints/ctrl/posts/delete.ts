@@ -14,8 +14,8 @@ type Req = ReqUser & FastifyRequest<{
 
 const opts: RouteShorthandOptions = {
 	schema: {
-		tags: ['posts'],
-		description: 'Delete a post',
+		tags: ['entries'],
+		description: 'Delete an entry',
 		security: [
 			{ bearer: [ ] }
 		],
