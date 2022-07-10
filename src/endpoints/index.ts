@@ -75,7 +75,6 @@ export function import_endpoints() {
 	require('./ctrl/templates/get');
 	require('./ctrl/templates/update');
 	require('./ctrl/templates/reset');
-	// require('./ctrl/templates/update-favicon');
 	
 	// Themes
 	require('./ctrl/themes/get');
@@ -89,10 +88,10 @@ export function import_endpoints() {
 	require('./ctrl/posts/get');
 	require('./ctrl/posts/create');
 	require('./ctrl/posts/update');
-	// require('./ctrl/posts/delete');
+	require('./ctrl/posts/delete');
 
-	// Interactions
-	// TODO: Interactions
+	// Mentions
+	// TODO: Mentions
 
 	// Syndications
 	// TODO: Syndications

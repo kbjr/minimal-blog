@@ -29,7 +29,6 @@ export const store_sqlite3 = obj_frozen<Store>({
 	set_links: links.set_links,
 
 	get_all_posts: posts.get_all_posts,
-	get_post: posts.get_post,
 	search_posts: posts.search_posts,
 	create_post: posts.create_post,
 	update_post: posts.update_post,

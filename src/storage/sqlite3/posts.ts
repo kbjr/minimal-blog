@@ -1,7 +1,10 @@
 
 import { obj } from '../../util';
-import { PostData, PostDataPatch, SearchResult, TagData } from '../posts';
+import { PostData, PostDataPatch, PostType, SearchResult, TagData } from '../posts';
 import { run, get_one, get_all, sql, posts_pool } from './db';
+import { logger } from '../../debug';
+
+const log = logger('sqlite');
 
 type RawPostRecord = Omit<PostData, 'tags'> & {
 	tags: string;
@@ -21,12 +24,12 @@ export async function get_all_posts() : Promise<PostData[]> {
 	}
 }
 
-export async function get_post(uri_name: string) : Promise<PostData> {
-	const sql = `${sql_get_posts} where uri_name = ? ${sql_get_posts__group_order_by}`;
+export async function get_post(post_type: PostType, uri_name: string) : Promise<PostData> {
+	const sql = `${sql_get_posts} where post_type = ? and uri_name = ? ${sql_get_posts__group_order_by}`;
 	const db = await posts_pool.acquire();
 
 	try {
-		const post = await get_one<RawPostRecord>(db, sql, [ uri_name ]);
+		const post = await get_one<RawPostRecord>(db, sql, [ post_type, uri_name ]);
 		return split_tags(post);
 	}
 
@@ -180,12 +183,27 @@ set title            = $title,
 where post_id = $post_id
 `;
 
-export async function delete_post(uri_name: string) : Promise<void> {
-	// 
+export async function delete_post(post_type: PostType, uri_name: string) : Promise<void> {
+	const db = await posts_pool.acquire();
+
+	try {
+		await run(db, sql_delete_post, [ post_type, uri_name ]);
+	}
+
+	finally {
+		posts_pool.release(db);
+	}
 }
 
+const sql_delete_post = sql(`
+delete from posts
+where post_type = ?
+  and uri_name = ?
+`);
+
 export async function move_post(old_uri_name: string, new_uri_name: string) : Promise<void> {
-	// 
+	// todo: move post
+	log.warn('move_post not yet implemented');
 }
 
 export async function list_all_tags() {

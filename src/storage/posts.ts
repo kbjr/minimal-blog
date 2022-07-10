@@ -9,13 +9,13 @@ import { ExternalEntry, ExternalEvent } from '../external-posts';
 import { Mention } from './mentions';
 
 export type PostType = 'post' | 'comment' | 'note' | 'event' | 'rsvp';
-// | 'poll' | 'poll-response' | 'share' | 'like/reaction' | 'media-album'
+// | 'poll' | 'poll-response' | 'share' | 'like/reaction' | 'media-album' | 'recipe'
 
 export function post_types() : PostType[] {
 	return ['post', 'comment', 'note', 'event', 'rsvp'];
 }
 
-// Note: `posts` is ordered with the most recent post first
+// Note: `posts` is ordered with the most recently published post first
 let posts: PostData[];
 let posts_index: Record<PostType, Record<string, PostData>>;
 
@@ -193,6 +193,19 @@ export async function update_post(post_type: PostType, uri_name: string, updates
 	await store.update_post(post);
 	events.emit('posts.update', post);
 	return post;
+}
+
+export async function delete_post(post_type: PostType, uri_name: string) {
+	const post = get_post(post_type, uri_name);
+
+	if (! post) {
+		throw_404_not_found(`post_type "${post_type}" with uri_name "${uri_name}" not found`);
+	}
+
+	delete posts_index[post_type][uri_name];
+	posts.splice(posts.findIndex((elem) => elem === post), 1);
+	await store.delete_post(post_type, uri_name);
+	events.emit('posts.delete', post);
 }
 
 export function list_tags() {

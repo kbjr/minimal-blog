@@ -11,7 +11,7 @@
 			<table>
 				<thead>
 					<tr>
-						<!-- todo: i18n labels -->
+						<!-- fixme: i18n labels -->
 						<th class="title-preview">Title / Preview</th>
 						<th class="actions">Actions</th>
 					</tr>
@@ -19,11 +19,12 @@
 				<tbody></tbody>
 			</table>
 		</div>
+		<!-- fixme: i18n -->
 		<button id="expand-drafts" data-style="secondary">Expand</button>
 	</section>
 	
 	<section id="posts" class="show-message">
-		<h2>{{ labels.pages.dashboard.recent_posts }}</h2>
+		<h2>{{ labels.pages.dashboard.recent_entries }}</h2>
 		<div class="message">
 			<p>{{ labels.loading }}</p>
 		</div>
@@ -31,7 +32,7 @@
 			<table>
 				<thead>
 					<tr>
-						<!-- todo: i18n labels -->
+						<!-- fixme: i18n labels -->
 						<th class="link">Link</th>
 						<th class="title-preview">Title / Preview</th>
 						<th class="published">Published</th>
@@ -41,7 +42,8 @@
 				<tbody></tbody>
 			</table>
 		</div>
-		<button id="expand-posts" data-style="secondary">Expand</button>
+		<!-- fixme: i18n -->
+		<button id="expand-entries" data-style="secondary">Expand</button>
 	</section>
 
 	<section id="mentions" class="show-message">
@@ -57,10 +59,12 @@
 				<tbody></tbody>
 			</table>
 		</div>
+		<!-- fixme: i18n -->
 		<button id="expand-mentions" data-style="secondary">Expand</button>
 	</section>
 </main>
 
+<script src="{{{ ctrl_panel.url }}}/save_indicator.js"></script>
 <script>
 (() => {
 
@@ -75,12 +79,12 @@ const tbody_drafts      = table_drafts.querySelector('tbody');
 const message_drafts    = sect_drafts.querySelector('.message p');
 const btn_expand_drafts = sect_drafts.querySelector('button#expand-drafts');
 
-const sect_posts       = document.querySelector('#posts');
-const div_posts_table  = sect_posts.querySelector('.table');
-const table_posts      = div_posts_table.querySelector('table');
-const tbody_posts      = table_posts.querySelector('tbody');
-const message_posts    = sect_posts.querySelector('.message p');
-const btn_expand_posts = sect_posts.querySelector('button#expand-posts');
+const sect_entries       = document.querySelector('#posts');
+const div_entries_table  = sect_entries.querySelector('.table');
+const table_entries      = div_entries_table.querySelector('table');
+const tbody_entries      = table_entries.querySelector('tbody');
+const message_entries    = sect_entries.querySelector('.message p');
+const btn_expand_entries = sect_entries.querySelector('button#expand-entries');
 
 const sect_mentions       = document.querySelector('#mentions');
 const div_mentions_table  = sect_mentions.querySelector('.table');
@@ -94,7 +98,7 @@ const btn_expand_mentions = sect_mentions.querySelector('button#expand-mentions'
 // ===== Event Listeners =====
 
 btn_expand_drafts.addEventListener('click', expand_section(sect_drafts));
-btn_expand_posts.addEventListener('click', expand_section(sect_posts));
+btn_expand_entries.addEventListener('click', expand_section(sect_entries));
 btn_expand_mentions.addEventListener('click', expand_section(sect_mentions));
 
 
@@ -115,13 +119,13 @@ async function load() {
 	]);
 
 	render_drafts();
-	render_posts();
+	render_entries();
 	render_mentions();
 }
 
 function render_drafts() {
 	if (! drafts.length) {
-		show_message(sect_drafts, message_drafts, 'Nothing to show here.');
+		show_message(sect_drafts, message_drafts, '{{{ labels.pages.dashboard.no_drafts }}}');
 		btn_expand_drafts.parentNode.removeChild(btn_expand_drafts);
 		return;
 	}
@@ -133,13 +137,14 @@ function render_drafts() {
 	}
 
 	tbody_drafts.innerHTML = draft_rows.join('');
+	setup_delete_entry_buttons(tbody_drafts);
 	hide_message(sect_drafts);
 }
 
-function render_posts() {
+function render_entries() {
 	if (! posts.length) {
-		show_message(sect_posts, message_posts, 'Nothing to show here.');
-		btn_expand_posts.parentNode.removeChild(btn_expand_posts);
+		show_message(sect_entries, message_entries, '{{{ labels.pages.dashboard.no_entries }}}');
+		btn_expand_entries.parentNode.removeChild(btn_expand_entries);
 		return;
 	}
 
@@ -149,15 +154,84 @@ function render_posts() {
 		post_rows.push(post_template(post));
 	}
 
-	tbody_posts.innerHTML = post_rows.join('');
-	hide_message(sect_posts);
+	tbody_entries.innerHTML = post_rows.join('');
+	setup_delete_entry_buttons(tbody_entries);
+	hide_message(sect_entries);
 }
 
 function render_mentions() {
-	show_message(sect_mentions, message_mentions, 'Nothing to show here.');
+	show_message(sect_mentions, message_mentions, '{{{ labels.pages.dashboard.no_mentions }}}');
 	btn_expand_mentions.parentNode.removeChild(btn_expand_mentions);
 
 	// todo: render_mentions
+}
+
+
+
+// 
+
+function setup_delete_entry_buttons(root) {
+	const entries = root.querySelectorAll('tr[data-entry]');
+	
+	for (const entry_node of entries) {
+		const button = entry_node.querySelector('button[data-action="delete"]');
+		
+		button.addEventListener('click', (event) => {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			delete_entry(entry_node, button);
+			return false;
+		});
+	}
+}
+
+async function delete_entry(entry_node, button) {
+	const entry = entry_node.getAttribute('data-entry');
+	const save_ind = entry_node.querySelector('save-indicator');
+
+	button.parentNode.removeChild(button);
+	save_ind.show_active();
+	entry_node.setAttribute('data-active', 'deleting');
+
+	try {
+		await app.http_delete(`/api/posts/${entry}`, true);
+	}
+
+	catch (error) {
+		console.error(error);
+		save_ind.show_failure(save_ind.getAttribute('data-failure-message'));
+		return;
+	}
+
+	save_ind.show_success(save_ind.getAttribute('data-success-message'));
+	setTimeout(() => delete_table_row(entry_node), 5000);
+}
+
+function delete_table_row(tr) {
+	const tbody = tr.parentNode;
+	
+	tbody.removeChild(tr);
+
+	const contents = tbody.innerHTML.trim();
+
+	if (! contents) {
+		switch (tbody) {
+			case tbody_drafts:
+				show_message(sect_drafts, message_drafts, '{{{ labels.pages.dashboard.no_drafts }}}');
+				btn_expand_drafts.parentNode.removeChild(btn_expand_drafts);
+				break;
+
+			case tbody_entries:
+				show_message(sect_entries, message_entries, '{{{ labels.pages.dashboard.no_entries }}}');
+				btn_expand_entries.parentNode.removeChild(btn_expand_entries);
+				break;
+
+			case tbody_mentions:
+				show_message(sect_mentions, message_mentions, '{{{ labels.pages.dashboard.no_mentions }}}');
+				btn_expand_mentions.parentNode.removeChild(btn_expand_mentions);
+				break;
+		}
+	}
 }
 
 function show_message(section, message_p, message) {
@@ -167,8 +241,8 @@ function show_message(section, message_p, message) {
 }
 
 function hide_message(section) {
-	message_posts.innerHTML = '';
-	message_posts.setAttribute('aria-hidden', 'true');
+	message_entries.innerHTML = '';
+	message_entries.setAttribute('aria-hidden', 'true');
 	section.classList.remove('show-message');
 }
 
@@ -189,21 +263,22 @@ const date = (iso_date) => {
 	return `<time datetime="${iso_date}" title="${date_formatter_long.format(date)}">${date_formatter_short.format(date)}</time>`;
 };
 
-// todo: i18n labels for `title` attributes
+// fixme: i18n labels for `title` attributes
 const draft_template = (post) => `
-<tr>
+<tr data-entry="${post.post_type}/${post.uri_name}">
 	<td class="title-preview">${post_preview(post)}</td>
 	<td class="actions">
 		<a title="Edit Draft" class="icon-only" href="{{{ ctrl_panel.url }}}/edit/${post.post_type}/${post.uri_name}">{{{ icons.edit }}}</a>
 		<button title="Publish Draft" class="icon-only">{{{ icons.send }}}</button>
-		<button title="Delete Draft" class="icon-only">{{{ icons.trash }}}</button>
+		<button title="Delete Draft" class="icon-only" data-action="delete">{{{ icons.trash }}}</button>
+		<save-indicator data-success-message="Deleted" data-failure-message="Delete Failed"></save-indicator>
 	</td>
 </tr>
 `;
 
-// todo: i18n labels for `title` attributes
+// fixme: i18n labels for `title` attributes
 const post_template = (post) => `
-<tr>
+<tr data-entry="${post.post_type}/${post.uri_name}">
 	<td class="link">
 		<a title="Permalink to Post" class="icon-only" href="{{{ site.url }}}/${post.post_type}s/${post.uri_name}">{{{ icons.link }}}</a>
 	</td>
@@ -211,12 +286,13 @@ const post_template = (post) => `
 	<td class="published">${date(post.date_published)}</td>
 	<td class="actions">
 		<a title="Edit Post" class="icon-only" href="{{{ ctrl_panel.url }}}/edit/${post.post_type}/${post.uri_name}">{{{ icons.edit }}}</a>
-		<button title="Delete Post" class="icon-only">{{{ icons.trash }}}</button>
+		<button title="Delete Post" class="icon-only" data-action="delete">{{{ icons.trash }}}</button>
+		<save-indicator data-success-message="Deleted" data-failure-message="Delete Failed"></save-indicator>
 	</td>
 </tr>
 `;
 
-// todo: i18n
+// fixme: i18n
 function post_preview(post) {
 	switch (post.post_type) {
 		case 'post':

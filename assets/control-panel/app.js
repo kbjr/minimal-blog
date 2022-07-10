@@ -135,6 +135,7 @@ app.http_get = async function http_get(path, include_auth = false) {
 		};
 
 		case 403:
+		case 404:
 		case 500:
 		default:
 			return app.throw_http_error(res);
@@ -153,6 +154,7 @@ app.http_post = async function http_post(path, include_auth = false, body = null
 		case 401: return app.redirect_to_login(true);
 
 		case 403:
+		case 404:
 		case 422:
 		case 500:
 		default:
@@ -173,6 +175,7 @@ app.http_patch = async function http_patch(path, include_auth = false, body = nu
 		case 401: return app.redirect_to_login(true);
 
 		case 403:
+		case 404:
 		case 422:
 		case 500:
 		default:
@@ -193,6 +196,25 @@ app.http_put = async function http_put(path, include_auth = false, body = null) 
 		case 401: return app.redirect_to_login(true);
 
 		case 403:
+		case 404:
+		case 422:
+		case 500:
+		default:
+			return app.throw_http_error(res);
+	}
+};
+
+app.http_delete = async function http_put(path, include_auth = false) {
+	const headers = app.http_headers(include_auth);
+	const res = await app.http('DELETE', path, headers);
+	
+	switch (res.status) {
+		case 204: return;
+		case 200: return res.json();
+		case 401: return app.redirect_to_login(true);
+
+		case 403:
+		case 404:
 		case 422:
 		case 500:
 		default:
