@@ -48,16 +48,18 @@ export async function load() {
 	}
 }
 
-export async function get_live_post_mentions(post_type: PostType, uri_name: string) {
+export function get_live_post_mentions(post_type: PostType, uri_name: string) {
 	const mentions = mentions_index[post_type][uri_name];
 
 	if (! mentions) {
 		return [ ];
 	}
 
-	return mentions.filter((mention) => {
-		return ! mention.needs_moderation && ! mention.blocked && mention.verified;
-	});
+	return mentions.filter(is_live);
+}
+
+export function get_mentions(count: number, offset: number) {
+	return mentions.filter(is_live).slice(offset, offset + count);
 }
 
 export function get_mentions_needing_moderation(count: number, offset: number) {
@@ -110,6 +112,10 @@ export async function delete_mention(snowflake: string) {
 	// todo: actually delete mention
 
 	events.emit('mentions.delete', mention);
+}
+
+function is_live(mention: MentionData) {
+	return ! mention.needs_moderation && ! mention.blocked && mention.verified;
 }
 
 export interface EditableMentionData {

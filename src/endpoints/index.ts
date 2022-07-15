@@ -91,7 +91,10 @@ export function import_endpoints() {
 	require('./ctrl/posts/delete');
 
 	// Mentions
-	// TODO: Mentions
+	require('./ctrl/mentions/list');
+	require('./ctrl/mentions/list-moderation-queue');
+	require('./ctrl/mentions/list-verification-queue');
+	require('./ctrl/mentions/update');
 
 	// Moderation Rules
 	require('./ctrl/moderation-rules/get');
