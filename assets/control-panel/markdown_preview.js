@@ -68,6 +68,7 @@ p {
 li {
 	font-size: 1.2rem;
 	margin-block: 0.5rem;
+	line-height: 1.75;
 }
 
 dl {
@@ -287,6 +288,10 @@ figcaption {
 	margin-inline: 0.5rem;
 }
 
+.katex span[style~='color:transparent;'] {
+	user-select: none;
+}
+
 /* === nomnoml === */
 
 .rendered-nomnoml svg g[fill='#eee8d5'] {
@@ -367,6 +372,7 @@ figcaption {
 .rendered-railroad svg path {
 	stroke-width: 3;
 	stroke: var(--theme-text-body);
+	fill: none;
 }
 
 .rendered-railroad svg text {

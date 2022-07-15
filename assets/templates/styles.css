@@ -170,6 +170,7 @@ ul.tag-list li.p-category {
 	background: var(--theme-bg-light);
 	border-radius: 0.5rem;
 	margin-inline-end: 1rem;
+	line-height: 1.2;
 }
 
 
@@ -671,6 +672,7 @@ p[role='note']:before {
 li {
 	font-size: 1.2rem;
 	margin-block: 0.5rem;
+	line-height: 1.75;
 }
 
 li[role='doc-footnote'] {
@@ -1019,6 +1021,10 @@ select {
 	margin-inline: 0.5rem;
 }
 
+.katex span[style~='color:transparent;'] {
+	user-select: none;
+}
+
 /* === nomnoml === */
 
 .rendered-nomnoml svg g[fill='#eee8d5'] {
@@ -1099,6 +1105,7 @@ select {
 .rendered-railroad svg path {
 	stroke-width: 3;
 	stroke: var(--theme-text-body);
+	fill: none;
 }
 
 .rendered-railroad svg text {
