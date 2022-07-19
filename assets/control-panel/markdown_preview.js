@@ -447,58 +447,29 @@ customElements.define('markdown-preview',
 			this.article = this.shadowRoot.querySelector('article');
 		}
 
-		get post_type() {
-			return this.getAttribute('post-type');
+		get markdown_src() {
+			return document.querySelector('#' + this.getAttribute('markdown-src'));
 		}
 
-		get title_src() {
-			return document.querySelector('#' + this.getAttribute('title-src'));
-		}
-		
-		get subtitle_src() {
-			return document.querySelector('#' + this.getAttribute('subtitle-src'));
-		}
-
-		get body_src() {
-			return document.querySelector('#' + this.getAttribute('body-src'));
+		get external_url_src() {
+			return document.querySelector('#' + this.getAttribute('external-url-src'));
 		}
 
 		async render() {
 			this.article.innerHTML = '<p>{{ labels.loading }}</p>';
 
-			const title = this.title_src.value;
-			const subtitle = this.subtitle_src.value;
-			const markdown = this.body_src.value;
-			const published = new Date();
+			const markdown = this.markdown_src.value;
 
-			// TODO: Is this actually laid out in optimal format?
-			const author = conf.author.name
-				? conf.author.url
-					? `<a class="p-author" href="${conf.author.url}">${conf.author.name}</a>`
-					: `<span class="p-author">${conf.author.name}</span>`
-				: conf.author.url
-					? `<a class="p-author" href="${conf.author.url}">${conf.author.url}</a>`
-					: '<span class="p-author">Anonymous</span>';
+			// todo: use external url to get info about external page (if relavent)
 
 			try {
-				const title_html = `
-					<header>
-						<h1 class="p-name">${title}</h1>
-						${subtitle ? `<p class="subtitle">${subtitle}</p>` : ''}
-						<p class="author">By: ${author}</p>
-						<p class="dates">
-							Published: <time class="dt-published" datetime="${published.toISOString()}">${published.toLocaleString()}</time>
-							${''/* In a real post, there might also be a modified data, which would be `dt-update` */}
-						</p>
-					</header>
-					<main class="e-content">
-				`;
-				const body_html = await render_markdown(markdown);
-				this.article.innerHTML = title_html + body_html + '</main>';
+				const html = await render_markdown(markdown);
+				this.article.innerHTML = `<main class="e-content">${html}</main>`;
 			}
 
 			catch (error) {
-				this.article.innerHTML = '<p>Failed to render markdown preview</p>';
+				console.error('failed to render preview', error);
+				this.article.innerHTML = '<p>Failed to render preview</p>';
 			}
 		}
 	}
