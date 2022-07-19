@@ -25,6 +25,7 @@ export function import_endpoints() {
 	
 	// HTML pages
 	require('./web/feed-html');
+	require('./web/embed-html');
 	require('./web/post-html');
 	require('./web/comment-html');
 	require('./web/note-html');
