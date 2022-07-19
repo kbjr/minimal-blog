@@ -61,22 +61,17 @@ export interface LanguageLabels {
 			types: {
 				post: {
 					post_title: string;
-					helper_text: string;
 				};
 				comment: {
 					external_url: string;
-					helper_text: string;
 				};
 				note: {
-					helper_text: string;
 				};
 				event: {
 					post_title: string;
-					helper_text: string;
 				};
 				rsvp: {
 					external_url: string;
-					helper_text: string;
 					rsvp_type: string;
 					rsvp_types: {
 						yes: string;

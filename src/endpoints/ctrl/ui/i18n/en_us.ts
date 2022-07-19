@@ -63,22 +63,17 @@ export const en_us: LanguageLabels = {
 			types: {
 				post: {
 					post_title: 'Post Title',
-					helper_text: 'Posts are your typical, structured article or blog post.',
 				},
 				comment: {
 					external_url: 'Reply To URL',
-					helper_text: 'Comments let you post a response to some other content online.',
 				},
 				note: {
-					helper_text: 'Notes are for micro-blogging. They are typically short, unstructured posts or status updates.',
 				},
 				event: {
 					post_title: 'Event Title',
-					helper_text: 'Events let you create a post with additional time and location information that other people can send RSVPs to.',
 				},
 				rsvp: {
 					external_url: 'Event URL',
-					helper_text: 'RSVPs let you post a response to an event posted online, along with whether you plan to attend.',
 					rsvp_type: 'RSVP Type',
 					rsvp_types: {
 						yes: 'Going',

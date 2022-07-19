@@ -100,9 +100,6 @@ async function edit_post_endpoint(req: Req, res: FastifyReply) {
 		get post_type_has_external_url() {
 			return post_type === 'comment' || post_type === 'rsvp';
 		},
-		get label_helper_text() {
-			return type_specific_labels.helper_text;
-		},
 		get label_post_title() {
 			return 'post_title' in type_specific_labels ? type_specific_labels.post_title : null;
 		},
