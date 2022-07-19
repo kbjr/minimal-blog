@@ -31,6 +31,10 @@
 			<option value="interested">{{ labels.pages.posts.types.rsvp.rsvp_types.interested }}</option>
 		</select>
 		{{/ post_type_is_rsvp }}
+
+		{{# post_type_is_event }}
+		<!-- todo: start / end time -->
+		{{/ post_type_is_event }}
 		
 		{{# post_type_has_subtitle }}
 		<label for="in-post-sub-title">{{ labels.pages.posts.post_subtitle }} <small>({{ labels.optional }})</small></label>
@@ -38,15 +42,15 @@
 		{{/ post_type_has_subtitle }}
 
 		<div data-flex="row" class="textarea-hat">
-			{{! todo: i18n }}
+			<!-- fixme: i18n -->
 			<label for="in-post-markdown">{{ labels.pages.posts.post_body }} <sup>*</sup> <small>
 				(<a href="https://github.com/kbjr/minimal-blog/wiki/Markdown" rel="external">Markdown + Extensions</a>)
 			</small>
 			</label>
-			{{! todo: i18n }}
+			<!-- fixme: i18n -->
 			<label for="in-post-markdown-spellcheck">Spell Check</label>
 			<input type="checkbox" id="in-post-markdown-spellcheck" checked>
-			{{! todo: i18n }}
+			<!-- fixme: i18n -->
 			<label for="in-post-markdown-monospace">Monospace Font</label>
 			<input type="checkbox" id="in-post-markdown-monospace" checked>
 		</div>
@@ -71,7 +75,7 @@
 	</form>
 
 	<div id="preview" aria-hidden="true" aria-live="polite">
-		{{! todo: i18n }}
+		<!-- fixme: i18n -->
 		<button id="btn-post-back-to-edit">Back to Editing</button>
 		<markdown-preview markdown-src="in-post-markdown" external-url-src="in-post-external-url"></markdown-preview>
 	</div>
@@ -123,6 +127,10 @@ const input_subtitle = document.querySelector('#in-post-sub-title');
 {{# post_type_has_external_url }}
 const input_external_url = document.querySelector('#in-post-external-url');
 {{/ post_type_has_external_url }}
+
+{{# post_type_is_event }}
+// todo: start/end time
+{{/ post_type_is_event }}
 
 {{# post_type_is_rsvp }}
 const select_rsvp_type = document.querySelector('#in-post-rsvp-type');
