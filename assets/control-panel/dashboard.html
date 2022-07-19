@@ -46,7 +46,7 @@
 		<button id="expand-entries" data-style="secondary">Expand</button>
 	</section>
 
-	<section id="mentions" class="show-message">
+	<!-- <section id="mentions" class="show-message">
 		<h2>{{ labels.pages.dashboard.recent_mentions }}</h2>
 		<div class="message">
 			<p>{{ labels.loading }}</p>
@@ -59,9 +59,8 @@
 				<tbody></tbody>
 			</table>
 		</div>
-		<!-- fixme: i18n -->
 		<button id="expand-mentions" data-style="secondary">Expand</button>
-	</section>
+	</section> -->
 </main>
 
 <script src="{{{ ctrl_panel.url }}}/save_indicator.js"></script>
@@ -86,12 +85,12 @@ const tbody_entries      = table_entries.querySelector('tbody');
 const message_entries    = sect_entries.querySelector('.message p');
 const btn_expand_entries = sect_entries.querySelector('button#expand-entries');
 
-const sect_mentions       = document.querySelector('#mentions');
-const div_mentions_table  = sect_mentions.querySelector('.table');
-const table_mentions      = div_mentions_table.querySelector('table');
-const tbody_mentions      = table_mentions.querySelector('tbody');
-const message_mentions    = sect_mentions.querySelector('.message p');
-const btn_expand_mentions = sect_mentions.querySelector('button#expand-mentions');
+// const sect_mentions       = document.querySelector('#mentions');
+// const div_mentions_table  = sect_mentions.querySelector('.table');
+// const table_mentions      = div_mentions_table.querySelector('table');
+// const tbody_mentions      = table_mentions.querySelector('tbody');
+// const message_mentions    = sect_mentions.querySelector('.message p');
+// const btn_expand_mentions = sect_mentions.querySelector('button#expand-mentions');
 
 
 
@@ -99,7 +98,7 @@ const btn_expand_mentions = sect_mentions.querySelector('button#expand-mentions'
 
 btn_expand_drafts.addEventListener('click', expand_section(sect_drafts));
 btn_expand_entries.addEventListener('click', expand_section(sect_entries));
-btn_expand_mentions.addEventListener('click', expand_section(sect_mentions));
+// btn_expand_mentions.addEventListener('click', expand_section(sect_mentions));
 
 
 
@@ -120,7 +119,7 @@ async function load() {
 
 	render_drafts();
 	render_entries();
-	render_mentions();
+	// render_mentions();
 }
 
 function render_drafts() {
