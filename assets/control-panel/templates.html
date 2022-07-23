@@ -38,22 +38,26 @@
 		</form>
 	</section>
 
-	<section id="sect-styles-css">
+	<section id="sect-styles">
 		<h2>Styles</h2>
 		<p>
-			The <code>styles.css</code> template provides the majority of the CSS styles for the whole site, across all pages.
-			<code>var(--theme-*)</code> variables are available to enable select the correct colors from the active light or
-			dark theme.
+			The <code>base.css</code> and <code>pages.css</code> templates provides the majority of the CSS styles for the whole site, across
+			all pages. <code>var(--theme-*)</code> variables are available to enable select the correct colors from the active light or dark theme.
 		</p>
 		<form>
 			<div class="textarea-box">
-				<label for="in-styles-css">styles.css</label>
-				<textarea id="in-styles-css"></textarea>
+				<label for="in-base-css">base.css</label>
+				<textarea id="in-base-css"></textarea>
+			</div>
+			
+			<div class="textarea-box">
+				<label for="in-pages-css">pages.css</label>
+				<textarea id="in-pages-css"></textarea>
 			</div>
 			
 			<div data-flex="row align-center" class="buttons">
 				<!-- fixme: i18n label -->
-				<button type="submit" id="btn-styles-css" disabled>Save Changes</button>
+				<button type="submit" id="btn-styles" disabled>Save Changes</button>
 				<!-- fixme: i18n label -->
 				<save-indicator data-active-message="Saving..." data-success-message="Saved" data-failure-message="An unexpected error occured"></save-indicator>
 			</div>
@@ -423,13 +427,15 @@ const templates = {
 	'external_event.html': null,
 	// 'mention_card.html': null,
 	// 'mention_thread.html': null,
-	'styles.css': null,
+	'base.css': null,
+	'pages.css': null,
 };
 
 // 
 
 const in_page_html            = document.querySelector('#in-page-html');
-const in_styles_css           = document.querySelector('#in-styles-css');
+const in_base_css             = document.querySelector('#in-base-css');
+const in_pages_css            = document.querySelector('#in-pages-css');
 const in_feed_meta_html       = document.querySelector('#in-feed-meta-html');
 const in_feed_content_html    = document.querySelector('#in-feed-content-html');
 const in_post_card_html       = document.querySelector('#in-post-card-html');
@@ -458,7 +464,7 @@ const in_robots_txt           = document.querySelector('#in-robots-txt');
 // 
 
 const form_page_html        = new app.Form(document.querySelector('#sect-page-html form'), submit_page_html);
-const form_styles_css       = new app.Form(document.querySelector('#sect-styles-css form'), submit_styles_css);
+const form_styles           = new app.Form(document.querySelector('#sect-styles form'), submit_styles);
 const form_feed             = new app.Form(document.querySelector('#sect-feed form'), submit_feed);
 const form_entry_cards      = new app.Form(document.querySelector('#sect-entry-cards form'), submit_entry_cards);
 const form_post_entries     = new app.Form(document.querySelector('#sect-post-entries form'), submit_post_entries);
@@ -487,7 +493,7 @@ async function load() {
 
 function disable_all() {
 	form_page_html.disable();
-	form_styles_css.disable();
+	form_styles.disable();
 	form_feed.disable();
 	form_entry_cards.disable();
 	form_post_entries.disable();
@@ -504,7 +510,7 @@ function disable_all() {
 
 function enable_all() {
 	form_page_html.enable(false);
-	form_styles_css.enable(false);
+	form_styles.enable(false);
 	form_feed.enable(false);
 	form_entry_cards.enable(false);
 	form_post_entries.enable(false);
@@ -521,7 +527,8 @@ function enable_all() {
 
 function set_initial_values() {
 	in_page_html.value            = templates['page.html'];
-	in_styles_css.value           = templates['styles.css'];
+	in_base_css.value             = templates['base.css'];
+	in_pages_css.value            = templates['pages.css'];
 	in_feed_meta_html.value       = templates['feed_meta.html'];
 	in_feed_content_html.value    = templates['feed_content.html'];
 	in_post_card_html.value       = templates['post_card.html'];
@@ -618,8 +625,9 @@ async function submit_page_html() {
 	await update_template('page.html', 'text/html', in_page_html);
 }
 
-async function submit_styles_css() {
-	await update_template('styles.css', 'text/css', in_styles_css);
+async function submit_styles() {
+	await update_template('base.css', 'text/css', in_base_css);
+	await update_template('pages.css', 'text/css', in_pages_css);
 }
 
 async function submit_feed() {
