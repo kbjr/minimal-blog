@@ -15,8 +15,8 @@ export MB_AUTH_SETUP_CODE="MUK7kBU1NUgliz8FKzlmvg=="
 
 export MB_HTTP_WEB_PORT="3000"
 export MB_HTTP_CTRL_PORT="3001"
-export MB_HTTP_WEB_URL="http://localhost:$HTTP_WEB_PORT"
-export MB_HTTP_CTRL_URL="http://localhost:$HTTP_CTRL_PORT"
+export MB_HTTP_WEB_URL="http://localhost:$MB_HTTP_WEB_PORT"
+export MB_HTTP_CTRL_URL="http://localhost:$MB_HTTP_CTRL_PORT"
 
 export MB_HTTP_WEB_ENABLE_STATUS="1"
 export MB_HTTP_CTRL_SWAGGER="1"
