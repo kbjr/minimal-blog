@@ -11,30 +11,30 @@ export namespace conf {
 	/** Configuration for the HTTP server */
 	export namespace http {
 		/** The port the main web HTTP server will listen on */
-		export const web_port = cast_int<number>(process.env.HTTP_WEB_PORT, 3000);
+		export const web_port = cast_int<number>(process.env.MB_HTTP_WEB_PORT, 3000);
 
 		/** The port the control panel HTTP server will listen on */
-		export const ctrl_port = cast_int<number>(process.env.HTTP_CTRL_PORT, 3001);
+		export const ctrl_port = cast_int<number>(process.env.MB_HTTP_CTRL_PORT, 3001);
 
 		/** The URL the main web HTTP server will be accessed through */
-		export const web_url = cast_str<http_url>(process.env.HTTP_WEB_URL, `http://localhost:${web_port}`);
+		export const web_url = cast_str<http_url>(process.env.MB_HTTP_WEB_URL, `http://localhost:${web_port}`);
 
 		/** The URL the control panel HTTP server will be accessed through */
-		export const ctrl_url = cast_str<http_url>(process.env.HTTP_CTRL_URL, `http://localhost:${ctrl_port}`);
+		export const ctrl_url = cast_str<http_url>(process.env.MB_HTTP_CTRL_URL, `http://localhost:${ctrl_port}`);
 
 		/** Controls whether or not the `/.status` endpoint will be accessible under the web URL */
-		export const web_enable_status = cast_bool(process.env.HTTP_WEB_ENABLE_STATUS, true);
+		export const web_enable_status = cast_bool(process.env.MB_HTTP_WEB_ENABLE_STATUS, true);
 
 		/** Controls whether or not Swagger API docs can be found at /api/docs on the control API */
-		export const ctrl_enable_swagger = cast_bool(process.env.HTTP_CTRL_SWAGGER, true);
+		export const ctrl_enable_swagger = cast_bool(process.env.MB_HTTP_CTRL_SWAGGER, true);
 
 		/** Configuration for HTTP response caching mechanisms */
 		export namespace cache {
 			/** Controls whether or not to send ETag headers on all HTTP responses */
-			export const enable_etags = cast_bool(process.env.CACHE_ENABLE_ETAGS, true);
+			export const enable_etags = cast_bool(process.env.MB_CACHE_ENABLE_ETAGS, true);
 			
 			/** Controls whether or not to send Cache-Control headers on asset file HTTP responses */
-			export const enable_cache_control = cast_bool(process.env.CACHE_ENABLE_CACHE_CONTROL, true);
+			export const enable_cache_control = cast_bool(process.env.MB_CACHE_ENABLE_CACHE_CONTROL, true);
 		}
 	
 		/** Configuration for HTTP response compression */
@@ -47,10 +47,10 @@ export namespace conf {
 			}
 
 			/** Controls whether or not to compress all HTTP responses */
-			export const enable = cast_bool(process.env.COMPRESSION_ENABLE, true);
+			export const enable = cast_bool(process.env.MB_COMPRESSION_ENABLE, true);
 
 			/** Controls which compression encodings are enabled, and their priorities */
-			export const encodings = cast_str_list<Encoding>(process.env.COMPRESSION_ENCODINGS, null);
+			export const encodings = cast_str_list<Encoding>(process.env.MB_COMPRESSION_ENCODINGS, null);
 		}
 	}
 
@@ -62,15 +62,15 @@ export namespace conf {
 		}
 
 		/** The persistent storage mechanism to use for blog data */
-		export const storage_type = cast_str<StorageType>(process.env.DATA_STORAGE_TYPE, StorageType.sqlite3);
+		export const storage_type = cast_str<StorageType>(process.env.MB_DATA_STORAGE_TYPE, StorageType.sqlite3);
 
 		/** Should OpenSearch and the `/search` endpoint be enabled */
-		export const enable_search = cast_bool(process.env.DATA_ENABLE_SEARCH, true);
+		export const enable_search = cast_bool(process.env.MB_DATA_ENABLE_SEARCH, true);
 
 		/** Configuration for the sqlite3 storage implementation */
 		export namespace sqlite3 {
 			/** Path to the data storage directory */
-			export const path = cast_str<string>(process.env.DATA_DIR, '/data');
+			export const path = cast_str<string>(process.env.MB_DATA_DIR, '/data');
 	
 			/** Path to the file where the settings database is stored */
 			export const settings_path = `${path}/settings.db`;
@@ -136,7 +136,7 @@ export namespace conf {
 		 * Used as a temporary first-time-setup password, to block the control panel from
 		 * unauthorized users before the instance can be configured
 		 */
-		export const setup_code = cast_str<string>(process.env.AUTH_SETUP_CODE, null);
+		export const setup_code = cast_str<string>(process.env.MB_AUTH_SETUP_CODE, null);
 
 		/** Time to live (TTL) to set on issued tokens */
 		export const token_ttl = '3h';
@@ -145,10 +145,10 @@ export namespace conf {
 		export const minimum_password_complexity = 125;
 
 		/** Path to key file to use for signing JWTs. */
-		export const signing_key_file = cast_str<string>(process.env.AUTH_SIGNING_KEY, null);
+		export const signing_key_file = cast_str<string>(process.env.MB_AUTH_SIGNING_KEY, null);
 
 		/** Base-64 HMAC secret to use when signing tokens. */
-		export const hmac_secret = cast_str<string>(process.env.AUTH_HMAC_SECRET, null);
+		export const hmac_secret = cast_str<string>(process.env.MB_AUTH_HMAC_SECRET, null);
 
 		/** Secret size (in bytes) to auto-generate for HMAC token signing (if no other signing method is provided) */
 		export const hmac_secret_size = 128;
@@ -178,10 +178,10 @@ export namespace conf {
 		}
 
 		/** The logging output level */
-		export const level: Level = cast_str<Level>(process.env.LOG_LEVEL, Level.info);
+		export const level: Level = cast_str<Level>(process.env.MB_LOG_LEVEL, Level.info);
 
 		/** Enables `pino-pretty` logging output for easier reading (not included in production build) */
-		export const pretty = try_require('pino-pretty') && cast_bool(process.env.LOG_PRETTY, true);
+		export const pretty = try_require('pino-pretty') && cast_bool(process.env.MB_LOG_PRETTY, true);
 
 		/** Controls which additional debug loggers are enabled */
 		export const debug_loggers = Object.freeze<Partial<Loggers>>({
