@@ -3,7 +3,6 @@
 	font-size: 16px;
 	--font-open-sans: 'Open Sans', sans-serif;
 	--font-monospace: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-	--font-cursive: cursive;
 	--text-note-prefix: 'Note: ';
 }
 
@@ -832,8 +831,8 @@ select {
 	font-family: var(--font-monospace);
 }
 
-.rendered-nomnoml svg g[font-family='cursive'] text {
-	font-family: var(--font-cursive);
+.rendered-nomnoml svg g[font-family='sans-serif'] text {
+	font-family: var(--font-open-sans);
 }
 
 /* === Pikchr */
@@ -891,11 +890,11 @@ select {
 }
 
 .rendered-railroad svg text {
-	font: bold 0.8rem var(--font-cursive);
+	font: 0.8rem var(--font-open-sans);
 	text-anchor: middle;
 	white-space: pre;
 	fill: var(--theme-text-body);
-	font-weight: 300;
+	font-weight: 700;
 }
 
 .rendered-railroad svg text.diagram-text {
@@ -911,7 +910,7 @@ select {
 }
 
 .rendered-railroad svg text.comment {
-	font: italic 0.75rem var(--font-cursive);
+	font: italic 0.75rem var(--font-open-sans);
 }
 
 .rendered-railroad svg g.non-terminal text {
