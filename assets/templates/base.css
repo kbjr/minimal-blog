@@ -205,8 +205,8 @@ ul.link-list a {
 	#header-sidebar aside {
 		flex-direction: row;
 		flex-wrap: wrap;
-		row-gap: 1rem;
-		column-gap: 2rem;
+		row-gap: 2rem;
+		column-gap: 3rem;
 	}
 
 	#header-sidebar aside > * {

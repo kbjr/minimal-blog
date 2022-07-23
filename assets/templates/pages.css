@@ -23,6 +23,12 @@ section.feed-list article header .icon-wrapper svg {
 	flex: 0 0 auto;
 }
 
+
+
+
+
+
+
 /* === Posts === */
 
 section.feed-list article[data-post-type='post'] header h3 {
@@ -50,6 +56,12 @@ section.feed-list article[data-post-type='post'] footer p {
 	margin-block: 0.5rem;
 }
 
+
+
+
+
+
+
 /* === Comments === */
 
 section.feed-list article[data-post-type='comment'] header h3 {
@@ -70,6 +82,12 @@ section.feed-list article[data-post-type='comment'] footer p {
 	margin-block: 0.5rem;
 }
 
+
+
+
+
+
+
 /* === Notes === */
 
 section.feed-list article[data-post-type='note'] header h3 {
@@ -89,6 +107,12 @@ section.feed-list article[data-post-type='note'] footer p {
 	font-size: 0.8rem;
 	margin-block: 0.5rem;
 }
+
+
+
+
+
+
 
 /* === Events === */
 
@@ -122,6 +146,12 @@ section.feed-list article[data-post-type='event'] footer p {
 	margin-block: 0.5rem;
 }
 
+
+
+
+
+
+
 /* === RSVPs === */
 
 section.feed-list article[data-post-type='rsvp'] header h3 {
@@ -154,6 +184,12 @@ section.feed-list article[data-post-type='rsvp'] footer p {
 	margin-block: 0.5rem;
 }
 
+
+
+
+
+
+
 /* === Embeded External Posts === */
 
 section.feed-list blockquote.external-embed article {
@@ -168,6 +204,12 @@ section.feed-list blockquote.external-embed header h1 {
 section.feed-list blockquote.external-embed main p {
 	font-size: 1rem;
 }
+
+
+
+
+
+
 
 /* === Search Metadata === */
 
@@ -187,7 +229,25 @@ section.feed-list div.search-meta span.score {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ===== Post View ===== */
+
 
 /* === Posts === */
 
@@ -196,8 +256,8 @@ main[data-page='post'] article header h1 {
 }
 
 main[data-page='post'] article header p {
-	margin-block: 0.25rem;
-	margin-inline: 1rem;
+	margin-block: 0.5rem;
+	margin-inline: 0;
 	font-size: 1rem;
 }
 
@@ -215,6 +275,18 @@ main[data-page='post'] article header p.p-summary {
 	font-weight: 700;
 	color: var(--theme-text-light);
 }
+
+@media (max-width: 1600px) {
+	main[data-page='post'] article header h1 {
+		margin-block-start: 1rem;
+	}
+}
+
+
+
+
+
+
 
 /* === Comments === */
 
@@ -238,6 +310,12 @@ main[data-page='comment'] article footer p {
 	margin: 1rem 0;
 }
 
+
+
+
+
+
+
 /* === Notes === */
 
 main[data-page='note'] article {
@@ -257,24 +335,30 @@ main[data-page='note'] article footer p {
 	margin: 1rem 0;
 }
 
+
+
+
+
+
+
 /* === Events === */
 
 main[data-page='event'] article {
 	margin-inline: auto;
 }
 
-main[data-page='event'] article header h2 {
+main[data-page='event'] article header h1 {
 	margin-block-start: 2rem;
 }
 
-main[data-page='event'] article header h2 span.p-name {
+main[data-page='event'] article header h1 span.p-name {
 	font-size: 2rem;
 	font-weight: 300;
 }
 
 main[data-page='event'] article header p {
-	margin-block: 0.25rem;
-	margin-inline: 1rem;
+	margin-block: 0.5rem;
+	margin-inline: 0;
 	font-size: 1rem;
 }
 
@@ -302,6 +386,18 @@ main[data-page='event'] article footer p {
 	margin: 1rem 0;
 }
 
+@media (max-width: 1600px) {
+	main[data-page='event'] article header h1 {
+		margin-block-start: 1rem;
+	}
+}
+
+
+
+
+
+
+
 /* === RSVPs === */
 
 main[data-page='rsvp'] article {
@@ -321,6 +417,12 @@ main[data-page='rsvp'] article footer p {
 	font-size: 0.8rem;
 	margin: 1rem 0;
 }
+
+
+
+
+
+
 
 /* === External Embeds === */
 
@@ -346,6 +448,25 @@ main:is([data-page='comment'], [data-page='rsvp']) header blockquote.external-em
 main:is([data-page='comment'], [data-page='rsvp']) header blockquote.external-embed main p {
 	font-size: 1rem;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
