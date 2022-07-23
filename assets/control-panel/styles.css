@@ -537,7 +537,7 @@ table {
 	margin: 5rem auto;
 }
 
-:is(#page-login, #page-first-time-setup) :is(input, label, button) {
+:is(#page-login, #page-first-time-setup) :is(select, input, label, button) {
 	width: 100%;
 }
 

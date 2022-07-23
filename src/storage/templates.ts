@@ -38,7 +38,8 @@ const editable_ui_templates = [
 	'mention_thread.html',
 	'external_entry.html',
 	'external_event.html',
-	'styles.css',
+	'base.css',
+	'pages.css',
 	'robots.txt',
 ];
 

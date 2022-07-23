@@ -5,6 +5,7 @@ import { require_auth, ReqUser } from '../../../auth';
 import { FastifyRequest, RouteShorthandOptions } from 'fastify';
 import * as http_error from '../../../http-error';
 import { parse } from 'mustache';
+import { editable_templates } from './shared';
 
 type Req = ReqUser & FastifyRequest<{
 	Body: string;
@@ -26,39 +27,12 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
-const putable_templates = new Set([
-	'page.html',
-	'feed_meta.html',
-	'feed_content.html',
-	'post_card.html',
-	'post_meta.html',
-	'post_content.html',
-	'comment_card.html',
-	'comment_meta.html',
-	'comment_content.html',
-	'note_card.html',
-	'note_meta.html',
-	'note_content.html',
-	'event_card.html',
-	'event_meta.html',
-	'event_content.html',
-	'rsvp_card.html',
-	'rsvp_meta.html',
-	'rsvp_content.html',
-	'not_found.html',
-	'author_card.html',
-	'mention_card.html',
-	'mention_thread.html',
-	'styles.css',
-	'robots.txt',
-]);
-
 ctrl.put('/api/templates/:template_name', opts, async (req: Req, res) => {
 	require_auth(req);
 
 	const name = req.params.template_name;
 
-	if (! putable_templates.has(name)) {
+	if (! editable_templates.has(name)) {
 		http_error.throw_404_not_found('template not found');
 	}
 

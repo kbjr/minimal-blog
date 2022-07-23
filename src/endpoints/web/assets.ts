@@ -63,13 +63,18 @@ web.get('/colors.css', async (req, res) => {
 	return colors_css();
 });
 
-const styles_css = rendered_template_cache('styles.css', null_context, { }, {
-	settings: true,
-	colors: true,
-	templates: true
-});
+css_template('base.css');
+css_template('pages.css');
 
-web.get('/styles.css', async (req, res) => {
-	res.type('text/css; charset=utf-8');
-	return styles_css();
-});
+function css_template(file: string) {
+	const rendered = rendered_template_cache(file, null_context, { }, {
+		settings: true,
+		colors: true,
+		templates: true
+	});
+
+	web.get(`/${file}`, async (req, res) => {
+		res.type('text/css; charset=utf-8');
+		return rendered();
+	});
+}
