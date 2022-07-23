@@ -207,6 +207,7 @@ ul.link-list a {
 		flex-wrap: wrap;
 		row-gap: 2rem;
 		column-gap: 3rem;
+		margin-block-start: 1rem;
 	}
 
 	#header-sidebar aside > * {
@@ -531,7 +532,7 @@ figcaption {
 	}
 
 	code, pre, samp {
-		font-size: 1em;
+		font-size: 1.1rem;
 	}
 
 	pre {
@@ -546,6 +547,12 @@ figcaption {
 
 	blockquote {
 		margin-inline: 0.5rem;
+	}
+}
+
+@media (max-width: 960px) {
+	code, pre, samp {
+		font-size: 1rem;
 	}
 }
 

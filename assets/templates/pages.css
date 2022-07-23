@@ -23,6 +23,10 @@ section.feed-list article header .icon-wrapper svg {
 	flex: 0 0 auto;
 }
 
+section.feed-list article[data-post-type] footer {
+	margin-block-start: 1rem;
+}
+
 
 
 
@@ -199,6 +203,7 @@ section.feed-list blockquote.external-embed article {
 section.feed-list blockquote.external-embed header h1 {
 	margin-block-start: 0;
 	font-size: 1.5rem;
+	font-weight: 300;
 }
 
 section.feed-list blockquote.external-embed main p {
@@ -276,6 +281,10 @@ main[data-page='post'] article header p.p-summary {
 	color: var(--theme-text-light);
 }
 
+main[data-page='post'] article header ul.tag-list {
+	margin-block-start: 1rem;
+}
+
 @media (max-width: 1600px) {
 	main[data-page='post'] article header h1 {
 		margin-block-start: 1rem;
@@ -291,8 +300,7 @@ main[data-page='post'] article header p.p-summary {
 /* === Comments === */
 
 main[data-page='comment'] article {
-	max-width: 80rem;
-	margin-inline: auto;
+	/*  */
 }
 
 main[data-page='comment'] article header h1 {
@@ -319,10 +327,12 @@ main[data-page='comment'] article footer p {
 /* === Notes === */
 
 main[data-page='note'] article {
-	margin-inline: auto;
+	/*  */
 }
 
-main[data-page='note'] article header h2 {
+main[data-page='note'] article header h1 {
+	font-size: 1.5rem;
+	font-weight: 700;
 	margin-block-start: 2rem;
 }
 
@@ -348,6 +358,8 @@ main[data-page='event'] article {
 }
 
 main[data-page='event'] article header h1 {
+	font-size: 1.5rem;
+	font-weight: 700;
 	margin-block-start: 2rem;
 }
 
@@ -401,11 +413,12 @@ main[data-page='event'] article footer p {
 /* === RSVPs === */
 
 main[data-page='rsvp'] article {
-	max-width: 80rem;
-	margin-inline: auto;
+	/*  */
 }
 
-main[data-page='rsvp'] article header h2 {
+main[data-page='rsvp'] article header h1 {
+	font-size: 1.5rem;
+	font-weight: 700;
 	margin-block-start: 2rem;
 }
 
@@ -432,6 +445,7 @@ main:is([data-page='comment'], [data-page='rsvp']) header blockquote.external-em
 
 main:is([data-page='comment'], [data-page='rsvp']) header blockquote.external-embed header h1 {
 	margin-block-start: 0;
+	font-weight: 300;
 	font-size: 1.5rem;
 }
 
@@ -531,18 +545,8 @@ aside.mention-thread article[role='comment'] > footer p {
 
 
 @media (max-width: 1600px) {
-	main:is(
-		[data-page='post'],
-		[data-page='comment'],
-		[data-page='note'],
-		[data-page='event'],
-		[data-page='rsvp']
-	) article header h1 {
-		font-size: 2rem;
-	}
-
 	section.feed-list blockquote.external-embed header h1 {
-		font-size: 1rem;
+		font-size: 1.5rem;
 	}
 
 	main:is(
@@ -552,7 +556,7 @@ aside.mention-thread article[role='comment'] > footer p {
 		[data-page='event'],
 		[data-page='rsvp']
 	) article header blockquote.external-embed header h1 {
-		font-size: 1rem;
+		font-size: 1.5rem;
 	}
 
 	section.feed-list article:is(
