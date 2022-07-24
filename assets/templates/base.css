@@ -61,7 +61,7 @@ color-theme-toggle {
 	flex: 1 1 auto;
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1599px) {
 	:root {
 		font-size: 14px;
 	}
@@ -192,7 +192,7 @@ ul.link-list a {
 	/*  */
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1599px) {
 	#header-sidebar header h1 {
 		font-size: 1.8rem;
 	}
@@ -526,7 +526,7 @@ figcaption {
 	color: var(--theme-text-light);
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1599px) {
 	p, li {
 		/* font-size: 1rem; */
 	}
@@ -550,7 +550,7 @@ figcaption {
 	}
 }
 
-@media (max-width: 960px) {
+@media (max-width: 959px) {
 	code, pre, samp {
 		font-size: 1rem;
 	}
@@ -948,7 +948,7 @@ select {
 	fill: var(--theme-bg-heavy);
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1599px) {
 	.katex-display .katex {
 		font-size: 1.5rem;
 	}

@@ -285,7 +285,7 @@ main[data-page='post'] article header ul.tag-list {
 	margin-block-start: 1rem;
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1599px) {
 	main[data-page='post'] article header h1 {
 		margin-block-start: 1rem;
 	}
@@ -398,7 +398,7 @@ main[data-page='event'] article footer p {
 	margin: 1rem 0;
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1599px) {
 	main[data-page='event'] article header h1 {
 		margin-block-start: 1rem;
 	}
@@ -544,7 +544,7 @@ aside.mention-thread article[role='comment'] > footer p {
 
 
 
-@media (max-width: 1600px) {
+@media (max-width: 1599px) {
 	section.feed-list blockquote.external-embed header h1 {
 		font-size: 1.5rem;
 	}
