@@ -340,13 +340,7 @@ export class Post implements Readonly<PostData> {
 	constructor(private data: PostData & Partial<SearchResult>) { }
 
 	get post_url() {
-		switch (this.data.post_type) {
-			case 'post': return `${conf.http.web_url}/posts/${this.data.uri_name}`;
-			case 'comment': return `${conf.http.web_url}/comments/${this.data.uri_name}`;
-			case 'note': return `${conf.http.web_url}/notes/${this.data.uri_name}`;
-			case 'event': return `${conf.http.web_url}/events/${this.data.uri_name}`;
-			case 'rsvp': return `${conf.http.web_url}/rsvps/${this.data.uri_name}`;
-		}
+		return `${conf.http.web_url}/${this.data.post_type}/${this.data.uri_name}`;
 	}
 
 	get is_post() {

@@ -149,7 +149,7 @@ async function read_local_as_event(url: string) {
 	let event: ExternalEventData;
 	const parsed = parse_local_url(url);
 
-	if (parsed.type === 'post' && parsed.post_type === 'event') {
+	if (parsed.type === 'entry' && parsed.post_type === 'event') {
 		const post = store.posts.get_post(parsed.post_type, parsed.uri_name);
 		
 		event = {

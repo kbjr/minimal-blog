@@ -65,7 +65,7 @@ web.post('/webmention', opts, async (req: Req, res) => {
 		}
 	}
 
-	if (target.type !== 'post') {
+	if (target.type !== 'entry') {
 		throw_404_not_found('target URL not found or not a valid target');
 	}
 

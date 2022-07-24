@@ -26,7 +26,7 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
-web.get('/rsvps/:post_uri_name', opts, async (req: Req, res) => {
+web.get('/rsvp/:post_uri_name', opts, async (req: Req, res) => {
 	const html = await get_post_html(req.params.post_uri_name);
 
 	res.type('text/html; charset=utf-8');

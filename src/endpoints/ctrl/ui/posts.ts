@@ -13,6 +13,7 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
+// fixme: rename "entries"
 ctrl.get('/posts', opts, async (req, res) => {
 	if (redirect_for_first_time_setup(req, res)) return;
 

@@ -166,7 +166,7 @@ async function read_local_as_entry(url: string) {
 	const parsed = parse_local_url(url);
 
 	switch (parsed.type) {
-		case 'post':
+		case 'entry':
 			const post = store.posts.get_post(parsed.post_type, parsed.uri_name);
 
 			entry = {

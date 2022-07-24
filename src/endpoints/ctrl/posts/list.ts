@@ -47,6 +47,7 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
+// fixme: rename "entries"
 ctrl.get('/api/posts', opts, async (req: Req, res) => {
 	require_auth(req);
 

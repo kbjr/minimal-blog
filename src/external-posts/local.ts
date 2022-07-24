@@ -2,7 +2,7 @@
 import { conf } from '../conf';
 import { store } from '../storage';
 
-const post_pattern = /^\/(posts|comments|notes|events|rsvps)\/([^/]+)(?:\/(mentions))?/;
+const post_pattern = /^\/(post|comment|note|event|rsvp)\/([^/]+)(?:\/(mentions))?/;
 
 export function url_is_local(url: string) : url is `${typeof conf.http.web_url}${'' | `/${string}`}` {
 	return url === conf.http.web_url || url.startsWith(conf.http.web_url + '/');
@@ -34,5 +34,5 @@ export function parse_local_url(url: string) {
 		return { type: 'mentions' as const, post_type, uri_name };
 	}
 
-	return { type: 'post' as const, post_type, uri_name };
+	return { type: 'entry' as const, post_type, uri_name };
 }

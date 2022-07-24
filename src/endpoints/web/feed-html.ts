@@ -65,7 +65,7 @@ web.get('/tagged/:tag', opts, async (req: Req, res) => {
 	res.send(html);
 });
 
-web.get('/posts', opts, async (req: Req, res) => {
+web.get('/post', opts, async (req: Req, res) => {
 	const count = req.query.count ? req.query.count : default_count;
 	const html = await build_feed_html(count, null, req.query.before, 'post');
 
@@ -74,7 +74,7 @@ web.get('/posts', opts, async (req: Req, res) => {
 	res.send(html);
 });
 
-web.get('/comments', opts, async (req: Req, res) => {
+web.get('/comment', opts, async (req: Req, res) => {
 	const count = req.query.count ? req.query.count : default_count;
 	const html = await build_feed_html(count, null, req.query.before, 'comment');
 
@@ -83,7 +83,7 @@ web.get('/comments', opts, async (req: Req, res) => {
 	res.send(html);
 });
 
-web.get('/notes', opts, async (req: Req, res) => {
+web.get('/note', opts, async (req: Req, res) => {
 	const count = req.query.count ? req.query.count : default_count;
 	const html = await build_feed_html(count, null, req.query.before, 'note');
 
@@ -92,7 +92,7 @@ web.get('/notes', opts, async (req: Req, res) => {
 	res.send(html);
 });
 
-web.get('/events', opts, async (req: Req, res) => {
+web.get('/event', opts, async (req: Req, res) => {
 	const count = req.query.count ? req.query.count : default_count;
 	const html = await build_feed_html(count, null, req.query.before, 'event');
 
@@ -101,7 +101,7 @@ web.get('/events', opts, async (req: Req, res) => {
 	res.send(html);
 });
 
-web.get('/rsvps', opts, async (req: Req, res) => {
+web.get('/rsvp', opts, async (req: Req, res) => {
 	const count = req.query.count ? req.query.count : default_count;
 	const html = await build_feed_html(count, null, req.query.before, 'rsvp');
 

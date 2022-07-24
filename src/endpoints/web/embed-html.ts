@@ -18,11 +18,11 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
-web.get('/posts/:post_uri_name/embed', opts, embed_endpoint('post'));
-web.get('/comments/:post_uri_name/embed', opts, embed_endpoint('comment'));
-web.get('/notes/:post_uri_name/embed', opts, embed_endpoint('note'));
-web.get('/events/:post_uri_name/embed', opts, embed_endpoint('event'));
-web.get('/rsvps/:post_uri_name/embed', opts, embed_endpoint('rsvp'));
+web.get('/post/:post_uri_name/embed', opts, embed_endpoint('post'));
+web.get('/comment/:post_uri_name/embed', opts, embed_endpoint('comment'));
+web.get('/note/:post_uri_name/embed', opts, embed_endpoint('note'));
+web.get('/event/:post_uri_name/embed', opts, embed_endpoint('event'));
+web.get('/rsvp/:post_uri_name/embed', opts, embed_endpoint('rsvp'));
 
 function embed_endpoint(post_type: store.posts.PostType) {
 	return async (req: Req, res: FastifyReply) => {

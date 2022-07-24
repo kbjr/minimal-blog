@@ -35,11 +35,11 @@ async function build_sitemap() {
 	const post_data = await posts.get_posts(Infinity, null, null, null, false);
 	
 	url_elem(urlset, conf.http.web_url, now, 'daily', 1.0);
-	url_elem(urlset, conf.http.web_url + '/posts', now, 'daily', 0.5);
-	url_elem(urlset, conf.http.web_url + '/comments', now, 'daily', 0.5);
-	url_elem(urlset, conf.http.web_url + '/notes', now, 'daily', 0.5);
-	url_elem(urlset, conf.http.web_url + '/events', now, 'daily', 0.5);
-	url_elem(urlset, conf.http.web_url + '/rsvps', now, 'daily', 0.5);
+	url_elem(urlset, conf.http.web_url + '/post', now, 'daily', 0.5);
+	url_elem(urlset, conf.http.web_url + '/comment', now, 'daily', 0.5);
+	url_elem(urlset, conf.http.web_url + '/note', now, 'daily', 0.5);
+	url_elem(urlset, conf.http.web_url + '/event', now, 'daily', 0.5);
+	url_elem(urlset, conf.http.web_url + '/rsvp', now, 'daily', 0.5);
 
 	for (const data of tag_data) {
 		const tag = new posts.Tag(data);

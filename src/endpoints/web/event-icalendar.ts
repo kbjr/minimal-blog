@@ -33,7 +33,7 @@ web.get('/events.ics', async (req, res) => {
 	res.send(calendar);
 });
 
-web.get('/events/:post_uri_name/event.ics', opts, async (req: Req, res) => {
+web.get('/event/:post_uri_name/event.ics', opts, async (req: Req, res) => {
 	const calendar = await get_event_calendar(req.params.post_uri_name);
 
 	res.type('text/calendar; charset=utf-8');
@@ -90,7 +90,7 @@ async function get_recent_events_calendar() {
 
 	return create_icalendar({
 		prodId: ical_prod_id,
-		url: `${conf.http.web_url}/events`,
+		url: `${conf.http.web_url}/event`,
 	}, events);
 }
 

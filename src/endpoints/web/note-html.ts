@@ -25,7 +25,7 @@ const opts: RouteShorthandOptions = {
 	}
 };
 
-web.get('/notes/:post_uri_name', opts, async (req: Req, res) => {
+web.get('/note/:post_uri_name', opts, async (req: Req, res) => {
 	const html = await get_post_html(req.params.post_uri_name);
 
 	res.type('text/html; charset=utf-8');

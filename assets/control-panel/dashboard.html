@@ -279,7 +279,7 @@ const draft_template = (post) => `
 const post_template = (post) => `
 <tr data-entry="${post.post_type}/${post.uri_name}">
 	<td class="link">
-		<a title="Permalink to Post" class="icon-only" href="{{{ site.url }}}/${post.post_type}s/${post.uri_name}">{{{ icons.link }}}</a>
+		<a title="Permalink to Post" class="icon-only" href="{{{ site.url }}}/${post.post_type}/${post.uri_name}">{{{ icons.link }}}</a>
 	</td>
 	<td class="title-preview">${post_preview(post)}</td>
 	<td class="published">${date(post.date_published)}</td>
