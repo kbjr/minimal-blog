@@ -102,6 +102,7 @@ function ical_event(post: store.posts.Post) {
 		start: post.date_event_start_iso,
 		end: post.date_event_end_iso,
 		url: post.post_url,
+		created: post.date_published,
 		lastModified: post.date_updated || post.date_published,
 		organizer: {
 			name: store.settings.get('author_name'),

@@ -444,19 +444,27 @@ export class Post implements Readonly<PostData> {
 	}
 
 	get date_published_utc() {
-		return (new Date(this.data.date_published)).toUTCString();
+		return this.data.date_published
+			? (new Date(this.data.date_published)).toUTCString()
+			: null;
 	}
 
 	get date_updated_utc() {
-		return (new Date(this.data.date_updated)).toUTCString();
+		return this.data.date_updated
+			? (new Date(this.data.date_updated)).toUTCString()
+			: null;
 	}
 
 	get date_event_start_utc() {
-		return (new Date(this.data.date_event_start)).toUTCString();
+		return this.data.date_event_start
+			? (new Date(this.data.date_event_start)).toUTCString()
+			: null;
 	}
 
 	get date_event_end_utc() {
-		return (new Date(this.data.date_event_end)).toUTCString();
+		return this.data.date_event_end
+			? (new Date(this.data.date_event_end)).toUTCString()
+			: null;
 	}
 
 	get rsvp_type() {
