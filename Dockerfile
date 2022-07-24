@@ -79,12 +79,16 @@ VOLUME ${MB_DATA_PATH}
 WORKDIR ${MB_BLOG_PATH}
 
 COPY src/  ${MB_BLOG_PATH}/src/
+COPY scripts/  ${MB_BLOG_PATH}/scripts/
 COPY assets/  ${MB_BLOG_PATH}/assets/
 COPY package.json tsconfig.json ${MB_BLOG_PATH}/
 
 # Install build dependencies for sqlite3 / pikchr
 #  see: https://github.com/gliderlabs/docker-alpine/blob/master/docs/usage.md (re: `--no-cache` flag)
 RUN [ "apk", "add", "--no-cache", "python3", "g++", "make" ]
+
+# Update the version number in src/conf.ts
+RUN [ "node", "scripts/update-version.js" ]
 
 # Install dependencies and build the application
 RUN [ "npm", "install" ]
@@ -93,7 +97,7 @@ RUN [ "npm", "run", "build" ]
 # Now that everything is built, prune node_modules down to only
 # the production dependencies and delete any unneeded files
 RUN [ "npm", "install", "--only=production" ]
-RUN [ "rm", "-rf", "src", "package.json", "tsconfig.json" ]
+RUN [ "rm", "-rf", "src", "scripts", "package.json", "tsconfig.json" ]
 # "package-lock.json"
 
 ENTRYPOINT [ "node", "build/start.js" ]
