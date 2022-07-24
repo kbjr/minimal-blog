@@ -32,5 +32,5 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: false
-        tags: $TAGS_TO_PUBLISH
+        tags: ${{ env.TAGS_TO_PUBLISH }}
         # tags: jbrumond/minimal-blog:latest
