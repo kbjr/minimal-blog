@@ -6,7 +6,9 @@ type http_url = `http${'s' | ''}://${string}`;
 
 export namespace conf {
 	/** The current version of the blog software; Should stay in sync with package.json */
-	export const app_version = '0.1.0-alpha.1';
+	export const app_version = require('../package.json').version as string;
+	// note: this ^ line is auto-replaced when building the container image, and this won't
+	// work if the line's contents are changed; DO NOT EDIT
 
 	/** Configuration for the HTTP server */
 	export namespace http {
