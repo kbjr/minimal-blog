@@ -5,20 +5,26 @@ const { writeFileSync } = require('fs');
 
 const tags_file = resolve(__dirname, '../.tags');
 
-const [ base_version, pre_release ] = version.split('-');
+const [ base_version, extra ] = version.split('-');
 const [ major, minor, patch ] = base_version.split('.');
+const [ pre_release, build_info ] = extra.split('#');
+const [ pre_release_type ] = pre_release.split('.');
 
 const tags
 	= pre_release ? [
-		`${major}-${pre_release}`,
-		`${major}.${minor}-${pre_release}`,
-		`${major}.${minor}.${patch}-${pre_release}`,
+		`${major}-${pre_release_type}`,                      // e.g. "1-alpha"
+		`${major}.${minor}-${pre_release_type}`,             // e.g. "1.2-alpha"
+		`${major}.${minor}.${patch}-${pre_release_type}`,    // e.g. "1.2.3-alpha"
 	]
 	: [
-		`${major}`,
-		`${major}.${minor}`,
-		`${major}.${minor}.${patch}`,
+		`${major}`,                                          // e.g. "1"
+		`${major}.${minor}`,                                 // e.g. "1.2"
+		`${major}.${minor}.${patch}`,                        // e.g. "1.2.3"
 	];
+
+if (pre_release && pre_release !== pre_release_type) {
+	tags.push(`${major}.${minor}.${patch}-${pre_release}`);  // e.g. "1.2.3-alpha.4"
+}
 
 writeFileSync(tags_file, tags.join(','), 'utf8');
 
