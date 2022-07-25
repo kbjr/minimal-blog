@@ -1,6 +1,8 @@
 
 **NOTICE: This project is still in very early alpha development.**
 
+
+
 ## Features
 
 - Entire application runs in a single container
@@ -14,7 +16,7 @@
   - Notes (unstructured blobs, more like micro-blogging)
   - Events
   - RSVPs
-- Write posts using [GitHub Flavored Markdown](https://github.github.com/gfm/)
+- Write posts using Markdown
 	- Also includes support for:
 		- Code-block syntax highlighting with [Prism](https://prismjs.com/) for [more than 200 languages](https://prismjs.com/#supported-languages)
 		- Rendering math expressions with [KaTeX](https://katex.org/)
@@ -36,6 +38,7 @@
 - Light / dark mode toggle (defaulting to system preference)
 - Easily edit and swap between color themes in the control panel
 
+
 ### Roadmap Features
 
 - Automatic syndication to multiple 3rd parties
@@ -44,11 +47,27 @@
 	- [WebMentions](https://www.w3.org/TR/webmention) (with support for [vouches](https://indieweb.org/Vouch))
 - HTTPS termination in the server itself
 
+
+
+## Install from Docker Hub
+
+Official Image: https://hub.docker.com/r/jbrumond/minimal-blog
+
+See the [Dockerfile](./Dockerfile#L5-L71) for configurable environment variables
+
+```bash
+# Pull the v0 alpha image
+docker pull jbrumond/minimal-blog:0-alpha
+```
+
+
+
 ## Building from source
+
 
 ### To run locally (i.e. for development)
 
-The [start.sh](./start.sh) file contains all of the environment variables to configure the server.
+The [start.sh](./start.sh) file contains all of the environment variables to configure the server and will be called by `npm start`.
 
 The default configuration will create a `./data` directory in the project to store the sqlite database files for app storage.
 
@@ -63,6 +82,7 @@ $ npm run build
 $ npm start
 ```
 
+
 ### To build a docker image
 
 ```bash
@@ -73,11 +93,15 @@ $ npm run docker:arm64
 $ npm run docker:amd64
 ```
 
+
+
 ## Other Notes
+
 
 ### On Password Storage
 
 The admin login password hash is stored in a setting called `password_hash`. In the builtin SQLite3 storage implementation, that means it will show up in the `$DATA_DIR/settings.db` file. Please take whatever security precautions you consider reasonable for your situation to protect this file accordingly.
+
 
 ### On External Runtime Dependencies
 
