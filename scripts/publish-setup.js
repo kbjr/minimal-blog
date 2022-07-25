@@ -19,6 +19,7 @@ const tags
 		`${tag_prefix}${major}.${minor}.${patch}-${pre_release_type}`,    // e.g. "1.2.3-alpha"
 	]
 	: [
+		`${tag_prefix}latest`,                                            // e.g. "latest"
 		`${tag_prefix}${major}`,                                          // e.g. "1"
 		`${tag_prefix}${major}.${minor}`,                                 // e.g. "1.2"
 		`${tag_prefix}${major}.${minor}.${patch}`,                        // e.g. "1.2.3"
