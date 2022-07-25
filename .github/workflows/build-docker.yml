@@ -7,6 +7,13 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  workflow_dispatch:
+    inputs:
+      push_image:
+        type: boolean
+        required: true
+        default: false
+        description: Push container images to docker hub
 
 jobs:
   build:
@@ -31,6 +38,7 @@ jobs:
       with:
         context: .
         platforms: linux/amd64,linux/arm64
-        push: false
+        # linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/arm64, linux/riscv64, linux/ppc64le,
+        # linux/s390x, linux/386, linux/mips64le, linux/mips64, linux/arm/v7, linux/arm/v6
+        push: ${{ github.event.inputs.push_image }}
         tags: ${{ env.TAGS_TO_PUBLISH }}
-        # tags: jbrumond/minimal-blog:latest
